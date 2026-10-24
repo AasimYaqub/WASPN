@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WASPN Daily Compliance</title>
+  <title>WASPN Tilt Checklist</title>
 
   <style>
     :root {
@@ -12,12 +12,14 @@
       --border:#293342;
       --text:#e8eef6;
       --muted:#8e9aaa;
-      --green:#35d07f;
       --red:#ff5f6d;
-      --blue:#63a7ff;
+      --amber:#f3b84b;
+      --green:#35d07f;
     }
 
-    * { box-sizing:border-box; }
+    * {
+      box-sizing:border-box;
+    }
 
     body {
       margin:0;
@@ -39,16 +41,21 @@
       margin-bottom:16px;
     }
 
-    .home {
+    .home,
+    .reset {
+      border:0;
       text-decoration:none;
       color:white;
       background:#293342;
       padding:10px 14px;
       border-radius:10px;
       font-weight:700;
+      cursor:pointer;
+      font-size:14px;
     }
 
-    .hero,.card {
+    .hero,
+    .card {
       background:var(--panel);
       border:1px solid var(--border);
       border-radius:18px;
@@ -58,7 +65,7 @@
     h1 {
       margin:0 0 8px;
       font-size:42px;
-      color:var(--green);
+      color:var(--red);
     }
 
     .sub {
@@ -66,18 +73,19 @@
       line-height:1.5;
     }
 
-    .card { margin-top:18px; }
+    .card {
+      margin-top:18px;
+    }
 
     .check {
       display:flex;
       gap:14px;
-      align-items:center;
-      padding:18px 0;
+      align-items:flex-start;
+      padding:16px 0;
       border-bottom:1px solid var(--border);
-      font-size:19px;
-      font-weight:700;
       cursor:pointer;
       user-select:none;
+      line-height:1.45;
     }
 
     .check:last-child {
@@ -87,32 +95,60 @@
     input[type="checkbox"] {
       width:24px;
       height:24px;
-      accent-color:var(--green);
+      accent-color:var(--red);
       cursor:pointer;
+      flex:0 0 auto;
+      margin-top:2px;
     }
 
-    .scorebox {
+    .check strong {
+      font-size:17px;
+    }
+
+    .stopbox {
       margin-top:18px;
-      background:#102018;
-      border:1px solid #275c3e;
+      background:#231317;
+      border:1px solid #5b2630;
       border-radius:16px;
-      padding:20px;
+      padding:22px;
+      text-align:center;
+      display:none;
+    }
+
+    .stopbox.active {
+      display:block;
+    }
+
+    .stop-title {
+      color:var(--red);
+      font-size:30px;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    .count {
+      margin-top:18px;
+      background:#1b1710;
+      border:1px solid #5c4824;
+      border-radius:16px;
+      padding:18px;
       text-align:center;
     }
 
-    .score {
-      font-size:52px;
-      font-weight:800;
-      color:var(--green);
+    .count-number {
+      color:var(--amber);
+      font-size:42px;
+      font-weight:900;
       margin:4px 0;
     }
 
     .rule {
       margin-top:18px;
-      background:#181317;
-      border:1px solid #4b2930;
+      background:#122018;
+      border:1px solid #275c3e;
       border-radius:16px;
       padding:18px;
+      color:#dff7e9;
       line-height:1.6;
     }
 
@@ -130,79 +166,126 @@
 
     <div class="topbar">
       <a class="home" href="index.html">← Home</a>
+      <button class="reset" onclick="resetChecklist()">Reset</button>
     </div>
 
     <section class="hero">
-      <div class="sub">WASPN • Daily Process Scorecard</div>
-      <h1>Compliance Check</h1>
+      <div class="sub">WASPN • Live Trading Mental Control</div>
+      <h1>Tilt Checklist</h1>
       <div class="sub">
-        Judge the session by rule-following first. P&amp;L comes second.
+        If any one of these appears, stop trading for five minutes.
       </div>
     </section>
 
     <section class="card">
 
       <label class="check">
-        <input type="checkbox" class="compliance">
-        <span>Did I stay inside the window?</span>
+        <input type="checkbox" class="tilt">
+        <span>
+          <strong>Increasing size to recover</strong><br>
+          Trying to make back losses by sizing up.
+        </span>
       </label>
 
       <label class="check">
-        <input type="checkbox" class="compliance">
-        <span>Did I stop by attempt 5?</span>
+        <input type="checkbox" class="tilt">
+        <span>
+          <strong>Entering faster than normal</strong><br>
+          Clicking before the setup is fully formed.
+        </span>
       </label>
 
       <label class="check">
-        <input type="checkbox" class="compliance">
-        <span>Did I respect -$100?</span>
+        <input type="checkbox" class="tilt">
+        <span>
+          <strong>Re-entering the same ticker repeatedly</strong><br>
+          Chasing the same idea after it has already failed.
+        </span>
+      </label>
+
+      <label class="check">
+        <input type="checkbox" class="tilt">
+        <span>
+          <strong>Feeling angry at a stop-out</strong><br>
+          Trading to prove the market wrong.
+        </span>
+      </label>
+
+      <label class="check">
+        <input type="checkbox" class="tilt">
+        <span>
+          <strong>Thinking about daily P&amp;L instead of the setup</strong><br>
+          Focusing on getting back to green rather than trading quality.
+        </span>
+      </label>
+
+      <label class="check">
+        <input type="checkbox" class="tilt">
+        <span>
+          <strong>Saying “just one more”</strong><br>
+          The urge for one final trade is itself a warning sign.
+        </span>
+      </label>
+
+      <label class="check">
+        <input type="checkbox" class="tilt">
+        <span>
+          <strong>Holding a failed momentum trade</strong><br>
+          Refusing to realise the loss because you want it to come back.
+        </span>
       </label>
 
     </section>
 
-    <section class="scorebox">
-      <div class="sub">Daily compliance score</div>
-      <div class="score" id="score">0 / 3</div>
-      <div id="message">Complete the process.</div>
+    <section class="count">
+      <div class="sub">Tilt signals active</div>
+      <div class="count-number" id="count">0</div>
+    </section>
+
+    <section class="stopbox" id="stopbox">
+      <div class="stop-title">5-MINUTE STOP</div>
+      <strong>NO ORDERS. NO RE-ENTRY. NO SIZE INCREASE.</strong>
+      <div class="sub" style="margin-top:10px;">
+        Step away from the screen and let the emotional state reset.
+      </div>
     </section>
 
     <section class="rule">
-      <strong>UK times next week</strong><br><br>
-
-      Preliminary window:
-      <strong>10:30–11:00 AM</strong><br>
-
-      Main trading window:
-      <strong>1:00–3:00 PM</strong><br><br>
-
-      At <strong>3:00 PM</strong>, trading is finished.<br>
-      At <strong>attempt 5</strong>, trading is finished.<br>
-      At <strong>-$100 realised</strong>, trading is finished.
+      <strong>WASPN rule:</strong><br><br>
+      The thought <strong>“I can get this back”</strong> is a stop signal,
+      not a trading signal.
     </section>
 
     <div class="footer">
-      WASPN • Process Over Recovery
+      WASPN • Tilt Control
     </div>
 
   </div>
 
   <script>
-    const checks = document.querySelectorAll('.compliance');
-    const score = document.getElementById('score');
-    const message = document.getElementById('message');
+    const tiltChecks = document.querySelectorAll('.tilt');
+    const count = document.getElementById('count');
+    const stopbox = document.getElementById('stopbox');
 
-    function updateScore() {
-      const total = [...checks].filter(c => c.checked).length;
-      score.textContent = total + ' / 3';
+    function updateTilt() {
+      const total = [...tiltChecks].filter(c => c.checked).length;
 
-      if (total === 3) {
-        message.textContent = 'Fully compliant session.';
+      count.textContent = total;
+
+      if (total > 0) {
+        stopbox.classList.add('active');
       } else {
-        message.textContent = 'Process not yet complete.';
+        stopbox.classList.remove('active');
       }
     }
 
-    checks.forEach(check => {
-      check.addEventListener('change', updateScore);
+    function resetChecklist() {
+      tiltChecks.forEach(c => c.checked = false);
+      updateTilt();
+    }
+
+    tiltChecks.forEach(check => {
+      check.addEventListener('change', updateTilt);
     });
   </script>
 
