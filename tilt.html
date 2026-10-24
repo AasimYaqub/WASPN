@@ -1,111 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WASPN Tilt Checklist</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WASPN Daily Compliance</title>
 
   <style>
     :root {
-      --bg: #0b0f14;
-      --panel: #121820;
-      --border: #293342;
-      --text: #e8eef6;
-      --muted: #8e9aaa;
-      --red: #ff5f6d;
-      --amber: #f3b84b;
-      --green: #35d07f;
+      --bg:#0b0f14;
+      --panel:#121820;
+      --border:#293342;
+      --text:#e8eef6;
+      --muted:#8e9aaa;
+      --green:#35d07f;
+      --red:#ff5f6d;
+      --blue:#63a7ff;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing:border-box; }
 
     body {
-      margin: 0;
-      background: linear-gradient(180deg, #090d12, #0d131a);
-      color: var(--text);
-      font-family: Arial, Helvetica, sans-serif;
+      margin:0;
+      background:linear-gradient(180deg,#090d12,#0d131a);
+      color:var(--text);
+      font-family:Arial,Helvetica,sans-serif;
     }
 
     .wrap {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 24px;
+      max-width:760px;
+      margin:0 auto;
+      padding:24px;
     }
 
-    .hero,
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 22px;
+    .topbar {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:16px;
+    }
+
+    .home {
+      text-decoration:none;
+      color:white;
+      background:#293342;
+      padding:10px 14px;
+      border-radius:10px;
+      font-weight:700;
+    }
+
+    .hero,.card {
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:22px;
     }
 
     h1 {
-      margin: 0 0 8px;
-      font-size: 42px;
-      color: var(--red);
+      margin:0 0 8px;
+      font-size:42px;
+      color:var(--green);
     }
 
     .sub {
-      color: var(--muted);
-      line-height: 1.5;
+      color:var(--muted);
+      line-height:1.5;
     }
 
-    .card {
-      margin-top: 18px;
+    .card { margin-top:18px; }
+
+    .check {
+      display:flex;
+      gap:14px;
+      align-items:center;
+      padding:18px 0;
+      border-bottom:1px solid var(--border);
+      font-size:19px;
+      font-weight:700;
+      cursor:pointer;
+      user-select:none;
     }
 
-    .item {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-      line-height: 1.45;
+    .check:last-child {
+      border-bottom:0;
     }
 
-    .item:last-child {
-      border-bottom: 0;
+    input[type="checkbox"] {
+      width:24px;
+      height:24px;
+      accent-color:var(--green);
+      cursor:pointer;
     }
 
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--amber);
-      margin-top: 5px;
-      flex: 0 0 auto;
+    .scorebox {
+      margin-top:18px;
+      background:#102018;
+      border:1px solid #275c3e;
+      border-radius:16px;
+      padding:20px;
+      text-align:center;
     }
 
-    .stop {
-      margin-top: 20px;
-      background: #231317;
-      border: 1px solid #5b2630;
-      border-radius: 16px;
-      padding: 18px;
-    }
-
-    .stop strong {
-      color: var(--red);
-      font-size: 20px;
+    .score {
+      font-size:52px;
+      font-weight:800;
+      color:var(--green);
+      margin:4px 0;
     }
 
     .rule {
-      margin-top: 16px;
-      background: #122018;
-      border: 1px solid #275c3e;
-      border-radius: 16px;
-      padding: 18px;
-      color: #dff7e9;
+      margin-top:18px;
+      background:#181317;
+      border:1px solid #4b2930;
+      border-radius:16px;
+      padding:18px;
+      line-height:1.6;
     }
 
     .footer {
-      margin-top: 20px;
-      color: var(--muted);
-      font-size: 12px;
-      text-align: center;
+      margin-top:20px;
+      color:var(--muted);
+      font-size:12px;
+      text-align:center;
     }
   </style>
 </head>
@@ -113,91 +128,83 @@
 <body>
   <div class="wrap">
 
+    <div class="topbar">
+      <a class="home" href="index.html">← Home</a>
+    </div>
+
     <section class="hero">
-      <div class="sub">WASPN • Live Trading Mental Control</div>
-      <h1>Tilt Checklist</h1>
+      <div class="sub">WASPN • Daily Process Scorecard</div>
+      <h1>Compliance Check</h1>
       <div class="sub">
-        If any one of these appears, stop trading for five minutes.
+        Judge the session by rule-following first. P&amp;L comes second.
       </div>
     </section>
 
     <section class="card">
 
-      <div class="item">
-        <div class="dot"></div>
-        <div>
-          <strong>Increasing size to recover</strong><br>
-          Trying to make back losses by sizing up.
-        </div>
-      </div>
+      <label class="check">
+        <input type="checkbox" class="compliance">
+        <span>Did I stay inside the window?</span>
+      </label>
 
-      <div class="item">
-        <div class="dot"></div>
-        <div>
-          <strong>Entering faster than normal</strong><br>
-          Clicking before the setup is fully formed.
-        </div>
-      </div>
+      <label class="check">
+        <input type="checkbox" class="compliance">
+        <span>Did I stop by attempt 5?</span>
+      </label>
 
-      <div class="item">
-        <div class="dot"></div>
-        <div>
-          <strong>Re-entering the same ticker repeatedly</strong><br>
-          Chasing the same idea after it has already failed.
-        </div>
-      </div>
-
-      <div class="item">
-        <div class="dot"></div>
-        <div>
-          <strong>Feeling angry at a stop-out</strong><br>
-          Trading to prove the market wrong.
-        </div>
-      </div>
-
-      <div class="item">
-        <div class="dot"></div>
-        <div>
-          <strong>Thinking about daily P&amp;L instead of the setup</strong><br>
-          Focusing on getting back to green rather than trading quality.
-        </div>
-      </div>
-
-      <div class="item">
-        <div class="dot"></div>
-        <div>
-          <strong>Saying “just one more”</strong><br>
-          The urge for one final trade is itself a warning sign.
-        </div>
-      </div>
-
-      <div class="item">
-        <div class="dot"></div>
-        <div>
-          <strong>Holding a failed momentum trade</strong><br>
-          Refusing to realise the loss because you want it to come back.
-        </div>
-      </div>
+      <label class="check">
+        <input type="checkbox" class="compliance">
+        <span>Did I respect -$100?</span>
+      </label>
 
     </section>
 
-    <section class="stop">
-      <strong>Any one signal = 5-minute stop.</strong>
-      <div class="sub" style="margin-top:8px;">
-        Step away from the screen. No orders, no re-entry, no size increase.
-      </div>
+    <section class="scorebox">
+      <div class="sub">Daily compliance score</div>
+      <div class="score" id="score">0 / 3</div>
+      <div id="message">Complete the process.</div>
     </section>
 
     <section class="rule">
-      <strong>WASPN rule:</strong><br><br>
-      The thought <strong>“I can get this back”</strong> is a stop signal,
-      not a trading signal.
+      <strong>UK times next week</strong><br><br>
+
+      Preliminary window:
+      <strong>10:30–11:00 AM</strong><br>
+
+      Main trading window:
+      <strong>1:00–3:00 PM</strong><br><br>
+
+      At <strong>3:00 PM</strong>, trading is finished.<br>
+      At <strong>attempt 5</strong>, trading is finished.<br>
+      At <strong>-$100 realised</strong>, trading is finished.
     </section>
 
     <div class="footer">
-      WASPN • Tilt Control
+      WASPN • Process Over Recovery
     </div>
 
   </div>
+
+  <script>
+    const checks = document.querySelectorAll('.compliance');
+    const score = document.getElementById('score');
+    const message = document.getElementById('message');
+
+    function updateScore() {
+      const total = [...checks].filter(c => c.checked).length;
+      score.textContent = total + ' / 3';
+
+      if (total === 3) {
+        message.textContent = 'Fully compliant session.';
+      } else {
+        message.textContent = 'Process not yet complete.';
+      }
+    }
+
+    checks.forEach(check => {
+      check.addEventListener('change', updateScore);
+    });
+  </script>
+
 </body>
 </html>
