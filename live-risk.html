@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WASPN Live Risk Dashboard</title>
+
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --panel: #121820;
+      --border: #293342;
+      --text: #e8eef6;
+      --muted: #8e9aaa;
+      --green: #35d07f;
+      --red: #ff5f6d;
+      --amber: #f3b84b;
+      --blue: #63a7ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #090d12, #0d131a);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .wrap {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .btn,
+    a.btn {
+      background: #293342;
+      color: white;
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .hero,
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .card {
+      margin-top: 16px;
+    }
+
+    h1 {
+      margin: 4px 0 6px;
+      color: var(--blue);
+      font-size: 40px;
+    }
+
+    .muted {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+
+    .metric {
+      text-align: center;
+    }
+
+    .label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .value {
+      font-size: 36px;
+      font-weight: 900;
+      margin-top: 8px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    input[type="number"] {
+      width: 150px;
+      background: #0d131a;
+      color: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 22px;
+      text-align: center;
+    }
+
+    .status {
+      margin-top: 16px;
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+      font-weight: 900;
+      font-size: 28px;
+    }
+
+    .ok {
+      background: #102018;
+      border: 1px solid #275c3e;
+      color: var(--green);
+    }
+
+    .warn {
+      background: #251d0f;
+      border: 1px solid #6b5125;
+      color: var(--amber);
+    }
+
+    .stop {
+      background: #261216;
+      border: 1px solid #702c39;
+      color: var(--red);
+    }
+
+    .small {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .switch {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-weight: 700;
+    }
+
+    .switch input {
+      width: 24px;
+      height: 24px;
+      accent-color: var(--red);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrap">
+
+    <div class="top">
+      <a class="btn" href="index.html">← Home</a>
+      <button class="btn" onclick="resetAll()">Reset</button>
+    </div>
+
+    <section class="hero">
+      <div class="muted">WASPN • Live Trading Control</div>
+      <h1>Live Risk Dashboard</h1>
+      <div class="muted">
+        The dashboard does not decide trades.
+        It stops continuation when WASPN says the session is over.
+      </div>
+    </section>
+
+    <section class="card grid">
+
+      <div class="metric">
+        <div class="label">UK Time</div>
+        <div class="value" id="uktime">--:--</div>
+        <div class="small" id="windowText"></div>
+      </div>
+
+      <div class="metric">
+        <div class="label">Attempt</div>
+        <div class="value">
+          <span id="attempt">0</span> / 5
+        </div>
+
+        <div class="controls">
+          <button class="btn" onclick="changeAttempt(-1)">−</button>
+          <button class="btn" onclick="changeAttempt(1)">+</button>
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="label">Realised P&amp;L ($)</div>
+        <div class="value" id="pnlDisplay">0.00</div>
+
+        <div class="controls">
+          <input
+            id="pnl"
+            type="number"
+            step="0.01"
+            value="0"
+            oninput="update()"
+          >
+        </div>
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <label class="switch">
+        <input type="checkbox" id="tilt" onchange="update()">
+        Tilt signal active
+      </label>
+
+      <div class="small" style="text-align:center; margin-top:8px;">
+        Tick this if you notice recovery sizing, rushed entries,
+        repeated re-entry, anger, “just one more”,
+        or holding a failed momentum trade.
+      </div>
+
+    </section>
+
+    <div id="status" class="status ok">
+      WITHIN WASPN
+    </div>
+
+    <section class="card">
+
+      <div class="grid">
+
+        <div>
+          <div class="label">Preliminary</div>
+          <div style="font-size:24px; font-weight:800;">
+            10:30–11:00 AM UK
+          </div>
+        </div>
+
+        <div>
+          <div class="label">Main Window</div>
+          <div style="font-size:24px; font-weight:800;">
+            1:00–3:00 PM UK
+          </div>
+        </div>
+
+        <div>
+          <div class="label">Warning</div>
+          <div style="font-size:24px; font-weight:800; color:var(--amber);">
+            -$75
+          </div>
+        </div>
+
+        <div>
+          <div class="label">Hard Stop</div>
+          <div style="font-size:24px; font-weight:800; color:var(--red);">
+            -$100 / 5 attempts / 3 PM
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <script>
+    let attempt = 0;
+
+    function ukParts() {
+      const parts = new Intl.DateTimeFormat(
+        'en-GB',
+        {
+          timeZone: 'Europe/London',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false
+        }
+      ).formatToParts(new Date());
+
+      const obj = {};
+
+      parts.forEach(part => {
+        obj[part.type] = part.value;
+      });
+
+      return {
+        h: Number(obj.hour),
+        m: Number(obj.minute),
+        s: Number(obj.second),
+        text: `${obj.hour}:${obj.minute}:${obj.second}`
+      };
+    }
+
+    function changeAttempt(change) {
+      attempt = Math.max(
+        0,
+        Math.min(5, attempt + change)
+      );
+
+      document.getElementById('attempt').textContent = attempt;
+
+      update();
+    }
+
+    function resetAll() {
+      attempt = 0;
+
+      document.getElementById('attempt').textContent = '0';
+      document.getElementById('pnl').value = '0';
+      document.getElementById('tilt').checked = false;
+
+      update();
+    }
+
+    function update() {
+
+      const time = ukParts();
+
+      document.getElementById('uktime').textContent = time.text;
+
+      const mins = time.h * 60 + time.m;
+
+      const preliminaryStart = 10 * 60 + 30;
+      const preliminaryEnd = 11 * 60;
+
+      const mainStart = 13 * 60;
+      const close = 15 * 60;
+
+      let windowText = 'Outside active window';
+
+      if (
+        mins >= preliminaryStart &&
+        mins < preliminaryEnd
+      ) {
+        windowText = 'PRELIMINARY WINDOW';
+      }
+
+      else if (
+        mins >= mainStart &&
+        mins < close
+      ) {
+        windowText = 'MAIN WINDOW';
+      }
+
+      else if (
+        mins >= close
+      ) {
+        windowText = 'SESSION CLOSED';
+      }
+
+      else if (
+        mins >= preliminaryEnd &&
+        mins < mainStart
+      ) {
+        windowText = 'WAIT — MAIN WINDOW NOT OPEN';
+      }
+
+      document.getElementById('windowText').textContent = windowText;
+
+      const pnl =
+        parseFloat(
+          document.getElementById('pnl').value || 0
+        );
+
+      document.getElementById('pnlDisplay').textContent =
+        pnl.toFixed(2);
+
+      const tilt =
+        document.getElementById('tilt').checked;
+
+      const status =
+        document.getElementById('status');
+
+      let statusClass = 'status ok';
+      let statusText = 'WITHIN WASPN';
+
+      if (
+        attempt >= 5 ||
+        pnl <= -100 ||
+        mins >= close
+      ) {
+        statusClass = 'status stop';
+        statusText = 'STOP TRADING — SESSION OVER';
+      }
+
+      else if (tilt) {
+        statusClass = 'status warn';
+        statusText = '5-MINUTE STOP — NO ORDERS';
+      }
+
+      else if (pnl <= -75) {
+        statusClass = 'status warn';
+        statusText = 'WARNING STATE — STEP AWAY 5 MINUTES';
+      }
+
+      status.className = statusClass;
+      status.textContent = statusText;
+    }
+
+    setInterval(update, 1000);
+
+    update();
+  </script>
+
+</body>
+</html>
