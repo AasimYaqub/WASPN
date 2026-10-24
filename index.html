@@ -98,21 +98,10 @@
       margin-top: 8px;
     }
 
-    .green {
-      color: var(--green);
-    }
-
-    .red {
-      color: var(--red);
-    }
-
-    .blue {
-      color: var(--blue);
-    }
-
-    .amber {
-      color: var(--amber);
-    }
+    .green { color: var(--green); }
+    .red { color: var(--red); }
+    .blue { color: var(--blue); }
+    .amber { color: var(--amber); }
 
     .section {
       margin-top: 22px;
@@ -148,7 +137,7 @@
       text-decoration: none;
       border-radius: 14px;
       padding: 17px;
-      transition: transform .15s ease, border-color .15s ease;
+      transition: transform .15s ease;
     }
 
     .nav-card:active {
@@ -207,7 +196,7 @@
 
     .calendar {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 8px;
       margin-top: 14px;
     }
@@ -246,7 +235,6 @@
     }
 
     @media (max-width: 700px) {
-
       .wrap {
         padding: 14px;
       }
@@ -255,12 +243,16 @@
         padding: 20px;
       }
 
+      .nav-grid {
+        grid-template-columns: 1fr;
+      }
+
       .calendar {
         gap: 5px;
       }
 
       .day {
-        min-height: 70px;
+        min-height: 72px;
         padding: 7px;
       }
 
@@ -268,8 +260,8 @@
         font-size: 14px;
       }
 
-      .nav-grid {
-        grid-template-columns: 1fr;
+      .weekday {
+        font-size: 11px;
       }
     }
   </style>
@@ -278,8 +270,6 @@
 <body>
 
   <div class="wrap">
-
-    <!-- HERO -->
 
     <section class="hero">
 
@@ -298,47 +288,28 @@
       <div class="grid">
 
         <div class="card">
-          <div class="label">
-            Primary Window
-          </div>
-          <div class="value blue">
-            9:00–11:00 AM ET
-          </div>
+          <div class="label">Primary Window</div>
+          <div class="value blue">9:00–11:00 AM ET</div>
         </div>
 
         <div class="card">
-          <div class="label">
-            Max Attempts
-          </div>
-          <div class="value">
-            5
-          </div>
+          <div class="label">Max Attempts</div>
+          <div class="value">5</div>
         </div>
 
         <div class="card">
-          <div class="label">
-            Hard Daily Stop
-          </div>
-          <div class="value red">
-            -$100
-          </div>
+          <div class="label">Hard Daily Stop</div>
+          <div class="value red">-$100</div>
         </div>
 
         <div class="card">
-          <div class="label">
-            Green Day Objective
-          </div>
-          <div class="value green">
-            +$50
-          </div>
+          <div class="label">Green Day Objective</div>
+          <div class="value green">+$50</div>
         </div>
 
       </div>
 
     </section>
-
-
-    <!-- NAVIGATION PANEL -->
 
     <section class="section card">
 
@@ -350,89 +321,48 @@
 
       <div class="nav-grid">
 
-        <a
-          href="live-risk.html"
-          class="nav-card nav-live"
-        >
-          <div class="nav-title">
-            Live Risk Dashboard
-          </div>
-
+        <a href="live-risk.html" class="nav-card nav-live">
+          <div class="nav-title">Live Risk Dashboard</div>
           <div class="nav-desc">
             Track attempt count, realised P&amp;L,
             UK trading time, tilt and hard-stop status.
           </div>
         </a>
 
-
-        <a
-          href="tilt.html"
-          class="nav-card nav-tilt"
-        >
-          <div class="nav-title">
-            Tilt Checklist
-          </div>
-
+        <a href="tilt.html" class="nav-card nav-tilt">
+          <div class="nav-title">Tilt Checklist</div>
           <div class="nav-desc">
             Identify recovery trading, anger,
             rushed entries and “just one more”.
           </div>
         </a>
 
-
-        <a
-          href="compliance.html"
-          class="nav-card nav-compliance"
-        >
-          <div class="nav-title">
-            Daily Compliance
-          </div>
-
+        <a href="compliance.html" class="nav-card nav-compliance">
+          <div class="nav-title">Daily Compliance</div>
           <div class="nav-desc">
             Did I respect the window,
             attempt 5 and the -$100 hard stop?
           </div>
         </a>
 
-
-        <a
-          href="trade-duration.html"
-          class="nav-card nav-duration"
-        >
-          <div class="nav-title">
-            Trade Duration Warning
-          </div>
-
+        <a href="trade-duration.html" class="nav-card nav-duration">
+          <div class="nav-title">Trade Duration Warning</div>
           <div class="nav-desc">
             Live 3, 5 and 10 minute prompts
             to reassess failed momentum.
           </div>
         </a>
 
-
-        <a
-          href="post-trade-reset.html"
-          class="nav-card nav-reset"
-        >
-          <div class="nav-title">
-            Post-Trade Reset
-          </div>
-
+        <a href="post-trade-reset.html" class="nav-card nav-reset">
+          <div class="nav-title">Post-Trade Reset</div>
           <div class="nav-desc">
             Complete after a loss before
             considering another entry.
           </div>
         </a>
 
-
-        <a
-          href="session-score.html"
-          class="nav-card nav-score"
-        >
-          <div class="nav-title">
-            Session Score
-          </div>
-
+        <a href="session-score.html" class="nav-card nav-score">
+          <div class="nav-title">Session Score</div>
           <div class="nav-desc">
             Grade process compliance out of 5
             before judging daily P&amp;L.
@@ -442,9 +372,6 @@
       </div>
 
     </section>
-
-
-    <!-- CORE STRUCTURE -->
 
     <section class="section card">
 
@@ -481,92 +408,51 @@
 
     </section>
 
-
-    <!-- DATA -->
-
     <section class="section">
 
       <div class="grid">
 
         <div class="card">
-
-          <div class="label">
-            7–9 AM ET — Full 2026
-          </div>
-
-          <div class="value red">
-            -$3,323.15
-          </div>
-
+          <div class="label">7–9 AM ET — Full 2026</div>
+          <div class="value red">-$3,323.15</div>
           <div class="small">
             318 trades<br />
             Average: -$10.45 per trade<br />
             Win rate: 46.2%
           </div>
-
         </div>
 
-
         <div class="card">
-
-          <div class="label">
-            9–11 AM ET — Attempts 1–5
-          </div>
-
-          <div class="value green">
-            +$343.08
-          </div>
-
+          <div class="label">9–11 AM ET — Attempts 1–5</div>
+          <div class="value green">+$343.08</div>
           <div class="small">
             38 trades<br />
             Average: +$9.03 per trade<br />
             Win rate: 50.0%
           </div>
-
         </div>
 
-
         <div class="card">
-
-          <div class="label">
-            9:00–9:30 AM ET
-          </div>
-
-          <div class="value green">
-            +$544.11
-          </div>
-
+          <div class="label">9:00–9:30 AM ET</div>
+          <div class="value green">+$544.11</div>
           <div class="small">
             51 trades<br />
             Average: +$10.67 per trade<br />
             Win rate: 62.7%
           </div>
-
         </div>
 
-
         <div class="card">
-
-          <div class="label">
-            October Through 23 Oct 2026
-          </div>
-
-          <div class="value red">
-            -$1,440.61
-          </div>
-
+          <div class="label">October Through 23 Oct 2026</div>
+          <div class="value red">-$1,440.61</div>
           <div class="small">
             Big red days dominated the month.
           </div>
-
         </div>
 
       </div>
 
     </section>
-
-
-    <!-- WHY STRUCTURE CHANGED -->
 
     <section class="section card">
 
@@ -586,9 +472,6 @@
       </p>
 
     </section>
-
-
-    <!-- OCTOBER LESSON -->
 
     <section class="section card">
 
@@ -614,9 +497,6 @@
 
     </section>
 
-
-    <!-- CALENDAR -->
-
     <section class="section card">
 
       <h2>October 2026 Calendar</h2>
@@ -628,8 +508,6 @@
         <div class="weekday">Wed</div>
         <div class="weekday">Thu</div>
         <div class="weekday">Fri</div>
-        <div class="weekday">Sat</div>
-        <div class="weekday">Sun</div>
 
         <div class="day"></div>
         <div class="day"></div>
@@ -644,10 +522,6 @@
           <div class="date">2 Oct</div>
           <div class="pnl red">-$19.49</div>
         </div>
-
-        <div class="day"></div>
-        <div class="day"></div>
-
 
         <div class="day">
           <div class="date">5 Oct</div>
@@ -674,10 +548,6 @@
           <div class="pnl red">-$86.05</div>
         </div>
 
-        <div class="day"></div>
-        <div class="day"></div>
-
-
         <div class="day">
           <div class="date">12 Oct</div>
           <div class="pnl green">+$293.19</div>
@@ -701,10 +571,6 @@
         <div class="day">
           <div class="date">16 Oct</div>
         </div>
-
-        <div class="day"></div>
-        <div class="day"></div>
-
 
         <div class="day">
           <div class="date">19 Oct</div>
@@ -731,10 +597,6 @@
           <div class="pnl red">-$89.91</div>
         </div>
 
-        <div class="day"></div>
-        <div class="day"></div>
-
-
         <div class="day">
           <div class="date">26 Oct</div>
         </div>
@@ -755,15 +617,9 @@
           <div class="date">30 Oct</div>
         </div>
 
-        <div class="day"></div>
-        <div class="day"></div>
-
       </div>
 
     </section>
-
-
-    <!-- MONTH END -->
 
     <section class="section card">
 
@@ -772,28 +628,13 @@
       <div class="grid">
 
         <div>
-
-          <div class="label">
-            Current October P&amp;L
-          </div>
-
-          <div class="value red">
-            -$1,440.61
-          </div>
-
+          <div class="label">Current October P&amp;L</div>
+          <div class="value red">-$1,440.61</div>
         </div>
 
-
         <div>
-
-          <div class="label">
-            October Finish Goal
-          </div>
-
-          <div class="value amber">
-            ≈ -$1,200
-          </div>
-
+          <div class="label">October Finish Goal</div>
+          <div class="value amber">≈ -$1,200</div>
         </div>
 
       </div>
@@ -806,9 +647,6 @@
       </p>
 
     </section>
-
-
-    <!-- NOVEMBER -->
 
     <section class="section card">
 
@@ -840,7 +678,6 @@
       </div>
 
     </section>
-
 
     <div class="footer">
       WASPN • 2026 Data-Backed Trading Framework
