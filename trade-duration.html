@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WASPN Trade Duration Warning</title>
+
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --panel: #121820;
+      --border: #293342;
+      --text: #e8eef6;
+      --muted: #8e9aaa;
+      --green: #35d07f;
+      --red: #ff5f6d;
+      --amber: #f3b84b;
+      --blue: #63a7ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #090d12, #0d131a);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .btn,
+    a.btn {
+      background: #293342;
+      color: white;
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .hero,
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .card {
+      margin-top: 16px;
+    }
+
+    h1 {
+      margin: 4px 0 6px;
+      color: var(--amber);
+      font-size: 40px;
+    }
+
+    .muted {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .timer {
+      text-align: center;
+      font-size: 64px;
+      font-weight: 900;
+      margin: 18px 0;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .prompt {
+      margin-top: 16px;
+      border-radius: 16px;
+      padding: 18px;
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+      background: #102018;
+      border: 1px solid #275c3e;
+      color: var(--green);
+    }
+
+    .note {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .note:last-child {
+      border-bottom: 0;
+    }
+
+    .warning {
+      color: var(--amber);
+    }
+
+    .danger {
+      color: var(--red);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrap">
+
+    <div class="top">
+      <a class="btn" href="index.html">← Home</a>
+      <button class="btn" onclick="resetTimer()">Reset</button>
+    </div>
+
+    <section class="hero">
+      <div class="muted">WASPN • Trade Management Research</div>
+
+      <h1>Trade Duration Warning</h1>
+
+      <div class="muted">
+        October showed a strong pattern: faster trades were healthier,
+        while prolonged trades became much more damaging.
+        This page is a reassessment tool, not an automatic exit rule.
+      </div>
+    </section>
+
+    <section class="card">
+
+      <div id="timer" class="timer">
+        00:00
+      </div>
+
+      <div class="controls">
+
+        <button class="btn" onclick="startTimer()">
+          Start Trade
+        </button>
+
+        <button class="btn" onclick="stopTimer()">
+          Stop Timer
+        </button>
+
+      </div>
+
+      <div id="prompt" class="prompt">
+        Waiting for trade.
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <div class="note">
+        <strong class="warning">3 MINUTES</strong><br>
+        Has momentum actually followed through?
+      </div>
+
+      <div class="note">
+        <strong class="warning">5 MINUTES</strong><br>
+        Am I still trading the original setup,
+        or am I now hoping?
+      </div>
+
+      <div class="note">
+        <strong class="danger">10 MINUTES</strong><br>
+        Why am I still in this trade?
+        Has this become a failed scalp turned into a hold?
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <div class="muted">
+        <strong>October-only finding:</strong><br><br>
+
+        Trades held around one minute or less were much healthier
+        in the sample, while longer-held trades deteriorated sharply.
+
+        <br><br>
+
+        That does not prove duration itself caused the losses.
+        Use this timer to force a reassessment of the setup
+        before a failed momentum trade turns into hope.
+      </div>
+
+    </section>
+
+  </div>
+
+  <script>
+
+    let startTime = null;
+    let elapsed = 0;
+    let timerId = null;
+
+    function render() {
+
+      const seconds =
+        Math.floor(elapsed / 1000);
+
+      const minutes =
+        Math.floor(seconds / 60);
+
+      const remainingSeconds =
+        seconds % 60;
+
+      document.getElementById('timer').textContent =
+        String(minutes).padStart(2, '0') +
+        ':' +
+        String(remainingSeconds).padStart(2, '0');
+
+      let message =
+        'Trade active — manage the setup, not the P&L.';
+
+      if (seconds >= 600) {
+
+        message =
+          '10+ MINUTES — WHY ARE YOU STILL IN THIS TRADE?';
+
+      }
+
+      else if (seconds >= 300) {
+
+        message =
+          '5 MINUTES — ORIGINAL SETUP OR HOPE?';
+
+      }
+
+      else if (seconds >= 180) {
+
+        message =
+          '3 MINUTES — HAS MOMENTUM FOLLOWED THROUGH?';
+
+      }
+
+      document.getElementById('prompt').textContent =
+        message;
+    }
+
+    function tick() {
+
+      elapsed =
+        Date.now() - startTime;
+
+      render();
+    }
+
+    function startTimer() {
+
+      if (timerId) return;
+
+      startTime =
+        Date.now() - elapsed;
+
+      timerId =
+        setInterval(tick, 250);
+
+      render();
+    }
+
+    function stopTimer() {
+
+      clearInterval(timerId);
+
+      timerId = null;
+    }
+
+    function resetTimer() {
+
+      stopTimer();
+
+      elapsed = 0;
+
+      render();
+
+      document.getElementById('prompt').textContent =
+        'Waiting for trade.';
+    }
+
+    render();
+
+  </script>
+
+</body>
+</html>
