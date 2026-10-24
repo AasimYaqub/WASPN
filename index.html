@@ -4,39 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WASPN</title>
-  
-  <div style="
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:20px;
-">
-
-  <a href="tilt.html" style="
-    display:inline-block;
-    padding:14px 18px;
-    background:#ff5f6d;
-    color:white;
-    text-decoration:none;
-    border-radius:12px;
-    font-weight:700;
-  ">
-    Tilt Checklist
-  </a>
-
-  <a href="compliance.html" style="
-    display:inline-block;
-    padding:14px 18px;
-    background:#35d07f;
-    color:#08120d;
-    text-decoration:none;
-    border-radius:12px;
-    font-weight:700;
-  ">
-    Daily Compliance
-  </a>
-
-</div>
 
   <style>
     :root {
@@ -92,6 +59,11 @@
       color: var(--green);
     }
 
+    h2 {
+      margin-top: 0;
+      font-size: 22px;
+    }
+
     .subtitle {
       color: var(--muted);
       font-size: 17px;
@@ -126,18 +98,24 @@
       margin-top: 8px;
     }
 
-    .green { color: var(--green); }
-    .red { color: var(--red); }
-    .blue { color: var(--blue); }
-    .amber { color: var(--amber); }
+    .green {
+      color: var(--green);
+    }
+
+    .red {
+      color: var(--red);
+    }
+
+    .blue {
+      color: var(--blue);
+    }
+
+    .amber {
+      color: var(--amber);
+    }
 
     .section {
       margin-top: 22px;
-    }
-
-    h2 {
-      margin-top: 0;
-      font-size: 22px;
     }
 
     .rule {
@@ -155,6 +133,77 @@
       font-size: 14px;
       line-height: 1.6;
     }
+
+    /* NAVIGATION */
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .nav-card {
+      display: block;
+      text-decoration: none;
+      border-radius: 14px;
+      padding: 17px;
+      transition: transform .15s ease, border-color .15s ease;
+    }
+
+    .nav-card:active {
+      transform: scale(.98);
+    }
+
+    .nav-title {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .nav-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 7px;
+      line-height: 1.45;
+    }
+
+    .nav-live {
+      background: #152033;
+      border: 1px solid #315887;
+      color: var(--blue);
+    }
+
+    .nav-tilt {
+      background: #27171b;
+      border: 1px solid #5b2630;
+      color: var(--red);
+    }
+
+    .nav-compliance {
+      background: #132119;
+      border: 1px solid #275c3e;
+      color: var(--green);
+    }
+
+    .nav-duration {
+      background: #251d0f;
+      border: 1px solid #6b5125;
+      color: var(--amber);
+    }
+
+    .nav-reset {
+      background: #171d23;
+      border: 1px solid #374554;
+      color: var(--text);
+    }
+
+    .nav-score {
+      background: #132119;
+      border: 1px solid #275c3e;
+      color: var(--green);
+    }
+
+    /* CALENDAR */
 
     .calendar {
       display: grid;
@@ -197,6 +246,7 @@
     }
 
     @media (max-width: 700px) {
+
       .wrap {
         padding: 14px;
       }
@@ -217,50 +267,193 @@
       .day .pnl {
         font-size: 14px;
       }
+
+      .nav-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 
 <body>
+
   <div class="wrap">
 
+    <!-- HERO -->
+
     <section class="hero">
-      <div class="eyebrow">Momentum Trading Journal</div>
+
+      <div class="eyebrow">
+        Momentum Trading Journal
+      </div>
+
       <h1>WASPN</h1>
+
       <div class="subtitle">
         Data-backed small-cap momentum trading framework.
-        The goal is not to recover old losses — it is to prove a repeatable profitable operating system.
+        The goal is not to recover old losses — it is to prove a
+        repeatable profitable operating system.
       </div>
 
       <div class="grid">
+
         <div class="card">
-          <div class="label">Primary Window</div>
-          <div class="value blue">9:00–11:00 AM ET</div>
+          <div class="label">
+            Primary Window
+          </div>
+          <div class="value blue">
+            9:00–11:00 AM ET
+          </div>
         </div>
 
         <div class="card">
-          <div class="label">Max Attempts</div>
-          <div class="value">5</div>
+          <div class="label">
+            Max Attempts
+          </div>
+          <div class="value">
+            5
+          </div>
         </div>
 
         <div class="card">
-          <div class="label">Hard Daily Stop</div>
-          <div class="value red">-$100</div>
+          <div class="label">
+            Hard Daily Stop
+          </div>
+          <div class="value red">
+            -$100
+          </div>
         </div>
 
         <div class="card">
-          <div class="label">Green Day Objective</div>
-          <div class="value green">+$50</div>
+          <div class="label">
+            Green Day Objective
+          </div>
+          <div class="value green">
+            +$50
+          </div>
         </div>
+
       </div>
+
     </section>
 
+
+    <!-- NAVIGATION PANEL -->
+
     <section class="section card">
+
+      <h2>WASPN Control Centre</h2>
+
+      <div class="small">
+        Live trading controls, mental checks and end-of-day review.
+      </div>
+
+      <div class="nav-grid">
+
+        <a
+          href="live-risk.html"
+          class="nav-card nav-live"
+        >
+          <div class="nav-title">
+            Live Risk Dashboard
+          </div>
+
+          <div class="nav-desc">
+            Track attempt count, realised P&amp;L,
+            UK trading time, tilt and hard-stop status.
+          </div>
+        </a>
+
+
+        <a
+          href="tilt.html"
+          class="nav-card nav-tilt"
+        >
+          <div class="nav-title">
+            Tilt Checklist
+          </div>
+
+          <div class="nav-desc">
+            Identify recovery trading, anger,
+            rushed entries and “just one more”.
+          </div>
+        </a>
+
+
+        <a
+          href="compliance.html"
+          class="nav-card nav-compliance"
+        >
+          <div class="nav-title">
+            Daily Compliance
+          </div>
+
+          <div class="nav-desc">
+            Did I respect the window,
+            attempt 5 and the -$100 hard stop?
+          </div>
+        </a>
+
+
+        <a
+          href="trade-duration.html"
+          class="nav-card nav-duration"
+        >
+          <div class="nav-title">
+            Trade Duration Warning
+          </div>
+
+          <div class="nav-desc">
+            Live 3, 5 and 10 minute prompts
+            to reassess failed momentum.
+          </div>
+        </a>
+
+
+        <a
+          href="post-trade-reset.html"
+          class="nav-card nav-reset"
+        >
+          <div class="nav-title">
+            Post-Trade Reset
+          </div>
+
+          <div class="nav-desc">
+            Complete after a loss before
+            considering another entry.
+          </div>
+        </a>
+
+
+        <a
+          href="session-score.html"
+          class="nav-card nav-score"
+        >
+          <div class="nav-title">
+            Session Score
+          </div>
+
+          <div class="nav-desc">
+            Grade process compliance out of 5
+            before judging daily P&amp;L.
+          </div>
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- CORE STRUCTURE -->
+
+    <section class="section card">
+
       <h2>Core WASPN Structure</h2>
 
       <div class="rule">
         <strong>6:30–7:00 AM ET</strong><br />
-        Preliminary monitoring window only. Trade only if the setup is unusually strong.
+        Preliminary monitoring window only.
+        Trade only if the setup is unusually strong.
       </div>
 
       <div class="rule">
@@ -270,86 +463,147 @@
 
       <div class="rule">
         <strong>Maximum 5 completed attempts</strong><br />
-        Attempt 5 ends the session. No reopening later.
+        Attempt 5 ends the session.
+        No reopening later.
       </div>
 
       <div class="rule">
         <strong>Hard realised loss stop: -$100</strong><br />
-        Once reached, the session is over. No recovery trading.
+        Once reached, the session is over.
+        No recovery trading.
       </div>
 
       <div class="rule">
         <strong>Green-day objective: +$50</strong><br />
-        A successful day. Not a reason to force more trades.
+        A successful day.
+        Not a reason to force more trades.
       </div>
+
     </section>
 
+
+    <!-- DATA -->
+
     <section class="section">
+
       <div class="grid">
+
         <div class="card">
-          <div class="label">7–9 AM ET — Full 2026</div>
-          <div class="value red">-$3,323.15</div>
+
+          <div class="label">
+            7–9 AM ET — Full 2026
+          </div>
+
+          <div class="value red">
+            -$3,323.15
+          </div>
+
           <div class="small">
             318 trades<br />
             Average: -$10.45 per trade<br />
             Win rate: 46.2%
           </div>
+
         </div>
 
+
         <div class="card">
-          <div class="label">9–11 AM ET — Attempts 1–5</div>
-          <div class="value green">+$343.08</div>
+
+          <div class="label">
+            9–11 AM ET — Attempts 1–5
+          </div>
+
+          <div class="value green">
+            +$343.08
+          </div>
+
           <div class="small">
             38 trades<br />
             Average: +$9.03 per trade<br />
             Win rate: 50.0%
           </div>
+
         </div>
 
+
         <div class="card">
-          <div class="label">9:00–9:30 AM ET</div>
-          <div class="value green">+$544.11</div>
+
+          <div class="label">
+            9:00–9:30 AM ET
+          </div>
+
+          <div class="value green">
+            +$544.11
+          </div>
+
           <div class="small">
             51 trades<br />
             Average: +$10.67 per trade<br />
             Win rate: 62.7%
           </div>
+
         </div>
 
+
         <div class="card">
-          <div class="label">October Through 23 Oct 2026</div>
-          <div class="value red">-$1,440.61</div>
+
+          <div class="label">
+            October Through 23 Oct 2026
+          </div>
+
+          <div class="value red">
+            -$1,440.61
+          </div>
+
           <div class="small">
             Big red days dominated the month.
           </div>
+
         </div>
+
       </div>
+
     </section>
 
+
+    <!-- WHY STRUCTURE CHANGED -->
+
     <section class="section card">
+
       <h2>Why the Structure Changed</h2>
+
       <p class="small">
-        The 2026 data shows that time-of-day and attempt count matter together.
-        Trading from 7–9 AM ET was materially negative, while the first five
-        attempts inside the 9–11 AM ET window were positive in the sample.
+        The 2026 data shows that time-of-day and attempt count
+        matter together. Trading from 7–9 AM ET was materially
+        negative, while the first five attempts inside the
+        9–11 AM ET window were positive in the sample.
       </p>
 
       <p class="small">
-        The main problem has not been a lack of winning trades. It has been
-        allowing a small number of losing sessions to expand into catastrophic
-        red days.
+        The main problem has not been a lack of winning trades.
+        It has been allowing a small number of losing sessions
+        to expand into catastrophic red days.
       </p>
+
     </section>
 
+
+    <!-- OCTOBER LESSON -->
+
     <section class="section card">
+
       <h2>October Lesson</h2>
+
       <p class="small">
-        Three major red days — 5 October, 15 October and 22 October —
-        accounted for roughly <strong>-$2,015</strong> combined.
+        Three major red days — 5 October,
+        15 October and 22 October —
+        accounted for roughly
+        <strong>-$2,015</strong> combined.
       </p>
 
       <p class="small">
-        The rest of October through 23 October combined was approximately
+        The rest of October through 23 October
+        combined was approximately
         <strong class="green">+$574</strong>.
       </p>
 
@@ -357,12 +611,18 @@
         WASPN therefore does not need bigger home runs.
         It needs fewer catastrophic continuation sessions.
       </p>
+
     </section>
 
+
+    <!-- CALENDAR -->
+
     <section class="section card">
+
       <h2>October 2026 Calendar</h2>
 
       <div class="calendar">
+
         <div class="weekday">Mon</div>
         <div class="weekday">Tue</div>
         <div class="weekday">Wed</div>
@@ -387,6 +647,7 @@
 
         <div class="day"></div>
         <div class="day"></div>
+
 
         <div class="day">
           <div class="date">5 Oct</div>
@@ -416,6 +677,7 @@
         <div class="day"></div>
         <div class="day"></div>
 
+
         <div class="day">
           <div class="date">12 Oct</div>
           <div class="pnl green">+$293.19</div>
@@ -442,6 +704,7 @@
 
         <div class="day"></div>
         <div class="day"></div>
+
 
         <div class="day">
           <div class="date">19 Oct</div>
@@ -471,6 +734,7 @@
         <div class="day"></div>
         <div class="day"></div>
 
+
         <div class="day">
           <div class="date">26 Oct</div>
         </div>
@@ -493,49 +757,96 @@
 
         <div class="day"></div>
         <div class="day"></div>
+
       </div>
+
     </section>
 
+
+    <!-- MONTH END -->
+
     <section class="section card">
+
       <h2>Month-End Objective</h2>
 
       <div class="grid">
-        <div>
-          <div class="label">Current October P&L</div>
-          <div class="value red">-$1,440.61</div>
-        </div>
 
         <div>
-          <div class="label">October Finish Goal</div>
-          <div class="value amber">≈ -$1,200</div>
+
+          <div class="label">
+            Current October P&amp;L
+          </div>
+
+          <div class="value red">
+            -$1,440.61
+          </div>
+
         </div>
+
+
+        <div>
+
+          <div class="label">
+            October Finish Goal
+          </div>
+
+          <div class="value amber">
+            ≈ -$1,200
+          </div>
+
+        </div>
+
       </div>
 
       <p class="small">
-        Five +$50 green days would add about +$250 and bring October to roughly
-        -$1,190.61. The goal is to finish the month cleanly, not force a recovery.
+        Five +$50 green days would add about +$250
+        and bring October to roughly -$1,190.61.
+        The goal is to finish the month cleanly,
+        not force a recovery.
       </p>
+
     </section>
 
+
+    <!-- NOVEMBER -->
+
     <section class="section card">
+
       <h2>November Mission</h2>
 
       <p class="small">
-        November is the first opportunity to test WASPN from day one under the
-        complete structure:
+        November is the first opportunity to test WASPN
+        from day one under the complete structure:
       </p>
 
-      <div class="rule">Protect the downside.</div>
-      <div class="rule">Respect the 5-attempt limit.</div>
-      <div class="rule">Trade primarily between 9–11 AM ET.</div>
-      <div class="rule">Treat +$50 as enough.</div>
-      <div class="rule">Do not allow one bad session to define the month.</div>
+      <div class="rule">
+        Protect the downside.
+      </div>
+
+      <div class="rule">
+        Respect the 5-attempt limit.
+      </div>
+
+      <div class="rule">
+        Trade primarily between 9–11 AM ET.
+      </div>
+
+      <div class="rule">
+        Treat +$50 as enough.
+      </div>
+
+      <div class="rule">
+        Do not allow one bad session to define the month.
+      </div>
+
     </section>
+
 
     <div class="footer">
       WASPN • 2026 Data-Backed Trading Framework
     </div>
 
   </div>
+
 </body>
 </html>
