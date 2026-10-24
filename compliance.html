@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WASPN Daily Compliance</title>
+
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --panel: #121820;
+      --border: #293342;
+      --text: #e8eef6;
+      --muted: #8e9aaa;
+      --green: #35d07f;
+      --red: #ff5f6d;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #090d12, #0d131a);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero, .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 42px;
+      color: var(--green);
+    }
+
+    .sub {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .card {
+      margin-top: 18px;
+    }
+
+    .check {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 21px;
+      font-weight: 700;
+    }
+
+    .check:last-child {
+      border-bottom: 0;
+    }
+
+    .objective {
+      margin-top: 18px;
+      background: #102018;
+      border: 1px solid #275c3e;
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .score {
+      font-size: 52px;
+      font-weight: 800;
+      color: var(--green);
+      margin: 5px 0;
+    }
+
+    .rule {
+      margin-top: 18px;
+      background: #181317;
+      border: 1px solid #4b2930;
+      border-radius: 16px;
+      padding: 18px;
+      line-height: 1.6;
+    }
+
+    .footer {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <section class="hero">
+      <div class="sub">WASPN • Daily Process Scorecard</div>
+      <h1>Compliance Check</h1>
+      <div class="sub">
+        Judge the session by rule-following first. P&amp;L comes second.
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="check">✓ Did I stay inside the window?</div>
+      <div class="check">✓ Did I stop by attempt 5?</div>
+      <div class="check">✓ Did I respect -$100?</div>
+    </section>
+
+    <section class="objective">
+      <strong>Next-week objective</strong>
+      <div class="score">5 / 5</div>
+      <div>
+        Five fully compliant trading days are more valuable than forcing
+        a big P&amp;L recovery.
+      </div>
+    </section>
+
+    <section class="rule">
+      <strong>UK times next week</strong><br><br>
+
+      Preliminary window: <strong>10:30–11:00 AM</strong><br>
+      Main trading window: <strong>1:00–3:00 PM</strong><br><br>
+
+      At <strong>3:00 PM</strong>, trading is finished.<br>
+      At <strong>attempt 5</strong>, trading is finished.<br>
+      At <strong>-$100 realised</strong>, trading is finished.
+    </section>
+
+    <div class="footer">
+      WASPN • Process Over Recovery
+    </div>
+
+  </div>
+</body>
+</html>
