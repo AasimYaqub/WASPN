@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WASPN Session Score</title>
+
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --panel: #121820;
+      --border: #293342;
+      --text: #e8eef6;
+      --muted: #8e9aaa;
+      --green: #35d07f;
+      --red: #ff5f6d;
+      --amber: #f3b84b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #090d12, #0d131a);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .btn,
+    a.btn {
+      background: #293342;
+      color: white;
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .hero,
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .card {
+      margin-top: 16px;
+    }
+
+    h1 {
+      margin: 4px 0 6px;
+      color: var(--green);
+      font-size: 40px;
+    }
+
+    .muted {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .check {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .check:last-child {
+      border-bottom: 0;
+    }
+
+    .check input {
+      width: 24px;
+      height: 24px;
+      accent-color: var(--green);
+      cursor: pointer;
+    }
+
+    .score {
+      text-align: center;
+      font-size: 68px;
+      font-weight: 900;
+      color: var(--green);
+    }
+
+    .message {
+      text-align: center;
+      font-weight: 800;
+      font-size: 20px;
+      margin-top: 8px;
+    }
+
+    .date {
+      width: 100%;
+      background: #0d131a;
+      border: 1px solid var(--border);
+      color: white;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 16px;
+    }
+
+    .good {
+      color: var(--green);
+    }
+
+    .warn {
+      color: var(--amber);
+    }
+
+    .bad {
+      color: var(--red);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrap">
+
+    <div class="top">
+      <a class="btn" href="index.html">← Home</a>
+      <button class="btn" onclick="resetScore()">Reset</button>
+    </div>
+
+    <section class="hero">
+
+      <div class="muted">
+        WASPN • End-of-Day Process Score
+      </div>
+
+      <h1>Session Score</h1>
+
+      <div class="muted">
+        Score the process before judging the money.
+        A red day can still be a good execution day if the structure was respected.
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <label class="muted">
+        Trading date
+      </label>
+
+      <input
+        id="date"
+        class="date"
+        type="date"
+      >
+
+    </section>
+
+    <section class="card">
+
+      <label class="check">
+        <input
+          type="checkbox"
+          class="scoreCheck"
+          onchange="updateScore()"
+        >
+        <span>
+          Stayed inside the trading window
+        </span>
+      </label>
+
+      <label class="check">
+        <input
+          type="checkbox"
+          class="scoreCheck"
+          onchange="updateScore()"
+        >
+        <span>
+          Stopped by attempt 5
+        </span>
+      </label>
+
+      <label class="check">
+        <input
+          type="checkbox"
+          class="scoreCheck"
+          onchange="updateScore()"
+        >
+        <span>
+          Respected the -$100 hard stop
+        </span>
+      </label>
+
+      <label class="check">
+        <input
+          type="checkbox"
+          class="scoreCheck"
+          onchange="updateScore()"
+        >
+        <span>
+          No post-stop or revenge continuation
+        </span>
+      </label>
+
+      <label class="check">
+        <input
+          type="checkbox"
+          class="scoreCheck"
+          onchange="updateScore()"
+        >
+        <span>
+          No tilt-driven trade
+        </span>
+      </label>
+
+    </section>
+
+    <section class="card">
+
+      <div
+        id="score"
+        class="score"
+      >
+        0 / 5
+      </div>
+
+      <div
+        id="message"
+        class="message bad"
+      >
+        Process incomplete.
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <div class="muted">
+
+        <strong>Next-week target:</strong>
+
+        <br><br>
+
+        <span class="good">
+          5 fully compliant days out of 5.
+        </span>
+
+        <br><br>
+
+        That is more valuable than forcing a large P&amp;L recovery.
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <script>
+
+    const checks =
+      [
+        ...document.querySelectorAll(
+          '.scoreCheck'
+        )
+      ];
+
+    document.getElementById('date').value =
+      new Date().toISOString().slice(0, 10);
+
+    function updateScore() {
+
+      const total =
+        checks.filter(
+          check => check.checked
+        ).length;
+
+      const score =
+        document.getElementById('score');
+
+      const message =
+        document.getElementById('message');
+
+      score.textContent =
+        total + ' / 5';
+
+      if (total === 5) {
+
+        score.className =
+          'score good';
+
+        message.className =
+          'message good';
+
+        message.textContent =
+          'FULLY COMPLIANT SESSION';
+
+      }
+
+      else if (total === 4) {
+
+        score.className =
+          'score warn';
+
+        message.className =
+          'message warn';
+
+        message.textContent =
+          'Strong process — review the one breach.';
+
+      }
+
+      else if (total === 3) {
+
+        score.className =
+          'score warn';
+
+        message.className =
+          'message warn';
+
+        message.textContent =
+          'Mixed process — fix the breach before next session.';
+
+      }
+
+      else {
+
+        score.className =
+          'score bad';
+
+        message.className =
+          'message bad';
+
+        message.textContent =
+          'Process incomplete.';
+
+      }
+    }
+
+    function resetScore() {
+
+      checks.forEach(
+        check => check.checked = false
+      );
+
+      updateScore();
+    }
+
+    updateScore();
+
+  </script>
+
+</body>
+</html>
