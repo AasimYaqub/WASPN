@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WASPN 2026 Calendar</title>
+
+  <style>
+    :root {
+      --bg:#0b0f14;
+      --panel:#121820;
+      --panel2:#171f29;
+      --border:#293342;
+      --text:#e8eef6;
+      --muted:#8e9aaa;
+      --green:#35d07f;
+      --red:#ff5f6d;
+      --blue:#63a7ff;
+      --amber:#f3b84b;
+    }
+
+    * {
+      box-sizing:border-box;
+    }
+
+    body {
+      margin:0;
+      background:linear-gradient(180deg,#090d12,#0d131a);
+      color:var(--text);
+      font-family:Arial,Helvetica,sans-serif;
+    }
+
+    .wrap {
+      max-width:900px;
+      margin:0 auto;
+      padding:18px;
+    }
+
+    .topbar {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .btn,
+    a.btn {
+      border:0;
+      background:#293342;
+      color:white;
+      padding:11px 14px;
+      border-radius:10px;
+      font-weight:700;
+      text-decoration:none;
+      cursor:pointer;
+    }
+
+    .hero,
+    .card {
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:20px;
+    }
+
+    .card {
+      margin-top:16px;
+    }
+
+    h1 {
+      margin:4px 0 6px;
+      color:var(--green);
+      font-size:40px;
+    }
+
+    h2 {
+      margin:0;
+    }
+
+    .muted {
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .month-nav {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    .month-title {
+      font-size:28px;
+      font-weight:900;
+      text-align:center;
+      flex:1;
+    }
+
+    .stats {
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:10px;
+      margin-top:16px;
+    }
+
+    .stat {
+      background:var(--panel2);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px;
+    }
+
+    .label {
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      font-weight:700;
+    }
+
+    .value {
+      font-size:24px;
+      font-weight:900;
+      margin-top:5px;
+    }
+
+    .green { color:var(--green); }
+    .red { color:var(--red); }
+    .blue { color:var(--blue); }
+    .amber { color:var(--amber); }
+
+    .calendar {
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:6px;
+      margin-top:16px;
+    }
+
+    .weekday {
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+      padding-bottom:4px;
+    }
+
+    .day {
+      min-height:86px;
+      padding:9px;
+      background:var(--panel2);
+      border:1px solid var(--border);
+      border-radius:12px;
+      cursor:pointer;
+      position:relative;
+    }
+
+    .day.empty {
+      opacity:.22;
+      cursor:default;
+    }
+
+    .day.future {
+      opacity:.45;
+    }
+
+    .day.green-day {
+      border-color:#275c3e;
+      background:#102018;
+    }
+
+    .day.red-day {
+      border-color:#5b2630;
+      background:#231317;
+    }
+
+    .date {
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .pnl {
+      font-size:17px;
+      font-weight:900;
+      margin-top:10px;
+      word-break:break-word;
+    }
+
+    .detail {
+      margin-top:16px;
+      padding:16px;
+      border-radius:14px;
+      background:#0d131a;
+      border:1px solid var(--border);
+      min-height:84px;
+    }
+
+    .detail-title {
+      font-size:18px;
+      font-weight:800;
+    }
+
+    .month-buttons {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:8px;
+      margin-top:16px;
+    }
+
+    .month-jump {
+      background:#171f29;
+      color:var(--text);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:10px 6px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .month-jump.active {
+      border-color:var(--blue);
+      color:var(--blue);
+    }
+
+    .year-summary {
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:10px;
+      margin-top:14px;
+    }
+
+    @media(max-width:600px) {
+
+      .wrap {
+        padding:12px;
+      }
+
+      .hero,
+      .card {
+        padding:16px;
+      }
+
+      .month-title {
+        font-size:23px;
+      }
+
+      .calendar {
+        gap:4px;
+      }
+
+      .day {
+        min-height:76px;
+        padding:6px;
+      }
+
+      .pnl {
+        font-size:14px;
+      }
+
+      .stats {
+        grid-template-columns:1fr 1fr;
+      }
+
+      .month-buttons {
+        grid-template-columns:repeat(3,1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="topbar">
+    <a href="index.html" class="btn">← Home</a>
+  </div>
+
+  <section class="hero">
+    <div class="muted">WASPN • Full Trading History</div>
+    <h1>2026 Interactive Calendar</h1>
+    <div class="muted">
+      Full broker-history calendar through 23 October 2026.
+      Tap any trading day to inspect its result.
+    </div>
+  </section>
+
+  <section class="card">
+
+    <div class="month-nav">
+
+      <button class="btn" id="prevBtn">
+        ←
+      </button>
+
+      <div class="month-title" id="monthTitle">
+        October 2026
+      </div>
+
+      <button class="btn" id="nextBtn">
+        →
+      </button>
+
+    </div>
+
+    <div class="month-buttons" id="monthButtons"></div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="label">Month P&amp;L</div>
+        <div class="value" id="monthPnl">—</div>
+      </div>
+
+      <div class="stat">
+        <div class="label">Trading Days</div>
+        <div class="value" id="tradingDays">—</div>
+      </div>
+
+      <div class="stat">
+        <div class="label">Green Days</div>
+        <div class="value green" id="greenDays">—</div>
+      </div>
+
+      <div class="stat">
+        <div class="label">Red Days</div>
+        <div class="value red" id="redDays">—</div>
+      </div>
+
+      <div class="stat">
+        <div class="label">Best Day</div>
+        <div class="value green" id="bestDay">—</div>
+      </div>
+
+      <div class="stat">
+        <div class="label">Worst Day</div>
+        <div class="value red" id="worstDay">—</div>
+      </div>
+
+    </div>
+
+    <div class="calendar">
+
+      <div class="weekday">Mon</div>
+      <div class="weekday">Tue</div>
+      <div class="weekday">Wed</div>
+      <div class="weekday">Thu</div>
+      <div class="weekday">Fri</div>
+
+      <div id="calendarDays" style="display:contents;"></div>
+
+    </div>
+
+    <div class="detail" id="detail">
+      <div class="muted">
+        Tap a trading day to see its result.
+      </div>
+    </div>
+
+  </section>
+
+  <section class="card">
+
+    <h2>2026 Year-to-Date</h2>
+
+    <div class="year-summary">
+
+      <div class="stat">
+        <div class="label">Net P&amp;L</div>
+        <div class="value red">-$9,403.62</div>
+      </div>
+
+      <div class="stat">
+        <div class="label">Trading Days</div>
+        <div class="value">79</div>
+      </div>
+
+      <div class="stat">
+        <div class="label">First Trading Day</div>
+        <div class="value blue">30 Jun</div>
+      </div>
+
+      <div class="stat">
+        <div class="label">Latest Data</div>
+        <div class="value blue">23 Oct</div>
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+<script>
+
+const tradingData = {
+
+  "2026-06-30": 50.30,
+
+  "2026-07-01": 39.67,
+  "2026-07-02": -379.18,
+  "2026-07-06": -208.32,
+  "2026-07-07": -225.94,
+  "2026-07-08": -83.53,
+  "2026-07-09": 100.11,
+  "2026-07-10": -394.58,
+  "2026-07-13": 18.12,
+  "2026-07-14": -116.76,
+  "2026-07-15": 5.86,
+  "2026-07-16": -83.74,
+  "2026-07-17": -18.83,
+  "2026-07-20": -35.90,
+  "2026-07-21": 45.40,
+  "2026-07-22": 85.58,
+  "2026-07-23": -383.95,
+  "2026-07-24": -296.24,
+  "2026-07-27": -481.58,
+  "2026-07-28": -558.70,
+  "2026-07-29": 16.89,
+  "2026-07-30": 24.27,
+  "2026-07-31": 15.92,
+
+  "2026-08-03": 47.24,
+  "2026-08-04": 99.86,
+  "2026-08-05": 59.42,
+  "2026-08-06": -105.88,
+  "2026-08-07": 72.98,
+  "2026-08-10": -386.95,
+  "2026-08-11": -152.17,
+  "2026-08-12": -67.56,
+  "2026-08-13": 20.05,
+  "2026-08-14": -29.16,
+  "2026-08-17": -7.59,
+  "2026-08-18": 197.55,
+  "2026-08-19": 98.21,
+  "2026-08-20": -1577.00,
+  "2026-08-21": 10.56,
+  "2026-08-24": -3.68,
+  "2026-08-25": -435.49,
+  "2026-08-26": -840.25,
+  "2026-08-27": 33.55,
+  "2026-08-28": 46.90,
+  "2026-08-31": 96.24,
+
+  "2026-09-01": -193.99,
+  "2026-09-02": -41.68,
+  "2026-09-03": -232.65,
+  "2026-09-04": -403.03,
+  "2026-09-08": -21.27,
+  "2026-09-09": 188.32,
+  "2026-09-10": 39.66,
+  "2026-09-11": -42.66,
+  "2026-09-14": -14.48,
+  "2026-09-15": -220.39,
+  "2026-09-16": 159.08,
+  "2026-09-17": 169.43,
+  "2026-09-18": 86.85,
+  "2026-09-21": -544.24,
+  "2026-09-22": 182.20,
+  "2026-09-23": -855.48,
+  "2026-09-24": 51.15,
+  "2026-09-25": -423.36,
+  "2026-09-30": -150.79,
+
+  "2026-10-01": 39.76,
+  "2026-10-02": -19.49,
+  "2026-10-05": -509.05,
+  "2026-10-06": 176.03,
+  "2026-10-07": 48.84,
+  "2026-10-08": -142.03,
+  "2026-10-09": -86.05,
+  "2026-10-12": 293.19,
+  "2026-10-13": 339.95,
+  "2026-10-14": 122.73,
+  "2026-10-15": -908.32,
+  "2026-10-19": -2.53,
+  "2026-10-20": -74.58,
+  "2026-10-21": -31.44,
+  "2026-10-22": -599.78,
+  "2026-10-23": -95.22
+
+};
+
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+];
+
+let currentMonth = 9;
+
+function money(value) {
+
+  if (value > 0) {
+    return "+$" + value.toFixed(2);
+  }
+
+  if (value < 0) {
+    return "-$" + Math.abs(value).toFixed(2);
+  }
+
+  return "$0.00";
+}
+
+function dateKey(year, month, day) {
+
+  return (
+    year +
+    "-" +
+    String(month + 1).padStart(2, "0") +
+    "-" +
+    String(day).padStart(2, "0")
+  );
+}
+
+function getMonthData(month) {
+
+  const prefix =
+    "2026-" +
+    String(month + 1).padStart(2, "0");
+
+  return Object.entries(tradingData)
+    .filter(([date]) =>
+      date.startsWith(prefix)
+    );
+}
+
+function updateStats(month) {
+
+  const entries =
+    getMonthData(month);
+
+  if (entries.length === 0) {
+
+    document.getElementById("monthPnl").textContent =
+      "No data";
+
+    document.getElementById("monthPnl").className =
+      "value";
+
+    document.getElementById("tradingDays").textContent =
+      "0";
+
+    document.getElementById("greenDays").textContent =
+      "0";
+
+    document.getElementById("redDays").textContent =
+      "0";
+
+    document.getElementById("bestDay").textContent =
+      "—";
+
+    document.getElementById("worstDay").textContent =
+      "—";
+
+    return;
+  }
+
+  const values =
+    entries.map(entry => entry[1]);
+
+  const total =
+    values.reduce(
+      (sum,value) => sum + value,
+      0
+    );
+
+  const green =
+    values.filter(value => value > 0).length;
+
+  const red =
+    values.filter(value => value < 0).length;
+
+  const bestEntry =
+    entries.reduce(
+      (best,current) =>
+        current[1] > best[1]
+          ? current
+          : best
+    );
+
+  const worstEntry =
+    entries.reduce(
+      (worst,current) =>
+        current[1] < worst[1]
+          ? current
+          : worst
+    );
+
+  const monthPnl =
+    document.getElementById("monthPnl");
+
+  monthPnl.textContent =
+    money(total);
+
+  monthPnl.className =
+    total >= 0
+      ? "value green"
+      : "value red";
+
+  document.getElementById("tradingDays").textContent =
+    entries.length;
+
+  document.getElementById("greenDays").textContent =
+    green;
+
+  document.getElementById("redDays").textContent =
+    red;
+
+  document.getElementById("bestDay").textContent =
+    money(bestEntry[1]);
+
+  document.getElementById("worstDay").textContent =
+    money(worstEntry[1]);
+}
+
+function renderCalendar() {
+
+  document.getElementById("monthTitle").textContent =
+    monthNames[currentMonth] +
+    " 2026";
+
+  updateStats(currentMonth);
+
+  document
+    .querySelectorAll(".month-jump")
+    .forEach((button,index) => {
+
+      button.classList.toggle(
+        "active",
+        index === currentMonth
+      );
+
+    });
+
+  const container =
+    document.getElementById("calendarDays");
+
+  container.innerHTML = "";
+
+  const first =
+    new Date(
+      2026,
+      currentMonth,
+      1
+    );
+
+  const daysInMonth =
+    new Date(
+      2026,
+      currentMonth + 1,
+      0
+    ).getDate();
+
+  let weekday =
+    first.getDay();
+
+  weekday =
+    weekday === 0
+      ? 7
+      : weekday;
+
+  let mondayIndex =
+    weekday - 1;
+
+  if (mondayIndex > 4) {
+    mondayIndex = 0;
+  }
+
+  for (
+    let i = 0;
+    i < mondayIndex;
+    i++
+  ) {
+
+    const empty =
+      document.createElement("div");
+
+    empty.className =
+      "day empty";
+
+    container.appendChild(empty);
+  }
+
+  for (
+    let day = 1;
+    day <= daysInMonth;
+    day++
+  ) {
+
+    const date =
+      new Date(
+        2026,
+        currentMonth,
+        day
+      );
+
+    const jsDay =
+      date.getDay();
+
+    if (
+      jsDay === 0 ||
+      jsDay === 6
+    ) {
+      continue;
+    }
+
+    const key =
+      dateKey(
+        2026,
+        currentMonth,
+        day
+      );
+
+    const value =
+      tradingData[key];
+
+    const cell =
+      document.createElement("div");
+
+    cell.className =
+      "day";
+
+    if (
+      typeof value === "number"
+    ) {
+
+      if (value > 0) {
+        cell.classList.add(
+          "green-day"
+        );
+      }
+
+      else if (value < 0) {
+        cell.classList.add(
+          "red-day"
+        );
+      }
+
+    }
+
+    else {
+
+      if (
+        key > "2026-10-23"
+      ) {
+        cell.classList.add(
+          "future"
+        );
+      }
+
+    }
+
+    const dateEl =
+      document.createElement("div");
+
+    dateEl.className =
+      "date";
+
+    dateEl.textContent =
+      day + " " +
+      monthNames[currentMonth].slice(0,3);
+
+    cell.appendChild(dateEl);
+
+    const pnl =
+      document.createElement("div");
+
+    pnl.className =
+      "pnl";
+
+    if (
+      typeof value === "number"
+    ) {
+
+      pnl.textContent =
+        money(value);
+
+      pnl.classList.add(
+        value >= 0
+          ? "green"
+          : "red"
+      );
+
+    }
+
+    else {
+
+      pnl.textContent =
+        "—";
+
+      pnl.classList.add(
+        "muted"
+      );
+    }
+
+    cell.appendChild(pnl);
+
+    if (
+      typeof value === "number"
+    ) {
+
+      cell.addEventListener(
+        "click",
+        () =>
+          showDetail(
+            key,
+            value
+          )
+      );
+
+    }
+
+    container.appendChild(cell);
+  }
+}
+
+function showDetail(date,value) {
+
+  const d =
+    new Date(
+      date + "T12:00:00"
+    );
+
+  const formatted =
+    d.toLocaleDateString(
+      "en-GB",
+      {
+        weekday:"long",
+        day:"numeric",
+        month:"long",
+        year:"numeric"
+      }
+    );
+
+  const detail =
+    document.getElementById("detail");
+
+  detail.innerHTML =
+    '<div class="detail-title">' +
+    formatted +
+    '</div>' +
+    '<div class="' +
+    (value >= 0 ? "green" : "red") +
+    '" style="font-size:30px;font-weight:900;margin-top:8px;">' +
+    money(value) +
+    '</div>';
+}
+
+function buildMonthButtons() {
+
+  const holder =
+    document.getElementById(
+      "monthButtons"
+    );
+
+  monthNames.forEach(
+    (month,index) => {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.className =
+        "month-jump";
+
+      button.textContent =
+        month.slice(0,3);
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          currentMonth =
+            index;
+
+          renderCalendar();
+
+        }
+      );
+
+      holder.appendChild(
+        button
+      );
+    }
+  );
+}
+
+document
+  .getElementById("prevBtn")
+  .addEventListener(
+    "click",
+    () => {
+
+      currentMonth =
+        currentMonth === 0
+          ? 11
+          : currentMonth - 1;
+
+      renderCalendar();
+
+    }
+  );
+
+document
+  .getElementById("nextBtn")
+  .addEventListener(
+    "click",
+    () => {
+
+      currentMonth =
+        currentMonth === 11
+          ? 0
+          : currentMonth + 1;
+
+      renderCalendar();
+
+    }
+  );
+
+buildMonthButtons();
+renderCalendar();
+
+</script>
+
+</body>
+</html>
