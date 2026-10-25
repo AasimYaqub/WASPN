@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>WASPN Trading Journal</title>
+
+<style>
+
+:root{
+  --bg:#0b0f14;
+  --panel:#121820;
+  --panel2:#171f29;
+  --border:#293342;
+  --text:#e8eef6;
+  --muted:#8e9aaa;
+  --green:#35d07f;
+  --red:#ff5f6d;
+  --blue:#63a7ff;
+  --amber:#f3b84b;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:linear-gradient(180deg,#090d12,#0d131a);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+.wrap{
+  max-width:900px;
+  margin:0 auto;
+  padding:18px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.btn,
+a.btn{
+  border:0;
+  background:#293342;
+  color:white;
+  padding:11px 14px;
+  border-radius:10px;
+  font-weight:700;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+.save{
+  background:#17693d;
+}
+
+.delete{
+  background:#6d2530;
+}
+
+.hero,
+.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+}
+
+.card{
+  margin-top:16px;
+}
+
+h1{
+  margin:4px 0 6px;
+  color:var(--green);
+  font-size:40px;
+}
+
+h2{
+  margin:0 0 14px;
+}
+
+.muted{
+  color:var(--muted);
+  line-height:1.5;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+label{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  color:var(--muted);
+  margin-bottom:5px;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  background:#0d131a;
+  border:1px solid var(--border);
+  color:white;
+  border-radius:10px;
+  padding:11px;
+  font-size:16px;
+}
+
+textarea{
+  min-height:80px;
+  resize:vertical;
+}
+
+.trade{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:16px;
+  margin-top:14px;
+}
+
+.trade-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+}
+
+.trade-title{
+  font-size:21px;
+  font-weight:900;
+}
+
+.pnl{
+  font-size:20px;
+  font-weight:900;
+}
+
+.green{
+  color:var(--green);
+}
+
+.red{
+  color:var(--red);
+}
+
+.daily-total{
+  text-align:center;
+  font-size:46px;
+  font-weight:900;
+  margin:8px 0;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:16px;
+}
+
+.status{
+  margin-top:14px;
+  padding:14px;
+  border-radius:12px;
+  background:#101820;
+  border:1px solid var(--border);
+  text-align:center;
+  font-weight:700;
+}
+
+.check{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-top:10px;
+}
+
+.check input{
+  width:22px;
+  height:22px;
+}
+
+@media(max-width:650px){
+
+  .wrap{
+    padding:12px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="topbar">
+
+    <a class="btn" href="index.html">
+      ← Home
+    </a>
+
+    <a class="btn" href="calendar-2026.html">
+      Calendar
+    </a>
+
+  </div>
+
+  <section class="hero">
+
+    <div class="muted">
+      WASPN • Daily Trading Record
+    </div>
+
+    <h1>Trading Journal</h1>
+
+    <div class="muted">
+      Record a maximum of five completed trade attempts.
+      Saving the day automatically makes the saved daily
+      P&amp;L available to the 2026 calendar.
+    </div>
+
+  </section>
+
+
+  <section class="card">
+
+    <div class="grid">
+
+      <div>
+
+        <label>
+          Trading date
+        </label>
+
+        <input
+          id="tradeDate"
+          type="date"
+        >
+
+      </div>
+
+      <div>
+
+        <label>
+          Session starting account value
+        </label>
+
+        <input
+          id="startValue"
+          type="number"
+          step="0.01"
+          placeholder="Optional"
+        >
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <div id="trades"></div>
+
+
+  <section class="card">
+
+    <h2>Daily Review</h2>
+
+    <label>
+      Daily notes
+    </label>
+
+    <textarea
+      id="dailyNotes"
+      placeholder="What happened today? What worked? What needs fixing?"
+    ></textarea>
+
+
+    <div style="margin-top:16px;">
+
+      <label>
+        WASPN compliance
+      </label>
+
+      <label class="check">
+        <input
+          id="windowCheck"
+          type="checkbox"
+        >
+        Stayed inside the trading window
+      </label>
+
+      <label class="check">
+        <input
+          id="attemptCheck"
+          type="checkbox"
+        >
+        Stopped by attempt 5
+      </label>
+
+      <label class="check">
+        <input
+          id="stopCheck"
+          type="checkbox"
+        >
+        Respected the -$100 hard stop
+      </label>
+
+      <label class="check">
+        <input
+          id="tiltCheck"
+          type="checkbox"
+        >
+        No tilt-driven continuation
+      </label>
+
+      <label class="check">
+        <input
+          id="durationCheck"
+          type="checkbox"
+        >
+        Failed momentum was not turned into a hope trade
+      </label>
+
+    </div>
+
+  </section>
+
+
+  <section class="card">
+
+    <div class="muted" style="text-align:center;">
+      DAILY NET P&amp;L
+    </div>
+
+    <div
+      id="dailyTotal"
+      class="daily-total"
+    >
+      $0.00
+    </div>
+
+    <div class="actions">
+
+      <button
+        class="btn save"
+        onclick="saveDay()"
+      >
+        Save Day
+      </button>
+
+      <button
+        class="btn"
+        onclick="loadDay()"
+      >
+        Load Saved Day
+      </button>
+
+      <button
+        class="btn delete"
+        onclick="deleteDay()"
+      >
+        Delete Day
+      </button>
+
+    </div>
+
+    <div
+      id="saveStatus"
+      class="status"
+    >
+      No changes saved yet.
+    </div>
+
+  </section>
+
+</div>
+
+
+<script>
+
+const STORAGE_KEY = "waspnJournalV2";
+
+const tradeContainer =
+  document.getElementById("trades");
+
+
+function money(value){
+
+  const n =
+    Number(value || 0);
+
+  if(n > 0){
+    return "+$" + n.toFixed(2);
+  }
+
+  if(n < 0){
+    return "-$" + Math.abs(n).toFixed(2);
+  }
+
+  return "$0.00";
+}
+
+
+function createTrade(index){
+
+  const section =
+    document.createElement("section");
+
+  section.className =
+    "trade";
+
+  section.innerHTML = `
+
+    <div class="trade-header">
+
+      <div class="trade-title">
+        Trade ${index}
+      </div>
+
+      <div
+        id="tradePnl${index}"
+        class="pnl"
+      >
+        $0.00
+      </div>
+
+    </div>
+
+
+    <div class="grid">
+
+      <div>
+
+        <label>
+          Ticker
+        </label>
+
+        <input
+          id="ticker${index}"
+          placeholder="e.g. ABCD"
+        >
+
+      </div>
+
+
+      <div>
+
+        <label>
+          Side
+        </label>
+
+        <select
+          id="side${index}"
+          onchange="calculateTrade(${index})"
+        >
+
+          <option value="long">
+            Long
+          </option>
+
+          <option value="short">
+            Short
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div>
+
+        <label>
+          Entry time
+        </label>
+
+        <input
+          id="entryTime${index}"
+          type="time"
+        >
+
+      </div>
+
+
+      <div>
+
+        <label>
+          Exit time
+        </label>
+
+        <input
+          id="exitTime${index}"
+          type="time"
+        >
+
+      </div>
+
+
+      <div>
+
+        <label>
+          Entry price
+        </label>
+
+        <input
+          id="entryPrice${index}"
+          type="number"
+          step="0.0001"
+          oninput="calculateTrade(${index})"
+        >
+
+      </div>
+
+
+      <div>
+
+        <label>
+          Exit price
+        </label>
+
+        <input
+          id="exitPrice${index}"
+          type="number"
+          step="0.0001"
+          oninput="calculateTrade(${index})"
+        >
+
+      </div>
+
+
+      <div>
+
+        <label>
+          Shares
+        </label>
+
+        <input
+          id="shares${index}"
+          type="number"
+          step="1"
+          oninput="calculateTrade(${index})"
+        >
+
+      </div>
+
+
+      <div>
+
+        <label>
+          Fees
+        </label>
+
+        <input
+          id="fees${index}"
+          type="number"
+          step="0.01"
+          value="0"
+          oninput="calculateTrade(${index})"
+        >
+
+      </div>
+
+
+      <div>
+
+        <label>
+          Setup
+        </label>
+
+        <input
+          id="setup${index}"
+          placeholder="Momentum / breakout / pullback..."
+        >
+
+      </div>
+
+
+      <div>
+
+        <label>
+          Tilt present?
+        </label>
+
+        <select id="tilt${index}">
+
+          <option value="no">
+            No
+          </option>
+
+          <option value="yes">
+            Yes
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <div style="margin-top:12px;">
+
+      <label>
+        Reason for entry
+      </label>
+
+      <textarea
+        id="entryReason${index}"
+      ></textarea>
+
+    </div>
+
+
+    <div style="margin-top:12px;">
+
+      <label>
+        Reason for exit
+      </label>
+
+      <textarea
+        id="exitReason${index}"
+      ></textarea>
+
+    </div>
+
+
+    <div style="margin-top:12px;">
+
+      <label>
+        Mistake / lesson
+      </label>
+
+      <textarea
+        id="lesson${index}"
+      ></textarea>
+
+    </div>
+
+  `;
+
+  tradeContainer.appendChild(section);
+}
+
+
+for(let i = 1; i <= 5; i++){
+  createTrade(i);
+}
+
+
+function calculateTrade(index){
+
+  const entry =
+    Number(
+      document.getElementById(
+        "entryPrice" + index
+      ).value || 0
+    );
+
+  const exit =
+    Number(
+      document.getElementById(
+        "exitPrice" + index
+      ).value || 0
+    );
+
+  const shares =
+    Number(
+      document.getElementById(
+        "shares" + index
+      ).value || 0
+    );
+
+  const fees =
+    Number(
+      document.getElementById(
+        "fees" + index
+      ).value || 0
+    );
+
+  const side =
+    document.getElementById(
+      "side" + index
+    ).value;
+
+  let gross = 0;
+
+  if(side === "long"){
+
+    gross =
+      (exit - entry) *
+      shares;
+
+  } else {
+
+    gross =
+      (entry - exit) *
+      shares;
+
+  }
+
+  const net =
+    gross - fees;
+
+  const display =
+    document.getElementById(
+      "tradePnl" + index
+    );
+
+  display.textContent =
+    money(net);
+
+  display.className =
+    net >= 0
+      ? "pnl green"
+      : "pnl red";
+
+  display.dataset.pnl =
+    net;
+
+  calculateDailyTotal();
+}
+
+
+function calculateDailyTotal(){
+
+  let total = 0;
+
+  for(let i = 1; i <= 5; i++){
+
+    const display =
+      document.getElementById(
+        "tradePnl" + i
+      );
+
+    total +=
+      Number(
+        display.dataset.pnl || 0
+      );
+
+  }
+
+  const element =
+    document.getElementById(
+      "dailyTotal"
+    );
+
+  element.textContent =
+    money(total);
+
+  element.className =
+    total >= 0
+      ? "daily-total green"
+      : "daily-total red";
+
+  element.dataset.pnl =
+    total;
+
+  return total;
+}
+
+
+function getJournal(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        STORAGE_KEY
+      )
+    ) || {};
+
+  } catch(error){
+
+    return {};
+
+  }
+}
+
+
+function tradeData(index){
+
+  return {
+
+    ticker:
+      document
+      .getElementById(
+        "ticker" + index
+      )
+      .value
+      .trim()
+      .toUpperCase(),
+
+    side:
+      document
+      .getElementById(
+        "side" + index
+      )
+      .value,
+
+    entryTime:
+      document
+      .getElementById(
+        "entryTime" + index
+      )
+      .value,
+
+    exitTime:
+      document
+      .getElementById(
+        "exitTime" + index
+      )
+      .value,
+
+    entryPrice:
+      Number(
+        document
+        .getElementById(
+          "entryPrice" + index
+        )
+        .value || 0
+      ),
+
+    exitPrice:
+      Number(
+        document
+        .getElementById(
+          "exitPrice" + index
+        )
+        .value || 0
+      ),
+
+    shares:
+      Number(
+        document
+        .getElementById(
+          "shares" + index
+        )
+        .value || 0
+      ),
+
+    fees:
+      Number(
+        document
+        .getElementById(
+          "fees" + index
+        )
+        .value || 0
+      ),
+
+    setup:
+      document
+      .getElementById(
+        "setup" + index
+      )
+      .value,
+
+    tilt:
+      document
+      .getElementById(
+        "tilt" + index
+      )
+      .value,
+
+    entryReason:
+      document
+      .getElementById(
+        "entryReason" + index
+      )
+      .value,
+
+    exitReason:
+      document
+      .getElementById(
+        "exitReason" + index
+      )
+      .value,
+
+    lesson:
+      document
+      .getElementById(
+        "lesson" + index
+      )
+      .value,
+
+    netPnl:
+      Number(
+        document
+        .getElementById(
+          "tradePnl" + index
+        )
+        .dataset.pnl || 0
+      )
+
+  };
+
+}
+
+
+function saveDay(){
+
+  const date =
+    document.getElementById(
+      "tradeDate"
+    ).value;
+
+  if(!date){
+
+    alert(
+      "Choose a trading date first."
+    );
+
+    return;
+  }
+
+  const journal =
+    getJournal();
+
+  const trades = [];
+
+  for(let i = 1; i <= 5; i++){
+
+    const trade =
+      tradeData(i);
+
+    const used =
+      trade.ticker ||
+      trade.entryPrice ||
+      trade.exitPrice ||
+      trade.shares;
+
+    if(used){
+      trades.push(trade);
+    }
+
+  }
+
+  const total =
+    calculateDailyTotal();
+
+  journal[date] = {
+
+    date,
+
+    startValue:
+      Number(
+        document
+        .getElementById(
+          "startValue"
+        )
+        .value || 0
+      ),
+
+    trades,
+
+    totalNet:
+      total,
+
+    notes:
+      document
+      .getElementById(
+        "dailyNotes"
+      )
+      .value,
+
+    compliance:{
+
+      window:
+        document
+        .getElementById(
+          "windowCheck"
+        )
+        .checked,
+
+      attempts:
+        document
+        .getElementById(
+          "attemptCheck"
+        )
+        .checked,
+
+      stop:
+        document
+        .getElementById(
+          "stopCheck"
+        )
+        .checked,
+
+      tilt:
+        document
+        .getElementById(
+          "tiltCheck"
+        )
+        .checked,
+
+      duration:
+        document
+        .getElementById(
+          "durationCheck"
+        )
+        .checked
+
+    },
+
+    savedAt:
+      new Date().toISOString()
+
+  };
+
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(journal)
+  );
+
+
+  document.getElementById(
+    "saveStatus"
+  ).textContent =
+    "Saved " +
+    date +
+    " • " +
+    money(total) +
+    " • Calendar updated.";
+
+}
+
+
+function clearForm(){
+
+  document.getElementById(
+    "startValue"
+  ).value = "";
+
+  document.getElementById(
+    "dailyNotes"
+  ).value = "";
+
+  document.querySelectorAll(
+    'input[type="checkbox"]'
+  ).forEach(
+    box => box.checked = false
+  );
+
+  for(let i = 1; i <= 5; i++){
+
+    document.getElementById(
+      "ticker" + i
+    ).value = "";
+
+    document.getElementById(
+      "side" + i
+    ).value = "long";
+
+    document.getElementById(
+      "entryTime" + i
+    ).value = "";
+
+    document.getElementById(
+      "exitTime" + i
+    ).value = "";
+
+    document.getElementById(
+      "entryPrice" + i
+    ).value = "";
+
+    document.getElementById(
+      "exitPrice" + i
+    ).value = "";
+
+    document.getElementById(
+      "shares" + i
+    ).value = "";
+
+    document.getElementById(
+      "fees" + i
+    ).value = "0";
+
+    document.getElementById(
+      "setup" + i
+    ).value = "";
+
+    document.getElementById(
+      "tilt" + i
+    ).value = "no";
+
+    document.getElementById(
+      "entryReason" + i
+    ).value = "";
+
+    document.getElementById(
+      "exitReason" + i
+    ).value = "";
+
+    document.getElementById(
+      "lesson" + i
+    ).value = "";
+
+    calculateTrade(i);
+
+  }
+
+}
+
+
+function loadDay(){
+
+  const date =
+    document.getElementById(
+      "tradeDate"
+    ).value;
+
+  const journal =
+    getJournal();
+
+  const day =
+    journal[date];
+
+  clearForm();
+
+  if(!day){
+
+    document.getElementById(
+      "saveStatus"
+    ).textContent =
+      "No saved journal entry for " +
+      date;
+
+    return;
+  }
+
+
+  document.getElementById(
+    "startValue"
+  ).value =
+    day.startValue || "";
+
+
+  document.getElementById(
+    "dailyNotes"
+  ).value =
+    day.notes || "";
+
+
+  const compliance =
+    day.compliance || {};
+
+
+  document.getElementById(
+    "windowCheck"
+  ).checked =
+    !!compliance.window;
+
+  document.getElementById(
+    "attemptCheck"
+  ).checked =
+    !!compliance.attempts;
+
+  document.getElementById(
+    "stopCheck"
+  ).checked =
+    !!compliance.stop;
+
+  document.getElementById(
+    "tiltCheck"
+  ).checked =
+    !!compliance.tilt;
+
+  document.getElementById(
+    "durationCheck"
+  ).checked =
+    !!compliance.duration;
+
+
+  (day.trades || [])
+    .slice(0,5)
+    .forEach(
+      (trade,index) => {
+
+        const i =
+          index + 1;
+
+        document.getElementById(
+          "ticker" + i
+        ).value =
+          trade.ticker || "";
+
+        document.getElementById(
+          "side" + i
+        ).value =
+          trade.side || "long";
+
+        document.getElementById(
+          "entryTime" + i
+        ).value =
+          trade.entryTime || "";
+
+        document.getElementById(
+          "exitTime" + i
+        ).value =
+          trade.exitTime || "";
+
+        document.getElementById(
+          "entryPrice" + i
+        ).value =
+          trade.entryPrice || "";
+
+        document.getElementById(
+          "exitPrice" + i
+        ).value =
+          trade.exitPrice || "";
+
+        document.getElementById(
+          "shares" + i
+        ).value =
+          trade.shares || "";
+
+        document.getElementById(
+          "fees" + i
+        ).value =
+          trade.fees || 0;
+
+        document.getElementById(
+          "setup" + i
+        ).value =
+          trade.setup || "";
+
+        document.getElementById(
+          "tilt" + i
+        ).value =
+          trade.tilt || "no";
+
+        document.getElementById(
+          "entryReason" + i
+        ).value =
+          trade.entryReason || "";
+
+        document.getElementById(
+          "exitReason" + i
+        ).value =
+          trade.exitReason || "";
+
+        document.getElementById(
+          "lesson" + i
+        ).value =
+          trade.lesson || "";
+
+        calculateTrade(i);
+
+      }
+    );
+
+
+  document.getElementById(
+    "saveStatus"
+  ).textContent =
+    "Loaded saved entry for " +
+    date;
+
+}
+
+
+function deleteDay(){
+
+  const date =
+    document.getElementById(
+      "tradeDate"
+    ).value;
+
+  if(!date){
+    return;
+  }
+
+  const journal =
+    getJournal();
+
+  if(!journal[date]){
+
+    alert(
+      "No saved entry exists for this date."
+    );
+
+    return;
+  }
+
+  const confirmed =
+    confirm(
+      "Delete journal entry for " +
+      date +
+      "?"
+    );
+
+  if(!confirmed){
+    return;
+  }
+
+  delete journal[date];
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(journal)
+  );
+
+  clearForm();
+
+  document.getElementById(
+    "saveStatus"
+  ).textContent =
+    "Deleted saved entry for " +
+    date;
+
+}
+
+
+const today =
+  new Date();
+
+document.getElementById(
+  "tradeDate"
+).value =
+  [
+    today.getFullYear(),
+    String(
+      today.getMonth() + 1
+    ).padStart(2,"0"),
+    String(
+      today.getDate()
+    ).padStart(2,"0")
+  ].join("-");
+
+
+document.getElementById(
+  "tradeDate"
+).addEventListener(
+  "change",
+  loadDay
+);
+
+calculateDailyTotal();
+
+</script>
+
+</body>
+</html>
