@@ -1,909 +1,419 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>WASPN Session Score</title>
 
-  <title>WASPN Session Score</title>
+<style>
+:root{
+  --bg:#0b0f14;
+  --panel:#121820;
+  --border:#293342;
+  --text:#e8eef6;
+  --muted:#8e9aaa;
+  --green:#35d07f;
+  --red:#ff5f6d;
+  --blue:#63a7ff;
+  --amber:#f3b84b;
+}
 
-  <style>
-    :root {
-      --bg:#0b0f14;
-      --panel:#121820;
-      --panel2:#171f29;
-      --border:#293342;
-      --text:#e8eef6;
-      --muted:#8e9aaa;
-      --green:#35d07f;
-      --red:#ff5f6d;
-      --blue:#63a7ff;
-      --amber:#f3b84b;
-    }
+*{box-sizing:border-box}
 
-    * {
-      box-sizing:border-box;
-    }
+body{
+  margin:0;
+  background:linear-gradient(180deg,#090d12,#0d131a);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
 
-    body {
-      margin:0;
-      background:linear-gradient(180deg,#090d12,#0d131a);
-      color:var(--text);
-      font-family:Arial,Helvetica,sans-serif;
-    }
+.wrap{
+  max-width:760px;
+  margin:auto;
+  padding:18px;
+}
 
-    .wrap {
-      max-width:760px;
-      margin:0 auto;
-      padding:18px;
-    }
+.top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
 
-    .topbar {
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:14px;
-    }
+.btn,a.btn{
+  border:0;
+  background:#293342;
+  color:white;
+  padding:11px 14px;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:700;
+  cursor:pointer;
+}
 
-    .topbar-right {
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
+.save{background:#17693d}
 
-    .btn,
-    a.btn {
-      border:0;
-      background:#293342;
-      color:white;
-      padding:11px 14px;
-      border-radius:10px;
-      font-weight:700;
-      text-decoration:none;
-      cursor:pointer;
-    }
+.hero,.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+}
 
-    .save-btn {
-      background:#17693d;
-    }
+.card{margin-top:15px}
 
-    .reset-btn {
-      background:#5b2630;
-    }
+h1{
+  color:var(--green);
+  font-size:40px;
+  margin:4px 0 7px;
+}
 
-    .hero,
-    .card {
-      background:var(--panel);
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:20px;
-    }
+.muted{
+  color:var(--muted);
+  line-height:1.5;
+}
 
-    .card {
-      margin-top:16px;
-    }
+input[type="date"]{
+  width:100%;
+  padding:11px;
+  background:#0d131a;
+  border:1px solid var(--border);
+  border-radius:10px;
+  color:white;
+  font-size:16px;
+}
 
-    h1 {
-      margin:4px 0 6px;
-      color:var(--green);
-      font-size:40px;
-    }
+.question{
+  display:flex;
+  gap:13px;
+  padding:16px 0;
+  border-bottom:1px solid var(--border);
+  align-items:flex-start;
+}
 
-    h2 {
-      margin:0 0 14px;
-    }
+.question:last-child{border-bottom:0}
 
-    .muted {
-      color:var(--muted);
-      line-height:1.5;
-    }
+.question input{
+  width:24px;
+  height:24px;
+  flex:0 0 auto;
+}
 
-    label.field-label {
-      display:block;
-      color:var(--muted);
-      font-size:12px;
-      font-weight:700;
-      margin-bottom:6px;
-    }
+.question input:disabled{
+  opacity:1;
+}
 
-    input[type="date"] {
-      width:100%;
-      background:#0d131a;
-      color:white;
-      border:1px solid var(--border);
-      border-radius:10px;
-      padding:11px;
-      font-size:16px;
-    }
+.title{font-weight:900}
 
-    .question {
-      display:flex;
-      gap:14px;
-      align-items:flex-start;
-      padding:16px 0;
-      border-bottom:1px solid var(--border);
-    }
+.copy{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
+  margin-top:4px;
+}
 
-    .question:last-child {
-      border-bottom:0;
-    }
+.imported{
+  color:var(--blue);
+  font-size:11px;
+  font-weight:700;
+  margin-top:4px;
+}
 
-    .question input {
-      width:24px;
-      height:24px;
-      flex:0 0 auto;
-      margin-top:2px;
-    }
+.score{
+  font-size:68px;
+  font-weight:900;
+  text-align:center;
+}
 
-    .question-title {
-      font-weight:800;
-      line-height:1.4;
-    }
+.green{color:var(--green)}
+.red{color:var(--red)}
+.amber{color:var(--amber)}
 
-    .question-copy {
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.5;
-      margin-top:5px;
-    }
+.status{
+  margin-top:12px;
+  background:#0d131a;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:12px;
+  text-align:center;
+  color:var(--muted);
+  line-height:1.5;
+}
 
-    .score-wrap {
-      text-align:center;
-    }
-
-    .score-label {
-      color:var(--muted);
-      font-size:12px;
-      text-transform:uppercase;
-      font-weight:700;
-      letter-spacing:.8px;
-    }
-
-    .score {
-      font-size:72px;
-      line-height:1;
-      font-weight:900;
-      margin-top:12px;
-    }
-
-    .score-message {
-      margin-top:12px;
-      font-size:17px;
-      font-weight:800;
-    }
-
-    .green {
-      color:var(--green);
-    }
-
-    .amber {
-      color:var(--amber);
-    }
-
-    .red {
-      color:var(--red);
-    }
-
-    .status {
-      margin-top:14px;
-      padding:14px;
-      border-radius:12px;
-      border:1px solid var(--border);
-      background:#0d131a;
-      color:var(--muted);
-      text-align:center;
-      line-height:1.5;
-    }
-
-    .actions {
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:16px;
-    }
-
-    .rule-box {
-      margin-top:16px;
-      background:#101820;
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:15px;
-      color:var(--muted);
-      line-height:1.55;
-    }
-
-    @media(max-width:600px) {
-      .wrap {
-        padding:12px;
-      }
-
-      .hero,
-      .card {
-        padding:16px;
-      }
-
-      h1 {
-        font-size:34px;
-      }
-
-      .score {
-        font-size:64px;
-      }
-
-      .actions .btn {
-        flex:1;
-        min-width:120px;
-      }
-    }
-  </style>
+@media(max-width:600px){
+  .wrap{padding:12px}
+  .hero,.card{padding:16px}
+}
+</style>
 </head>
 
 <body>
-
 <div class="wrap">
 
-  <div class="topbar">
+<div class="top">
+  <a href="index.html" class="btn">← Home</a>
+  <a href="compliance.html" class="btn">Daily Compliance</a>
+</div>
 
-    <a href="index.html" class="btn">
-      ← Home
-    </a>
 
-    <div class="topbar-right">
+<section class="hero">
+  <div class="muted">WASPN • End-of-Day Review</div>
+  <h1>Session Score</h1>
+  <div class="muted">
+    The three structural answers come directly from Daily Compliance.
+    You only answer the two behavioural questions here.
+  </div>
+</section>
 
-      <a href="journal.html" class="btn">
-        Journal
-      </a>
 
-      <a href="calendar-2026.html" class="btn">
-        Calendar
-      </a>
+<section class="card">
+  <label class="muted">Trading date</label>
+  <input id="date" type="date">
+</section>
 
+
+<section class="card">
+
+  <div class="question">
+    <input id="q1" type="checkbox" disabled>
+    <div>
+      <div class="title">Stayed inside the allowed trading window</div>
+      <div class="imported">Imported from Daily Compliance</div>
     </div>
-
   </div>
 
-
-  <section class="hero">
-
-    <div class="muted">
-      WASPN • End-of-Day Process Review
+  <div class="question">
+    <input id="q2" type="checkbox" disabled>
+    <div>
+      <div class="title">Stopped by Attempt 5</div>
+      <div class="imported">Imported from Daily Compliance</div>
     </div>
+  </div>
 
-    <h1>Session Score</h1>
-
-    <div class="muted">
-      Score the process before judging the money.
-      The result is saved into the same daily record as your Trading Journal.
+  <div class="question">
+    <input id="q3" type="checkbox" disabled>
+    <div>
+      <div class="title">Respected the -$100 hard stop</div>
+      <div class="imported">Imported from Daily Compliance</div>
     </div>
+  </div>
 
-  </section>
-
-
-  <section class="card">
-
-    <label class="field-label">
-      Trading date
-    </label>
-
-    <input
-      type="date"
-      id="scoreDate"
-    >
-
-  </section>
-
-
-  <section class="card">
-
-    <h2>Process Score</h2>
-
-
-    <label class="question">
-
-      <input
-        type="checkbox"
-        id="q1"
-      >
-
-      <div>
-
-        <div class="question-title">
-          1. Stayed inside the allowed trading window
-        </div>
-
-        <div class="question-copy">
-          No normal trading outside the WASPN session structure.
-        </div>
-
+  <label class="question">
+    <input id="q4" type="checkbox">
+    <div>
+      <div class="title">No revenge or post-stop continuation</div>
+      <div class="copy">
+        I did not trade simply to recover a previous loss.
       </div>
-
-    </label>
-
-
-    <label class="question">
-
-      <input
-        type="checkbox"
-        id="q2"
-      >
-
-      <div>
-
-        <div class="question-title">
-          2. Stopped by Attempt 5
-        </div>
-
-        <div class="question-copy">
-          No sixth completed attempt and no reopening the session later.
-        </div>
-
-      </div>
-
-    </label>
-
-
-    <label class="question">
-
-      <input
-        type="checkbox"
-        id="q3"
-      >
-
-      <div>
-
-        <div class="question-title">
-          3. Respected the -$100 hard daily stop
-        </div>
-
-        <div class="question-copy">
-          Once the realised-loss limit was reached, trading was finished.
-        </div>
-
-      </div>
-
-    </label>
-
-
-    <label class="question">
-
-      <input
-        type="checkbox"
-        id="q4"
-      >
-
-      <div>
-
-        <div class="question-title">
-          4. No revenge or post-stop continuation
-        </div>
-
-        <div class="question-copy">
-          No attempt to immediately make back losses after a stop or rule trigger.
-        </div>
-
-      </div>
-
-    </label>
-
-
-    <label class="question">
-
-      <input
-        type="checkbox"
-        id="q5"
-      >
-
-      <div>
-
-        <div class="question-title">
-          5. No tilt-driven trade
-        </div>
-
-        <div class="question-copy">
-          Entries remained setup-driven rather than anger, urgency, fear or recovery-driven.
-        </div>
-
-      </div>
-
-    </label>
-
-  </section>
-
-
-  <section class="card">
-
-    <div class="score-wrap">
-
-      <div class="score-label">
-        Session Process Score
-      </div>
-
-      <div
-        id="score"
-        class="score red"
-      >
-        0/5
-      </div>
-
-      <div
-        id="scoreMessage"
-        class="score-message red"
-      >
-        Process not complete
-      </div>
-
     </div>
+  </label>
 
-
-    <div class="rule-box">
-
-      <strong>WASPN standard:</strong>
-
-      <br><br>
-
-      5/5 = fully compliant session.
-
-      <br>
-
-      The score measures execution of the operating system — not whether the day made money.
-
+  <label class="question">
+    <input id="q5" type="checkbox">
+    <div>
+      <div class="title">No tilt-driven trade</div>
+      <div class="copy">
+        Entries remained setup-driven rather than anger, urgency or P&amp;L-driven.
+      </div>
     </div>
+  </label>
+
+</section>
 
 
-    <div class="actions">
+<section class="card">
 
-      <button
-        type="button"
-        class="btn save-btn"
-        id="saveBtn"
-      >
-        Save Session Score
-      </button>
+  <div class="muted" style="text-align:center;">SESSION PROCESS SCORE</div>
 
-      <button
-        type="button"
-        class="btn"
-        id="loadBtn"
-      >
-        Load Saved Score
-      </button>
+  <div id="score" class="score red">
+    0/5
+  </div>
 
-      <button
-        type="button"
-        class="btn reset-btn"
-        id="resetBtn"
-      >
-        Reset
-      </button>
+  <div id="message" style="text-align:center;font-weight:900;">
+    Process not complete
+  </div>
 
-    </div>
+  <button
+    id="saveBtn"
+    class="btn save"
+    style="width:100%;margin-top:16px;"
+  >
+    Save Session Score
+  </button>
 
+  <div id="status" class="status">
+    Complete Daily Compliance first.
+  </div>
 
-    <div
-      id="status"
-      class="status"
-    >
-      No session score saved yet.
-    </div>
-
-  </section>
+</section>
 
 </div>
 
 
 <script>
+const STORAGE_KEY = "waspnJournalV2";
 
-const STORAGE_KEY =
-  "waspnJournalV2";
-
-
-const scoreDate =
-  document.getElementById(
-    "scoreDate"
-  );
+const q = [1,2,3,4,5].map(
+  n=>document.getElementById("q"+n)
+);
 
 
-const boxes = [
-  document.getElementById("q1"),
-  document.getElementById("q2"),
-  document.getElementById("q3"),
-  document.getElementById("q4"),
-  document.getElementById("q5")
-];
-
-
-const scoreEl =
-  document.getElementById(
-    "score"
-  );
-
-
-const messageEl =
-  document.getElementById(
-    "scoreMessage"
-  );
-
-
-const statusEl =
-  document.getElementById(
-    "status"
-  );
-
-
-function getJournal() {
-
-  try {
-
-    return JSON.parse(
-      localStorage.getItem(
-        STORAGE_KEY
-      )
-    ) || {};
-
-  } catch(error) {
-
+function getJournal(){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  }catch{
     return {};
-
   }
-
 }
 
 
-function saveJournal(journal) {
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(journal)
-  );
-
+function saveJournal(j){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(j));
 }
 
 
-function getScore() {
-
-  return boxes.filter(
-    box => box.checked
-  ).length;
-
+function score(){
+  return q.filter(x=>x.checked).length;
 }
 
 
-function updateScore() {
+function updateScore(){
 
-  const score =
-    getScore();
+  const n = score();
 
+  const el = document.getElementById("score");
 
-  scoreEl.textContent =
-    score + "/5";
+  el.textContent = n + "/5";
 
-
-  if(score === 5) {
-
-    scoreEl.className =
-      "score green";
-
-    messageEl.className =
-      "score-message green";
-
-    messageEl.textContent =
+  if(n === 5){
+    el.className = "score green";
+    document.getElementById("message").textContent =
       "Fully compliant WASPN session";
-
+  }else if(n >= 3){
+    el.className = "score amber";
+    document.getElementById("message").textContent =
+      "Partial compliance";
+  }else{
+    el.className = "score red";
+    document.getElementById("message").textContent =
+      "Process failure / incomplete";
   }
-
-  else if(score >= 3) {
-
-    scoreEl.className =
-      "score amber";
-
-    messageEl.className =
-      "score-message amber";
-
-    messageEl.textContent =
-      "Partial compliance — review the missed rules";
-
-  }
-
-  else {
-
-    scoreEl.className =
-      "score red";
-
-    messageEl.className =
-      "score-message red";
-
-    messageEl.textContent =
-      "Process failure — identify what broke";
-
-  }
-
 }
 
 
-function getAnswers() {
+function loadDay(){
 
-  return {
+  q.forEach(x=>x.checked=false);
 
-    insideWindow:
-      boxes[0].checked,
+  const date = document.getElementById("date").value;
 
-    stoppedByFive:
-      boxes[1].checked,
+  const day = getJournal()[date];
 
-    respectedHardStop:
-      boxes[2].checked,
+  const compliance = day?.compliance;
 
-    noRevengeContinuation:
-      boxes[3].checked,
+  if(compliance){
 
-    noTiltTrade:
-      boxes[4].checked
-
-  };
-
-}
-
-
-function saveScore() {
-
-  const date =
-    scoreDate.value;
-
-
-  if(!date) {
-
-    alert(
-      "Choose a trading date first."
-    );
-
-    return;
-
+    q[0].checked = !!compliance.window;
+    q[1].checked = !!compliance.attempts;
+    q[2].checked = !!compliance.stop;
   }
 
+  if(day?.sessionScore){
 
-  const journal =
-    getJournal();
+    q[3].checked =
+      !!day.sessionScore.answers?.noRevengeContinuation;
 
-
-  const existingDay =
-    journal[date] || {
-      date:date,
-      trades:[],
-      totalNet:0,
-      notes:"",
-      compliance:{}
-    };
-
-
-  existingDay.sessionScore = {
-
-    score:
-      getScore(),
-
-    outOf:
-      5,
-
-    answers:
-      getAnswers(),
-
-    savedAt:
-      new Date().toISOString()
-
-  };
-
-
-  existingDay.lastUpdated =
-    new Date().toISOString();
-
-
-  journal[date] =
-    existingDay;
-
-
-  saveJournal(
-    journal
-  );
-
-
-  statusEl.textContent =
-    "Saved " +
-    date +
-    " • Session score " +
-    getScore() +
-    "/5";
-
-
-  statusEl.style.color =
-    "var(--green)";
-
-}
-
-
-function loadScore() {
-
-  const date =
-    scoreDate.value;
-
-
-  if(!date) {
-
-    alert(
-      "Choose a trading date first."
-    );
-
-    return;
-
+    q[4].checked =
+      !!day.sessionScore.answers?.noTiltTrade;
   }
-
-
-  boxes.forEach(
-    box => {
-      box.checked = false;
-    }
-  );
-
-
-  const journal =
-    getJournal();
-
-
-  const day =
-    journal[date];
-
-
-  if(
-    !day ||
-    !day.sessionScore
-  ) {
-
-    updateScore();
-
-    statusEl.textContent =
-      "No saved Session Score for " +
-      date;
-
-    statusEl.style.color =
-      "var(--muted)";
-
-    return;
-
-  }
-
-
-  const answers =
-    day.sessionScore.answers || {};
-
-
-  boxes[0].checked =
-    !!answers.insideWindow;
-
-  boxes[1].checked =
-    !!answers.stoppedByFive;
-
-  boxes[2].checked =
-    !!answers.respectedHardStop;
-
-  boxes[3].checked =
-    !!answers.noRevengeContinuation;
-
-  boxes[4].checked =
-    !!answers.noTiltTrade;
-
 
   updateScore();
 
+  const status = document.getElementById("status");
 
-  statusEl.textContent =
-    "Loaded saved score for " +
-    date +
-    " • " +
-    getScore() +
-    "/5";
-
-
-  statusEl.style.color =
-    "var(--blue)";
-
+  if(!compliance){
+    status.textContent =
+      "Daily Compliance has not been saved for this date.";
+    status.style.color = "var(--red)";
+  }else if(day?.sessionScore){
+    status.textContent =
+      "Loaded saved Session Score • " +
+      day.sessionScore.score +
+      "/5";
+    status.style.color = "var(--blue)";
+  }else{
+    status.textContent =
+      "Compliance loaded. Complete the final two questions.";
+    status.style.color = "var(--muted)";
+  }
 }
 
 
-function resetScore() {
+function saveScore(){
 
-  boxes.forEach(
-    box => {
-      box.checked = false;
-    }
-  );
+  const date = document.getElementById("date").value;
 
+  const journal = getJournal();
 
-  updateScore();
+  const existing = journal[date];
 
+  if(!existing?.compliance){
+    alert("Save Daily Compliance first.");
+    return;
+  }
 
-  statusEl.textContent =
-    "Form reset. Saved record has not been deleted.";
+  const answers = {
+    insideWindow:q[0].checked,
+    stoppedByFive:q[1].checked,
+    respectedHardStop:q[2].checked,
+    noRevengeContinuation:q[3].checked,
+    noTiltTrade:q[4].checked
+  };
 
+  const sessionScore = {
+    score:score(),
+    outOf:5,
+    answers,
+    savedAt:new Date().toISOString()
+  };
 
-  statusEl.style.color =
-    "var(--muted)";
+  journal[date] = {
+    ...existing,
+    sessionScore,
+    lastUpdated:new Date().toISOString()
+  };
 
+  saveJournal(journal);
+
+  const status = document.getElementById("status");
+
+  status.textContent =
+    `Saved ${date} • ${sessionScore.score}/5`;
+
+  status.style.color = "var(--green)";
 }
 
 
-function setToday() {
+function setToday(){
+  const d = new Date();
 
-  const today =
-    new Date();
-
-
-  const value = [
-    today.getFullYear(),
-    String(
-      today.getMonth() + 1
-    ).padStart(2,"0"),
-    String(
-      today.getDate()
-    ).padStart(2,"0")
+  document.getElementById("date").value = [
+    d.getFullYear(),
+    String(d.getMonth()+1).padStart(2,"0"),
+    String(d.getDate()).padStart(2,"0")
   ].join("-");
-
-
-  scoreDate.value =
-    value;
-
 }
 
 
-boxes.forEach(
-  box => {
+q[3].addEventListener("change",updateScore);
+q[4].addEventListener("change",updateScore);
 
-    box.addEventListener(
-      "change",
-      updateScore
-    );
-
-  }
-);
-
-
-document
-  .getElementById(
-    "saveBtn"
-  )
-  .addEventListener(
-    "click",
-    saveScore
-  );
-
-
-document
-  .getElementById(
-    "loadBtn"
-  )
-  .addEventListener(
-    "click",
-    loadScore
-  );
-
-
-document
-  .getElementById(
-    "resetBtn"
-  )
-  .addEventListener(
-    "click",
-    resetScore
-  );
-
-
-scoreDate.addEventListener(
-  "change",
-  loadScore
-);
-
+document.getElementById("date").addEventListener("change",loadDay);
+document.getElementById("saveBtn").addEventListener("click",saveScore);
 
 setToday();
-updateScore();
-loadScore();
-
+loadDay();
 </script>
 
 </body>
