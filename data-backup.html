@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -16,12 +17,16 @@
 
 <title>WASPN • Data Backup</title>
 
+
 <style>
 
 :root{
+
   --bg:#070b10;
+
   --panel:#10171f;
   --panel2:#151e28;
+
   --border:#273442;
 
   --text:#edf4fb;
@@ -32,27 +37,38 @@
   --red:#ff5f6d;
   --blue:#22c7ff;
   --amber:#f3b84b;
+
 }
+
 
 *{
   box-sizing:border-box;
 }
 
+
 html{
+
   -webkit-text-size-adjust:100%;
+
+  scroll-behavior:smooth;
+
 }
 
+
 body{
+
   margin:0;
 
   min-height:100vh;
 
   background:
+
     radial-gradient(
       circle at 50% -10%,
       rgba(34,199,255,.07),
       transparent 35%
     ),
+
     #070b10;
 
   color:var(--text);
@@ -64,14 +80,24 @@ body{
     Arial,
     Helvetica,
     sans-serif;
+
 }
+
 
 button,
 input{
   font:inherit;
 }
 
+
+button,
+a{
+  -webkit-tap-highlight-color:transparent;
+}
+
+
 .wrap{
+
   width:100%;
   max-width:760px;
 
@@ -87,7 +113,9 @@ input{
       20px,
       env(safe-area-inset-bottom)
     );
+
 }
+
 
 
 /* ========================================
@@ -95,6 +123,7 @@ input{
 ======================================== */
 
 .topbar{
+
   display:grid;
 
   grid-template-columns:
@@ -103,9 +132,12 @@ input{
   align-items:center;
 
   gap:8px;
+
 }
 
+
 .icon-btn{
+
   width:50px;
   height:48px;
 
@@ -113,39 +145,58 @@ input{
   align-items:center;
   justify-content:center;
 
-  border:1px solid var(--border);
+  border:
+    1px solid
+    var(--border);
+
   border-radius:13px;
 
   background:#111922;
+
   color:white;
 
   text-decoration:none;
 
   font-size:19px;
   font-weight:900;
+
 }
+
+
+.icon-btn:active{
+  transform:scale(.97);
+}
+
 
 .product{
   text-align:center;
 }
 
+
 .wordmark{
+
   color:var(--blue);
 
   font-size:11px;
   font-weight:950;
 
   letter-spacing:2.4px;
+
 }
 
+
 .page-title{
+
   margin-top:1px;
 
   font-size:19px;
   font-weight:950;
+
 }
 
+
 .sub{
+
   margin:
     8px 0 10px;
 
@@ -159,7 +210,9 @@ input{
   letter-spacing:1.2px;
 
   text-transform:uppercase;
+
 }
+
 
 
 /* ========================================
@@ -167,6 +220,7 @@ input{
 ======================================== */
 
 .card{
+
   margin-top:8px;
 
   padding:14px;
@@ -178,11 +232,17 @@ input{
       #0d141a
     );
 
-  border:1px solid var(--border);
+  border:
+    1px solid
+    var(--border);
+
   border-radius:16px;
+
 }
 
+
 .label{
+
   color:var(--muted);
 
   font-size:9px;
@@ -191,14 +251,20 @@ input{
   letter-spacing:.8px;
 
   text-transform:uppercase;
+
 }
+
 
 .card-title{
+
   font-size:15px;
   font-weight:950;
+
 }
 
+
 .card-copy{
+
   margin-top:4px;
 
   color:var(--muted);
@@ -206,7 +272,9 @@ input{
   font-size:10px;
 
   line-height:1.45;
+
 }
+
 
 
 /* ========================================
@@ -214,6 +282,7 @@ input{
 ======================================== */
 
 .database-status{
+
   display:grid;
 
   grid-template-columns:
@@ -222,9 +291,12 @@ input{
   gap:7px;
 
   margin-top:10px;
+
 }
 
+
 .metric{
+
   min-height:82px;
 
   display:flex;
@@ -238,32 +310,44 @@ input{
 
   background:#090f14;
 
-  border:1px solid var(--border);
+  border:
+    1px solid
+    var(--border);
+
   border-radius:11px;
+
 }
 
+
 .metric-value{
+
   margin-top:4px;
 
   font-size:24px;
   font-weight:950;
+
 }
+
 
 .green{
   color:var(--green);
 }
 
+
 .red{
   color:var(--red);
 }
+
 
 .blue{
   color:var(--blue);
 }
 
+
 .amber{
   color:var(--amber);
 }
+
 
 
 /* ========================================
@@ -271,11 +355,15 @@ input{
 ======================================== */
 
 .export-card{
+
   border-color:
     rgba(53,208,127,.32);
+
 }
 
+
 .export-btn{
+
   width:100%;
 
   min-height:64px;
@@ -283,6 +371,7 @@ input{
   margin-top:12px;
 
   border:0;
+
   border-radius:14px;
 
   background:
@@ -302,13 +391,17 @@ input{
   box-shadow:
     0 14px 30px
     rgba(20,120,70,.18);
+
 }
+
 
 .export-btn:active{
   transform:scale(.99);
 }
 
+
 .status{
+
   margin-top:9px;
 
   padding:10px;
@@ -317,7 +410,10 @@ input{
 
   background:#080e13;
 
-  border:1px solid var(--border);
+  border:
+    1px solid
+    var(--border);
+
   border-radius:10px;
 
   color:var(--muted);
@@ -325,7 +421,9 @@ input{
   font-size:10px;
 
   line-height:1.4;
+
 }
+
 
 
 /* ========================================
@@ -336,25 +434,35 @@ input{
   margin-top:8px;
 }
 
+
 .file-wrap{
   margin-top:11px;
 }
 
+
 input[type="file"]{
+
   width:100%;
 
   padding:11px;
 
-  border:1px solid var(--border);
+  border:
+    1px solid
+    var(--border);
+
   border-radius:10px;
 
   background:#080e13;
+
   color:white;
 
   font-size:11px;
+
 }
 
+
 .import-actions{
+
   display:grid;
 
   grid-template-columns:
@@ -363,35 +471,51 @@ input[type="file"]{
   gap:7px;
 
   margin-top:9px;
+
 }
 
+
 .secondary-btn{
+
   min-height:48px;
 
-  border:1px solid var(--border);
+  border:
+    1px solid
+    var(--border);
+
   border-radius:11px;
 
   background:#151e27;
+
   color:white;
 
   font-size:11px;
   font-weight:900;
 
   cursor:pointer;
+
 }
+
 
 .secondary-btn:disabled{
+
   opacity:.3;
+
   cursor:not-allowed;
+
 }
 
+
 .replace-btn{
+
   border-color:#56323a;
 
   background:#1d1115;
 
   color:#ffadb5;
+
 }
+
 
 
 /* ========================================
@@ -399,24 +523,34 @@ input[type="file"]{
 ======================================== */
 
 .safety{
+
   margin-top:8px;
 
   padding:12px;
 
   background:#1b160d;
 
-  border:1px solid #5b4725;
+  border:
+    1px solid
+    #5b4725;
+
   border-radius:13px;
+
 }
 
+
 .safety-title{
+
   color:var(--amber);
 
   font-size:12px;
   font-weight:950;
+
 }
 
+
 .safety-copy{
+
   margin-top:5px;
 
   color:#c7b997;
@@ -424,39 +558,52 @@ input[type="file"]{
   font-size:10px;
 
   line-height:1.5;
+
 }
 
+
 .action-definition{
+
   margin-top:8px;
 
   display:grid;
 
   gap:6px;
+
 }
 
+
 .definition{
+
   padding:9px;
 
   background:#100d08;
 
-  border:1px solid #3c3220;
+  border:
+    1px solid
+    #3c3220;
+
   border-radius:9px;
 
   font-size:9px;
 
   line-height:1.45;
+
 }
+
 
 .definition strong{
   color:white;
 }
 
 
+
 /* ========================================
-   FOOTER NAV
+   NAVIGATION
 ======================================== */
 
 .nav{
+
   display:grid;
 
   grid-template-columns:
@@ -465,17 +612,25 @@ input[type="file"]{
   gap:7px;
 
   margin-top:10px;
+
 }
 
+
 .nav-link{
-  min-height:48px;
+
+  min-height:50px;
 
   display:flex;
 
   align-items:center;
   justify-content:center;
 
-  border:1px solid var(--border);
+  padding:8px;
+
+  border:
+    1px solid
+    var(--border);
+
   border-radius:11px;
 
   background:#10171f;
@@ -484,9 +639,55 @@ input[type="file"]{
 
   text-decoration:none;
 
+  text-align:center;
+
   font-size:10px;
   font-weight:900;
+
 }
+
+
+.nav-link:active{
+  transform:scale(.98);
+}
+
+
+.nav-link.review{
+
+  color:#c8cdff;
+
+  border-color:
+    rgba(174,183,255,.3);
+
+}
+
+
+
+/* ========================================
+   UTILITY NOTE
+======================================== */
+
+.utility-note{
+
+  margin-top:10px;
+
+  padding:10px;
+
+  text-align:center;
+
+  color:var(--muted2);
+
+  font-size:9px;
+
+  line-height:1.45;
+
+}
+
+
+.utility-note strong{
+  color:#b8c4cf;
+}
+
 
 
 /* ========================================
@@ -499,9 +700,12 @@ input[type="file"]{
     padding:18px;
   }
 
+
   .database-status{
+
     grid-template-columns:
       repeat(4,1fr);
+
   }
 
 }
@@ -511,7 +715,9 @@ input[type="file"]{
 </head>
 
 
+
 <body>
+
 
 <div class="wrap">
 
@@ -547,7 +753,7 @@ input[type="file"]{
       class="icon-btn"
       aria-label="Performance Review"
     >
-      C
+      4
     </a>
 
   </div>
@@ -628,7 +834,10 @@ input[type="file"]{
         Storage
       </div>
 
-      <div class="metric-value" style="font-size:16px;">
+      <div
+        class="metric-value"
+        style="font-size:16px;"
+      >
         Local
       </div>
 
@@ -787,10 +996,23 @@ input[type="file"]{
 
   <a
     href="calendar-2026.html"
-    class="nav-link"
+    class="nav-link review"
   >
     PERFORMANCE REVIEW →
   </a>
+
+</div>
+
+
+
+<div class="utility-note">
+
+  <strong>
+    Data Backup is a utility.
+  </strong>
+
+  It sits outside the live WASPN workflow:
+  Risk → Timer → Journal → End → Review.
 
 </div>
 
@@ -808,6 +1030,11 @@ const STORAGE_KEY =
 let pendingData =
   null;
 
+
+
+/* ========================================
+   STORAGE
+======================================== */
 
 function getJournal(){
 
@@ -843,6 +1070,11 @@ function saveJournal(
 
 }
 
+
+
+/* ========================================
+   DATABASE COUNTS
+======================================== */
 
 function updateCounts(){
 
@@ -884,6 +1116,11 @@ function updateCounts(){
 
 }
 
+
+
+/* ========================================
+   EXPORT
+======================================== */
 
 function exportData(){
 
@@ -1001,6 +1238,11 @@ function exportData(){
 }
 
 
+
+/* ========================================
+   VALIDATION
+======================================== */
+
 function validatePayload(
   parsed
 ){
@@ -1023,8 +1265,8 @@ function validatePayload(
 
 
   /*
-    Also accept a raw journal object
-    for manual/future recovery.
+    Also accepts a raw date-keyed WASPN
+    journal object for manual recovery.
   */
 
   if(
@@ -1084,6 +1326,11 @@ function setImportReady(
 
 }
 
+
+
+/* ========================================
+   FILE SELECTION
+======================================== */
 
 document.getElementById(
   "fileInput"
@@ -1192,6 +1439,11 @@ document.getElementById(
 );
 
 
+
+/* ========================================
+   MERGE
+======================================== */
+
 document.getElementById(
   "mergeBtn"
 )
@@ -1250,6 +1502,11 @@ document.getElementById(
 );
 
 
+
+/* ========================================
+   REPLACE ALL
+======================================== */
+
 document.getElementById(
   "replaceBtn"
 )
@@ -1306,6 +1563,11 @@ document.getElementById(
 );
 
 
+
+/* ========================================
+   EVENTS
+======================================== */
+
 document.getElementById(
   "exportBtn"
 )
@@ -1315,9 +1577,15 @@ document.getElementById(
 );
 
 
+
+/* ========================================
+   START
+======================================== */
+
 updateCounts();
 
 </script>
 
 </body>
+
 </html>
