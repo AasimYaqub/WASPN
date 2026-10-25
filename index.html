@@ -19,7 +19,9 @@
   --amber:#f3b84b;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
@@ -34,14 +36,17 @@ body{
   padding:18px;
 }
 
-.hero,.card{
+.hero,
+.card{
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:18px;
   padding:20px;
 }
 
-.card{margin-top:16px}
+.card{
+  margin-top:16px;
+}
 
 h1{
   margin:4px 0 8px;
@@ -50,7 +55,13 @@ h1{
   color:var(--green);
 }
 
-h2{margin:0 0 12px}
+h2{
+  margin:0 0 12px;
+}
+
+h3{
+  margin:0 0 6px;
+}
 
 .muted{
   color:var(--muted);
@@ -84,10 +95,21 @@ h2{margin:0 0 12px}
   font-weight:900;
 }
 
-.green{color:var(--green)}
-.red{color:var(--red)}
-.blue{color:var(--blue)}
-.amber{color:var(--amber)}
+.green{
+  color:var(--green);
+}
+
+.red{
+  color:var(--red);
+}
+
+.blue{
+  color:var(--blue);
+}
+
+.amber{
+  color:var(--amber);
+}
 
 .nav-grid{
   display:grid;
@@ -105,7 +127,9 @@ h2{margin:0 0 12px}
   padding:15px;
 }
 
-.nav-card:active{transform:scale(.98)}
+.nav-card:active{
+  transform:scale(.98);
+}
 
 .nav-title{
   font-weight:900;
@@ -119,17 +143,90 @@ h2{margin:0 0 12px}
   margin-top:6px;
 }
 
-.live{border-color:#315887;color:var(--blue)}
-.journal{border-color:#2f6670;color:#77d7e5}
-.duration{border-color:#6b5125;color:var(--amber)}
-.tilt{border-color:#5b2630;color:var(--red)}
-.compliance{border-color:#275c3e;color:var(--green)}
-.calendar{border-color:#4a4f80;color:#aeb7ff}
-.backup{border-color:#53606c;color:#c9d3dd}
+.live{
+  border-color:#315887;
+  color:var(--blue);
+}
 
-.workflow{
+.journal{
+  border-color:#2f6670;
+  color:#77d7e5;
+}
+
+.duration{
+  border-color:#6b5125;
+  color:var(--amber);
+}
+
+.tilt{
+  border-color:#5b2630;
+  color:var(--red);
+}
+
+.compliance{
+  border-color:#275c3e;
+  color:var(--green);
+}
+
+.calendar{
+  border-color:#4a4f80;
+  color:#aeb7ff;
+}
+
+.backup{
+  border-color:#53606c;
+  color:#c9d3dd;
+}
+
+.today-grid{
   display:grid;
-  gap:0;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+}
+
+.today-item{
+  background:#0d131a;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:12px;
+}
+
+.workflow-section{
+  margin-top:14px;
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid var(--border);
+}
+
+.workflow-head{
+  padding:14px 16px;
+  font-weight:900;
+  font-size:18px;
+}
+
+.workflow-head.before{
+  background:#102018;
+  color:var(--green);
+}
+
+.workflow-head.during{
+  background:#131c2a;
+  color:var(--blue);
+}
+
+.workflow-head.after{
+  background:#251d0f;
+  color:var(--amber);
+}
+
+.workflow-head.end{
+  background:#17131f;
+  color:#b9adff;
+}
+
+.workflow-body{
+  background:var(--panel2);
+  padding:0 16px;
 }
 
 .step{
@@ -140,7 +237,9 @@ h2{margin:0 0 12px}
   border-bottom:1px solid var(--border);
 }
 
-.step:last-child{border-bottom:0}
+.step:last-child{
+  border-bottom:0;
+}
 
 .num{
   width:36px;
@@ -165,6 +264,52 @@ h2{margin:0 0 12px}
   line-height:1.5;
 }
 
+.loop{
+  margin-top:15px;
+  padding:16px;
+  border:1px solid #315887;
+  background:#101820;
+  border-radius:13px;
+  text-align:center;
+}
+
+.loop-title{
+  color:var(--blue);
+  font-weight:900;
+  font-size:17px;
+  margin-bottom:8px;
+}
+
+.loop-flow{
+  font-size:15px;
+  line-height:1.7;
+  font-weight:800;
+}
+
+.optional{
+  margin-top:14px;
+  background:#181317;
+  border:1px solid #4b2930;
+  border-radius:13px;
+  padding:15px;
+}
+
+.optional-title{
+  color:var(--amber);
+  font-weight:900;
+  margin-bottom:8px;
+}
+
+.optional-row{
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  line-height:1.5;
+}
+
+.optional-row:last-child{
+  border-bottom:0;
+}
+
 .stop{
   margin-top:14px;
   background:#251419;
@@ -174,19 +319,7 @@ h2{margin:0 0 12px}
   border-radius:13px;
   font-weight:900;
   line-height:1.5;
-}
-
-.today-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:9px;
-}
-
-.today-item{
-  background:#0d131a;
-  border:1px solid var(--border);
-  border-radius:11px;
-  padding:12px;
+  text-align:center;
 }
 
 .footer{
@@ -197,77 +330,545 @@ h2{margin:0 0 12px}
 }
 
 @media(max-width:700px){
-  .wrap{padding:12px}
-  .hero,.card{padding:16px}
-  .metrics{grid-template-columns:1fr 1fr}
-  .today-grid{grid-template-columns:1fr 1fr}
+
+  .wrap{
+    padding:12px;
+  }
+
+  .hero,
+  .card{
+    padding:16px;
+  }
+
+  .metrics{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .today-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
 }
 </style>
 </head>
 
 <body>
+
 <div class="wrap">
 
+
 <section class="hero">
-  <div class="muted">Data-backed small-cap momentum operating system</div>
+
+  <div class="muted">
+    Data-backed small-cap momentum operating system
+  </div>
+
   <h1>WASPN</h1>
 
   <div class="muted">
-    One date = one master record. Live risk, Trades 1–5, compliance,
-    Session Score and calendar history all use the same daily data.
+    Trade the process in the correct order.
+    Live Risk stays open throughout the session.
+    Trade Duration starts when you enter.
+    Live Risk and Journal are updated only after the trade closes.
   </div>
+
 
   <div class="metrics">
-    <div class="metric">
-      <div class="label">Primary Window</div>
-      <div class="value blue">9–11 AM ET</div>
-    </div>
 
     <div class="metric">
-      <div class="label">Max Attempts</div>
-      <div class="value">5</div>
+      <div class="label">
+        Primary Window
+      </div>
+
+      <div class="value blue">
+        9–11 AM ET
+      </div>
     </div>
 
-    <div class="metric">
-      <div class="label">Hard Stop</div>
-      <div class="value red">-$100</div>
-    </div>
 
     <div class="metric">
-      <div class="label">Green Objective</div>
-      <div class="value green">+$50</div>
+      <div class="label">
+        Max Attempts
+      </div>
+
+      <div class="value">
+        5
+      </div>
     </div>
+
+
+    <div class="metric">
+      <div class="label">
+        Hard Stop
+      </div>
+
+      <div class="value red">
+        -$100
+      </div>
+    </div>
+
+
+    <div class="metric">
+      <div class="label">
+        Green Objective
+      </div>
+
+      <div class="value green">
+        +$50
+      </div>
+    </div>
+
   </div>
+
 </section>
 
 
+
 <section class="card">
+
   <h2>Today</h2>
 
   <div class="today-grid">
 
     <div class="today-item">
-      <div class="label">Journal Trades</div>
-      <div class="value" id="todayTrades">0</div>
+
+      <div class="label">
+        Journal Trades
+      </div>
+
+      <div class="value" id="todayTrades">
+        0
+      </div>
+
     </div>
 
-    <div class="today-item">
-      <div class="label">Saved P&amp;L</div>
-      <div class="value" id="todayPnl">—</div>
-    </div>
 
     <div class="today-item">
-      <div class="label">Compliance</div>
-      <div class="value" id="todayCompliance">—</div>
+
+      <div class="label">
+        Saved P&amp;L
+      </div>
+
+      <div class="value" id="todayPnl">
+        —
+      </div>
+
     </div>
 
+
     <div class="today-item">
-      <div class="label">Session Score</div>
-      <div class="value" id="todayScore">—</div>
+
+      <div class="label">
+        Compliance
+      </div>
+
+      <div class="value" id="todayCompliance">
+        —
+      </div>
+
+    </div>
+
+
+    <div class="today-item">
+
+      <div class="label">
+        Session Score
+      </div>
+
+      <div class="value" id="todayScore">
+        —
+      </div>
+
     </div>
 
   </div>
+
 </section>
+
+
+
+<section class="card">
+
+  <h2>Live Trading Workflow</h2>
+
+  <div class="muted">
+    Follow this order for every trade. You do not need to use every page every time.
+  </div>
+
+
+  <div class="workflow-section">
+
+    <div class="workflow-head before">
+      BEFORE ENTRY
+    </div>
+
+    <div class="workflow-body">
+
+
+      <div class="step">
+
+        <div class="num">
+          1
+        </div>
+
+        <div>
+
+          <div class="step-title">
+            Keep Live Risk open
+          </div>
+
+          <div class="step-copy">
+            Check that you are inside an allowed WASPN window and that
+            Attempt count, realised P&amp;L and Tilt state are correct.
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="num">
+          2
+        </div>
+
+        <div>
+
+          <div class="step-title">
+            Decide whether the setup is valid
+          </div>
+
+          <div class="step-copy">
+            Do not increase the attempt count yet.
+            A trade becomes an attempt only after it has been completed.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="workflow-section">
+
+    <div class="workflow-head during">
+      WHEN YOU ENTER THE TRADE
+    </div>
+
+    <div class="workflow-body">
+
+
+      <div class="step">
+
+        <div class="num">
+          3
+        </div>
+
+        <div>
+
+          <div class="step-title">
+            Start Trade Duration immediately
+          </div>
+
+          <div class="step-copy">
+            Start the timer when the position is entered.
+            The timer is for reassessment while the position is still open.
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="num">
+          4
+        </div>
+
+        <div>
+
+          <div class="step-title">
+            Manage the trade
+          </div>
+
+          <div class="step-copy">
+            Trade Duration can prompt reassessment at 3, 5 and 10 minutes.
+            Do not fill out Journal while you are still managing the position.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="workflow-section">
+
+    <div class="workflow-head after">
+      AFTER THE TRADE CLOSES
+    </div>
+
+    <div class="workflow-body">
+
+
+      <div class="step">
+
+        <div class="num">
+          5
+        </div>
+
+        <div>
+
+          <div class="step-title">
+            Update Live Risk
+          </div>
+
+          <div class="step-copy">
+            Increase the Attempt count by one and update realised P&amp;L
+            to the new session total.
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="num">
+          6
+        </div>
+
+        <div>
+
+          <div class="step-title">
+            Record the completed trade in Journal
+          </div>
+
+          <div class="step-copy">
+            Enter the ticker, times, setup and result.
+            Use Actual / Broker Net P&amp;L when available.
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="num">
+          7
+        </div>
+
+        <div>
+
+          <div class="step-title">
+            Decide whether you are allowed to continue
+          </div>
+
+          <div class="step-copy">
+            If the session has hit Attempt 5, -$100 realised or 11:00 AM ET,
+            you are finished.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="loop">
+
+    <div class="loop-title">
+      THE NORMAL LOOP
+    </div>
+
+    <div class="loop-flow">
+      Live Risk open
+      → Enter trade
+      → Start Trade Duration
+      → Exit trade
+      → Update Live Risk
+      → Record in Journal
+      → Repeat only if WASPN still allows it
+    </div>
+
+  </div>
+
+
+
+  <div class="optional">
+
+    <div class="optional-title">
+      USE THESE ONLY WHEN NEEDED
+    </div>
+
+
+    <div class="optional-row">
+
+      <strong>
+        Post-Trade Reset
+      </strong>
+
+      <br>
+
+      <span class="muted">
+        Use after a meaningful losing trade and before considering another entry.
+      </span>
+
+    </div>
+
+
+    <div class="optional-row">
+
+      <strong>
+        Tilt Checklist
+      </strong>
+
+      <br>
+
+      <span class="muted">
+        Use when you notice urgency, anger, repeated re-entry,
+        recovery thinking or “just one more”.
+      </span>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="stop">
+    ATTEMPT 5 • -$100 REALISED • 11:00 AM ET
+    <br>
+    ANY ONE = SESSION OVER
+    <br>
+    NO REOPENING LATER
+  </div>
+
+</section>
+
+
+
+<section class="card">
+
+  <h2>End-of-Session Workflow</h2>
+
+  <div class="workflow-section">
+
+    <div class="workflow-head end">
+      WHEN TRADING IS FINISHED
+    </div>
+
+    <div class="workflow-body">
+
+
+      <div class="step">
+
+        <div class="num">
+          1
+        </div>
+
+        <div>
+
+          <div class="step-title">
+            Save Journal
+          </div>
+
+          <div class="step-copy">
+            Confirm all completed attempts and the final daily P&amp;L are correct.
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="num">
+          2
+        </div>
+
+        <div>
+
+          <div class="step-title">
+            Complete Daily Compliance
+          </div>
+
+          <div class="step-copy">
+            Answer the three structural questions:
+            window, Attempt 5 and -$100 hard stop.
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="num">
+          3
+        </div>
+
+        <div>
+
+          <div class="step-title">
+            Complete Session Score
+          </div>
+
+          <div class="step-copy">
+            Compliance is imported automatically.
+            Answer the two remaining behavioural questions.
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="num">
+          4
+        </div>
+
+        <div>
+
+          <div class="step-title">
+            Check Calendar
+          </div>
+
+          <div class="step-copy">
+            Confirm P&amp;L, trade count, compliance and Session Score all appear correctly.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
 
 
 <section class="card">
@@ -276,194 +877,192 @@ h2{margin:0 0 12px}
 
   <div class="nav-grid">
 
+
     <a href="live-risk.html" class="nav-card live">
-      <div class="nav-title">Live Risk Dashboard</div>
-      <div class="nav-desc">
-        Attempts, realised P&amp;L, tilt, dynamic ET windows and hard-stop state.
+
+      <div class="nav-title">
+        Live Risk Dashboard
       </div>
+
+      <div class="nav-desc">
+        Keep this open throughout the session.
+      </div>
+
     </a>
+
 
     <a href="trade-duration.html" class="nav-card duration">
-      <div class="nav-title">Trade Duration Warning</div>
-      <div class="nav-desc">
-        Start on entry. Reassess momentum at 3, 5 and 10 minutes.
+
+      <div class="nav-title">
+        Trade Duration Warning
       </div>
+
+      <div class="nav-desc">
+        Start this when you enter the position.
+      </div>
+
     </a>
+
 
     <a href="journal.html" class="nav-card journal">
-      <div class="nav-title">Trading Journal</div>
-      <div class="nav-desc">
-        Record Trades 1–5 and exact broker net P&amp;L.
+
+      <div class="nav-title">
+        Trading Journal
       </div>
+
+      <div class="nav-desc">
+        Record the completed trade after you exit.
+      </div>
+
     </a>
 
+
     <a href="post-trade-reset.html" class="nav-card">
-      <div class="nav-title">Post-Trade Reset</div>
+
+      <div class="nav-title">
+        Post-Trade Reset
+      </div>
+
       <div class="nav-desc">
         Use after a meaningful losing trade before another entry.
       </div>
+
     </a>
+
 
     <a href="tilt.html" class="nav-card tilt">
-      <div class="nav-title">Tilt Checklist</div>
-      <div class="nav-desc">
-        Use when urgency, revenge, repeated re-entry or “just one more” appears.
+
+      <div class="nav-title">
+        Tilt Checklist
       </div>
+
+      <div class="nav-desc">
+        Use only when mental-state warning signs appear.
+      </div>
+
     </a>
+
 
     <a href="compliance.html" class="nav-card compliance">
-      <div class="nav-title">Daily Compliance</div>
-      <div class="nav-desc">
-        Save the three structural rules into the daily master record.
+
+      <div class="nav-title">
+        Daily Compliance
       </div>
+
+      <div class="nav-desc">
+        Complete once after trading is finished.
+      </div>
+
     </a>
+
 
     <a href="session-score.html" class="nav-card compliance">
-      <div class="nav-title">Session Score</div>
-      <div class="nav-desc">
-        Compliance is loaded automatically; score the remaining behavioural rules.
+
+      <div class="nav-title">
+        Session Score
       </div>
+
+      <div class="nav-desc">
+        Complete after Daily Compliance.
+      </div>
+
     </a>
+
 
     <a href="calendar-2026.html" class="nav-card calendar">
-      <div class="nav-title">2026 Interactive Calendar</div>
-      <div class="nav-desc">
-        Daily P&amp;L plus complete saved WASPN record.
+
+      <div class="nav-title">
+        2026 Interactive Calendar
       </div>
+
+      <div class="nav-desc">
+        Final check of the completed daily record.
+      </div>
+
     </a>
+
 
     <a href="data-backup.html" class="nav-card backup">
-      <div class="nav-title">Data Backup</div>
-      <div class="nav-desc">
-        Export or restore the entire local WASPN database.
+
+      <div class="nav-title">
+        Data Backup
       </div>
+
+      <div class="nav-desc">
+        Export or restore your local WASPN records.
+      </div>
+
     </a>
 
-  </div>
-</section>
 
-
-<section class="card">
-
-  <h2>How to Use WASPN Each Trading Day</h2>
-
-  <div class="workflow">
-
-    <div class="step">
-      <div class="num">1</div>
-      <div>
-        <div class="step-title">Open Live Risk</div>
-        <div class="step-copy">
-          Keep attempts and realised P&amp;L current. The page autosaves.
-        </div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="num">2</div>
-      <div>
-        <div class="step-title">Start Trade Duration on entry</div>
-        <div class="step-copy">
-          Reassess at 3, 5 and 10 minutes.
-        </div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="num">3</div>
-      <div>
-        <div class="step-title">Record the completed attempt in Journal</div>
-        <div class="step-copy">
-          Use the broker's actual net P&amp;L when available.
-        </div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="num">4</div>
-      <div>
-        <div class="step-title">After a meaningful loss, use Post-Trade Reset</div>
-        <div class="step-copy">
-          Do this before deciding on another entry.
-        </div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="num">5</div>
-      <div>
-        <div class="step-title">Use Tilt Checklist when triggered</div>
-        <div class="step-copy">
-          Any active tilt signal = five-minute stop.
-        </div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="num">6</div>
-      <div>
-        <div class="step-title">Save Journal at session end</div>
-        <div class="step-copy">
-          This updates daily P&amp;L and the calendar.
-        </div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="num">7</div>
-      <div>
-        <div class="step-title">Save Daily Compliance</div>
-        <div class="step-copy">
-          Window, Attempt 5 and -$100 are answered once here.
-        </div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="num">8</div>
-      <div>
-        <div class="step-title">Complete Session Score</div>
-        <div class="step-copy">
-          The first three answers are imported from Daily Compliance automatically.
-        </div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="num">9</div>
-      <div>
-        <div class="step-title">Review Calendar</div>
-        <div class="step-copy">
-          Review process and P&amp;L together, not one trade in isolation.
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="stop">
-    SESSION ENDS AT ATTEMPT 5, -$100 REALISED, OR 11:00 AM ET.
-    NO REOPENING LATER.
   </div>
 
 </section>
 
 
+
 <section class="card">
+
   <h2>Core Structure</h2>
 
   <div class="muted">
-    <strong>6:30–7:00 AM ET:</strong> preliminary monitoring / exceptional setup only.
+
+    <strong>
+      6:30–7:00 AM ET
+    </strong>
+
+    <br>
+
+    Preliminary monitoring / exceptional setup window.
+
     <br><br>
-    <strong>9:00–11:00 AM ET:</strong> primary trading and study window.
+
+
+    <strong>
+      9:00–11:00 AM ET
+    </strong>
+
+    <br>
+
+    Primary trading and study window.
+
     <br><br>
-    <strong>-$75:</strong> warning state — five-minute step-away.
+
+
+    <strong>
+      -$75
+    </strong>
+
+    <br>
+
+    Warning state — five-minute step-away.
+
     <br><br>
-    <strong>-$100:</strong> hard realised-loss stop.
+
+
+    <strong>
+      -$100
+    </strong>
+
+    <br>
+
+    Hard realised-loss stop.
+
     <br><br>
-    <strong>Attempt 5:</strong> session finished.
+
+
+    <strong>
+      Attempt 5
+    </strong>
+
+    <br>
+
+    Session finished.
+
   </div>
+
 </section>
+
 
 
 <div class="footer">
@@ -474,75 +1073,212 @@ h2{margin:0 0 12px}
 
 
 <script>
-const STORAGE_KEY = "waspnJournalV2";
+
+const STORAGE_KEY =
+  "waspnJournalV2";
+
 
 function getJournal(){
+
   try{
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-  }catch{
-    return {};
+
+    return JSON.parse(
+      localStorage.getItem(
+        STORAGE_KEY
+      )
+    ) || {};
+
   }
+
+  catch{
+
+    return {};
+
+  }
+
 }
 
-function todayKey(){
-  const now = new Date();
 
-  const parts = new Intl.DateTimeFormat(
-    "en-GB",
-    {
-      timeZone:"America/New_York",
-      year:"numeric",
-      month:"2-digit",
-      day:"2-digit"
-    }
-  ).formatToParts(now);
+function todayKey(){
+
+  const now =
+    new Date();
+
+
+  const parts =
+    new Intl.DateTimeFormat(
+      "en-GB",
+      {
+        timeZone:
+          "America/New_York",
+
+        year:
+          "numeric",
+
+        month:
+          "2-digit",
+
+        day:
+          "2-digit"
+      }
+    )
+    .formatToParts(
+      now
+    );
+
 
   const d = {};
 
-  parts.forEach(p=>{
-    if(p.type !== "literal") d[p.type] = p.value;
-  });
 
-  return `${d.year}-${d.month}-${d.day}`;
+  parts.forEach(
+    p => {
+
+      if(
+        p.type !== "literal"
+      ){
+
+        d[p.type] =
+          p.value;
+
+      }
+
+    }
+  );
+
+
+  return (
+    d.year +
+    "-" +
+    d.month +
+    "-" +
+    d.day
+  );
+
 }
 
-function money(v){
-  const n = Number(v || 0);
-  if(n > 0) return "+$" + n.toFixed(2);
-  if(n < 0) return "-$" + Math.abs(n).toFixed(2);
-  return "$0.00";
-}
 
-function renderToday(){
-  const day = getJournal()[todayKey()] || {};
+function money(value){
 
-  document.getElementById("todayTrades").textContent =
-    Array.isArray(day.trades) ? day.trades.length : 0;
+  const n =
+    Number(
+      value || 0
+    );
 
-  const pnl = document.getElementById("todayPnl");
 
-  if(typeof day.totalNet === "number"){
-    pnl.textContent = money(day.totalNet);
-    pnl.className = "value " + (day.totalNet >= 0 ? "green" : "red");
-  }else{
-    pnl.textContent = "—";
-    pnl.className = "value";
+  if(n > 0){
+
+    return (
+      "+$" +
+      n.toFixed(2)
+    );
+
   }
 
-  document.getElementById("todayCompliance").textContent =
-    day.compliance && typeof day.compliance.score === "number"
-      ? day.compliance.score + "/3"
+
+  if(n < 0){
+
+    return (
+      "-$" +
+      Math.abs(n).toFixed(2)
+    );
+
+  }
+
+
+  return "$0.00";
+
+}
+
+
+function renderToday(){
+
+  const day =
+    getJournal()[
+      todayKey()
+    ] || {};
+
+
+  document.getElementById(
+    "todayTrades"
+  ).textContent =
+    Array.isArray(
+      day.trades
+    )
+      ? day.trades.length
+      : 0;
+
+
+  const pnl =
+    document.getElementById(
+      "todayPnl"
+    );
+
+
+  if(
+    typeof day.totalNet ===
+    "number"
+  ){
+
+    pnl.textContent =
+      money(
+        day.totalNet
+      );
+
+
+    pnl.className =
+      "value " +
+      (
+        day.totalNet >= 0
+          ? "green"
+          : "red"
+      );
+
+  }
+
+  else{
+
+    pnl.textContent =
+      "—";
+
+
+    pnl.className =
+      "value";
+
+  }
+
+
+  document.getElementById(
+    "todayCompliance"
+  ).textContent =
+    day.compliance &&
+    typeof day.compliance.score ===
+      "number"
+      ? day.compliance.score +
+        "/3"
       : "—";
 
-  document.getElementById("todayScore").textContent =
-    day.sessionScore && typeof day.sessionScore.score === "number"
-      ? day.sessionScore.score + "/5"
+
+  document.getElementById(
+    "todayScore"
+  ).textContent =
+    day.sessionScore &&
+    typeof day.sessionScore.score ===
+      "number"
+      ? day.sessionScore.score +
+        "/5"
       : "—";
+
 }
+
 
 renderToday();
 
-window.addEventListener("storage",renderToday);
+
+window.addEventListener(
+  "storage",
+  renderToday
+);
+
 </script>
 
 </body>
