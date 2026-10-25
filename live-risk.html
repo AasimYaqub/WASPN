@@ -2,410 +2,1403 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>WASPN Live Risk</title>
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1.0,viewport-fit=cover"
+>
+
+<title>WASPN • Live Risk</title>
 
 <style>
+
 :root{
-  --bg:#0b0f14;
-  --panel:#121820;
-  --panel2:#171f29;
-  --border:#293342;
-  --text:#e8eef6;
-  --muted:#8e9aaa;
+  --bg:#070b10;
+  --panel:#10171f;
+  --panel2:#151e28;
+  --panel3:#0b1117;
+  --border:#273442;
+
+  --text:#edf4fb;
+  --muted:#8797a7;
+
   --green:#35d07f;
   --red:#ff5f6d;
   --amber:#f3b84b;
-  --blue:#63a7ff;
+  --blue:#22c7ff;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
+
+html{
+  -webkit-text-size-adjust:100%;
+  scroll-behavior:smooth;
+}
 
 body{
   margin:0;
-  background:linear-gradient(180deg,#090d12,#0d131a);
+
+  background:
+    radial-gradient(
+      circle at top,
+      #0c1821 0%,
+      #070b10 42%
+    );
+
   color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  padding-bottom:
+    calc(
+      82px +
+      env(safe-area-inset-bottom)
+    );
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  touch-action:manipulation;
 }
 
 .wrap{
-  max-width:840px;
-  margin:auto;
-  padding:18px;
+  width:100%;
+  max-width:900px;
+
+  margin:0 auto;
+
+  padding:
+    max(
+      10px,
+      env(safe-area-inset-top)
+    )
+    10px
+    18px;
 }
 
-.top{
+
+/* ========================================
+   TOP BAR
+======================================== */
+
+.topbar{
+  display:grid;
+
+  grid-template-columns:
+    52px 1fr 52px;
+
+  align-items:center;
+
+  gap:8px;
+
+  margin-bottom:10px;
+}
+
+.icon-btn{
+  min-height:48px;
+
   display:flex;
-  justify-content:space-between;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:14px;
-}
+  align-items:center;
+  justify-content:center;
 
-.btn,
-a.btn{
-  border:0;
-  background:#293342;
-  color:white;
-  padding:11px 14px;
-  border-radius:10px;
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:13px;
+
+  background:#111922;
+
+  color:var(--text);
+
   text-decoration:none;
-  font-weight:700;
+
+  font-size:20px;
+  font-weight:900;
+
   cursor:pointer;
 }
 
-.reset{
-  background:#5b2630;
-}
-
-.hero,
-.card{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:20px;
-}
-
-.card{
-  margin-top:14px;
-}
-
-h1{
-  color:var(--blue);
-  font-size:40px;
-  margin:4px 0 7px;
-}
-
-h2{
-  margin-top:0;
-}
-
-.muted{
-  color:var(--muted);
-  line-height:1.5;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
-
-.metric{
+.top-title{
   text-align:center;
-  background:var(--panel2);
-  border:1px solid var(--border);
+}
+
+.top-brand{
+  color:var(--blue);
+
+  font-size:10px;
+  font-weight:900;
+
+  letter-spacing:2px;
+
+  text-transform:uppercase;
+}
+
+.top-page{
+  margin-top:2px;
+
+  font-size:19px;
+  font-weight:950;
+}
+
+
+/* ========================================
+   SESSION STATUS
+======================================== */
+
+.status{
+  position:relative;
+
+  overflow:hidden;
+
+  padding:
+    18px 14px;
+
+  border-radius:18px;
+
+  text-align:center;
+
+  border:
+    1px solid
+    var(--border);
+
+  box-shadow:
+    0 14px 34px
+    rgba(0,0,0,.18);
+}
+
+.status-title{
+  font-size:
+    clamp(
+      20px,
+      5.5vw,
+      29px
+    );
+
+  font-weight:950;
+
+  line-height:1.15;
+}
+
+.status-detail{
+  margin-top:6px;
+
+  font-size:12px;
+
+  font-weight:750;
+
+  opacity:.78;
+}
+
+.status.ok{
+  color:var(--green);
+
+  background:
+    linear-gradient(
+      180deg,
+      #10241a,
+      #0c1913
+    );
+
+  border-color:#286546;
+}
+
+.status.warn{
+  color:var(--amber);
+
+  background:
+    linear-gradient(
+      180deg,
+      #261e10,
+      #19140c
+    );
+
+  border-color:#725724;
+}
+
+.status.stop{
+  color:var(--red);
+
+  background:
+    linear-gradient(
+      180deg,
+      #291319,
+      #1b0d11
+    );
+
+  border-color:#71303b;
+}
+
+.status.closed{
+  color:#a4b0bb;
+
+  background:
+    linear-gradient(
+      180deg,
+      #151c23,
+      #10161c
+    );
+
+  border-color:#3b4855;
+}
+
+
+/* ========================================
+   CLOCK STRIP
+======================================== */
+
+.clocks{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+
+  gap:8px;
+
+  margin-top:8px;
+}
+
+.clock{
+  padding:
+    11px 9px;
+
+  text-align:center;
+
+  background:var(--panel3);
+
+  border:
+    1px solid
+    var(--border);
+
   border-radius:13px;
-  padding:14px;
 }
 
 .label{
   color:var(--muted);
+
+  font-size:10px;
+  font-weight:850;
+
+  letter-spacing:.8px;
+
   text-transform:uppercase;
-  font-size:11px;
-  font-weight:700;
 }
 
-.value{
-  font-size:35px;
-  font-weight:900;
-  margin-top:7px;
+.clock-time{
+  margin-top:3px;
+
+  font-size:19px;
+  font-weight:950;
 }
 
-.controls{
+.clock-detail{
+  margin-top:2px;
+
+  color:var(--muted);
+
+  font-size:10px;
+}
+
+
+/* ========================================
+   MAIN RISK COCKPIT
+======================================== */
+
+.cockpit{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:8px;
+
+  margin-top:8px;
+}
+
+.metric{
+  min-width:0;
+
+  padding:
+    14px 10px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #111922,
+      #0c1218
+    );
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:16px;
+
+  text-align:center;
+}
+
+.metric-value{
+  margin-top:5px;
+
+  font-size:
+    clamp(
+      34px,
+      10vw,
+      48px
+    );
+
+  font-weight:950;
+
+  line-height:1;
+}
+
+.attempt-max{
+  color:var(--muted);
+
+  font-size:.52em;
+}
+
+.pnl-input-wrap{
+  margin-top:9px;
+
   display:flex;
   justify-content:center;
-  gap:9px;
-  margin-top:10px;
 }
 
-input[type="number"]{
-  width:150px;
-  padding:10px;
-  background:#0d131a;
-  border:1px solid var(--border);
-  border-radius:9px;
-  color:white;
-  font-size:21px;
+.pnl-input{
+  width:100%;
+  max-width:160px;
+
+  min-height:48px;
+
+  padding:
+    8px 10px;
+
+  border:
+    1px solid
+    #3b4856;
+
+  border-radius:11px;
+
+  outline:none;
+
   text-align:center;
+
+  background:#070c11;
+
+  color:white;
+
+  font-size:20px;
+  font-weight:900;
+}
+
+.pnl-input:focus{
+  border-color:var(--blue);
+
+  box-shadow:
+    0 0 0 2px
+    rgba(34,199,255,.09);
+}
+
+
+/* ========================================
+   COMPLETE TRADE
+======================================== */
+
+.trade-actions{
+  display:grid;
+
+  grid-template-columns:
+    1fr 58px;
+
+  gap:8px;
+
+  margin-top:8px;
+}
+
+.complete-btn{
+  min-height:60px;
+
+  border:0;
+
+  border-radius:15px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #1a8ed0,
+      #1172ac
+    );
+
+  color:white;
+
+  font-weight:950;
+
+  font-size:16px;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 10px 24px
+    rgba(0,130,200,.18);
+}
+
+.complete-btn:active,
+.icon-action:active,
+.timer-btn:active{
+  transform:scale(.985);
+}
+
+.complete-btn:disabled{
+  opacity:.35;
+  cursor:not-allowed;
+}
+
+.icon-action{
+  min-height:60px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:15px;
+
+  background:#151d26;
+
+  color:white;
+
+  font-size:24px;
+  font-weight:950;
+
+  cursor:pointer;
+}
+
+.trade-help{
+  margin-top:5px;
+
+  text-align:center;
+
+  color:var(--muted);
+
+  font-size:10px;
+}
+
+
+/* ========================================
+   TIMER
+======================================== */
+
+.timer-card{
+  margin-top:8px;
+
+  padding:14px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #111921,
+      #0c1218
+    );
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:17px;
+}
+
+.timer-top{
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  gap:10px;
+}
+
+.timer-heading{
+  color:var(--amber);
+
+  font-size:12px;
+  font-weight:950;
+
+  letter-spacing:1px;
+
+  text-transform:uppercase;
+}
+
+.timer{
+  margin:
+    7px 0 3px;
+
+  text-align:center;
+
+  font-size:
+    clamp(
+      54px,
+      17vw,
+      76px
+    );
+
+  font-weight:950;
+
+  line-height:1;
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+.timer-prompt{
+  min-height:38px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:
+    8px 6px;
+
+  text-align:center;
+
+  color:var(--green);
+
+  font-size:12px;
+  font-weight:900;
+
+  line-height:1.35;
+}
+
+.timer-prompt.warning{
+  color:var(--amber);
+}
+
+.timer-prompt.danger{
+  color:var(--red);
+}
+
+.timer-controls{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr 58px;
+
+  gap:7px;
+
+  margin-top:8px;
+}
+
+.timer-btn{
+  min-height:48px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:12px;
+
+  background:#18222c;
+
+  color:white;
+
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+.timer-btn.start{
+  background:#143824;
+  border-color:#285d40;
+
+  color:var(--green);
+}
+
+.timer-btn.stop-timer{
+  background:#352812;
+  border-color:#655027;
+
+  color:var(--amber);
+}
+
+
+/* ========================================
+   TILT
+======================================== */
+
+.tilt-card{
+  margin-top:8px;
+
+  padding:
+    12px 13px;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  gap:12px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #14191f,
+      #0e141a
+    );
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:15px;
+}
+
+.tilt-title{
+  font-size:14px;
+  font-weight:950;
+}
+
+.tilt-note{
+  margin-top:3px;
+
+  color:var(--muted);
+
+  font-size:10px;
+  line-height:1.35;
 }
 
 .switch{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:10px;
-  font-weight:900;
+  position:relative;
+
+  width:54px;
+  height:30px;
+
+  flex:0 0 auto;
 }
 
 .switch input{
+  opacity:0;
+  width:0;
+  height:0;
+}
+
+.slider{
+  position:absolute;
+
+  inset:0;
+
+  border-radius:999px;
+
+  background:#303944;
+
+  cursor:pointer;
+
+  transition:.15s;
+}
+
+.slider::before{
+  content:"";
+
+  position:absolute;
+
   width:24px;
   height:24px;
-  accent-color:var(--red);
+
+  left:3px;
+  top:3px;
+
+  border-radius:50%;
+
+  background:white;
+
+  transition:.15s;
 }
 
-.status{
-  margin-top:14px;
-  border-radius:15px;
-  padding:18px;
+.switch input:checked + .slider{
+  background:#8b2939;
+}
+
+.switch input:checked + .slider::before{
+  transform:translateX(24px);
+}
+
+
+/* ========================================
+   LIMIT STRIP
+======================================== */
+
+.limits{
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:6px;
+
+  margin-top:8px;
+}
+
+.limit{
+  padding:
+    9px 4px;
+
   text-align:center;
-  font-weight:900;
-  font-size:26px;
+
+  background:#0a1015;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:11px;
 }
 
-.ok{
-  color:var(--green);
-  background:#102018;
-  border:1px solid #275c3e;
+.limit-value{
+  margin-top:3px;
+
+  font-size:13px;
+  font-weight:950;
 }
 
-.warn{
-  color:var(--amber);
-  background:#251d0f;
-  border:1px solid #6b5125;
+
+/* ========================================
+   CONNECTED RECORD
+======================================== */
+
+.section{
+  margin-top:10px;
+
+  padding:14px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #111921,
+      #0d141b
+    );
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:17px;
 }
 
-.stop{
-  color:var(--red);
-  background:#261216;
-  border:1px solid #702c39;
-}
+.section-title{
+  margin-bottom:10px;
 
-.closed{
-  color:var(--muted);
-  background:#15191e;
-  border:1px solid #3b4652;
+  font-size:15px;
+  font-weight:950;
 }
 
 .summary{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:8px;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:7px;
 }
 
 .summary-item{
-  background:#0d131a;
-  border:1px solid var(--border);
-  border-radius:10px;
   padding:11px;
+
+  background:#090f14;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:11px;
 }
 
-.small{
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.45;
+.summary-value{
+  margin-top:4px;
+
+  font-size:17px;
+  font-weight:950;
 }
 
 .save-state{
-  margin-top:12px;
+  margin-top:9px;
+
   text-align:center;
+
   color:var(--muted);
-  font-size:12px;
+
+  font-size:10px;
 }
 
-.weekend-box{
-  display:none;
-  margin-top:14px;
-  padding:16px;
-  border-radius:13px;
-  border:1px solid #3b4652;
-  background:#15191e;
+
+/* ========================================
+   RULE REMINDER
+======================================== */
+
+.rule-reminder{
+  margin-top:10px;
+
+  padding:13px;
+
+  border:
+    1px solid
+    #583039;
+
+  border-radius:14px;
+
+  background:#1b1014;
+
+  color:#d7c0c4;
+
   text-align:center;
+
+  font-size:11px;
+  font-weight:800;
+
+  line-height:1.5;
 }
 
-.weekend-box.active{
-  display:block;
+.rule-reminder strong{
+  color:var(--red);
 }
 
-.weekend-title{
-  font-size:22px;
-  font-weight:900;
-  color:var(--muted);
+
+/* ========================================
+   STICKY NAV
+======================================== */
+
+.bottom-nav{
+  position:fixed;
+
+  z-index:100;
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  padding:
+    7px
+    8px
+    max(
+      7px,
+      env(safe-area-inset-bottom)
+    );
+
+  background:
+    rgba(
+      6,
+      10,
+      14,
+      .94
+    );
+
+  border-top:
+    1px solid
+    #26333f;
+
+  backdrop-filter:
+    blur(14px);
 }
 
-@media(max-width:620px){
-  .wrap{padding:12px}
-  .hero,.card{padding:16px}
-  .grid{grid-template-columns:1fr}
-  .summary{grid-template-columns:1fr 1fr}
+.bottom-nav-inner{
+  width:100%;
+  max-width:900px;
+
+  margin:0 auto;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:6px;
 }
+
+.nav-link{
+  min-height:52px;
+
+  display:flex;
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  gap:2px;
+
+  border:
+    1px solid
+    #26333f;
+
+  border-radius:11px;
+
+  background:#0f161d;
+
+  color:#aab7c3;
+
+  text-decoration:none;
+
+  font-size:10px;
+  font-weight:850;
+}
+
+.nav-link strong{
+  color:white;
+
+  font-size:15px;
+}
+
+.nav-link.active{
+  border-color:
+    rgba(
+      34,
+      199,
+      255,
+      .45
+    );
+
+  background:#0e1d27;
+
+  color:var(--blue);
+}
+
+
+/* ========================================
+   DESKTOP
+======================================== */
+
+@media(min-width:700px){
+
+  .wrap{
+    padding:
+      18px
+      18px
+      28px;
+  }
+
+  .cockpit{
+    gap:12px;
+  }
+
+  .metric{
+    padding:20px;
+  }
+
+  .trade-actions{
+    grid-template-columns:
+      1fr 70px;
+  }
+
+  .timer-card{
+    padding:20px;
+  }
+
+  .summary{
+    grid-template-columns:
+      repeat(4,1fr);
+  }
+
+}
+
 </style>
 </head>
 
+
 <body>
 
-<div class="wrap">
+<div
+  class="wrap"
+  id="top"
+>
 
-<div class="top">
 
-  <a href="index.html" class="btn">
-    ← Home
+<!-- ========================================
+     TOP BAR
+======================================== -->
+
+<div class="topbar">
+
+  <a
+    href="index.html"
+    class="icon-btn"
+    aria-label="Home"
+  >
+    ←
   </a>
 
-  <div>
-    <a href="journal.html" class="btn">
-      Journal
-    </a>
+  <div class="top-title">
 
-    <button id="resetBtn" class="btn reset">
-      Reset Today
+    <div class="top-brand">
+      WASPN
+    </div>
+
+    <div class="top-page">
+      Live Risk
+    </div>
+
+  </div>
+
+  <button
+    id="resetBtn"
+    class="icon-btn"
+    type="button"
+    aria-label="Reset today"
+  >
+    ↻
+  </button>
+
+</div>
+
+
+
+<!-- ========================================
+     STATUS
+======================================== -->
+
+<section
+  id="status"
+  class="status warn"
+>
+
+  <div
+    id="statusTitle"
+    class="status-title"
+  >
+    CHECKING SESSION
+  </div>
+
+  <div
+    id="statusDetail"
+    class="status-detail"
+  >
+    Loading New York trading state…
+  </div>
+
+</section>
+
+
+
+<!-- ========================================
+     CLOCKS
+======================================== -->
+
+<div class="clocks">
+
+  <div class="clock">
+
+    <div class="label">
+      UK
+    </div>
+
+    <div
+      id="ukTime"
+      class="clock-time"
+    >
+      --:--
+    </div>
+
+  </div>
+
+  <div class="clock">
+
+    <div class="label">
+      New York
+    </div>
+
+    <div
+      id="etTime"
+      class="clock-time"
+    >
+      --:--
+    </div>
+
+    <div
+      id="nyDay"
+      class="clock-detail"
+    ></div>
+
+  </div>
+
+</div>
+
+
+
+<!-- ========================================
+     ATTEMPT / P&L
+======================================== -->
+
+<div class="cockpit">
+
+  <section class="metric">
+
+    <div class="label">
+      Completed Attempts
+    </div>
+
+    <div class="metric-value">
+
+      <span id="attempt">
+        0
+      </span>
+
+      <span class="attempt-max">
+        /5
+      </span>
+
+    </div>
+
+  </section>
+
+
+  <section class="metric">
+
+    <div class="label">
+      Realised P&amp;L
+    </div>
+
+    <div
+      id="pnlDisplay"
+      class="metric-value"
+    >
+      $0
+    </div>
+
+    <div class="pnl-input-wrap">
+
+      <input
+        id="pnl"
+        class="pnl-input"
+        type="number"
+        inputmode="decimal"
+        step="0.01"
+        value="0"
+        aria-label="Realised P and L"
+      >
+
+    </div>
+
+  </section>
+
+</div>
+
+
+
+<!-- ========================================
+     COMPLETE TRADE
+======================================== -->
+
+<div class="trade-actions">
+
+  <button
+    id="completeTradeBtn"
+    class="complete-btn"
+    type="button"
+  >
+    TRADE CLOSED • +1 ATTEMPT
+  </button>
+
+  <button
+    id="minus"
+    class="icon-action"
+    type="button"
+    aria-label="Remove one attempt"
+  >
+    −
+  </button>
+
+</div>
+
+<div class="trade-help">
+  Use only when the trade is fully closed. Minus is correction only.
+</div>
+
+
+
+<!-- ========================================
+     TIMER
+======================================== -->
+
+<section
+  id="timerSection"
+  class="timer-card"
+>
+
+  <div class="timer-top">
+
+    <div class="timer-heading">
+      Live Trade Timer
+    </div>
+
+    <div
+      id="timerState"
+      class="label"
+    >
+      READY
+    </div>
+
+  </div>
+
+
+  <div
+    id="timer"
+    class="timer"
+  >
+    00:00
+  </div>
+
+
+  <div
+    id="timerPrompt"
+    class="timer-prompt"
+  >
+    Start when the position is entered.
+  </div>
+
+
+  <div class="timer-controls">
+
+    <button
+      id="startTimerBtn"
+      class="timer-btn start"
+      type="button"
+    >
+      START
     </button>
-  </div>
 
-</div>
+    <button
+      id="stopTimerBtn"
+      class="timer-btn stop-timer"
+      type="button"
+    >
+      STOP
+    </button>
 
-
-<section class="hero">
-
-  <div class="muted">
-    WASPN • Live Trading Control
-  </div>
-
-  <h1>Live Risk</h1>
-
-  <div class="muted">
-    New York time and trading day control the session.
-    Saturday and Sunday are automatically treated as market closed.
-  </div>
-
-</section>
-
-
-<div id="weekendBox" class="weekend-box">
-
-  <div class="weekend-title">
-    MARKET CLOSED — WEEKEND
-  </div>
-
-  <div class="small" style="margin-top:7px;">
-    No WASPN trading window is active on Saturday or Sunday.
-  </div>
-
-</div>
-
-
-<section class="card">
-
-  <div class="grid">
-
-    <div class="metric">
-
-      <div class="label">
-        UK Time
-      </div>
-
-      <div id="ukTime" class="value">
-        --:--
-      </div>
-
-    </div>
-
-
-    <div class="metric">
-
-      <div class="label">
-        New York Time
-      </div>
-
-      <div id="etTime" class="value">
-        --:--
-      </div>
-
-      <div id="nyDay" class="small"></div>
-
-      <div id="windowText" class="small"></div>
-
-    </div>
-
-
-    <div class="metric">
-
-      <div class="label">
-        Attempt
-      </div>
-
-      <div class="value">
-        <span id="attempt">0</span>/5
-      </div>
-
-      <div class="controls">
-
-        <button id="minus" class="btn">
-          −
-        </button>
-
-        <button id="plus" class="btn">
-          +
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div class="metric">
-
-      <div class="label">
-        Realised P&amp;L
-      </div>
-
-      <div id="pnlDisplay" class="value">
-        0.00
-      </div>
-
-      <div class="controls">
-
-        <input
-          id="pnl"
-          type="number"
-          step="0.01"
-          value="0"
-        >
-
-      </div>
-
-    </div>
+    <button
+      id="resetTimerBtn"
+      class="timer-btn"
+      type="button"
+      aria-label="Reset timer"
+    >
+      ↻
+    </button>
 
   </div>
 
 </section>
 
 
-<section class="card">
+
+<!-- ========================================
+     TILT
+======================================== -->
+
+<section class="tilt-card">
+
+  <div>
+
+    <div class="tilt-title">
+      Tilt signal
+    </div>
+
+    <div class="tilt-note">
+      Recovery thinking • rushed entry • anger • repeated re-entry • “one more”
+    </div>
+
+  </div>
+
 
   <label class="switch">
 
-    <input id="tilt" type="checkbox">
+    <input
+      id="tilt"
+      type="checkbox"
+      aria-label="Tilt signal active"
+    >
 
-    Tilt signal active
+    <span class="slider"></span>
 
   </label>
-
-  <div
-    class="small"
-    style="text-align:center;margin-top:8px;"
-  >
-    Recovery sizing • rushed entries • repeated re-entry • anger • “just one more”
-  </div>
 
 </section>
 
 
-<div id="status" class="status warn">
-  OUTSIDE ACTIVE WINDOW
+
+<!-- ========================================
+     CORE LIMITS
+======================================== -->
+
+<div class="limits">
+
+  <div class="limit">
+
+    <div class="label">
+      Main
+    </div>
+
+    <div class="limit-value blue">
+      9–11 ET
+    </div>
+
+  </div>
+
+
+  <div class="limit">
+
+    <div class="label">
+      Max
+    </div>
+
+    <div class="limit-value">
+      5
+    </div>
+
+  </div>
+
+
+  <div class="limit">
+
+    <div class="label">
+      Warning
+    </div>
+
+    <div class="limit-value amber">
+      -$75
+    </div>
+
+  </div>
+
+
+  <div class="limit">
+
+    <div class="label">
+      Stop
+    </div>
+
+    <div class="limit-value red">
+      -$100
+    </div>
+
+  </div>
+
 </div>
 
 
-<div id="saveState" class="save-state">
-  Live state ready.
-</div>
 
+<!-- ========================================
+     CONNECTED RECORD
+======================================== -->
 
-<section class="card">
+<section class="section">
 
-  <h2>
-    Today's Connected Record
-  </h2>
+  <div class="section-title">
+    Today
+  </div>
 
   <div class="summary">
 
@@ -415,9 +1408,12 @@ input[type="number"]{
         Journal Trades
       </div>
 
-      <strong id="journalTrades">
+      <div
+        id="journalTrades"
+        class="summary-value"
+      >
         0
-      </strong>
+      </div>
 
     </div>
 
@@ -428,9 +1424,12 @@ input[type="number"]{
         Journal P&amp;L
       </div>
 
-      <strong id="journalPnl">
+      <div
+        id="journalPnl"
+        class="summary-value"
+      >
         —
-      </strong>
+      </div>
 
     </div>
 
@@ -441,9 +1440,12 @@ input[type="number"]{
         Compliance
       </div>
 
-      <strong id="compliance">
+      <div
+        id="compliance"
+        class="summary-value"
+      >
         —
-      </strong>
+      </div>
 
     </div>
 
@@ -454,81 +1456,91 @@ input[type="number"]{
         Session Score
       </div>
 
-      <strong id="sessionScore">
+      <div
+        id="sessionScore"
+        class="summary-value"
+      >
         —
-      </strong>
+      </div>
 
     </div>
 
   </div>
 
-</section>
 
-
-<section class="card">
-
-  <div class="summary">
-
-    <div class="summary-item">
-
-      <div class="label">
-        Preliminary
-      </div>
-
-      <strong>
-        6:30–7:00 AM ET
-      </strong>
-
-      <div id="prelimUk" class="small"></div>
-
-    </div>
-
-
-    <div class="summary-item">
-
-      <div class="label">
-        Main Window
-      </div>
-
-      <strong>
-        9:00–11:00 AM ET
-      </strong>
-
-      <div id="mainUk" class="small"></div>
-
-    </div>
-
-
-    <div class="summary-item">
-
-      <div class="label">
-        Warning
-      </div>
-
-      <strong style="color:var(--amber);">
-        -$75
-      </strong>
-
-    </div>
-
-
-    <div class="summary-item">
-
-      <div class="label">
-        Hard Stop
-      </div>
-
-      <strong style="color:var(--red);">
-        -$100 / 5 / 11 ET
-      </strong>
-
-    </div>
-
+  <div
+    id="saveState"
+    class="save-state"
+  >
+    Live state ready.
   </div>
 
 </section>
+
+
+
+<div class="rule-reminder">
+
+  <strong>
+    SESSION OVER:
+  </strong>
+
+  Attempt 5 • -$100 realised • 11:00 AM ET
+
+  <br>
+
+  One structural stop means no reopening later.
 
 </div>
+
+</div>
+
+
+
+<!-- ========================================
+     MOBILE NAV
+======================================== -->
+
+<nav class="bottom-nav">
+
+  <div class="bottom-nav-inner">
+
+    <a
+      href="index.html"
+      class="nav-link"
+    >
+      <strong>⌂</strong>
+      Home
+    </a>
+
+    <a
+      href="#top"
+      class="nav-link active"
+    >
+      <strong>R</strong>
+      Risk
+    </a>
+
+    <a
+      href="#timerSection"
+      class="nav-link"
+    >
+      <strong>◷</strong>
+      Timer
+    </a>
+
+    <a
+      href="journal.html"
+      class="nav-link"
+    >
+      <strong>J</strong>
+      Journal
+    </a>
+
+  </div>
+
+</nav>
+
 
 
 <script>
@@ -553,6 +1565,29 @@ let saveTimer =
   null;
 
 
+/* ========================================
+   TRADE TIMER STATE
+======================================== */
+
+let timerRunning =
+  false;
+
+
+let timerStartedAt =
+  null;
+
+
+let timerElapsed =
+  0;
+
+
+let timerInterval =
+  null;
+
+
+/* ========================================
+   STORAGE
+======================================== */
 
 function getJournal(){
 
@@ -575,7 +1610,6 @@ function getJournal(){
 }
 
 
-
 function saveJournal(
   journal
 ){
@@ -590,6 +1624,9 @@ function saveJournal(
 }
 
 
+/* ========================================
+   TIME
+======================================== */
 
 function getParts(
   zone
@@ -702,7 +1739,6 @@ function getParts(
 }
 
 
-
 function isWeekend(){
 
   const ny =
@@ -719,7 +1755,6 @@ function isWeekend(){
   );
 
 }
-
 
 
 function tradingDate(){
@@ -751,6 +1786,9 @@ function tradingDate(){
 }
 
 
+/* ========================================
+   MONEY
+======================================== */
 
 function money(
   value
@@ -797,187 +1835,300 @@ function money(
 }
 
 
+/* ========================================
+   TIMER
+======================================== */
 
-function formatUk(
-  etHour,
-  etMinute
-){
+function currentTimerElapsed(){
 
-  const ny =
-    getParts(
-      "America/New_York"
-    );
-
-
-  const approximate =
-    Date.UTC(
-      ny.year,
-      ny.month - 1,
-      ny.day,
-      etHour + 5,
-      etMinute
-    );
-
-
-  for(
-    let offset = -180;
-    offset <= 180;
-    offset++
+  if(
+    timerRunning &&
+    timerStartedAt
   ){
 
-    const candidate =
-      new Date(
-        approximate +
-        offset * 60000
-      );
-
-
-    const formatted =
-      new Intl.DateTimeFormat(
-        "en-CA",
-        {
-          timeZone:
-            "America/New_York",
-
-          year:
-            "numeric",
-
-          month:
-            "2-digit",
-
-          day:
-            "2-digit",
-
-          hour:
-            "2-digit",
-
-          minute:
-            "2-digit",
-
-          hour12:
-            false
-        }
-      )
-      .formatToParts(
-        candidate
-      );
-
-
-    const data =
-      {};
-
-
-    formatted.forEach(
-      part => {
-
-        if(
-          part.type !==
-          "literal"
-        ){
-
-          data[
-            part.type
-          ] =
-            part.value;
-
-        }
-
-      }
+    return Math.max(
+      0,
+      Date.now() -
+      timerStartedAt
     );
-
-
-    if(
-      Number(
-        data.year
-      ) ===
-        ny.year &&
-
-      Number(
-        data.month
-      ) ===
-        ny.month &&
-
-      Number(
-        data.day
-      ) ===
-        ny.day &&
-
-      Number(
-        data.hour
-      ) ===
-        etHour &&
-
-      Number(
-        data.minute
-      ) ===
-        etMinute
-    ){
-
-      return new Intl.DateTimeFormat(
-        "en-GB",
-        {
-          timeZone:
-            "Europe/London",
-
-          hour:
-            "numeric",
-
-          minute:
-            "2-digit",
-
-          hour12:
-            true
-        }
-      )
-      .format(
-        candidate
-      );
-
-    }
 
   }
 
 
-  return "";
+  return Math.max(
+    0,
+    timerElapsed
+  );
 
 }
 
 
+function renderTimer(){
 
-function updateWindowLabels(){
+  const elapsed =
+    currentTimerElapsed();
+
+
+  const totalSeconds =
+    Math.floor(
+      elapsed / 1000
+    );
+
+
+  const minutes =
+    Math.floor(
+      totalSeconds / 60
+    );
+
+
+  const seconds =
+    totalSeconds % 60;
+
 
   document.getElementById(
-    "prelimUk"
+    "timer"
   ).textContent =
-    formatUk(
-      6,
-      30
+    String(
+      minutes
+    ).padStart(
+      2,
+      "0"
     ) +
-    "–" +
-    formatUk(
-      7,
-      0
-    ) +
-    " UK";
+    ":" +
+    String(
+      seconds
+    ).padStart(
+      2,
+      "0"
+    );
 
 
-  document.getElementById(
-    "mainUk"
-  ).textContent =
-    formatUk(
-      9,
-      0
-    ) +
-    "–" +
-    formatUk(
-      11,
-      0
-    ) +
-    " UK";
+  const prompt =
+    document.getElementById(
+      "timerPrompt"
+    );
+
+
+  const state =
+    document.getElementById(
+      "timerState"
+    );
+
+
+  if(
+    !timerRunning &&
+    totalSeconds === 0
+  ){
+
+    state.textContent =
+      "READY";
+
+
+    prompt.className =
+      "timer-prompt";
+
+
+    prompt.textContent =
+      "Start when the position is entered.";
+
+
+    return;
+
+  }
+
+
+  state.textContent =
+    timerRunning
+      ? "LIVE"
+      : "PAUSED";
+
+
+  if(
+    totalSeconds >= 600
+  ){
+
+    prompt.className =
+      "timer-prompt danger";
+
+
+    prompt.textContent =
+      "10+ MIN — WHY ARE YOU STILL IN THIS TRADE?";
+
+  }
+
+  else if(
+    totalSeconds >= 300
+  ){
+
+    prompt.className =
+      "timer-prompt warning";
+
+
+    prompt.textContent =
+      "5 MIN — ORIGINAL SETUP OR HOPE?";
+
+  }
+
+  else if(
+    totalSeconds >= 180
+  ){
+
+    prompt.className =
+      "timer-prompt warning";
+
+
+    prompt.textContent =
+      "3 MIN — HAS MOMENTUM FOLLOWED THROUGH?";
+
+  }
+
+  else{
+
+    prompt.className =
+      "timer-prompt";
+
+
+    prompt.textContent =
+      timerRunning
+        ? "Trade active — manage the setup, not the P&L."
+        : "Timer paused.";
+
+  }
 
 }
 
 
+function startTimer(){
+
+  if(
+    isWeekend()
+  ){
+
+    alert(
+      "Market closed — weekend."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    sessionEnded
+  ){
+
+    alert(
+      "Session is already over."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    timerRunning
+  ){
+
+    return;
+
+  }
+
+
+  timerStartedAt =
+    Date.now() -
+    timerElapsed;
+
+
+  timerRunning =
+    true;
+
+
+  clearInterval(
+    timerInterval
+  );
+
+
+  timerInterval =
+    setInterval(
+      renderTimer,
+      250
+    );
+
+
+  renderTimer();
+
+  queueSave();
+
+}
+
+
+function stopTimer(){
+
+  if(
+    timerRunning
+  ){
+
+    timerElapsed =
+      currentTimerElapsed();
+
+  }
+
+
+  timerRunning =
+    false;
+
+  timerStartedAt =
+    null;
+
+
+  clearInterval(
+    timerInterval
+  );
+
+
+  timerInterval =
+    null;
+
+
+  renderTimer();
+
+  queueSave();
+
+}
+
+
+function resetTradeTimer(){
+
+  timerRunning =
+    false;
+
+  timerStartedAt =
+    null;
+
+  timerElapsed =
+    0;
+
+
+  clearInterval(
+    timerInterval
+  );
+
+
+  timerInterval =
+    null;
+
+
+  renderTimer();
+
+  queueSave();
+
+}
+
+
+/* ========================================
+   CONNECTED RECORD
+======================================== */
 
 function renderConnected(){
 
@@ -1032,6 +2183,9 @@ function renderConnected(){
 }
 
 
+/* ========================================
+   SAVE LIVE STATE
+======================================== */
 
 function saveLiveState(){
 
@@ -1062,6 +2216,10 @@ function saveLiveState(){
         "pnl"
       ).value || 0
     );
+
+
+  const timerValue =
+    currentTimerElapsed();
 
 
   journal[
@@ -1104,6 +2262,19 @@ function saveLiveState(){
         ),
 
       sessionEnded,
+
+      timer:{
+        running:
+          timerRunning,
+
+        startedAt:
+          timerRunning
+            ? timerStartedAt
+            : null,
+
+        elapsed:
+          timerValue
+      },
 
       updatedAt:
         new Date()
@@ -1153,7 +2324,6 @@ function saveLiveState(){
 }
 
 
-
 function queueSave(){
 
   clearTimeout(
@@ -1164,12 +2334,15 @@ function queueSave(){
   saveTimer =
     setTimeout(
       saveLiveState,
-      120
+      140
     );
 
 }
 
 
+/* ========================================
+   LOAD
+======================================== */
 
 function loadLive(){
 
@@ -1204,12 +2377,6 @@ function loadLive(){
 
 
     document.getElementById(
-      "attempt"
-    ).textContent =
-      "0";
-
-
-    document.getElementById(
       "pnl"
     ).value =
       "0";
@@ -1219,6 +2386,16 @@ function loadLive(){
       "tilt"
     ).checked =
       false;
+
+
+    timerRunning =
+      false;
+
+    timerStartedAt =
+      null;
+
+    timerElapsed =
+      0;
 
   }
 
@@ -1242,12 +2419,6 @@ function loadLive(){
 
 
     document.getElementById(
-      "attempt"
-    ).textContent =
-      attempt;
-
-
-    document.getElementById(
       "pnl"
     ).value =
       Number(
@@ -1261,11 +2432,76 @@ function loadLive(){
     ).checked =
       !!live.tilt;
 
+
+    if(
+      live.timer
+    ){
+
+      timerRunning =
+        !!live.timer.running;
+
+
+      timerElapsed =
+        Number(
+          live.timer.elapsed ||
+          0
+        );
+
+
+      if(
+        timerRunning &&
+        live.timer.startedAt
+      ){
+
+        timerStartedAt =
+          Number(
+            live.timer.startedAt
+          );
+
+      }
+
+      else{
+
+        timerRunning =
+          false;
+
+        timerStartedAt =
+          null;
+
+      }
+
+    }
+
   }
 
 
-  renderConnected();
+  document.getElementById(
+    "attempt"
+  ).textContent =
+    attempt;
 
+
+  if(
+    timerRunning
+  ){
+
+    clearInterval(
+      timerInterval
+    );
+
+
+    timerInterval =
+      setInterval(
+        renderTimer,
+        250
+      );
+
+  }
+
+
+  renderTimer();
+
+  renderConnected();
 
   update(
     false
@@ -1274,6 +2510,9 @@ function loadLive(){
 }
 
 
+/* ========================================
+   ATTEMPT CONTROL
+======================================== */
 
 function changeAttempt(
   delta
@@ -1293,11 +2532,12 @@ function changeAttempt(
 
 
   if(
+    delta > 0 &&
     sessionEnded
   ){
 
     alert(
-      "The session is already marked finished. Use Reset Today only if this was entered by mistake."
+      "The session is already over."
     );
 
     return;
@@ -1339,6 +2579,46 @@ function changeAttempt(
 }
 
 
+function completeTrade(){
+
+  if(
+    isWeekend()
+  ){
+
+    alert(
+      "Market closed — weekend."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    sessionEnded
+  ){
+
+    alert(
+      "Session is already over."
+    );
+
+    return;
+
+  }
+
+
+  stopTimer();
+
+  changeAttempt(
+    1
+  );
+
+}
+
+
+/* ========================================
+   MAIN STATUS ENGINE
+======================================== */
 
 function update(
   shouldSave = false
@@ -1374,35 +2654,6 @@ function update(
     et.weekday;
 
 
-  const weekend =
-    isWeekend();
-
-
-  const weekendBox =
-    document.getElementById(
-      "weekendBox"
-    );
-
-
-  if(
-    weekend
-  ){
-
-    weekendBox.classList.add(
-      "active"
-    );
-
-  }
-
-  else{
-
-    weekendBox.classList.remove(
-      "active"
-    );
-
-  }
-
-
   const mins =
     et.hour * 60 +
     et.minute;
@@ -1424,11 +2675,20 @@ function update(
     11 * 60;
 
 
+  const weekend =
+    (
+      et.weekday ===
+        "Saturday" ||
+      et.weekday ===
+        "Sunday"
+    );
+
+
   let active =
     false;
 
 
-  let windowText =
+  let windowName =
     "OUTSIDE ACTIVE WINDOW";
 
 
@@ -1436,7 +2696,7 @@ function update(
     weekend
   ){
 
-    windowText =
+    windowName =
       "MARKET CLOSED — WEEKEND";
 
   }
@@ -1450,7 +2710,7 @@ function update(
       true;
 
 
-    windowText =
+    windowName =
       "PRELIMINARY WINDOW";
 
   }
@@ -1464,7 +2724,7 @@ function update(
       true;
 
 
-    windowText =
+    windowName =
       "MAIN WINDOW";
 
   }
@@ -1474,7 +2734,7 @@ function update(
     mins < mainStart
   ){
 
-    windowText =
+    windowName =
       "WAIT — MAIN WINDOW NOT OPEN";
 
   }
@@ -1483,23 +2743,17 @@ function update(
     mins >= close
   ){
 
-    windowText =
+    windowName =
       "SESSION CLOSED";
 
   }
 
   else{
 
-    windowText =
+    windowName =
       "WAIT — PRELIMINARY WINDOW NOT OPEN";
 
   }
-
-
-  document.getElementById(
-    "windowText"
-  ).textContent =
-    windowText;
 
 
   const pnl =
@@ -1517,8 +2771,8 @@ function update(
 
 
   pnlDisplay.textContent =
-    pnl.toFixed(
-      2
+    money(
+      pnl
     );
 
 
@@ -1541,6 +2795,17 @@ function update(
   }
 
 
+  if(
+    !weekend &&
+    mins >= close
+  ){
+
+    sessionEnded =
+      true;
+
+  }
+
+
   const tilt =
     document.getElementById(
       "tilt"
@@ -1553,6 +2818,24 @@ function update(
     );
 
 
+  const title =
+    document.getElementById(
+      "statusTitle"
+    );
+
+
+  const detail =
+    document.getElementById(
+      "statusDetail"
+    );
+
+
+  const completeBtn =
+    document.getElementById(
+      "completeTradeBtn"
+    );
+
+
   if(
     weekend
   ){
@@ -1561,8 +2844,17 @@ function update(
       "status closed";
 
 
-    status.textContent =
+    title.textContent =
       "MARKET CLOSED — WEEKEND";
+
+
+    detail.textContent =
+      et.weekday +
+      " in New York • No WASPN session";
+
+
+    completeBtn.disabled =
+      true;
 
   }
 
@@ -1577,8 +2869,47 @@ function update(
       "status stop";
 
 
-    status.textContent =
+    title.textContent =
       "STOP TRADING — SESSION OVER";
+
+
+    if(
+      attempt >= 5
+    ){
+
+      detail.textContent =
+        "Attempt 5 reached • No reopening later";
+
+    }
+
+    else if(
+      pnl <= -100
+    ){
+
+      detail.textContent =
+        "-$100 realised hard stop reached";
+
+    }
+
+    else if(
+      mins >= close
+    ){
+
+      detail.textContent =
+        "11:00 AM ET has passed";
+
+    }
+
+    else{
+
+      detail.textContent =
+        "Session has been ended";
+
+    }
+
+
+    completeBtn.disabled =
+      true;
 
   }
 
@@ -1590,8 +2921,16 @@ function update(
       "status warn";
 
 
-    status.textContent =
+    title.textContent =
       "5-MINUTE STOP — NO ORDERS";
+
+
+    detail.textContent =
+      "Tilt signal active • Step away before reassessment";
+
+
+    completeBtn.disabled =
+      false;
 
   }
 
@@ -1603,8 +2942,16 @@ function update(
       "status warn";
 
 
-    status.textContent =
-      "WARNING STATE — STEP AWAY 5 MINUTES";
+    title.textContent =
+      "WARNING — STEP AWAY 5 MINUTES";
+
+
+    detail.textContent =
+      "Realised P&L has reached -$75";
+
+
+    completeBtn.disabled =
+      false;
 
   }
 
@@ -1616,8 +2963,19 @@ function update(
       "status ok";
 
 
-    status.textContent =
+    title.textContent =
       "WITHIN WASPN";
+
+
+    detail.textContent =
+      windowName +
+      " • " +
+      attempt +
+      "/5 attempts";
+
+
+    completeBtn.disabled =
+      false;
 
   }
 
@@ -1627,8 +2985,16 @@ function update(
       "status warn";
 
 
-    status.textContent =
-      windowText;
+    title.textContent =
+      windowName;
+
+
+    detail.textContent =
+      "No new WASPN entry right now";
+
+
+    completeBtn.disabled =
+      false;
 
   }
 
@@ -1644,12 +3010,15 @@ function update(
 }
 
 
+/* ========================================
+   RESET TODAY
+======================================== */
 
 function resetToday(){
 
   if(
     !confirm(
-      "Reset today's Live Risk state? Journal, Compliance and Session Score will be preserved."
+      "Reset today's Live Risk state and timer? Journal, Compliance and Session Score will be preserved."
     )
   ){
 
@@ -1682,6 +3051,25 @@ function resetToday(){
     "tilt"
   ).checked =
     false;
+
+
+  timerRunning =
+    false;
+
+  timerStartedAt =
+    null;
+
+  timerElapsed =
+    0;
+
+
+  clearInterval(
+    timerInterval
+  );
+
+
+  timerInterval =
+    null;
 
 
   const date =
@@ -1729,6 +3117,17 @@ function resetToday(){
       sessionEnded:
         false,
 
+      timer:{
+        running:
+          false,
+
+        startedAt:
+          null,
+
+        elapsed:
+          0
+      },
+
       resetAt:
         new Date()
           .toISOString(),
@@ -1751,28 +3150,28 @@ function resetToday(){
   );
 
 
+  renderTimer();
+
   update(
     false
   );
-
 
   renderConnected();
 
 }
 
 
+/* ========================================
+   EVENTS
+======================================== */
 
 document.getElementById(
-  "plus"
+  "completeTradeBtn"
 )
 .addEventListener(
   "click",
-  () =>
-    changeAttempt(
-      1
-    )
+  completeTrade
 );
-
 
 
 document.getElementById(
@@ -1787,7 +3186,6 @@ document.getElementById(
 );
 
 
-
 document.getElementById(
   "pnl"
 )
@@ -1798,7 +3196,6 @@ document.getElementById(
       true
     )
 );
-
 
 
 document.getElementById(
@@ -1813,6 +3210,32 @@ document.getElementById(
 );
 
 
+document.getElementById(
+  "startTimerBtn"
+)
+.addEventListener(
+  "click",
+  startTimer
+);
+
+
+document.getElementById(
+  "stopTimerBtn"
+)
+.addEventListener(
+  "click",
+  stopTimer
+);
+
+
+document.getElementById(
+  "resetTimerBtn"
+)
+.addEventListener(
+  "click",
+  resetTradeTimer
+);
+
 
 document.getElementById(
   "resetBtn"
@@ -1823,8 +3246,9 @@ document.getElementById(
 );
 
 
-
-updateWindowLabels();
+/* ========================================
+   START
+======================================== */
 
 loadLive();
 
@@ -1839,14 +3263,15 @@ setInterval(
 
       loadLive();
 
-      updateWindowLabels();
-
     }
 
 
     update(
       false
     );
+
+
+    renderTimer();
 
   },
   1000
