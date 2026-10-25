@@ -12,15 +12,8 @@
       key: "risk",
       label: "Risk",
       icon: "1",
-      href: "live-risk.html#top",
+      href: "live-risk.html",
       color: "#22c7ff"
-    },
-    {
-      key: "timer",
-      label: "Timer",
-      icon: "◷",
-      href: "live-risk.html#timerSection",
-      color: "#f3b84b"
     },
     {
       key: "journal",
@@ -74,17 +67,7 @@
     if(
       file === "live-risk.html"
     ){
-
-      if(
-        window.location.hash ===
-        "#timerSection"
-      ){
-        return "timer";
-      }
-
-
       return "risk";
-
     }
 
 
@@ -158,7 +141,7 @@
 
         padding:
           7px
-          6px
+          7px
           max(
             7px,
             env(safe-area-inset-bottom)
@@ -188,6 +171,7 @@
       .waspn-workflow-inner{
 
         width:100%;
+
         max-width:1000px;
 
         margin:0 auto;
@@ -196,11 +180,11 @@
 
         grid-template-columns:
           repeat(
-            6,
+            5,
             minmax(0,1fr)
           );
 
-        gap:4px;
+        gap:5px;
 
       }
 
@@ -210,7 +194,7 @@
         position:relative;
 
         min-width:0;
-        min-height:59px;
+        min-height:61px;
 
         display:flex;
 
@@ -222,7 +206,7 @@
         gap:3px;
 
         padding:
-          6px 1px;
+          6px 2px;
 
         overflow:hidden;
 
@@ -230,7 +214,7 @@
           1px solid
           #283645;
 
-        border-radius:11px;
+        border-radius:12px;
 
         background:
           linear-gradient(
@@ -239,7 +223,7 @@
             #0d141b
           );
 
-        color:#94a2b0;
+        color:#9ba9b7;
 
         text-decoration:none;
 
@@ -247,9 +231,9 @@
 
         font-size:
           clamp(
-            7px,
-            2.1vw,
-            9px
+            8px,
+            2.3vw,
+            10px
           );
 
         font-weight:850;
@@ -271,15 +255,15 @@
       .waspn-workflow-item:active{
 
         transform:
-          scale(.95);
+          scale(.96);
 
       }
 
 
       .waspn-workflow-icon{
 
-        min-width:23px;
-        height:23px;
+        min-width:25px;
+        height:25px;
 
         display:flex;
 
@@ -288,7 +272,7 @@
 
         color:white;
 
-        font-size:13px;
+        font-size:14px;
         font-weight:950;
 
         line-height:1;
@@ -299,28 +283,20 @@
       .waspn-workflow-item[data-step="home"]
       .waspn-workflow-icon{
 
-        font-size:17px;
-
-      }
-
-
-      .waspn-workflow-item[data-step="timer"]
-      .waspn-workflow-icon{
-
-        font-size:17px;
+        font-size:18px;
 
       }
 
 
       .waspn-workflow-label{
 
-        width:100%;
-
         overflow:hidden;
 
         text-overflow:ellipsis;
 
         white-space:nowrap;
+
+        max-width:100%;
 
       }
 
@@ -342,7 +318,10 @@
         background:#111c24;
 
         box-shadow:
-          inset 0 0 18px
+          inset
+          0
+          0
+          18px
           color-mix(
             in srgb,
             var(
@@ -381,8 +360,8 @@
 
         position:absolute;
 
-        left:9px;
-        right:9px;
+        left:12px;
+        right:12px;
         top:0;
 
         height:2px;
@@ -397,7 +376,9 @@
           );
 
         box-shadow:
-          0 0 8px
+          0
+          0
+          8px
           var(
             --workflow-active,
             #22c7ff
@@ -408,34 +389,26 @@
 
       @media(max-width:390px){
 
-        .waspn-workflow-nav{
-          padding-left:4px;
-          padding-right:4px;
-        }
-
-
         .waspn-workflow-inner{
-          gap:3px;
+          gap:4px;
         }
 
 
         .waspn-workflow-item{
 
-          min-height:56px;
+          min-height:58px;
 
-          border-radius:9px;
-
-          font-size:7px;
+          border-radius:10px;
 
         }
 
 
         .waspn-workflow-icon{
 
-          min-width:21px;
-          height:21px;
+          min-width:23px;
+          height:23px;
 
-          font-size:12px;
+          font-size:13px;
 
         }
 
@@ -494,15 +467,6 @@
 
         }
       );
-
-  }
-
-
-  function refreshActive(){
-
-    setActive(
-      activeKey()
-    );
 
   }
 
@@ -579,11 +543,6 @@
           "click",
           () => {
 
-            /*
-              Gives immediate visual feedback
-              before navigation / hash movement.
-            */
-
             setActive(
               step.key
             );
@@ -648,21 +607,11 @@
     );
 
 
-    refreshActive();
+    setActive(
+      activeKey()
+    );
 
   }
-
-
-  window.addEventListener(
-    "hashchange",
-    refreshActive
-  );
-
-
-  window.addEventListener(
-    "popstate",
-    refreshActive
-  );
 
 
   if(
