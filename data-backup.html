@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>WASPN Data Backup</title>
+
+<style>
+:root{
+  --bg:#0b0f14;
+  --panel:#121820;
+  --border:#293342;
+  --text:#e8eef6;
+  --muted:#8e9aaa;
+  --green:#35d07f;
+  --red:#ff5f6d;
+  --blue:#63a7ff;
+  --amber:#f3b84b;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:linear-gradient(180deg,#090d12,#0d131a);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+.wrap{
+  max-width:720px;
+  margin:auto;
+  padding:18px;
+}
+
+.btn,a.btn{
+  border:0;
+  background:#293342;
+  color:white;
+  padding:11px 14px;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.export{background:#17693d}
+.replace{background:#6d2530}
+
+.hero,.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+}
+
+.card{margin-top:15px}
+
+h1{
+  color:var(--blue);
+  font-size:40px;
+  margin:4px 0 7px;
+}
+
+.muted{
+  color:var(--muted);
+  line-height:1.5;
+}
+
+.big{
+  font-size:32px;
+  font-weight:900;
+}
+
+.actions{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+
+input[type="file"]{
+  width:100%;
+  padding:12px;
+  color:white;
+  background:#0d131a;
+  border:1px solid var(--border);
+  border-radius:10px;
+}
+
+.status{
+  margin-top:12px;
+  padding:12px;
+  background:#0d131a;
+  border:1px solid var(--border);
+  border-radius:10px;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+.warning{
+  border-color:#6b5125;
+  background:#251d0f;
+  color:var(--amber);
+}
+
+@media(max-width:600px){
+  .wrap{padding:12px}
+  .hero,.card{padding:16px}
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<a href="index.html" class="btn">
+  ← Home
+</a>
+
+
+<section class="hero" style="margin-top:14px;">
+  <div class="muted">WASPN • Local Database Protection</div>
+  <h1>Data Backup</h1>
+  <div class="muted">
+    Your WASPN records are stored in this browser.
+    Export a backup regularly so clearing browser data cannot destroy your history.
+  </div>
+</section>
+
+
+<section class="card">
+
+  <div class="muted">
+    Records currently stored
+  </div>
+
+  <div id="recordCount" class="big">
+    0
+  </div>
+
+  <div class="actions">
+
+    <button id="exportBtn" class="btn export">
+      Export WASPN Backup
+    </button>
+
+  </div>
+
+  <div id="exportStatus" class="status">
+    Export creates a JSON backup file containing the complete WASPN daily database.
+  </div>
+
+</section>
+
+
+<section class="card">
+
+  <h2 style="margin-top:0;">Import Backup</h2>
+
+  <div class="muted">
+    Choose a WASPN JSON backup file.
+  </div>
+
+  <div style="margin-top:12px;">
+    <input
+      id="fileInput"
+      type="file"
+      accept=".json,application/json"
+    >
+  </div>
+
+
+  <div class="actions">
+
+    <button id="mergeBtn" class="btn">
+      Import &amp; Merge
+    </button>
+
+    <button id="replaceBtn" class="btn replace">
+      Replace All Local Data
+    </button>
+
+  </div>
+
+  <div id="importStatus" class="status">
+    No file selected.
+  </div>
+
+</section>
+
+
+<section class="card warning">
+
+  <strong>Recommended</strong>
+
+  <br><br>
+
+  Export a backup at least once per week.
+
+  <br><br>
+
+  <strong>Merge</strong> keeps existing local dates and adds/updates dates from the backup.
+
+  <br><br>
+
+  <strong>Replace</strong> deletes the current local WASPN database and replaces it entirely with the selected backup.
+
+</section>
+
+</div>
+
+
+<script>
+const STORAGE_KEY = "waspnJournalV2";
+
+let pendingData = null;
+
+
+function getJournal(){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  }catch{
+    return {};
+  }
+}
+
+
+function saveJournal(data){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+}
+
+
+function updateCount(){
+  document.getElementById("recordCount").textContent =
+    Object.keys(getJournal()).length;
+}
+
+
+function exportData(){
+
+  const journal = getJournal();
+
+  const payload = {
+    application:"WASPN",
+    storageKey:STORAGE_KEY,
+    exportedAt:new Date().toISOString(),
+    data:journal
+  };
+
+  const blob = new Blob(
+    [JSON.stringify(payload,null,2)],
+    {type:"application/json"}
+  );
+
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+
+  const stamp = new Date()
+    .toISOString()
+    .slice(0,10);
+
+  a.href = url;
+  a.download = `WASPN-backup-${stamp}.json`;
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+
+  document.getElementById("exportStatus").textContent =
+    `Backup exported • ${Object.keys(journal).length} record(s).`;
+}
+
+
+function validatePayload(parsed){
+
+  if(
+    parsed &&
+    parsed.application === "WASPN" &&
+    parsed.data &&
+    typeof parsed.data === "object" &&
+    !Array.isArray(parsed.data)
+  ){
+    return parsed.data;
+  }
+
+  /*
+    Also accept a raw journal object
+    for future/manual recovery.
+  */
+  if(
+    parsed &&
+    typeof parsed === "object" &&
+    !Array.isArray(parsed)
+  ){
+    const keys = Object.keys(parsed);
+
+    if(
+      keys.length === 0 ||
+      keys.every(k=>/^\d{4}-\d{2}-\d{2}$/.test(k))
+    ){
+      return parsed;
+    }
+  }
+
+  throw new Error("This is not a valid WASPN backup.");
+}
+
+
+document.getElementById("fileInput").addEventListener(
+  "change",
+  async event=>{
+
+    pendingData = null;
+
+    const file = event.target.files[0];
+
+    if(!file){
+      return;
+    }
+
+    try{
+
+      const text = await file.text();
+
+      const parsed = JSON.parse(text);
+
+      pendingData = validatePayload(parsed);
+
+      document.getElementById("importStatus").textContent =
+        `Ready to import ${Object.keys(pendingData).length} record(s).`;
+
+      document.getElementById("importStatus").style.color =
+        "var(--green)";
+
+    }catch(error){
+
+      document.getElementById("importStatus").textContent =
+        error.message;
+
+      document.getElementById("importStatus").style.color =
+        "var(--red)";
+    }
+  }
+);
+
+
+document.getElementById("mergeBtn").addEventListener(
+  "click",
+  ()=>{
+
+    if(!pendingData){
+      alert("Choose a valid backup file first.");
+      return;
+    }
+
+    const existing = getJournal();
+
+    const merged = {
+      ...existing,
+      ...pendingData
+    };
+
+    saveJournal(merged);
+
+    updateCount();
+
+    document.getElementById("importStatus").textContent =
+      `Merge complete • ${Object.keys(merged).length} total record(s).`;
+
+    document.getElementById("importStatus").style.color =
+      "var(--green)";
+  }
+);
+
+
+document.getElementById("replaceBtn").addEventListener(
+  "click",
+  ()=>{
+
+    if(!pendingData){
+      alert("Choose a valid backup file first.");
+      return;
+    }
+
+    if(!confirm(
+      "Replace ALL current local WASPN data with this backup?"
+    )){
+      return;
+    }
+
+    saveJournal(pendingData);
+
+    updateCount();
+
+    document.getElementById("importStatus").textContent =
+      `Local database replaced • ${Object.keys(pendingData).length} record(s).`;
+
+    document.getElementById("importStatus").style.color =
+      "var(--green)";
+  }
+);
+
+
+document.getElementById("exportBtn").addEventListener(
+  "click",
+  exportData
+);
+
+
+updateCount();
+</script>
+
+</body>
+</html>
