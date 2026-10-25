@@ -59,7 +59,6 @@ html{
 
 }
 
-<script src="workflow-nav.js"></script>
 
 body{
 
@@ -90,12 +89,6 @@ body{
     Arial,
     Helvetica,
     sans-serif;
-
-  padding-bottom:
-    calc(
-      84px +
-      env(safe-area-inset-bottom)
-    );
 
 }
 
@@ -782,6 +775,8 @@ a{
     var(--border);
 
   border-radius:17px;
+
+  scroll-margin-top:12px;
 
 }
 
@@ -1764,117 +1759,6 @@ a{
 
 
 /* ========================================
-   BOTTOM NAV
-======================================== */
-
-.bottom-nav{
-
-  position:fixed;
-
-  z-index:100;
-
-  left:0;
-  right:0;
-  bottom:0;
-
-  padding:
-    7px
-    8px
-    max(
-      7px,
-      env(safe-area-inset-bottom)
-    );
-
-  background:
-    rgba(
-      6,
-      10,
-      14,
-      .95
-    );
-
-  border-top:
-    1px solid
-    #26333f;
-
-  backdrop-filter:
-    blur(14px);
-
-}
-
-
-.bottom-nav-inner{
-
-  width:100%;
-
-  max-width:900px;
-
-  margin:0 auto;
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(4,1fr);
-
-  gap:6px;
-
-}
-
-
-.nav-link{
-
-  min-height:52px;
-
-  display:flex;
-
-  flex-direction:column;
-
-  align-items:center;
-  justify-content:center;
-
-  gap:2px;
-
-  border:
-    1px solid
-    #26333f;
-
-  border-radius:11px;
-
-  background:#0f161d;
-
-  color:#aab7c3;
-
-  text-decoration:none;
-
-  font-size:9px;
-  font-weight:850;
-
-}
-
-
-.nav-link strong{
-
-  color:white;
-
-  font-size:15px;
-
-}
-
-
-.nav-link.active{
-
-  border-color:
-    rgba(34,199,255,.44);
-
-  background:#0e1d27;
-
-  color:var(--blue);
-
-}
-
-
-
-/* ========================================
    DESKTOP
 ======================================== */
 
@@ -2739,51 +2623,6 @@ a{
 
 
 </div>
-
-
-
-<nav class="bottom-nav">
-
-  <div class="bottom-nav-inner">
-
-    <a
-      href="index.html"
-      class="nav-link"
-    >
-      <strong>⌂</strong>
-      Home
-    </a>
-
-
-    <a
-      href="#top"
-      class="nav-link active"
-    >
-      <strong>R</strong>
-      Risk
-    </a>
-
-
-    <a
-      href="#timerSection"
-      class="nav-link"
-    >
-      <strong>◷</strong>
-      Timer
-    </a>
-
-
-    <a
-      href="journal.html"
-      class="nav-link"
-    >
-      <strong>J</strong>
-      Journal
-    </a>
-
-  </div>
-
-</nav>
 
 
 
@@ -4750,13 +4589,6 @@ function loadLive(){
 
   else{
 
-    /*
-      Backward compatibility:
-      older records may already have warningReached=true
-      without the newer cooldown object.
-      Treat those as already having completed the warning.
-    */
-
     lossWarningActive =
       false;
 
@@ -5004,13 +4836,6 @@ function update(
 
   }
 
-
-  /*
-    Trigger -$75 cooling period only when the P&L
-    is actively updated into the warning zone.
-
-    It runs once per session.
-  */
 
   if(
     shouldSave &&
@@ -5747,6 +5572,7 @@ setInterval(
 
 </script>
 
+<script src="workflow-nav.js"></script>
 
 </body>
 </html>
