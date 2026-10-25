@@ -2,380 +2,1391 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>WASPN Daily Compliance</title>
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1.0,viewport-fit=cover"
+>
+
+<meta
+  name="theme-color"
+  content="#070b10"
+>
+
+<title>WASPN • End Session</title>
 
 <style>
+
 :root{
-  --bg:#0b0f14;
-  --panel:#121820;
-  --border:#293342;
-  --text:#e8eef6;
-  --muted:#8e9aaa;
+  --bg:#070b10;
+  --panel:#10171f;
+  --panel2:#151e28;
+  --border:#273442;
+
+  --text:#edf4fb;
+  --muted:#8797a7;
+  --muted2:#657687;
+
   --green:#35d07f;
   --red:#ff5f6d;
-  --blue:#63a7ff;
+  --blue:#22c7ff;
+  --amber:#f3b84b;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
+
+html{
+  -webkit-text-size-adjust:100%;
+}
 
 body{
   margin:0;
-  background:linear-gradient(180deg,#090d12,#0d131a);
+
+  min-height:100vh;
+
+  background:
+    radial-gradient(
+      circle at 50% -10%,
+      rgba(34,199,255,.07),
+      transparent 34%
+    ),
+    #070b10;
+
   color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  padding-bottom:
+    calc(
+      82px +
+      env(safe-area-inset-bottom)
+    );
+}
+
+button,
+input{
+  font:inherit;
 }
 
 .wrap{
+  width:100%;
   max-width:760px;
-  margin:auto;
-  padding:18px;
+
+  margin:0 auto;
+
+  padding:
+    max(10px,env(safe-area-inset-top))
+    10px
+    20px;
 }
 
-.top{
+
+/* HEADER */
+
+.topbar{
+  display:grid;
+  grid-template-columns:50px 1fr 50px;
+  align-items:center;
+  gap:8px;
+}
+
+.icon-btn{
+  width:50px;
+  height:48px;
+
   display:flex;
-  justify-content:space-between;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:14px;
-}
+  align-items:center;
+  justify-content:center;
 
-.btn,a.btn{
-  border:0;
-  background:#293342;
-  color:white;
-  padding:11px 14px;
-  border-radius:10px;
-  text-decoration:none;
-  font-weight:700;
-  cursor:pointer;
-}
-
-.save{background:#17693d}
-
-.hero,.card{
-  background:var(--panel);
   border:1px solid var(--border);
-  border-radius:18px;
-  padding:20px;
+  border-radius:13px;
+
+  background:#111922;
+  color:white;
+
+  text-decoration:none;
+
+  font-size:20px;
+  font-weight:900;
 }
 
-.card{margin-top:15px}
-
-h1{
-  color:var(--green);
-  font-size:40px;
-  margin:4px 0 7px;
+.product{
+  text-align:center;
 }
 
-.muted{
+.wordmark{
+  color:var(--blue);
+
+  font-size:11px;
+  font-weight:950;
+
+  letter-spacing:2.3px;
+}
+
+.page-title{
+  margin-top:1px;
+
+  font-size:19px;
+  font-weight:950;
+}
+
+.sub{
+  margin:8px 0 10px;
+
+  text-align:center;
+
   color:var(--muted);
-  line-height:1.5;
+
+  font-size:9px;
+  font-weight:850;
+
+  letter-spacing:1.2px;
+
+  text-transform:uppercase;
+}
+
+
+/* DATE */
+
+.date-card{
+  padding:13px;
+
+  background:var(--panel);
+
+  border:1px solid var(--border);
+  border-radius:15px;
+}
+
+.label{
+  color:var(--muted);
+
+  font-size:9px;
+  font-weight:900;
+
+  letter-spacing:.8px;
+
+  text-transform:uppercase;
 }
 
 input[type="date"]{
   width:100%;
-  background:#0d131a;
+  min-height:46px;
+
+  margin-top:5px;
+
+  padding:9px 10px;
+
   border:1px solid var(--border);
-  color:white;
-  padding:11px;
   border-radius:10px;
-  font-size:16px;
+
+  background:#080e13;
+  color:white;
+
+  font-size:15px;
 }
 
-.check{
+
+/* SCORES */
+
+.score-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+
+  gap:8px;
+
+  margin-top:8px;
+}
+
+.score-card{
+  padding:13px;
+
+  text-align:center;
+
+  background:#0b1117;
+
+  border:1px solid var(--border);
+  border-radius:14px;
+}
+
+.score-value{
+  margin-top:4px;
+
+  font-size:32px;
+  font-weight:950;
+}
+
+
+/* SECTIONS */
+
+.section{
+  margin-top:8px;
+
+  padding:13px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #111921,
+      #0d141a
+    );
+
+  border:1px solid var(--border);
+  border-radius:16px;
+}
+
+.section-title{
+  font-size:14px;
+  font-weight:950;
+}
+
+.section-copy{
+  margin-top:3px;
+
+  color:var(--muted);
+
+  font-size:10px;
+  line-height:1.4;
+}
+
+
+/* QUESTIONS */
+
+.question{
+  margin-top:10px;
+
   display:flex;
-  gap:13px;
+
   align-items:flex-start;
-  padding:17px 0;
-  border-bottom:1px solid var(--border);
+
+  gap:11px;
+
+  padding:11px;
+
+  background:#090f14;
+
+  border:1px solid var(--border);
+  border-radius:11px;
+
   cursor:pointer;
 }
 
-.check:last-child{border-bottom:0}
+.question input{
+  width:23px;
+  height:23px;
 
-.check input{
-  width:24px;
-  height:24px;
   flex:0 0 auto;
+
+  margin-top:1px;
+
   accent-color:var(--green);
 }
 
-.title{
+.question-title{
+  font-size:12px;
   font-weight:900;
+
+  line-height:1.35;
 }
 
-.copy{
+.question-copy{
+  margin-top:3px;
+
   color:var(--muted);
-  font-size:13px;
-  line-height:1.5;
-  margin-top:4px;
+
+  font-size:9px;
+
+  line-height:1.4;
 }
 
-.score{
+.structural{
+  border-left:3px solid var(--blue);
+}
+
+.behavioural{
+  border-left:3px solid var(--amber);
+}
+
+
+/* RESULT */
+
+.result{
+  margin-top:8px;
+
+  padding:14px;
+
   text-align:center;
-  font-size:60px;
+
+  background:#0c1319;
+
+  border:1px solid var(--border);
+  border-radius:16px;
+}
+
+.result-score{
+  font-size:
+    clamp(
+      46px,
+      14vw,
+      64px
+    );
+
+  font-weight:950;
+
+  line-height:1;
+}
+
+.result-message{
+  margin-top:6px;
+
+  font-size:12px;
   font-weight:900;
+}
+
+.green{
   color:var(--green);
 }
 
+.amber{
+  color:var(--amber);
+}
+
+.red{
+  color:var(--red);
+}
+
+.blue{
+  color:var(--blue);
+}
+
+
+/* SAVE */
+
+.save-btn{
+  width:100%;
+
+  min-height:58px;
+
+  margin-top:10px;
+
+  border:0;
+  border-radius:14px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #1b8c54,
+      #11683d
+    );
+
+  color:white;
+
+  font-size:15px;
+  font-weight:950;
+
+  cursor:pointer;
+}
+
 .status{
-  margin-top:12px;
-  background:#0d131a;
-  border:1px solid var(--border);
-  border-radius:11px;
-  padding:12px;
-  color:var(--muted);
+  margin-top:8px;
+
+  padding:9px;
+
   text-align:center;
+
+  background:#080e13;
+
+  border:1px solid var(--border);
+  border-radius:10px;
+
+  color:var(--muted);
+
+  font-size:10px;
+}
+
+
+/* FOOT RULE */
+
+.rule{
+  margin-top:8px;
+
+  padding:11px;
+
+  text-align:center;
+
+  background:#1a1013;
+
+  border:1px solid #563038;
+  border-radius:12px;
+
+  color:#d6c0c4;
+
+  font-size:10px;
+  font-weight:800;
+
   line-height:1.5;
 }
 
-.rule{
-  background:#181317;
-  border:1px solid #4b2930;
+
+/* NAV */
+
+.bottom-nav{
+  position:fixed;
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  z-index:100;
+
+  padding:
+    7px
+    8px
+    max(
+      7px,
+      env(safe-area-inset-bottom)
+    );
+
+  background:rgba(6,10,14,.95);
+
+  border-top:1px solid #26333f;
+
+  backdrop-filter:blur(14px);
 }
 
-@media(max-width:600px){
-  .wrap{padding:12px}
-  .hero,.card{padding:16px}
+.bottom-nav-inner{
+  max-width:760px;
+
+  margin:0 auto;
+
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+
+  gap:6px;
 }
+
+.nav-link{
+  min-height:52px;
+
+  display:flex;
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  border:1px solid #26333f;
+  border-radius:11px;
+
+  background:#0f161d;
+
+  color:#aab7c3;
+
+  text-decoration:none;
+
+  font-size:9px;
+  font-weight:850;
+}
+
+.nav-link strong{
+  color:white;
+
+  font-size:15px;
+}
+
+.nav-link.active{
+  color:var(--green);
+
+  border-color:rgba(53,208,127,.4);
+
+  background:#102018;
+}
+
 </style>
 </head>
 
+
 <body>
-<div class="wrap">
 
-<div class="top">
-  <a href="index.html" class="btn">← Home</a>
-  <a href="session-score.html" class="btn">Session Score</a>
+<div class="wrap" id="top">
+
+
+<header>
+
+  <div class="topbar">
+
+    <a
+      href="index.html"
+      class="icon-btn"
+    >
+      ←
+    </a>
+
+    <div class="product">
+
+      <div class="wordmark">
+        WASPN
+      </div>
+
+      <div class="page-title">
+        End Session
+      </div>
+
+    </div>
+
+    <a
+      href="journal.html"
+      class="icon-btn"
+    >
+      J
+    </a>
+
+  </div>
+
+  <div class="sub">
+    Compliance • Behaviour • Process Score
+  </div>
+
+</header>
+
+
+
+<section class="date-card">
+
+  <div class="label">
+    Trading Date • New York
+  </div>
+
+  <input
+    id="date"
+    type="date"
+  >
+
+</section>
+
+
+
+<div class="score-grid">
+
+  <div class="score-card">
+
+    <div class="label">
+      Structural
+    </div>
+
+    <div
+      id="complianceScore"
+      class="score-value blue"
+    >
+      0/3
+    </div>
+
+  </div>
+
+
+  <div class="score-card">
+
+    <div class="label">
+      Overall Process
+    </div>
+
+    <div
+      id="processScoreTop"
+      class="score-value red"
+    >
+      0/5
+    </div>
+
+  </div>
+
 </div>
 
 
-<section class="hero">
-  <div class="muted">WASPN • Structural Rules</div>
-  <h1>Daily Compliance</h1>
-  <div class="muted">
-    These three factual rules are answered once here and reused by Session Score.
+
+<section class="section">
+
+  <div class="section-title">
+    Structural Compliance
   </div>
-</section>
+
+  <div class="section-copy">
+    Factual WASPN rules. These determine the daily compliance score.
+  </div>
 
 
-<section class="card">
-  <label class="muted">Trading date</label>
-  <input id="date" type="date">
-</section>
+  <label class="question structural">
 
+    <input
+      id="q1"
+      type="checkbox"
+    >
 
-<section class="card">
+    <div>
 
-  <label class="check">
-    <input id="window" type="checkbox">
-    <span>
-      <div class="title">Stayed inside the allowed trading window</div>
-      <div class="copy">
-        Preliminary 6:30–7:00 AM ET only for exceptional setups;
-        primary session 9:00–11:00 AM ET.
+      <div class="question-title">
+        Stayed inside the allowed trading window
       </div>
-    </span>
+
+      <div class="question-copy">
+        Preliminary 6:30–7:00 AM ET only for exceptional setups. Primary session 9:00–11:00 AM ET.
+      </div>
+
+    </div>
+
   </label>
 
-  <label class="check">
-    <input id="attempts" type="checkbox">
-    <span>
-      <div class="title">Stopped by Attempt 5</div>
-      <div class="copy">
-        No sixth completed attempt and no reopening the session later.
+
+  <label class="question structural">
+
+    <input
+      id="q2"
+      type="checkbox"
+    >
+
+    <div>
+
+      <div class="question-title">
+        Stopped by Attempt 5
       </div>
-    </span>
+
+      <div class="question-copy">
+        No sixth completed attempt and no reopening later.
+      </div>
+
+    </div>
+
   </label>
 
-  <label class="check">
-    <input id="hardStop" type="checkbox">
-    <span>
-      <div class="title">Respected the -$100 realised hard stop</div>
-      <div class="copy">
-        Once reached, the session was finished.
+
+  <label class="question structural">
+
+    <input
+      id="q3"
+      type="checkbox"
+    >
+
+    <div>
+
+      <div class="question-title">
+        Respected the -$100 realised hard stop
       </div>
-    </span>
+
+      <div class="question-copy">
+        Once reached, the trading session was finished.
+      </div>
+
+    </div>
+
   </label>
 
 </section>
 
 
-<section class="card">
-  <div class="muted" style="text-align:center;">COMPLIANCE SCORE</div>
-  <div id="score" class="score">0/3</div>
 
-  <button id="saveBtn" class="btn save" style="width:100%;">
-    Save Daily Compliance
-  </button>
+<section class="section">
 
-  <div id="status" class="status">
-    No compliance record saved yet.
+  <div class="section-title">
+    Behavioural Execution
   </div>
+
+  <div class="section-copy">
+    Final check that the session remained process-led rather than recovery-led.
+  </div>
+
+
+  <label class="question behavioural">
+
+    <input
+      id="q4"
+      type="checkbox"
+    >
+
+    <div>
+
+      <div class="question-title">
+        No revenge or post-stop continuation
+      </div>
+
+      <div class="question-copy">
+        I did not continue simply to recover a previous loss.
+      </div>
+
+    </div>
+
+  </label>
+
+
+  <label class="question behavioural">
+
+    <input
+      id="q5"
+      type="checkbox"
+    >
+
+    <div>
+
+      <div class="question-title">
+        No tilt-driven trade
+      </div>
+
+      <div class="question-copy">
+        Entries remained setup-driven rather than anger, urgency or P&amp;L-driven.
+      </div>
+
+    </div>
+
+  </label>
+
 </section>
 
 
-<section class="card rule">
-  <strong>Structural finish conditions</strong>
-  <div class="muted" style="margin-top:8px;">
-    Attempt 5 • -$100 realised • 11:00 AM ET
+
+<section class="result">
+
+  <div class="label">
+    Session Process Score
   </div>
+
+  <div
+    id="processScore"
+    class="result-score red"
+  >
+    0/5
+  </div>
+
+  <div
+    id="message"
+    class="result-message"
+  >
+    Process incomplete
+  </div>
+
 </section>
+
+
+
+<button
+  id="saveBtn"
+  class="save-btn"
+  type="button"
+>
+  COMPLETE SESSION
+</button>
+
+
+<div
+  id="status"
+  class="status"
+>
+  End-of-session review not saved.
+</div>
+
+
+
+<div class="rule">
+
+  <strong style="color:var(--red);">
+    HARD FINISH CONDITIONS
+  </strong>
+
+  <br>
+
+  Attempt 5 • -$100 realised • 11:00 AM ET
+
+  <br>
+
+  No reopening later.
 
 </div>
+
+
+</div>
+
+
+
+<nav class="bottom-nav">
+
+  <div class="bottom-nav-inner">
+
+    <a
+      href="index.html"
+      class="nav-link"
+    >
+      <strong>⌂</strong>
+      Home
+    </a>
+
+
+    <a
+      href="live-risk.html"
+      class="nav-link"
+    >
+      <strong>R</strong>
+      Risk
+    </a>
+
+
+    <a
+      href="journal.html"
+      class="nav-link"
+    >
+      <strong>J</strong>
+      Journal
+    </a>
+
+
+    <a
+      href="#top"
+      class="nav-link active"
+    >
+      <strong>✓</strong>
+      End
+    </a>
+
+  </div>
+
+</nav>
+
 
 
 <script>
-const STORAGE_KEY = "waspnJournalV2";
 
-const els = {
-  date:document.getElementById("date"),
-  window:document.getElementById("window"),
-  attempts:document.getElementById("attempts"),
-  hardStop:document.getElementById("hardStop")
-};
+const STORAGE_KEY =
+  "waspnJournalV2";
+
+
+const q = [
+
+  document.getElementById("q1"),
+  document.getElementById("q2"),
+  document.getElementById("q3"),
+  document.getElementById("q4"),
+  document.getElementById("q5")
+
+];
 
 
 function getJournal(){
+
   try{
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-  }catch{
-    return {};
+
+    return JSON.parse(
+      localStorage.getItem(
+        STORAGE_KEY
+      )
+    ) || {};
+
   }
+
+  catch{
+
+    return {};
+
+  }
+
 }
 
 
-function saveJournal(j){
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(j));
+function saveJournal(
+  journal
+){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(
+      journal
+    )
+  );
+
 }
 
 
-function score(){
+function getNyDate(){
+
+  const parts =
+    new Intl.DateTimeFormat(
+      "en-CA",
+      {
+        timeZone:
+          "America/New_York",
+
+        year:
+          "numeric",
+
+        month:
+          "2-digit",
+
+        day:
+          "2-digit"
+      }
+    )
+    .formatToParts(
+      new Date()
+    );
+
+
+  const data =
+    {};
+
+
+  parts.forEach(
+    part => {
+
+      if(
+        part.type !==
+        "literal"
+      ){
+
+        data[
+          part.type
+        ] =
+          part.value;
+
+      }
+
+    }
+  );
+
+
+  return (
+    data.year +
+    "-" +
+    data.month +
+    "-" +
+    data.day
+  );
+
+}
+
+
+function complianceScore(){
+
   return [
-    els.window.checked,
-    els.attempts.checked,
-    els.hardStop.checked
-  ].filter(Boolean).length;
+
+    q[0].checked,
+    q[1].checked,
+    q[2].checked
+
+  ]
+  .filter(Boolean)
+  .length;
+
 }
 
 
-function updateScore(){
-  document.getElementById("score").textContent = score() + "/3";
+function processScore(){
+
+  return q
+    .filter(
+      item =>
+        item.checked
+    )
+    .length;
+
+}
+
+
+function updateScores(){
+
+  const compliance =
+    complianceScore();
+
+
+  const process =
+    processScore();
+
+
+  document.getElementById(
+    "complianceScore"
+  ).textContent =
+    compliance +
+    "/3";
+
+
+  const top =
+    document.getElementById(
+      "processScoreTop"
+    );
+
+
+  const main =
+    document.getElementById(
+      "processScore"
+    );
+
+
+  const message =
+    document.getElementById(
+      "message"
+    );
+
+
+  top.textContent =
+    process +
+    "/5";
+
+
+  main.textContent =
+    process +
+    "/5";
+
+
+  if(
+    process === 5
+  ){
+
+    top.className =
+      "score-value green";
+
+
+    main.className =
+      "result-score green";
+
+
+    message.textContent =
+      "Fully compliant WASPN session";
+
+  }
+
+  else if(
+    process >= 3
+  ){
+
+    top.className =
+      "score-value amber";
+
+
+    main.className =
+      "result-score amber";
+
+
+    message.textContent =
+      "Partial process compliance";
+
+  }
+
+  else{
+
+    top.className =
+      "score-value red";
+
+
+    main.className =
+      "result-score red";
+
+
+    message.textContent =
+      "Process failure / incomplete";
+
+  }
+
 }
 
 
 function loadDay(){
 
-  const day = getJournal()[els.date.value];
+  q.forEach(
+    item => {
 
-  els.window.checked = !!day?.compliance?.window;
-  els.attempts.checked = !!day?.compliance?.attempts;
-  els.hardStop.checked = !!day?.compliance?.stop;
+      item.checked =
+        false;
 
-  updateScore();
+    }
+  );
 
-  const status = document.getElementById("status");
 
-  if(day?.compliance?.savedAt){
-    status.textContent =
-      "Loaded saved compliance • " + day.compliance.score + "/3";
-    status.style.color = "var(--blue)";
-  }else{
-    status.textContent = "No saved compliance for this date.";
-    status.style.color = "var(--muted)";
+  const date =
+    document.getElementById(
+      "date"
+    ).value;
+
+
+  const day =
+    getJournal()[
+      date
+    ];
+
+
+  if(
+    day?.compliance
+  ){
+
+    q[0].checked =
+      !!day.compliance.window;
+
+
+    q[1].checked =
+      !!day.compliance.attempts;
+
+
+    q[2].checked =
+      !!day.compliance.stop;
+
   }
+
+
+  if(
+    day?.sessionScore
+  ){
+
+    const answers =
+      day.sessionScore.answers ||
+      {};
+
+
+    q[3].checked =
+      !!answers.noRevengeContinuation;
+
+
+    q[4].checked =
+      !!answers.noTiltTrade;
+
+  }
+
+
+  updateScores();
+
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+
+  if(
+    day?.sessionScore?.savedAt
+  ){
+
+    status.textContent =
+      "Loaded completed session • " +
+      day.sessionScore.score +
+      "/5";
+
+
+    status.style.color =
+      "var(--blue)";
+
+  }
+
+  else if(
+    day?.compliance?.savedAt
+  ){
+
+    status.textContent =
+      "Existing compliance loaded • complete behavioural review";
+
+
+    status.style.color =
+      "var(--amber)";
+
+  }
+
+  else{
+
+    status.textContent =
+      "End-of-session review not saved.";
+
+
+    status.style.color =
+      "var(--muted)";
+
+  }
+
 }
 
 
-function saveCompliance(){
+function saveEndSession(){
 
-  const date = els.date.value;
+  const date =
+    document.getElementById(
+      "date"
+    ).value;
 
-  if(!date){
-    alert("Choose a date.");
+
+  if(
+    !date
+  ){
+
+    alert(
+      "Choose a trading date."
+    );
+
     return;
+
   }
 
-  const journal = getJournal();
 
-  const existing = journal[date] || {date};
+  const journal =
+    getJournal();
+
+
+  const existing =
+    journal[
+      date
+    ] || {
+      date
+    };
+
+
+  const now =
+    new Date()
+      .toISOString();
+
 
   const compliance = {
-    window:els.window.checked,
-    attempts:els.attempts.checked,
-    stop:els.hardStop.checked,
-    score:score(),
-    outOf:3,
-    savedAt:new Date().toISOString()
+
+    window:
+      q[0].checked,
+
+    attempts:
+      q[1].checked,
+
+    stop:
+      q[2].checked,
+
+    score:
+      complianceScore(),
+
+    outOf:
+      3,
+
+    savedAt:
+      now
+
   };
 
-  const next = {
+
+  const answers = {
+
+    insideWindow:
+      q[0].checked,
+
+    stoppedByFive:
+      q[1].checked,
+
+    respectedHardStop:
+      q[2].checked,
+
+    noRevengeContinuation:
+      q[3].checked,
+
+    noTiltTrade:
+      q[4].checked
+
+  };
+
+
+  const sessionScore = {
+
+    score:
+      processScore(),
+
+    outOf:
+      5,
+
+    answers,
+
+    savedAt:
+      now
+
+  };
+
+
+  journal[
+    date
+  ] = {
+
     ...existing,
+
     date,
+
     compliance,
-    lastUpdated:new Date().toISOString()
+
+    sessionScore,
+
+    sessionCompletedAt:
+      now,
+
+    lastUpdated:
+      now
+
   };
 
-  /*
-    If a Session Score already exists, keep its first
-    three answers synchronised automatically.
-  */
-  if(next.sessionScore){
 
-    const answers = next.sessionScore.answers || {};
+  saveJournal(
+    journal
+  );
 
-    answers.insideWindow = compliance.window;
-    answers.stoppedByFive = compliance.attempts;
-    answers.respectedHardStop = compliance.stop;
 
-    next.sessionScore.answers = answers;
+  const status =
+    document.getElementById(
+      "status"
+    );
 
-    next.sessionScore.score = [
-      answers.insideWindow,
-      answers.stoppedByFive,
-      answers.respectedHardStop,
-      answers.noRevengeContinuation,
-      answers.noTiltTrade
-    ].filter(Boolean).length;
-
-    next.sessionScore.updatedAt = new Date().toISOString();
-  }
-
-  journal[date] = next;
-
-  saveJournal(journal);
-
-  const status = document.getElementById("status");
 
   status.textContent =
-    `Saved ${date} • ${compliance.score}/3`;
+    "Session completed • Compliance " +
+    compliance.score +
+    "/3 • Process " +
+    sessionScore.score +
+    "/5";
 
-  status.style.color = "var(--green)";
+
+  status.style.color =
+    "var(--green)";
+
 }
 
 
 function setToday(){
-  const d = new Date();
 
-  els.date.value = [
-    d.getFullYear(),
-    String(d.getMonth()+1).padStart(2,"0"),
-    String(d.getDate()).padStart(2,"0")
-  ].join("-");
+  document.getElementById(
+    "date"
+  ).value =
+    getNyDate();
+
 }
 
 
-[els.window,els.attempts,els.hardStop].forEach(el=>{
-  el.addEventListener("change",updateScore);
-});
+q.forEach(
+  item => {
 
-els.date.addEventListener("change",loadDay);
+    item.addEventListener(
+      "change",
+      updateScores
+    );
 
-document.getElementById("saveBtn").addEventListener("click",saveCompliance);
+  }
+);
+
+
+document.getElementById(
+  "date"
+)
+.addEventListener(
+  "change",
+  loadDay
+);
+
+
+document.getElementById(
+  "saveBtn"
+)
+.addEventListener(
+  "click",
+  saveEndSession
+);
+
 
 setToday();
+
 loadDay();
+
 </script>
 
 </body>
