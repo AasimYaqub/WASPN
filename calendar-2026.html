@@ -16,9 +16,12 @@
   --green:#35d07f;
   --red:#ff5f6d;
   --blue:#63a7ff;
+  --amber:#f3b84b;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
@@ -41,7 +44,14 @@ body{
   margin-bottom:14px;
 }
 
-.btn,a.btn{
+.top-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.btn,
+a.btn{
   border:0;
   background:#293342;
   color:white;
@@ -52,14 +62,17 @@ body{
   cursor:pointer;
 }
 
-.hero,.card{
+.hero,
+.card{
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:18px;
   padding:20px;
 }
 
-.card{margin-top:15px}
+.card{
+  margin-top:15px;
+}
 
 h1{
   color:var(--green);
@@ -67,12 +80,81 @@ h1{
   margin:4px 0 7px;
 }
 
-h2{margin:0}
+h2{
+  margin:0;
+}
 
 .muted{
   color:var(--muted);
   line-height:1.5;
 }
+
+.green{
+  color:var(--green);
+}
+
+.red{
+  color:var(--red);
+}
+
+.blue{
+  color:var(--blue);
+}
+
+.amber{
+  color:var(--amber);
+}
+
+
+/* FX */
+
+.fx-box{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:end;
+}
+
+.fx-field label{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+
+.fx-input-wrap{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.fx-prefix{
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.fx-field input{
+  width:110px;
+  background:#0d131a;
+  border:1px solid var(--border);
+  color:white;
+  border-radius:9px;
+  padding:10px;
+  font-size:17px;
+  font-weight:800;
+}
+
+.fx-note{
+  margin-top:9px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+
+/* MONTH NAV */
 
 .month-nav{
   display:flex;
@@ -102,12 +184,16 @@ h2{margin:0}
   padding:9px;
   border-radius:9px;
   font-weight:700;
+  cursor:pointer;
 }
 
 .month-jump.active{
   color:var(--blue);
   border-color:var(--blue);
 }
+
+
+/* STATS */
 
 .stats{
   display:grid;
@@ -135,13 +221,24 @@ h2{margin:0}
   margin-top:5px;
   font-size:22px;
   font-weight:900;
+}
+
+.value-usd{
   white-space:nowrap;
   overflow:hidden;
 }
 
-.green{color:var(--green)}
-.red{color:var(--red)}
-.blue{color:var(--blue)}
+.value-gbp{
+  margin-top:3px;
+  font-size:14px;
+  font-weight:800;
+  color:var(--muted);
+  white-space:nowrap;
+  overflow:hidden;
+}
+
+
+/* CALENDAR */
 
 .legend{
   display:flex;
@@ -168,7 +265,7 @@ h2{margin:0}
 
 .day{
   min-width:0;
-  min-height:84px;
+  min-height:97px;
   padding:7px 5px;
   background:var(--panel2);
   border:1px solid var(--border);
@@ -183,7 +280,9 @@ h2{margin:0}
   cursor:default;
 }
 
-.day.future{opacity:.45}
+.day.future{
+  opacity:.45;
+}
 
 .day.green-day{
   background:#102018;
@@ -212,12 +311,27 @@ h2{margin:0}
 }
 
 .pnl{
-  margin-top:12px;
+  margin-top:11px;
+}
+
+.pnl-usd{
   font-size:clamp(10px,3vw,15px);
   font-weight:900;
   white-space:nowrap;
   letter-spacing:-.4px;
 }
+
+.pnl-gbp{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:clamp(9px,2.6vw,12px);
+  font-weight:800;
+  white-space:nowrap;
+  letter-spacing:-.3px;
+}
+
+
+/* DETAIL */
 
 .detail{
   margin-top:15px;
@@ -225,6 +339,19 @@ h2{margin:0}
   border:1px solid var(--border);
   border-radius:13px;
   padding:15px;
+}
+
+.detail-main-usd{
+  font-size:30px;
+  font-weight:900;
+  margin-top:7px;
+}
+
+.detail-main-gbp{
+  color:var(--muted);
+  font-size:19px;
+  font-weight:800;
+  margin-top:3px;
 }
 
 .detail-grid{
@@ -251,149 +378,489 @@ h2{margin:0}
   line-height:1.5;
 }
 
+.trade-gbp{
+  color:var(--muted);
+  font-size:12px;
+}
+
+
 @media(max-width:600px){
-  .wrap{padding:10px}
-  .hero,.card{padding:14px}
-  h1{font-size:34px}
-  .month-title{font-size:21px}
-  .calendar{gap:4px}
-  .day{min-height:80px;padding:6px 4px}
-  .pnl{font-size:clamp(10px,3vw,13px)}
-  .month-buttons{grid-template-columns:repeat(3,1fr)}
-  .detail-grid{grid-template-columns:1fr 1fr}
+
+  .wrap{
+    padding:10px;
+  }
+
+  .hero,
+  .card{
+    padding:14px;
+  }
+
+  h1{
+    font-size:34px;
+  }
+
+  .fx-box{
+    grid-template-columns:1fr;
+  }
+
+  .month-title{
+    font-size:21px;
+  }
+
+  .calendar{
+    gap:4px;
+  }
+
+  .day{
+    min-height:92px;
+    padding:6px 4px;
+  }
+
+  .date{
+    font-size:10px;
+  }
+
+  .pnl-usd{
+    font-size:clamp(9px,2.8vw,13px);
+  }
+
+  .pnl-gbp{
+    font-size:clamp(8px,2.45vw,11px);
+  }
+
+  .month-buttons{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .detail-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
 }
 </style>
 </head>
 
+
 <body>
+
 <div class="wrap">
 
-<div class="top">
-  <a href="index.html" class="btn">← Home</a>
 
-  <div>
-    <a href="journal.html" class="btn">Journal</a>
-    <a href="data-backup.html" class="btn">Backup</a>
+<div class="top">
+
+  <a href="index.html" class="btn">
+    ← Home
+  </a>
+
+  <div class="top-actions">
+
+    <a href="journal.html" class="btn">
+      Journal
+    </a>
+
+    <a href="data-backup.html" class="btn">
+      Backup
+    </a>
+
   </div>
+
 </div>
 
 
+
 <section class="hero">
-  <div class="muted">WASPN • Full Trading History</div>
-  <h1>2026 Calendar</h1>
+
   <div class="muted">
-    Historical broker results plus journal-saved daily records.
+    WASPN • Full Trading History
   </div>
+
+  <h1>2026 Calendar</h1>
+
+  <div class="muted">
+    Historical broker results are stored in USD.
+    GBP equivalents are shown underneath using your selected USD → GBP rate.
+  </div>
+
 </section>
+
+
+
+<section class="card">
+
+  <div class="fx-box">
+
+    <div class="fx-field">
+
+      <label>
+        USD → GBP conversion rate
+      </label>
+
+      <div class="fx-input-wrap">
+
+        <span class="fx-prefix">
+          $1 =
+        </span>
+
+        <input
+          id="fxRate"
+          type="number"
+          min="0.01"
+          max="2"
+          step="0.0001"
+          value="0.7500"
+        >
+
+        <span class="fx-prefix">
+          GBP
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <button
+      id="saveFxBtn"
+      class="btn"
+    >
+      Save Rate
+    </button>
+
+  </div>
+
+
+  <div class="fx-note">
+    GBP amounts are approximate. Changing this rate recalculates the full calendar,
+    monthly totals and year-to-date figures. Your chosen rate is saved on this device.
+  </div>
+
+</section>
+
 
 
 <section class="card">
 
   <div class="month-nav">
-    <button id="prev" class="btn">←</button>
-    <div id="monthTitle" class="month-title"></div>
-    <button id="next" class="btn">→</button>
+
+    <button id="prev" class="btn">
+      ←
+    </button>
+
+    <div
+      id="monthTitle"
+      class="month-title"
+    ></div>
+
+    <button id="next" class="btn">
+      →
+    </button>
+
   </div>
 
-  <div id="monthButtons" class="month-buttons"></div>
+
+  <div
+    id="monthButtons"
+    class="month-buttons"
+  ></div>
 
 
   <div class="stats">
 
-    <div class="stat">
-      <div class="label">Month P&amp;L</div>
-      <div id="monthPnl" class="value">—</div>
-    </div>
 
     <div class="stat">
-      <div class="label">Trading Days</div>
-      <div id="tradingDays" class="value">0</div>
+
+      <div class="label">
+        Month P&amp;L
+      </div>
+
+      <div
+        id="monthPnlUsd"
+        class="value value-usd"
+      >
+        —
+      </div>
+
+      <div
+        id="monthPnlGbp"
+        class="value-gbp"
+      >
+        —
+      </div>
+
     </div>
 
-    <div class="stat">
-      <div class="label">Green Days</div>
-      <div id="greenDays" class="value green">0</div>
-    </div>
 
     <div class="stat">
-      <div class="label">Red Days</div>
-      <div id="redDays" class="value red">0</div>
+
+      <div class="label">
+        Trading Days
+      </div>
+
+      <div
+        id="tradingDays"
+        class="value"
+      >
+        0
+      </div>
+
     </div>
 
-    <div class="stat">
-      <div class="label">Best Day</div>
-      <div id="bestDay" class="value green">—</div>
-    </div>
 
     <div class="stat">
-      <div class="label">Worst Day</div>
-      <div id="worstDay" class="value red">—</div>
+
+      <div class="label">
+        Green Days
+      </div>
+
+      <div
+        id="greenDays"
+        class="value green"
+      >
+        0
+      </div>
+
     </div>
+
+
+    <div class="stat">
+
+      <div class="label">
+        Red Days
+      </div>
+
+      <div
+        id="redDays"
+        class="value red"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="label">
+        Best Day
+      </div>
+
+      <div
+        id="bestDayUsd"
+        class="value value-usd green"
+      >
+        —
+      </div>
+
+      <div
+        id="bestDayGbp"
+        class="value-gbp"
+      >
+        —
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="label">
+        Worst Day
+      </div>
+
+      <div
+        id="worstDayUsd"
+        class="value value-usd red"
+      >
+        —
+      </div>
+
+      <div
+        id="worstDayGbp"
+        class="value-gbp"
+      >
+        —
+      </div>
+
+    </div>
+
 
   </div>
 
 
   <div class="legend">
-    <span>Green = profitable</span>
-    <span>Red = losing</span>
-    <span>J = saved WASPN record</span>
+
+    <span>
+      Green = profitable
+    </span>
+
+    <span>
+      Red = losing
+    </span>
+
+    <span>
+      J = saved WASPN record
+    </span>
+
+    <span>
+      £ = approximate conversion
+    </span>
+
   </div>
 
 
   <div class="calendar">
-    <div class="weekday">Mon</div>
-    <div class="weekday">Tue</div>
-    <div class="weekday">Wed</div>
-    <div class="weekday">Thu</div>
-    <div class="weekday">Fri</div>
 
-    <div id="calendarDays" style="display:contents;"></div>
+    <div class="weekday">
+      Mon
+    </div>
+
+    <div class="weekday">
+      Tue
+    </div>
+
+    <div class="weekday">
+      Wed
+    </div>
+
+    <div class="weekday">
+      Thu
+    </div>
+
+    <div class="weekday">
+      Fri
+    </div>
+
+
+    <div
+      id="calendarDays"
+      style="display:contents;"
+    ></div>
+
   </div>
 
 
-  <div id="detail" class="detail">
+  <div
+    id="detail"
+    class="detail"
+  >
+
     <div class="muted">
       Tap a trading day to see its complete record.
     </div>
+
   </div>
 
 </section>
+
 
 
 <section class="card">
-  <h2>2026 Year-to-Date</h2>
+
+  <h2>
+    2026 Year-to-Date
+  </h2>
+
 
   <div class="stats">
-    <div class="stat">
-      <div class="label">Net P&amp;L</div>
-      <div id="yearPnl" class="value">—</div>
-    </div>
+
 
     <div class="stat">
-      <div class="label">Trading Days</div>
-      <div id="yearDays" class="value">0</div>
+
+      <div class="label">
+        Net P&amp;L
+      </div>
+
+      <div
+        id="yearPnlUsd"
+        class="value value-usd"
+      >
+        —
+      </div>
+
+      <div
+        id="yearPnlGbp"
+        class="value-gbp"
+      >
+        —
+      </div>
+
     </div>
 
-    <div class="stat">
-      <div class="label">Green</div>
-      <div id="yearGreen" class="value green">0</div>
-    </div>
 
     <div class="stat">
-      <div class="label">Red</div>
-      <div id="yearRed" class="value red">0</div>
+
+      <div class="label">
+        Trading Days
+      </div>
+
+      <div
+        id="yearDays"
+        class="value"
+      >
+        0
+      </div>
+
     </div>
+
+
+    <div class="stat">
+
+      <div class="label">
+        Green
+      </div>
+
+      <div
+        id="yearGreen"
+        class="value green"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="label">
+        Red
+      </div>
+
+      <div
+        id="yearRed"
+        class="value red"
+      >
+        0
+      </div>
+
+    </div>
+
+
   </div>
+
 </section>
+
 
 </div>
 
 
+
 <script>
-const STORAGE_KEY = "waspnJournalV2";
+
+const STORAGE_KEY =
+  "waspnJournalV2";
+
+
+const FX_STORAGE_KEY =
+  "waspnUsdGbpRateV1";
+
+
+const DEFAULT_FX_RATE =
+  0.7500;
+
 
 
 const tradingData = {
+
   "2026-06-30":50.30,
 
   "2026-07-01":39.67,
@@ -477,274 +944,915 @@ const tradingData = {
   "2026-10-21":-31.44,
   "2026-10-22":-599.78,
   "2026-10-23":-95.22
+
 };
 
 
+
 const months = [
-  "January","February","March","April",
-  "May","June","July","August",
-  "September","October","November","December"
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
 ];
 
-let currentMonth = 9;
+
+let currentMonth =
+  9;
+
 
 
 function getJournal(){
+
   try{
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-  }catch{
-    return {};
+
+    return JSON.parse(
+      localStorage.getItem(
+        STORAGE_KEY
+      )
+    ) || {};
+
   }
+
+  catch{
+
+    return {};
+
+  }
+
 }
+
 
 
 function combined(){
-  const data = {...tradingData};
 
-  const journal = getJournal();
+  const data = {
+    ...tradingData
+  };
 
-  Object.entries(journal).forEach(([date,day])=>{
-    if(typeof day?.totalNet === "number"){
-      data[date] = day.totalNet;
+
+  const journal =
+    getJournal();
+
+
+  Object.entries(
+    journal
+  ).forEach(
+    ([date,day]) => {
+
+      if(
+        typeof day?.totalNet ===
+        "number"
+      ){
+
+        data[date] =
+          day.totalNet;
+
+      }
+
     }
-  });
+  );
+
 
   return data;
+
 }
 
 
-function money(v){
-  const n = Number(v || 0);
 
-  if(n > 0) return "+$" + n.toFixed(2);
-  if(n < 0) return "-$" + Math.abs(n).toFixed(2);
+function getFxRate(){
+
+  const saved =
+    Number(
+      localStorage.getItem(
+        FX_STORAGE_KEY
+      )
+    );
+
+
+  if(
+    Number.isFinite(saved) &&
+    saved > 0
+  ){
+
+    return saved;
+
+  }
+
+
+  return DEFAULT_FX_RATE;
+
+}
+
+
+
+function saveFxRate(){
+
+  const input =
+    document.getElementById(
+      "fxRate"
+    );
+
+
+  const rate =
+    Number(
+      input.value
+    );
+
+
+  if(
+    !Number.isFinite(rate) ||
+    rate <= 0
+  ){
+
+    alert(
+      "Enter a valid USD → GBP conversion rate."
+    );
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+    FX_STORAGE_KEY,
+    String(rate)
+  );
+
+
+  input.value =
+    rate.toFixed(4);
+
+
+  render();
+
+}
+
+
+
+function usdMoney(value){
+
+  const n =
+    Number(
+      value || 0
+    );
+
+
+  if(n > 0){
+
+    return (
+      "+$" +
+      n.toFixed(2)
+    );
+
+  }
+
+
+  if(n < 0){
+
+    return (
+      "-$" +
+      Math.abs(n).toFixed(2)
+    );
+
+  }
+
 
   return "$0.00";
+
 }
 
 
-function key(month,day){
-  return `2026-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+
+function gbpMoney(
+  usdValue,
+  approximate = true
+){
+
+  const gbp =
+    Number(
+      usdValue || 0
+    ) *
+    getFxRate();
+
+
+  const prefix =
+    approximate
+      ? "≈ "
+      : "";
+
+
+  if(gbp > 0){
+
+    return (
+      prefix +
+      "+£" +
+      gbp.toFixed(2)
+    );
+
+  }
+
+
+  if(gbp < 0){
+
+    return (
+      prefix +
+      "-£" +
+      Math.abs(gbp).toFixed(2)
+    );
+
+  }
+
+
+  return (
+    prefix +
+    "£0.00"
+  );
+
 }
 
 
-function monthEntries(month){
+
+function key(
+  month,
+  day
+){
+
+  return (
+    "2026-" +
+    String(
+      month + 1
+    ).padStart(2,"0") +
+    "-" +
+    String(day)
+      .padStart(2,"0")
+  );
+
+}
+
+
+
+function monthEntries(
+  month
+){
 
   const prefix =
     "2026-" +
-    String(month+1).padStart(2,"0");
+    String(
+      month + 1
+    ).padStart(2,"0");
 
-  return Object.entries(combined()).filter(
-    ([date])=>date.startsWith(prefix)
+
+  return Object.entries(
+    combined()
+  )
+  .filter(
+    ([date]) =>
+      date.startsWith(
+        prefix
+      )
   );
+
 }
+
+
+
+function setMoneyStat(
+  usdId,
+  gbpId,
+  value,
+  empty = false
+){
+
+  const usd =
+    document.getElementById(
+      usdId
+    );
+
+
+  const gbp =
+    document.getElementById(
+      gbpId
+    );
+
+
+  if(empty){
+
+    usd.textContent =
+      "—";
+
+    gbp.textContent =
+      "—";
+
+    return;
+
+  }
+
+
+  usd.textContent =
+    usdMoney(
+      value
+    );
+
+
+  gbp.textContent =
+    gbpMoney(
+      value
+    );
+
+}
+
 
 
 function renderStats(){
 
-  const entries = monthEntries(currentMonth);
+  const entries =
+    monthEntries(
+      currentMonth
+    );
 
-  const values = entries.map(x=>x[1]);
 
-  const total = values.reduce((a,b)=>a+b,0);
+  const values =
+    entries.map(
+      x => x[1]
+    );
 
-  const monthPnl = document.getElementById("monthPnl");
 
-  monthPnl.textContent =
-    entries.length ? money(total) : "No data";
+  const total =
+    values.reduce(
+      (a,b) => a+b,
+      0
+    );
 
-  monthPnl.className =
-    "value " +
+
+  const monthUsd =
+    document.getElementById(
+      "monthPnlUsd"
+    );
+
+
+  if(entries.length){
+
+    setMoneyStat(
+      "monthPnlUsd",
+      "monthPnlGbp",
+      total
+    );
+
+
+    monthUsd.className =
+      "value value-usd " +
+      (
+        total >= 0
+          ? "green"
+          : "red"
+      );
+
+  }
+
+  else{
+
+    monthUsd.textContent =
+      "No data";
+
+
+    document.getElementById(
+      "monthPnlGbp"
+    ).textContent =
+      "—";
+
+
+    monthUsd.className =
+      "value value-usd";
+
+  }
+
+
+  document.getElementById(
+    "tradingDays"
+  ).textContent =
+    entries.length;
+
+
+  document.getElementById(
+    "greenDays"
+  ).textContent =
+    values.filter(
+      v => v > 0
+    ).length;
+
+
+  document.getElementById(
+    "redDays"
+  ).textContent =
+    values.filter(
+      v => v < 0
+    ).length;
+
+
+  if(entries.length){
+
+    const best =
+      Math.max(
+        ...values
+      );
+
+
+    const worst =
+      Math.min(
+        ...values
+      );
+
+
+    setMoneyStat(
+      "bestDayUsd",
+      "bestDayGbp",
+      best
+    );
+
+
+    setMoneyStat(
+      "worstDayUsd",
+      "worstDayGbp",
+      worst
+    );
+
+  }
+
+  else{
+
+    setMoneyStat(
+      "bestDayUsd",
+      "bestDayGbp",
+      0,
+      true
+    );
+
+
+    setMoneyStat(
+      "worstDayUsd",
+      "worstDayGbp",
+      0,
+      true
+    );
+
+  }
+
+
+
+  const all =
+    Object.values(
+      combined()
+    );
+
+
+  const ytd =
+    all.reduce(
+      (a,b) => a+b,
+      0
+    );
+
+
+  setMoneyStat(
+    "yearPnlUsd",
+    "yearPnlGbp",
+    ytd
+  );
+
+
+  const yearUsd =
+    document.getElementById(
+      "yearPnlUsd"
+    );
+
+
+  yearUsd.className =
+    "value value-usd " +
     (
-      total >= 0
+      ytd >= 0
         ? "green"
         : "red"
     );
 
-  document.getElementById("tradingDays").textContent =
-    entries.length;
 
-  document.getElementById("greenDays").textContent =
-    values.filter(v=>v>0).length;
-
-  document.getElementById("redDays").textContent =
-    values.filter(v=>v<0).length;
-
-  document.getElementById("bestDay").textContent =
-    entries.length
-      ? money(Math.max(...values))
-      : "—";
-
-  document.getElementById("worstDay").textContent =
-    entries.length
-      ? money(Math.min(...values))
-      : "—";
-
-
-  const all = Object.values(combined());
-
-  const ytd = all.reduce((a,b)=>a+b,0);
-
-  const y = document.getElementById("yearPnl");
-
-  y.textContent = money(ytd);
-
-  y.className =
-    "value " +
-    (ytd >= 0 ? "green" : "red");
-
-  document.getElementById("yearDays").textContent =
+  document.getElementById(
+    "yearDays"
+  ).textContent =
     all.length;
 
-  document.getElementById("yearGreen").textContent =
-    all.filter(v=>v>0).length;
 
-  document.getElementById("yearRed").textContent =
-    all.filter(v=>v<0).length;
+  document.getElementById(
+    "yearGreen"
+  ).textContent =
+    all.filter(
+      v => v > 0
+    ).length;
+
+
+  document.getElementById(
+    "yearRed"
+  ).textContent =
+    all.filter(
+      v => v < 0
+    ).length;
+
 }
+
 
 
 function render(){
 
-  document.getElementById("monthTitle").textContent =
-    months[currentMonth] + " 2026";
+  document.getElementById(
+    "monthTitle"
+  ).textContent =
+    months[currentMonth] +
+    " 2026";
 
-  document.querySelectorAll(".month-jump").forEach(
-    (b,i)=>b.classList.toggle("active",i===currentMonth)
-  );
+
+  document
+    .querySelectorAll(
+      ".month-jump"
+    )
+    .forEach(
+      (button,index) => {
+
+        button.classList.toggle(
+          "active",
+          index === currentMonth
+        );
+
+      }
+    );
+
 
   renderStats();
 
-  const container = document.getElementById("calendarDays");
 
-  container.innerHTML = "";
+  const container =
+    document.getElementById(
+      "calendarDays"
+    );
 
-  const first = new Date(2026,currentMonth,1);
 
-  let dayIndex = first.getDay();
+  container.innerHTML =
+    "";
 
-  dayIndex = dayIndex === 0 ? 7 : dayIndex;
 
-  let offset = dayIndex-1;
+  const first =
+    new Date(
+      2026,
+      currentMonth,
+      1
+    );
 
-  if(offset > 4) offset = 0;
 
-  for(let i=0;i<offset;i++){
-    const empty = document.createElement("div");
-    empty.className = "day empty";
-    container.appendChild(empty);
+  let dayIndex =
+    first.getDay();
+
+
+  dayIndex =
+    dayIndex === 0
+      ? 7
+      : dayIndex;
+
+
+  let offset =
+    dayIndex - 1;
+
+
+  if(offset > 4){
+
+    offset = 0;
+
   }
 
+
+  for(
+    let i = 0;
+    i < offset;
+    i++
+  ){
+
+    const empty =
+      document.createElement(
+        "div"
+      );
+
+
+    empty.className =
+      "day empty";
+
+
+    container.appendChild(
+      empty
+    );
+
+  }
+
+
   const days =
-    new Date(2026,currentMonth+1,0).getDate();
+    new Date(
+      2026,
+      currentMonth + 1,
+      0
+    ).getDate();
 
-  const data = combined();
 
-  const journal = getJournal();
+  const data =
+    combined();
 
-  for(let day=1;day<=days;day++){
 
-    const d = new Date(2026,currentMonth,day);
+  const journal =
+    getJournal();
 
-    if(d.getDay() === 0 || d.getDay() === 6){
+
+  for(
+    let day = 1;
+    day <= days;
+    day++
+  ){
+
+    const d =
+      new Date(
+        2026,
+        currentMonth,
+        day
+      );
+
+
+    if(
+      d.getDay() === 0 ||
+      d.getDay() === 6
+    ){
+
       continue;
+
     }
 
-    const date = key(currentMonth,day);
 
-    const value = data[date];
+    const date =
+      key(
+        currentMonth,
+        day
+      );
 
-    const cell = document.createElement("div");
 
-    cell.className = "day";
+    const value =
+      data[date];
 
-    if(typeof value === "number"){
+
+    const cell =
+      document.createElement(
+        "div"
+      );
+
+
+    cell.className =
+      "day";
+
+
+    if(
+      typeof value ===
+      "number"
+    ){
 
       cell.classList.add(
         value >= 0
           ? "green-day"
           : "red-day"
       );
+
     }
 
-    if(journal[date]){
-      cell.classList.add("saved-day");
-    }
 
     if(
-      typeof value !== "number" &&
-      date > "2026-10-23"
+      journal[date]
     ){
-      cell.classList.add("future");
+
+      cell.classList.add(
+        "saved-day"
+      );
+
     }
 
-    const dateEl = document.createElement("div");
 
-    dateEl.className = "date";
+    if(
+      typeof value !==
+        "number" &&
+      date >
+        "2026-10-23"
+    ){
+
+      cell.classList.add(
+        "future"
+      );
+
+    }
+
+
+    const dateEl =
+      document.createElement(
+        "div"
+      );
+
+
+    dateEl.className =
+      "date";
+
 
     dateEl.textContent =
-      day + " " +
-      months[currentMonth].slice(0,3);
+      day +
+      " " +
+      months[
+        currentMonth
+      ].slice(
+        0,
+        3
+      );
 
-    const pnl = document.createElement("div");
 
-    pnl.className = "pnl";
+    const pnl =
+      document.createElement(
+        "div"
+      );
 
-    pnl.textContent =
-      typeof value === "number"
-        ? money(value)
-        : "—";
 
-    if(typeof value === "number"){
-      pnl.classList.add(value >= 0 ? "green" : "red");
-    }else{
-      pnl.classList.add("muted");
+    pnl.className =
+      "pnl";
+
+
+    const pnlUsd =
+      document.createElement(
+        "div"
+      );
+
+
+    pnlUsd.className =
+      "pnl-usd";
+
+
+    const pnlGbp =
+      document.createElement(
+        "div"
+      );
+
+
+    pnlGbp.className =
+      "pnl-gbp";
+
+
+    if(
+      typeof value ===
+      "number"
+    ){
+
+      pnlUsd.textContent =
+        usdMoney(
+          value
+        );
+
+
+      pnlGbp.textContent =
+        gbpMoney(
+          value
+        );
+
+
+      pnlUsd.classList.add(
+        value >= 0
+          ? "green"
+          : "red"
+      );
+
     }
 
-    cell.appendChild(dateEl);
-    cell.appendChild(pnl);
+    else{
 
-    if(typeof value === "number" || journal[date]){
+      pnlUsd.textContent =
+        "—";
+
+
+      pnlGbp.textContent =
+        "";
+
+
+      pnlUsd.classList.add(
+        "muted"
+      );
+
+    }
+
+
+    pnl.appendChild(
+      pnlUsd
+    );
+
+
+    pnl.appendChild(
+      pnlGbp
+    );
+
+
+    cell.appendChild(
+      dateEl
+    );
+
+
+    cell.appendChild(
+      pnl
+    );
+
+
+    if(
+      typeof value ===
+        "number" ||
+      journal[date]
+    ){
+
       cell.addEventListener(
         "click",
-        ()=>showDetail(date,value)
+        () => showDetail(
+          date,
+          value
+        )
       );
+
     }
 
-    container.appendChild(cell);
+
+    container.appendChild(
+      cell
+    );
+
   }
+
 }
 
 
-function showDetail(date,value){
 
-  const day = getJournal()[date] || {};
+function showDetail(
+  date,
+  value
+){
 
-  const pretty = new Date(
-    date+"T12:00:00"
-  ).toLocaleDateString(
-    "en-GB",
-    {
-      weekday:"long",
-      day:"numeric",
-      month:"long",
-      year:"numeric"
-    }
-  );
+  const day =
+    getJournal()[
+      date
+    ] || {};
 
-  const trades = day.trades || [];
+
+  const pretty =
+    new Date(
+      date +
+      "T12:00:00"
+    )
+    .toLocaleDateString(
+      "en-GB",
+      {
+        weekday:
+          "long",
+
+        day:
+          "numeric",
+
+        month:
+          "long",
+
+        year:
+          "numeric"
+      }
+    );
+
+
+  const trades =
+    day.trades || [];
+
 
   const compliance =
     day.compliance &&
-    typeof day.compliance.score === "number"
-      ? day.compliance.score + "/3"
+    typeof day.compliance.score ===
+      "number"
+      ? day.compliance.score +
+        "/3"
       : "—";
+
 
   const score =
     day.sessionScore &&
-    typeof day.sessionScore.score === "number"
-      ? day.sessionScore.score + "/5"
+    typeof day.sessionScore.score ===
+      "number"
+      ? day.sessionScore.score +
+        "/5"
       : "—";
+
 
   const attempt =
     day.liveRisk
@@ -755,162 +1863,411 @@ function showDetail(date,value){
         )
       : "—";
 
+
   const warning =
     day.liveRisk?.warningReached
       ? "Yes"
       : "No";
+
 
   const hardStop =
     day.liveRisk?.hardStopReached
       ? "Yes"
       : "No";
 
+
   const tilt =
     day.liveRisk?.tilt ||
-    trades.some(t=>t.tilt === "yes")
+    trades.some(
+      trade =>
+        trade.tilt ===
+        "yes"
+    )
       ? "Yes"
       : "No";
 
-  const tradeHtml = trades.map(
-    (t,i)=>`
-      <div class="trade">
-        <strong>
-          Trade ${i+1}${t.ticker ? " • "+t.ticker : ""}
-        </strong>
-        <br>
-        ${t.side || ""}
-        ${t.entryTime ? " • "+t.entryTime : ""}
-        ${t.exitTime ? " → "+t.exitTime : ""}
-        <br>
-        Net:
-        <strong class="${Number(t.netPnl)>=0 ? "green" : "red"}">
-          ${money(t.netPnl)}
-        </strong>
-        ${t.actualNet !== null && t.actualNet !== undefined
-          ? " • Broker net"
-          : " • Calculated"}
-        ${t.setup ? "<br>Setup: "+escapeHtml(t.setup) : ""}
-      </div>
-    `
-  ).join("");
+
+  const tradeHtml =
+    trades.map(
+      (trade,index) => {
+
+        const net =
+          Number(
+            trade.netPnl || 0
+          );
 
 
-  document.getElementById("detail").innerHTML = `
-    <strong>${pretty}</strong>
+        return `
+          <div class="trade">
 
-    <div
-      class="${Number(value)>=0 ? "green" : "red"}"
-      style="font-size:30px;font-weight:900;margin-top:7px;"
-    >
-      ${typeof value === "number" ? money(value) : "No saved P&L"}
-    </div>
+            <strong>
+              Trade ${index + 1}
+              ${trade.ticker
+                ? " • " + escapeHtml(trade.ticker)
+                : ""
+              }
+            </strong>
+
+            <br>
+
+            ${escapeHtml(trade.side || "")}
+
+            ${trade.entryTime
+              ? " • " + escapeHtml(trade.entryTime)
+              : ""
+            }
+
+            ${trade.exitTime
+              ? " → " + escapeHtml(trade.exitTime)
+              : ""
+            }
+
+            <br>
+
+            Net:
+
+            <strong class="${net >= 0 ? "green" : "red"}">
+              ${usdMoney(net)}
+            </strong>
+
+            <div class="trade-gbp">
+              ${gbpMoney(net)}
+            </div>
+
+            ${
+              trade.actualNet !== null &&
+              trade.actualNet !== undefined
+                ? "Broker net"
+                : "Calculated net"
+            }
+
+            ${
+              trade.setup
+                ? "<br>Setup: " +
+                  escapeHtml(
+                    trade.setup
+                  )
+                : ""
+            }
+
+          </div>
+        `;
+
+      }
+    )
+    .join("");
+
+
+  const detail =
+    document.getElementById(
+      "detail"
+    );
+
+
+  const resultClass =
+    Number(
+      value
+    ) >= 0
+      ? "green"
+      : "red";
+
+
+  detail.innerHTML = `
+
+    <strong>
+      ${pretty}
+    </strong>
+
+    ${
+      typeof value ===
+      "number"
+        ? `
+          <div class="detail-main-usd ${resultClass}">
+            ${usdMoney(value)}
+          </div>
+
+          <div class="detail-main-gbp">
+            ${gbpMoney(value)}
+          </div>
+        `
+        : `
+          <div class="detail-main-usd">
+            No saved P&amp;L
+          </div>
+        `
+    }
+
 
     <div class="detail-grid">
 
       <div class="detail-item">
-        <div class="label">Trades</div>
-        <strong>${trades.length}</strong>
+        <div class="label">
+          Trades
+        </div>
+        <strong>
+          ${trades.length}
+        </strong>
       </div>
 
-      <div class="detail-item">
-        <div class="label">Max Attempt</div>
-        <strong>${attempt}</strong>
-      </div>
 
       <div class="detail-item">
-        <div class="label">Compliance</div>
-        <strong>${compliance}</strong>
+        <div class="label">
+          Max Attempt
+        </div>
+        <strong>
+          ${attempt}
+        </strong>
       </div>
 
-      <div class="detail-item">
-        <div class="label">Session Score</div>
-        <strong>${score}</strong>
-      </div>
 
       <div class="detail-item">
-        <div class="label">-$75 Reached</div>
-        <strong>${warning}</strong>
+        <div class="label">
+          Compliance
+        </div>
+        <strong>
+          ${compliance}
+        </strong>
       </div>
 
-      <div class="detail-item">
-        <div class="label">-$100 Reached</div>
-        <strong>${hardStop}</strong>
-      </div>
 
       <div class="detail-item">
-        <div class="label">Tilt Recorded</div>
-        <strong>${tilt}</strong>
+        <div class="label">
+          Session Score
+        </div>
+        <strong>
+          ${score}
+        </strong>
       </div>
 
+
       <div class="detail-item">
-        <div class="label">Journal</div>
-        <strong>${day.journalSavedAt ? "Saved" : "—"}</strong>
+        <div class="label">
+          -$75 Reached
+        </div>
+        <strong>
+          ${warning}
+        </strong>
+      </div>
+
+
+      <div class="detail-item">
+        <div class="label">
+          -$100 Reached
+        </div>
+        <strong>
+          ${hardStop}
+        </strong>
+      </div>
+
+
+      <div class="detail-item">
+        <div class="label">
+          Tilt Recorded
+        </div>
+        <strong>
+          ${tilt}
+        </strong>
+      </div>
+
+
+      <div class="detail-item">
+        <div class="label">
+          Journal
+        </div>
+        <strong>
+          ${day.journalSavedAt ? "Saved" : "—"}
+        </strong>
       </div>
 
     </div>
 
+
     ${tradeHtml}
+
 
     ${
       day.notes
         ? `
           <div class="trade">
-            <strong>Daily Notes</strong><br>
+            <strong>
+              Daily Notes
+            </strong>
+            <br>
             ${escapeHtml(day.notes)}
           </div>
         `
         : ""
     }
+
   `;
+
 }
 
 
-function escapeHtml(value){
-  return String(value || "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+
+function escapeHtml(
+  value
+){
+
+  return String(
+    value || ""
+  )
+  .replaceAll(
+    "&",
+    "&amp;"
+  )
+  .replaceAll(
+    "<",
+    "&lt;"
+  )
+  .replaceAll(
+    ">",
+    "&gt;"
+  )
+  .replaceAll(
+    '"',
+    "&quot;"
+  )
+  .replaceAll(
+    "'",
+    "&#039;"
+  );
+
 }
+
 
 
 function buildButtons(){
 
-  const holder = document.getElementById("monthButtons");
+  const holder =
+    document.getElementById(
+      "monthButtons"
+    );
 
-  months.forEach((m,i)=>{
 
-    const b = document.createElement("button");
+  months.forEach(
+    (month,index) => {
 
-    b.className = "month-jump";
+      const button =
+        document.createElement(
+          "button"
+        );
 
-    b.textContent = m.slice(0,3);
 
-    b.addEventListener("click",()=>{
-      currentMonth = i;
-      render();
-    });
+      button.className =
+        "month-jump";
 
-    holder.appendChild(b);
-  });
+
+      button.textContent =
+        month.slice(
+          0,
+          3
+        );
+
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          currentMonth =
+            index;
+
+
+          render();
+
+        }
+      );
+
+
+      holder.appendChild(
+        button
+      );
+
+    }
+  );
+
 }
 
 
-document.getElementById("prev").addEventListener("click",()=>{
-  currentMonth = currentMonth === 0 ? 11 : currentMonth-1;
-  render();
-});
 
-document.getElementById("next").addEventListener("click",()=>{
-  currentMonth = currentMonth === 11 ? 0 : currentMonth+1;
-  render();
-});
+document.getElementById(
+  "prev"
+)
+.addEventListener(
+  "click",
+  () => {
 
-window.addEventListener("storage",render);
+    currentMonth =
+      currentMonth === 0
+        ? 11
+        : currentMonth - 1;
+
+
+    render();
+
+  }
+);
+
+
+
+document.getElementById(
+  "next"
+)
+.addEventListener(
+  "click",
+  () => {
+
+    currentMonth =
+      currentMonth === 11
+        ? 0
+        : currentMonth + 1;
+
+
+    render();
+
+  }
+);
+
+
+
+document.getElementById(
+  "saveFxBtn"
+)
+.addEventListener(
+  "click",
+  saveFxRate
+);
+
+
+
+document.getElementById(
+  "fxRate"
+)
+.addEventListener(
+  "change",
+  saveFxRate
+);
+
+
+
+window.addEventListener(
+  "storage",
+  render
+);
+
+
+
+document.getElementById(
+  "fxRate"
+).value =
+  getFxRate().toFixed(4);
+
+
 
 buildButtons();
+
 render();
+
 </script>
 
 </body>
