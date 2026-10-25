@@ -1,4 +1,4 @@
-l<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -48,9 +48,9 @@ l<!DOCTYPE html>
 
 html{
   -webkit-text-size-adjust:100%;
+  scroll-behavior:smooth;
 }
 
-<script src="workflow-nav.js"></script>
 
 body{
 
@@ -971,7 +971,10 @@ body{
 <body>
 
 
-<div class="wrap">
+<div
+  class="wrap"
+  id="top"
+>
 
 
 <!-- ========================================
@@ -1100,7 +1103,7 @@ body{
 >
 
   <div class="primary-kicker">
-    Live Trading
+    Step 1 • Live Trading
   </div>
 
   <div class="primary-title">
@@ -1204,11 +1207,11 @@ body{
 <section class="card">
 
   <div class="card-title">
-    Operating Flow
+    WASPN Workflow
   </div>
 
   <div class="card-copy">
-    Three core actions during a trading day.
+    The operating sequence from live control through session review.
   </div>
 
 
@@ -1227,7 +1230,28 @@ body{
         </div>
 
         <div class="flow-copy">
-          Control trading window, attempts, P&amp;L, trade duration and behavioural circuit breakers.
+          Control trading window, attempts, P&amp;L and behavioural risk.
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="flow-step">
+
+      <div class="flow-number">
+        ◷
+      </div>
+
+      <div>
+
+        <div class="flow-title">
+          Trade Timer
+        </div>
+
+        <div class="flow-copy">
+          Start when the position is entered and manage duration inside Live Risk.
         </div>
 
       </div>
@@ -1248,7 +1272,7 @@ body{
         </div>
 
         <div class="flow-copy">
-          Record the completed trade after the position is closed.
+          Capture the completed trade after the position is fully closed.
         </div>
 
       </div>
@@ -1269,7 +1293,28 @@ body{
         </div>
 
         <div class="flow-copy">
-          Complete structural compliance and behavioural process scoring in one step.
+          Complete structural compliance and behavioural process scoring.
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="flow-step">
+
+      <div class="flow-number">
+        4
+      </div>
+
+      <div>
+
+        <div class="flow-title">
+          Performance Review
+        </div>
+
+        <div class="flow-copy">
+          Review financial results alongside attempts, risk and process outcomes.
         </div>
 
       </div>
@@ -1293,7 +1338,7 @@ body{
   </div>
 
   <div class="card-copy">
-    Live control, record keeping and review.
+    Live control, structured capture and performance review.
   </div>
 
 
@@ -1688,6 +1733,7 @@ function money(
 }
 
 
+
 /* ========================================
    MARKET STATUS
 ======================================== */
@@ -1867,6 +1913,7 @@ function renderMarketStatus(){
 }
 
 
+
 /* ========================================
    TODAY
 ======================================== */
@@ -1975,6 +2022,7 @@ function renderToday(){
 }
 
 
+
 /* ========================================
    START
 ======================================== */
@@ -1997,6 +2045,7 @@ window.addEventListener(
 
 </script>
 
+<script src="workflow-nav.js"></script>
 
 </body>
 
