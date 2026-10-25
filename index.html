@@ -7,16 +7,13 @@
 <title>WASPN</title>
 
 <style>
-
 :root{
   --bg:#070b10;
   --panel:#10171f;
   --panel2:#151e28;
   --border:#273442;
-
   --text:#edf4fb;
   --muted:#8797a7;
-
   --green:#35d07f;
   --red:#ff5f6d;
   --blue:#22c7ff;
@@ -34,11 +31,7 @@ html{
 body{
   margin:0;
   background:
-    radial-gradient(
-      circle at top,
-      #0c1821 0%,
-      #070b10 42%
-    );
+    radial-gradient(circle at top,#0c1821 0%,#070b10 42%);
   color:var(--text);
   font-family:
     -apple-system,
@@ -69,7 +62,7 @@ body{
   overflow:hidden;
 
   padding:
-    12px 8px 16px;
+    14px 8px 16px;
 
   text-align:center;
 
@@ -112,21 +105,32 @@ body{
   pointer-events:none;
 }
 
-.brand-logo{
+.brand-logo-wrap{
   position:relative;
   z-index:2;
 
+  width:100%;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  overflow:hidden;
+}
+
+.brand-logo{
   display:block;
 
-  width:min(480px,94vw);
-  max-height:390px;
+  width:min(410px,88vw);
+  max-width:100%;
+  height:auto;
 
   margin:0 auto;
 
   object-fit:contain;
-  object-position:center;
+  object-position:center center;
 
-  transform:translateX(8px);
+  transform:none;
 
   filter:
     drop-shadow(
@@ -146,7 +150,7 @@ body{
   max-width:620px;
 
   margin:
-    4px auto 0;
+    6px auto 0;
 
   padding:
     0 12px;
@@ -165,9 +169,7 @@ body{
 .hero-rule-strip{
   display:grid;
   grid-template-columns:1fr 1fr;
-
   gap:8px;
-
   margin-top:10px;
 }
 
@@ -205,7 +207,6 @@ body{
   color:#8d9caf;
 
   font-size:11px;
-
   font-weight:900;
 
   letter-spacing:1.4px;
@@ -217,7 +218,6 @@ body{
   margin-top:8px;
 
   font-size:24px;
-
   font-weight:950;
 
   line-height:1.1;
@@ -253,13 +253,11 @@ body{
 
 h2{
   margin:0 0 10px;
-
   font-size:22px;
 }
 
 .muted{
   color:var(--muted);
-
   line-height:1.5;
 }
 
@@ -283,7 +281,6 @@ h2{
   color:var(--muted);
 
   font-size:10px;
-
   font-weight:800;
 
   letter-spacing:.5px;
@@ -295,7 +292,6 @@ h2{
   margin-top:5px;
 
   font-size:22px;
-
   font-weight:900;
 }
 
@@ -336,9 +332,7 @@ h2{
 
 .market-main{
   font-size:19px;
-
   font-weight:950;
-
   line-height:1.2;
 }
 
@@ -348,7 +342,6 @@ h2{
   color:var(--muted);
 
   font-size:12px;
-
   line-height:1.4;
 }
 
@@ -359,10 +352,7 @@ h2{
 
 .today-grid{
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns:1fr 1fr;
   gap:8px;
 }
 
@@ -406,7 +396,6 @@ h2{
     12px 14px;
 
   font-size:16px;
-
   font-weight:950;
 }
 
@@ -440,10 +429,7 @@ h2{
 
 .step{
   display:grid;
-
-  grid-template-columns:
-    36px 1fr;
-
+  grid-template-columns:36px 1fr;
   gap:10px;
 
   padding:
@@ -463,7 +449,6 @@ h2{
   height:32px;
 
   display:flex;
-
   align-items:center;
   justify-content:center;
 
@@ -474,15 +459,12 @@ h2{
   color:var(--blue);
 
   font-size:14px;
-
   font-weight:950;
 }
 
 .step-title{
   margin-bottom:3px;
-
   font-size:15px;
-
   font-weight:900;
 }
 
@@ -490,7 +472,6 @@ h2{
   color:var(--muted);
 
   font-size:12px;
-
   line-height:1.45;
 }
 
@@ -516,15 +497,12 @@ h2{
   color:var(--blue);
 
   font-size:15px;
-
   font-weight:950;
 }
 
 .loop-flow{
   font-size:13px;
-
   line-height:1.65;
-
   font-weight:800;
 }
 
@@ -548,7 +526,6 @@ h2{
   color:var(--amber);
 
   font-size:14px;
-
   font-weight:950;
 }
 
@@ -585,7 +562,6 @@ h2{
   border-radius:12px;
 
   font-size:13px;
-
   font-weight:950;
 
   line-height:1.5;
@@ -598,10 +574,7 @@ h2{
 
 .nav-grid{
   display:grid;
-
-  grid-template-columns:
-    1fr;
-
+  grid-template-columns:1fr;
   gap:8px;
 }
 
@@ -639,7 +612,6 @@ h2{
   content:"";
 
   position:absolute;
-
   left:0;
   top:0;
   bottom:0;
@@ -655,7 +627,6 @@ h2{
 
 .nav-title{
   font-size:16px;
-
   font-weight:950;
 }
 
@@ -665,7 +636,6 @@ h2{
   color:var(--muted);
 
   font-size:12px;
-
   line-height:1.4;
 }
 
@@ -732,7 +702,6 @@ h2{
   color:#aab9c8;
 
   font-size:10px;
-
   font-weight:900;
 
   letter-spacing:1.8px;
@@ -744,7 +713,6 @@ h2{
   display:block;
 
   width:100%;
-
   height:auto;
 
   border-radius:12px;
@@ -753,7 +721,6 @@ h2{
     0 14px 36px
     rgba(0,0,0,.38);
 }
-
 
 .footer{
   margin:
@@ -778,8 +745,6 @@ h2{
   }
 
   .brand-logo{
-    transform:none;
-
     width:min(520px,70vw);
   }
 
@@ -813,23 +778,22 @@ h2{
 </style>
 </head>
 
-
 <body>
 
 <div class="wrap">
 
 
-<!-- =========================
-     WASPN LOGO HERO
-========================= -->
-
 <section class="brand-hero">
 
-  <img
-    src="futuristic_neon_wasp_trading_emblem.png"
-    alt="WASPN Trading System"
-    class="brand-logo"
-  >
+  <div class="brand-logo-wrap">
+
+    <img
+      src="futuristic_neon_wasp_trading_emblem.png"
+      alt="WASPN Trading System"
+      class="brand-logo"
+    >
+
+  </div>
 
   <div class="brand-subtitle">
 
@@ -842,72 +806,31 @@ h2{
 
 
 
-<!-- =========================
-     CORE RULES
-========================= -->
-
 <div class="hero-rule-strip">
 
-
   <div class="hero-rule">
-
-    <div class="hero-rule-label">
-      Primary Window
-    </div>
-
-    <div class="hero-rule-value blue">
-      9–11 AM ET
-    </div>
-
+    <div class="hero-rule-label">Primary Window</div>
+    <div class="hero-rule-value blue">9–11 AM ET</div>
   </div>
 
-
   <div class="hero-rule">
-
-    <div class="hero-rule-label">
-      Max Attempts
-    </div>
-
-    <div class="hero-rule-value">
-      5
-    </div>
-
+    <div class="hero-rule-label">Max Attempts</div>
+    <div class="hero-rule-value">5</div>
   </div>
 
-
   <div class="hero-rule">
-
-    <div class="hero-rule-label">
-      Hard Stop
-    </div>
-
-    <div class="hero-rule-value red">
-      -$100
-    </div>
-
+    <div class="hero-rule-label">Hard Stop</div>
+    <div class="hero-rule-value red">-$100</div>
   </div>
 
-
   <div class="hero-rule">
-
-    <div class="hero-rule-label">
-      Objective
-    </div>
-
-    <div class="hero-rule-value green">
-      +$50
-    </div>
-
+    <div class="hero-rule-label">Objective</div>
+    <div class="hero-rule-value green">+$50</div>
   </div>
-
 
 </div>
 
 
-
-<!-- =========================
-     MARKET STATUS
-========================= -->
 
 <div
   id="marketStatus"
@@ -930,83 +853,31 @@ h2{
 
 
 
-<!-- =========================
-     TODAY
-========================= -->
-
 <section class="card">
 
-  <h2>
-    Today
-  </h2>
-
+  <h2>Today</h2>
 
   <div class="today-grid">
 
-
     <div class="today-item">
-
-      <div class="label">
-        Journal Trades
-      </div>
-
-      <div
-        id="todayTrades"
-        class="value"
-      >
-        0
-      </div>
-
+      <div class="label">Journal Trades</div>
+      <div id="todayTrades" class="value">0</div>
     </div>
 
-
     <div class="today-item">
-
-      <div class="label">
-        Saved P&amp;L
-      </div>
-
-      <div
-        id="todayPnl"
-        class="value"
-      >
-        —
-      </div>
-
+      <div class="label">Saved P&amp;L</div>
+      <div id="todayPnl" class="value">—</div>
     </div>
 
-
     <div class="today-item">
-
-      <div class="label">
-        Compliance
-      </div>
-
-      <div
-        id="todayCompliance"
-        class="value"
-      >
-        —
-      </div>
-
+      <div class="label">Compliance</div>
+      <div id="todayCompliance" class="value">—</div>
     </div>
 
-
     <div class="today-item">
-
-      <div class="label">
-        Session Score
-      </div>
-
-      <div
-        id="todayScore"
-        class="value"
-      >
-        —
-      </div>
-
+      <div class="label">Session Score</div>
+      <div id="todayScore" class="value">—</div>
     </div>
-
 
   </div>
 
@@ -1014,21 +885,13 @@ h2{
 
 
 
-<!-- =========================
-     LIVE WORKFLOW
-========================= -->
-
 <section class="card">
 
-  <h2>
-    Live Trading Workflow
-  </h2>
+  <h2>Live Trading Workflow</h2>
 
   <div class="muted">
-
     Follow this order for every trade.
     You do not need to use every page every time.
-
   </div>
 
 
@@ -1040,12 +903,9 @@ h2{
 
     <div class="workflow-body">
 
-
       <div class="step">
 
-        <div class="num">
-          1
-        </div>
+        <div class="num">1</div>
 
         <div>
 
@@ -1054,11 +914,9 @@ h2{
           </div>
 
           <div class="step-copy">
-
             Check that you are inside an allowed WASPN window
             and that Attempt count, realised P&amp;L and Tilt state
             are correct.
-
           </div>
 
         </div>
@@ -1068,9 +926,7 @@ h2{
 
       <div class="step">
 
-        <div class="num">
-          2
-        </div>
+        <div class="num">2</div>
 
         <div>
 
@@ -1079,16 +935,13 @@ h2{
           </div>
 
           <div class="step-copy">
-
             Do not increase the attempt count yet.
             A trade becomes an attempt after it has been completed.
-
           </div>
 
         </div>
 
       </div>
-
 
     </div>
 
@@ -1104,12 +957,9 @@ h2{
 
     <div class="workflow-body">
 
-
       <div class="step">
 
-        <div class="num">
-          3
-        </div>
+        <div class="num">3</div>
 
         <div>
 
@@ -1118,10 +968,8 @@ h2{
           </div>
 
           <div class="step-copy">
-
             Start the timer when the position is entered.
             It exists to trigger reassessment while the trade remains open.
-
           </div>
 
         </div>
@@ -1131,9 +979,7 @@ h2{
 
       <div class="step">
 
-        <div class="num">
-          4
-        </div>
+        <div class="num">4</div>
 
         <div>
 
@@ -1142,16 +988,13 @@ h2{
           </div>
 
           <div class="step-copy">
-
             Trade Duration can prompt reassessment at 3, 5 and 10 minutes.
             Do not fill out Journal while managing the position.
-
           </div>
 
         </div>
 
       </div>
-
 
     </div>
 
@@ -1167,12 +1010,9 @@ h2{
 
     <div class="workflow-body">
 
-
       <div class="step">
 
-        <div class="num">
-          5
-        </div>
+        <div class="num">5</div>
 
         <div>
 
@@ -1181,10 +1021,8 @@ h2{
           </div>
 
           <div class="step-copy">
-
             Increase the Attempt count by one and update realised
             P&amp;L to the new session total.
-
           </div>
 
         </div>
@@ -1194,9 +1032,7 @@ h2{
 
       <div class="step">
 
-        <div class="num">
-          6
-        </div>
+        <div class="num">6</div>
 
         <div>
 
@@ -1205,10 +1041,8 @@ h2{
           </div>
 
           <div class="step-copy">
-
             Enter the ticker, times, setup and result.
             Use Actual / Broker Net P&amp;L when available.
-
           </div>
 
         </div>
@@ -1218,9 +1052,7 @@ h2{
 
       <div class="step">
 
-        <div class="num">
-          7
-        </div>
+        <div class="num">7</div>
 
         <div>
 
@@ -1229,16 +1061,13 @@ h2{
           </div>
 
           <div class="step-copy">
-
             Attempt 5, -$100 realised or 11:00 AM ET
             means trading is finished.
-
           </div>
 
         </div>
 
       </div>
-
 
     </div>
 
@@ -1253,7 +1082,6 @@ h2{
     </div>
 
     <div class="loop-flow">
-
       Live Risk open
       → Enter trade
       → Start Trade Duration
@@ -1261,7 +1089,6 @@ h2{
       → Update Live Risk
       → Record in Journal
       → Repeat only if WASPN still allows it
-
     </div>
 
   </div>
@@ -1274,7 +1101,6 @@ h2{
       USE THESE ONLY WHEN NEEDED
     </div>
 
-
     <div class="optional-row">
 
       <strong>
@@ -1284,10 +1110,8 @@ h2{
       <br>
 
       <span class="muted">
-
         Use after a meaningful losing trade
         and before considering another entry.
-
       </span>
 
     </div>
@@ -1302,11 +1126,9 @@ h2{
       <br>
 
       <span class="muted">
-
         Use when you notice urgency, anger,
         repeated re-entry, recovery thinking
         or “just one more”.
-
       </span>
 
     </div>
@@ -1316,26 +1138,16 @@ h2{
 
 
   <div class="stop">
-
     ATTEMPT 5 • -$100 REALISED • 11:00 AM ET
-
     <br>
-
     ANY ONE = SESSION OVER
-
     <br>
-
     NO REOPENING LATER
-
   </div>
 
 </section>
 
 
-
-<!-- =========================
-     END SESSION
-========================= -->
 
 <section class="card">
 
@@ -1343,22 +1155,17 @@ h2{
     End-of-Session Workflow
   </h2>
 
-
   <div class="workflow-section">
 
     <div class="workflow-head end">
       WHEN TRADING IS FINISHED
     </div>
 
-
     <div class="workflow-body">
-
 
       <div class="step">
 
-        <div class="num">
-          1
-        </div>
+        <div class="num">1</div>
 
         <div>
 
@@ -1367,10 +1174,8 @@ h2{
           </div>
 
           <div class="step-copy">
-
             Confirm all completed attempts
             and final daily P&amp;L are correct.
-
           </div>
 
         </div>
@@ -1380,9 +1185,7 @@ h2{
 
       <div class="step">
 
-        <div class="num">
-          2
-        </div>
+        <div class="num">2</div>
 
         <div>
 
@@ -1391,10 +1194,8 @@ h2{
           </div>
 
           <div class="step-copy">
-
             Answer the three structural questions:
             window, Attempt 5 and -$100 hard stop.
-
           </div>
 
         </div>
@@ -1404,9 +1205,7 @@ h2{
 
       <div class="step">
 
-        <div class="num">
-          3
-        </div>
+        <div class="num">3</div>
 
         <div>
 
@@ -1415,10 +1214,8 @@ h2{
           </div>
 
           <div class="step-copy">
-
             Compliance is imported automatically.
             Answer the two remaining behavioural questions.
-
           </div>
 
         </div>
@@ -1428,9 +1225,7 @@ h2{
 
       <div class="step">
 
-        <div class="num">
-          4
-        </div>
+        <div class="num">4</div>
 
         <div>
 
@@ -1439,16 +1234,13 @@ h2{
           </div>
 
           <div class="step-copy">
-
             Confirm P&amp;L, trade count,
             compliance and Session Score appear correctly.
-
           </div>
 
         </div>
 
       </div>
-
 
     </div>
 
@@ -1458,176 +1250,64 @@ h2{
 
 
 
-<!-- =========================
-     CONTROL CENTRE
-========================= -->
-
 <section class="card">
 
   <h2>
     WASPN Control Centre
   </h2>
 
-
   <div class="nav-grid">
 
-
-    <a
-      href="live-risk.html"
-      class="nav-card live"
-    >
-
-      <div class="nav-title">
-        Live Risk Dashboard
-      </div>
-
-      <div class="nav-desc">
-        Keep this open throughout the session.
-      </div>
-
+    <a href="live-risk.html" class="nav-card live">
+      <div class="nav-title">Live Risk Dashboard</div>
+      <div class="nav-desc">Keep this open throughout the session.</div>
     </a>
 
-
-    <a
-      href="trade-duration.html"
-      class="nav-card duration"
-    >
-
-      <div class="nav-title">
-        Trade Duration Warning
-      </div>
-
-      <div class="nav-desc">
-        Start this when you enter the position.
-      </div>
-
+    <a href="trade-duration.html" class="nav-card duration">
+      <div class="nav-title">Trade Duration Warning</div>
+      <div class="nav-desc">Start this when you enter the position.</div>
     </a>
 
-
-    <a
-      href="journal.html"
-      class="nav-card journal"
-    >
-
-      <div class="nav-title">
-        Trading Journal
-      </div>
-
-      <div class="nav-desc">
-        Record the completed trade after you exit.
-      </div>
-
+    <a href="journal.html" class="nav-card journal">
+      <div class="nav-title">Trading Journal</div>
+      <div class="nav-desc">Record the completed trade after you exit.</div>
     </a>
 
-
-    <a
-      href="post-trade-reset.html"
-      class="nav-card"
-    >
-
-      <div class="nav-title">
-        Post-Trade Reset
-      </div>
-
-      <div class="nav-desc">
-
-        Use after a meaningful losing trade
-        before another entry.
-
-      </div>
-
+    <a href="post-trade-reset.html" class="nav-card">
+      <div class="nav-title">Post-Trade Reset</div>
+      <div class="nav-desc">Use after a meaningful losing trade before another entry.</div>
     </a>
 
-
-    <a
-      href="tilt.html"
-      class="nav-card tilt"
-    >
-
-      <div class="nav-title">
-        Tilt Checklist
-      </div>
-
-      <div class="nav-desc">
-        Use when mental-state warning signs appear.
-      </div>
-
+    <a href="tilt.html" class="nav-card tilt">
+      <div class="nav-title">Tilt Checklist</div>
+      <div class="nav-desc">Use when mental-state warning signs appear.</div>
     </a>
 
-
-    <a
-      href="compliance.html"
-      class="nav-card compliance"
-    >
-
-      <div class="nav-title">
-        Daily Compliance
-      </div>
-
-      <div class="nav-desc">
-        Complete after trading is finished.
-      </div>
-
+    <a href="compliance.html" class="nav-card compliance">
+      <div class="nav-title">Daily Compliance</div>
+      <div class="nav-desc">Complete after trading is finished.</div>
     </a>
 
-
-    <a
-      href="session-score.html"
-      class="nav-card compliance"
-    >
-
-      <div class="nav-title">
-        Session Score
-      </div>
-
-      <div class="nav-desc">
-        Complete after Daily Compliance.
-      </div>
-
+    <a href="session-score.html" class="nav-card compliance">
+      <div class="nav-title">Session Score</div>
+      <div class="nav-desc">Complete after Daily Compliance.</div>
     </a>
 
-
-    <a
-      href="calendar-2026.html"
-      class="nav-card calendar"
-    >
-
-      <div class="nav-title">
-        2026 Interactive Calendar
-      </div>
-
-      <div class="nav-desc">
-        Review the completed daily record.
-      </div>
-
+    <a href="calendar-2026.html" class="nav-card calendar">
+      <div class="nav-title">2026 Interactive Calendar</div>
+      <div class="nav-desc">Review the completed daily record.</div>
     </a>
 
-
-    <a
-      href="data-backup.html"
-      class="nav-card backup"
-    >
-
-      <div class="nav-title">
-        Data Backup
-      </div>
-
-      <div class="nav-desc">
-        Export or restore local WASPN records.
-      </div>
-
+    <a href="data-backup.html" class="nav-card backup">
+      <div class="nav-title">Data Backup</div>
+      <div class="nav-desc">Export or restore local WASPN records.</div>
     </a>
-
 
   </div>
 
 </section>
 
 
-
-<!-- =========================
-     CORE STRUCTURE
-========================= -->
 
 <section class="card">
 
@@ -1635,94 +1315,61 @@ h2{
     Core Structure
   </h2>
 
-
   <div class="muted">
-
 
     <strong class="blue">
       W — WINDOW
     </strong>
-
     <br>
-
-    Preliminary:
-    6:30–7:00 AM ET
-
+    Preliminary: 6:30–7:00 AM ET
     <br>
-
-    Primary:
-    9:00–11:00 AM ET
-
+    Primary: 9:00–11:00 AM ET
 
     <br><br>
-
 
     <strong class="blue">
       A — ATTEMPTS
     </strong>
-
     <br>
-
     Maximum 5 completed trade attempts.
 
-
     <br><br>
-
 
     <strong class="blue">
       S — SHARE SIZE
     </strong>
-
     <br>
-
     Control size.
     Never increase size simply to recover losses.
 
-
     <br><br>
-
 
     <strong class="blue">
       P — P&amp;L
     </strong>
-
     <br>
-
     -$75 warning.
-
     <br>
-
     -$100 hard stop.
-
     <br>
-
     +$50 objective.
 
-
     <br><br>
-
 
     <strong class="amber">
       N — NO PENNIES
     </strong>
-
     <br>
-
     No penny-stock trading outside the WASPN framework.
 
-
     <br><br>
-
 
     <strong>
       Saturday &amp; Sunday
     </strong>
-
     <br>
-
     Market closed.
     No WASPN trading session.
-
 
   </div>
 
@@ -1730,18 +1377,11 @@ h2{
 
 
 
-<!-- =========================
-     COMMAND CENTRE IMAGE
-========================= -->
-
 <section class="command-centre">
 
   <div class="command-centre-title">
-
     WASPN • Trade the Process
-
   </div>
-
 
   <img
     src="trade_the_process_waspn_trading_command_centre.png"
@@ -1753,11 +1393,8 @@ h2{
 
 
 <div class="footer">
-
   WASPN • Process Over Recovery
-
 </div>
-
 
 </div>
 
@@ -1767,7 +1404,6 @@ h2{
 
 const STORAGE_KEY =
   "waspnJournalV2";
-
 
 
 function getJournal(){
@@ -1791,36 +1427,20 @@ function getJournal(){
 }
 
 
-
 function getNyParts(){
 
   const parts =
     new Intl.DateTimeFormat(
       "en-GB",
       {
-        timeZone:
-          "America/New_York",
-
-        weekday:
-          "long",
-
-        year:
-          "numeric",
-
-        month:
-          "2-digit",
-
-        day:
-          "2-digit",
-
-        hour:
-          "2-digit",
-
-        minute:
-          "2-digit",
-
-        hour12:
-          false
+        timeZone:"America/New_York",
+        weekday:"long",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit",
+        hour12:false
       }
     )
     .formatToParts(
@@ -1852,32 +1472,25 @@ function getNyParts(){
 
   return{
 
-    weekday:
-      d.weekday,
+    weekday:d.weekday,
 
-    year:
-      d.year,
+    year:d.year,
 
-    month:
-      d.month,
+    month:d.month,
 
-    day:
-      d.day,
+    day:d.day,
 
-    hour:
-      Number(
-        d.hour
-      ),
+    hour:Number(
+      d.hour
+    ),
 
-    minute:
-      Number(
-        d.minute
-      )
+    minute:Number(
+      d.minute
+    )
 
   };
 
 }
-
 
 
 function todayKey(){
@@ -1895,7 +1508,6 @@ function todayKey(){
   );
 
 }
-
 
 
 function money(
@@ -1941,7 +1553,6 @@ function money(
   return "$0.00";
 
 }
-
 
 
 function renderMarketStatus(){
@@ -2119,7 +1730,6 @@ function renderMarketStatus(){
 }
 
 
-
 function renderToday(){
 
   const day =
@@ -2199,7 +1809,6 @@ function renderToday(){
       : "—";
 
 }
-
 
 
 renderMarketStatus();
