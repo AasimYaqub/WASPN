@@ -42,7 +42,14 @@ body{
   display:flex;
   justify-content:space-between;
   gap:10px;
+  flex-wrap:wrap;
   margin-bottom:14px;
+}
+
+.topbar-right{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
 .btn,
@@ -157,6 +164,10 @@ textarea{
   color:var(--red);
 }
 
+.blue{
+  color:var(--blue);
+}
+
 .daily-total{
   text-align:center;
   font-size:46px;
@@ -179,6 +190,7 @@ textarea{
   border:1px solid var(--border);
   text-align:center;
   font-weight:700;
+  line-height:1.5;
 }
 
 .check{
@@ -191,6 +203,17 @@ textarea{
 .check input{
   width:22px;
   height:22px;
+  flex:0 0 auto;
+}
+
+.saved-score{
+  margin-top:12px;
+  padding:12px;
+  border-radius:12px;
+  background:#101820;
+  border:1px solid var(--border);
+  color:var(--muted);
+  line-height:1.5;
 }
 
 @media(max-width:650px){
@@ -201,6 +224,11 @@ textarea{
 
   .grid{
     grid-template-columns:1fr;
+  }
+
+  .hero,
+  .card{
+    padding:16px;
   }
 
 }
@@ -218,11 +246,20 @@ textarea{
       ← Home
     </a>
 
-    <a class="btn" href="calendar-2026.html">
-      Calendar
-    </a>
+    <div class="topbar-right">
+
+      <a class="btn" href="calendar-2026.html">
+        Calendar
+      </a>
+
+      <a class="btn" href="session-score.html">
+        Session Score
+      </a>
+
+    </div>
 
   </div>
+
 
   <section class="hero">
 
@@ -234,8 +271,8 @@ textarea{
 
     <div class="muted">
       Record a maximum of five completed trade attempts.
-      Saving the day automatically makes the saved daily
-      P&amp;L available to the 2026 calendar.
+      Saving the day updates the shared WASPN daily record
+      without deleting Session Score or other saved information.
     </div>
 
   </section>
@@ -258,6 +295,7 @@ textarea{
 
       </div>
 
+
       <div>
 
         <label>
@@ -274,6 +312,13 @@ textarea{
       </div>
 
     </div>
+
+
+    <div
+      id="existingRecord"
+      class="saved-score"
+      style="display:none;"
+    ></div>
 
   </section>
 
@@ -301,44 +346,64 @@ textarea{
         WASPN compliance
       </label>
 
+
       <label class="check">
+
         <input
           id="windowCheck"
           type="checkbox"
         >
+
         Stayed inside the trading window
+
       </label>
 
+
       <label class="check">
+
         <input
           id="attemptCheck"
           type="checkbox"
         >
+
         Stopped by attempt 5
+
       </label>
 
+
       <label class="check">
+
         <input
           id="stopCheck"
           type="checkbox"
         >
+
         Respected the -$100 hard stop
+
       </label>
 
+
       <label class="check">
+
         <input
           id="tiltCheck"
           type="checkbox"
         >
+
         No tilt-driven continuation
+
       </label>
 
+
       <label class="check">
+
         <input
           id="durationCheck"
           type="checkbox"
         >
+
         Failed momentum was not turned into a hope trade
+
       </label>
 
     </div>
@@ -348,7 +413,10 @@ textarea{
 
   <section class="card">
 
-    <div class="muted" style="text-align:center;">
+    <div
+      class="muted"
+      style="text-align:center;"
+    >
       DAILY NET P&amp;L
     </div>
 
@@ -359,30 +427,37 @@ textarea{
       $0.00
     </div>
 
+
     <div class="actions">
 
       <button
+        type="button"
         class="btn save"
-        onclick="saveDay()"
+        id="saveBtn"
       >
         Save Day
       </button>
 
+
       <button
+        type="button"
         class="btn"
-        onclick="loadDay()"
+        id="loadBtn"
       >
         Load Saved Day
       </button>
 
+
       <button
+        type="button"
         class="btn delete"
-        onclick="deleteDay()"
+        id="deleteBtn"
       >
-        Delete Day
+        Delete Entire Day
       </button>
 
     </div>
+
 
     <div
       id="saveStatus"
@@ -398,10 +473,14 @@ textarea{
 
 <script>
 
-const STORAGE_KEY = "waspnJournalV2";
+const STORAGE_KEY =
+  "waspnJournalV2";
+
 
 const tradeContainer =
-  document.getElementById("trades");
+  document.getElementById(
+    "trades"
+  );
 
 
 function money(value){
@@ -418,16 +497,20 @@ function money(value){
   }
 
   return "$0.00";
+
 }
 
 
 function createTrade(index){
 
   const section =
-    document.createElement("section");
+    document.createElement(
+      "section"
+    );
 
   section.className =
     "trade";
+
 
   section.innerHTML = `
 
@@ -440,6 +523,7 @@ function createTrade(index){
       <div
         id="tradePnl${index}"
         class="pnl"
+        data-pnl="0"
       >
         $0.00
       </div>
@@ -448,6 +532,7 @@ function createTrade(index){
 
 
     <div class="grid">
+
 
       <div>
 
@@ -471,7 +556,6 @@ function createTrade(index){
 
         <select
           id="side${index}"
-          onchange="calculateTrade(${index})"
         >
 
           <option value="long">
@@ -525,7 +609,6 @@ function createTrade(index){
           id="entryPrice${index}"
           type="number"
           step="0.0001"
-          oninput="calculateTrade(${index})"
         >
 
       </div>
@@ -541,7 +624,6 @@ function createTrade(index){
           id="exitPrice${index}"
           type="number"
           step="0.0001"
-          oninput="calculateTrade(${index})"
         >
 
       </div>
@@ -557,7 +639,6 @@ function createTrade(index){
           id="shares${index}"
           type="number"
           step="1"
-          oninput="calculateTrade(${index})"
         >
 
       </div>
@@ -574,7 +655,6 @@ function createTrade(index){
           type="number"
           step="0.01"
           value="0"
-          oninput="calculateTrade(${index})"
         >
 
       </div>
@@ -600,7 +680,9 @@ function createTrade(index){
           Tilt present?
         </label>
 
-        <select id="tilt${index}">
+        <select
+          id="tilt${index}"
+        >
 
           <option value="no">
             No
@@ -657,11 +739,48 @@ function createTrade(index){
 
   `;
 
-  tradeContainer.appendChild(section);
+
+  tradeContainer.appendChild(
+    section
+  );
+
+
+  [
+    "side",
+    "entryPrice",
+    "exitPrice",
+    "shares",
+    "fees"
+  ].forEach(field => {
+
+    document
+      .getElementById(
+        field + index
+      )
+      .addEventListener(
+        "input",
+        () => calculateTrade(index)
+      );
+
+    document
+      .getElementById(
+        field + index
+      )
+      .addEventListener(
+        "change",
+        () => calculateTrade(index)
+      );
+
+  });
+
 }
 
 
-for(let i = 1; i <= 5; i++){
+for(
+  let i = 1;
+  i <= 5;
+  i++
+){
   createTrade(i);
 }
 
@@ -675,12 +794,14 @@ function calculateTrade(index){
       ).value || 0
     );
 
+
   const exit =
     Number(
       document.getElementById(
         "exitPrice" + index
       ).value || 0
     );
+
 
   const shares =
     Number(
@@ -689,6 +810,7 @@ function calculateTrade(index){
       ).value || 0
     );
 
+
   const fees =
     Number(
       document.getElementById(
@@ -696,47 +818,67 @@ function calculateTrade(index){
       ).value || 0
     );
 
+
   const side =
     document.getElementById(
       "side" + index
     ).value;
 
+
   let gross = 0;
 
-  if(side === "long"){
 
-    gross =
-      (exit - entry) *
-      shares;
+  if(
+    entry &&
+    exit &&
+    shares
+  ){
 
-  } else {
+    if(side === "long"){
 
-    gross =
-      (entry - exit) *
-      shares;
+      gross =
+        (exit - entry) *
+        shares;
+
+    }
+
+    else{
+
+      gross =
+        (entry - exit) *
+        shares;
+
+    }
 
   }
 
+
   const net =
     gross - fees;
+
 
   const display =
     document.getElementById(
       "tradePnl" + index
     );
 
+
   display.textContent =
     money(net);
+
 
   display.className =
     net >= 0
       ? "pnl green"
       : "pnl red";
 
+
   display.dataset.pnl =
-    net;
+    String(net);
+
 
   calculateDailyTotal();
+
 }
 
 
@@ -744,37 +886,45 @@ function calculateDailyTotal(){
 
   let total = 0;
 
-  for(let i = 1; i <= 5; i++){
 
-    const display =
-      document.getElementById(
-        "tradePnl" + i
-      );
+  for(
+    let i = 1;
+    i <= 5;
+    i++
+  ){
 
     total +=
       Number(
-        display.dataset.pnl || 0
+        document.getElementById(
+          "tradePnl" + i
+        ).dataset.pnl || 0
       );
 
   }
+
 
   const element =
     document.getElementById(
       "dailyTotal"
     );
 
+
   element.textContent =
     money(total);
+
 
   element.className =
     total >= 0
       ? "daily-total green"
       : "daily-total red";
 
+
   element.dataset.pnl =
-    total;
+    String(total);
+
 
   return total;
+
 }
 
 
@@ -788,11 +938,24 @@ function getJournal(){
       )
     ) || {};
 
-  } catch(error){
+  }
+
+  catch(error){
 
     return {};
 
   }
+
+}
+
+
+function saveJournal(journal){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(journal)
+  );
+
 }
 
 
@@ -802,112 +965,112 @@ function tradeData(index){
 
     ticker:
       document
-      .getElementById(
-        "ticker" + index
-      )
-      .value
-      .trim()
-      .toUpperCase(),
+        .getElementById(
+          "ticker" + index
+        )
+        .value
+        .trim()
+        .toUpperCase(),
 
     side:
       document
-      .getElementById(
-        "side" + index
-      )
-      .value,
+        .getElementById(
+          "side" + index
+        )
+        .value,
 
     entryTime:
       document
-      .getElementById(
-        "entryTime" + index
-      )
-      .value,
+        .getElementById(
+          "entryTime" + index
+        )
+        .value,
 
     exitTime:
       document
-      .getElementById(
-        "exitTime" + index
-      )
-      .value,
+        .getElementById(
+          "exitTime" + index
+        )
+        .value,
 
     entryPrice:
       Number(
         document
-        .getElementById(
-          "entryPrice" + index
-        )
-        .value || 0
+          .getElementById(
+            "entryPrice" + index
+          )
+          .value || 0
       ),
 
     exitPrice:
       Number(
         document
-        .getElementById(
-          "exitPrice" + index
-        )
-        .value || 0
+          .getElementById(
+            "exitPrice" + index
+          )
+          .value || 0
       ),
 
     shares:
       Number(
         document
-        .getElementById(
-          "shares" + index
-        )
-        .value || 0
+          .getElementById(
+            "shares" + index
+          )
+          .value || 0
       ),
 
     fees:
       Number(
         document
-        .getElementById(
-          "fees" + index
-        )
-        .value || 0
+          .getElementById(
+            "fees" + index
+          )
+          .value || 0
       ),
 
     setup:
       document
-      .getElementById(
-        "setup" + index
-      )
-      .value,
+        .getElementById(
+          "setup" + index
+        )
+        .value,
 
     tilt:
       document
-      .getElementById(
-        "tilt" + index
-      )
-      .value,
+        .getElementById(
+          "tilt" + index
+        )
+        .value,
 
     entryReason:
       document
-      .getElementById(
-        "entryReason" + index
-      )
-      .value,
+        .getElementById(
+          "entryReason" + index
+        )
+        .value,
 
     exitReason:
       document
-      .getElementById(
-        "exitReason" + index
-      )
-      .value,
+        .getElementById(
+          "exitReason" + index
+        )
+        .value,
 
     lesson:
       document
-      .getElementById(
-        "lesson" + index
-      )
-      .value,
+        .getElementById(
+          "lesson" + index
+        )
+        .value,
 
     netPnl:
       Number(
         document
-        .getElementById(
-          "tradePnl" + index
-        )
-        .dataset.pnl || 0
+          .getElementById(
+            "tradePnl" + index
+          )
+          .dataset.pnl || 0
       )
 
   };
@@ -922,6 +1085,7 @@ function saveDay(){
       "tradeDate"
     ).value;
 
+
   if(!date){
 
     alert(
@@ -929,44 +1093,85 @@ function saveDay(){
     );
 
     return;
+
   }
+
 
   const journal =
     getJournal();
 
+
+  /*
+    IMPORTANT FIX:
+
+    Preserve anything already saved
+    for this date.
+
+    This includes:
+    - sessionScore
+    - future tilt events
+    - future risk data
+    - any other fields added later
+  */
+
+  const existing =
+    journal[date] || {};
+
+
   const trades = [];
 
-  for(let i = 1; i <= 5; i++){
+
+  for(
+    let i = 1;
+    i <= 5;
+    i++
+  ){
 
     const trade =
       tradeData(i);
+
 
     const used =
       trade.ticker ||
       trade.entryPrice ||
       trade.exitPrice ||
-      trade.shares;
+      trade.shares ||
+      trade.entryTime ||
+      trade.exitTime ||
+      trade.setup ||
+      trade.entryReason ||
+      trade.exitReason ||
+      trade.lesson;
+
 
     if(used){
-      trades.push(trade);
+
+      trades.push(
+        trade
+      );
+
     }
 
   }
 
+
   const total =
     calculateDailyTotal();
 
+
   journal[date] = {
+
+    ...existing,
 
     date,
 
     startValue:
       Number(
         document
-        .getElementById(
-          "startValue"
-        )
-        .value || 0
+          .getElementById(
+            "startValue"
+          )
+          .value || 0
       ),
 
     trades,
@@ -976,59 +1181,63 @@ function saveDay(){
 
     notes:
       document
-      .getElementById(
-        "dailyNotes"
-      )
-      .value,
+        .getElementById(
+          "dailyNotes"
+        )
+        .value,
 
     compliance:{
 
+      ...(existing.compliance || {}),
+
       window:
         document
-        .getElementById(
-          "windowCheck"
-        )
-        .checked,
+          .getElementById(
+            "windowCheck"
+          )
+          .checked,
 
       attempts:
         document
-        .getElementById(
-          "attemptCheck"
-        )
-        .checked,
+          .getElementById(
+            "attemptCheck"
+          )
+          .checked,
 
       stop:
         document
-        .getElementById(
-          "stopCheck"
-        )
-        .checked,
+          .getElementById(
+            "stopCheck"
+          )
+          .checked,
 
       tilt:
         document
-        .getElementById(
-          "tiltCheck"
-        )
-        .checked,
+          .getElementById(
+            "tiltCheck"
+          )
+          .checked,
 
       duration:
         document
-        .getElementById(
-          "durationCheck"
-        )
-        .checked
+          .getElementById(
+            "durationCheck"
+          )
+          .checked
 
     },
 
-    savedAt:
+    journalSavedAt:
+      new Date().toISOString(),
+
+    lastUpdated:
       new Date().toISOString()
 
   };
 
 
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(journal)
+  saveJournal(
+    journal
   );
 
 
@@ -1039,28 +1248,52 @@ function saveDay(){
     date +
     " • " +
     money(total) +
-    " • Calendar updated.";
+    " • Existing Session Score and other saved data preserved.";
+
+
+  document.getElementById(
+    "saveStatus"
+  ).style.color =
+    "var(--green)";
+
+
+  showExistingRecord();
 
 }
 
 
-function clearForm(){
+function clearJournalFields(){
 
   document.getElementById(
     "startValue"
   ).value = "";
 
+
   document.getElementById(
     "dailyNotes"
   ).value = "";
 
-  document.querySelectorAll(
-    'input[type="checkbox"]'
-  ).forEach(
-    box => box.checked = false
-  );
 
-  for(let i = 1; i <= 5; i++){
+  [
+    "windowCheck",
+    "attemptCheck",
+    "stopCheck",
+    "tiltCheck",
+    "durationCheck"
+  ].forEach(id => {
+
+    document.getElementById(
+      id
+    ).checked = false;
+
+  });
+
+
+  for(
+    let i = 1;
+    i <= 5;
+    i++
+  ){
 
     document.getElementById(
       "ticker" + i
@@ -1118,6 +1351,9 @@ function clearForm(){
 
   }
 
+
+  calculateDailyTotal();
+
 }
 
 
@@ -1128,13 +1364,24 @@ function loadDay(){
       "tradeDate"
     ).value;
 
+
+  if(!date){
+
+    return;
+
+  }
+
+
   const journal =
     getJournal();
+
 
   const day =
     journal[date];
 
-  clearForm();
+
+  clearJournalFields();
+
 
   if(!day){
 
@@ -1144,7 +1391,17 @@ function loadDay(){
       "No saved journal entry for " +
       date;
 
+
+    document.getElementById(
+      "saveStatus"
+    ).style.color =
+      "var(--muted)";
+
+
+    showExistingRecord();
+
     return;
+
   }
 
 
@@ -1169,20 +1426,24 @@ function loadDay(){
   ).checked =
     !!compliance.window;
 
+
   document.getElementById(
     "attemptCheck"
   ).checked =
     !!compliance.attempts;
+
 
   document.getElementById(
     "stopCheck"
   ).checked =
     !!compliance.stop;
 
+
   document.getElementById(
     "tiltCheck"
   ).checked =
     !!compliance.tilt;
+
 
   document.getElementById(
     "durationCheck"
@@ -1198,70 +1459,84 @@ function loadDay(){
         const i =
           index + 1;
 
+
         document.getElementById(
           "ticker" + i
         ).value =
           trade.ticker || "";
+
 
         document.getElementById(
           "side" + i
         ).value =
           trade.side || "long";
 
+
         document.getElementById(
           "entryTime" + i
         ).value =
           trade.entryTime || "";
+
 
         document.getElementById(
           "exitTime" + i
         ).value =
           trade.exitTime || "";
 
+
         document.getElementById(
           "entryPrice" + i
         ).value =
           trade.entryPrice || "";
+
 
         document.getElementById(
           "exitPrice" + i
         ).value =
           trade.exitPrice || "";
 
+
         document.getElementById(
           "shares" + i
         ).value =
           trade.shares || "";
 
+
         document.getElementById(
           "fees" + i
         ).value =
-          trade.fees || 0;
+          trade.fees ?? 0;
+
 
         document.getElementById(
           "setup" + i
         ).value =
           trade.setup || "";
 
+
         document.getElementById(
           "tilt" + i
         ).value =
           trade.tilt || "no";
+
 
         document.getElementById(
           "entryReason" + i
         ).value =
           trade.entryReason || "";
 
+
         document.getElementById(
           "exitReason" + i
         ).value =
           trade.exitReason || "";
 
+
         document.getElementById(
           "lesson" + i
         ).value =
           trade.lesson || "";
+
 
         calculateTrade(i);
 
@@ -1269,11 +1544,129 @@ function loadDay(){
     );
 
 
+  calculateDailyTotal();
+
+
   document.getElementById(
     "saveStatus"
   ).textContent =
     "Loaded saved entry for " +
     date;
+
+
+  document.getElementById(
+    "saveStatus"
+  ).style.color =
+    "var(--blue)";
+
+
+  showExistingRecord();
+
+}
+
+
+function showExistingRecord(){
+
+  const date =
+    document.getElementById(
+      "tradeDate"
+    ).value;
+
+
+  const box =
+    document.getElementById(
+      "existingRecord"
+    );
+
+
+  if(!date){
+
+    box.style.display =
+      "none";
+
+    return;
+
+  }
+
+
+  const journal =
+    getJournal();
+
+
+  const day =
+    journal[date];
+
+
+  if(!day){
+
+    box.style.display =
+      "none";
+
+    return;
+
+  }
+
+
+  const parts = [];
+
+
+  if(day.sessionScore){
+
+    parts.push(
+      "Session Score: " +
+      day.sessionScore.score +
+      "/" +
+      (day.sessionScore.outOf || 5)
+    );
+
+  }
+
+
+  if(
+    typeof day.totalNet ===
+    "number"
+  ){
+
+    parts.push(
+      "Saved P&L: " +
+      money(day.totalNet)
+    );
+
+  }
+
+
+  if(
+    Array.isArray(
+      day.trades
+    )
+  ){
+
+    parts.push(
+      "Trades saved: " +
+      day.trades.length
+    );
+
+  }
+
+
+  if(parts.length){
+
+    box.innerHTML =
+      "<strong>Existing daily record:</strong><br>" +
+      parts.join(" • ");
+
+
+    box.style.display =
+      "block";
+
+  }
+
+  else{
+
+    box.style.display =
+      "none";
+
+  }
 
 }
 
@@ -1285,76 +1678,140 @@ function deleteDay(){
       "tradeDate"
     ).value;
 
+
   if(!date){
+
     return;
+
   }
+
 
   const journal =
     getJournal();
 
+
   if(!journal[date]){
 
     alert(
-      "No saved entry exists for this date."
+      "No saved record exists for this date."
     );
 
     return;
+
   }
+
 
   const confirmed =
     confirm(
-      "Delete journal entry for " +
+      "Delete the ENTIRE WASPN record for " +
       date +
-      "?"
+      "? This will also remove the Session Score for that date."
     );
 
+
   if(!confirmed){
+
     return;
+
   }
+
 
   delete journal[date];
 
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(journal)
+
+  saveJournal(
+    journal
   );
 
-  clearForm();
+
+  clearJournalFields();
+
 
   document.getElementById(
     "saveStatus"
   ).textContent =
-    "Deleted saved entry for " +
+    "Entire saved record deleted for " +
     date;
+
+
+  document.getElementById(
+    "saveStatus"
+  ).style.color =
+    "var(--red)";
+
+
+  showExistingRecord();
 
 }
 
 
-const today =
-  new Date();
+function setToday(){
 
-document.getElementById(
-  "tradeDate"
-).value =
-  [
-    today.getFullYear(),
-    String(
-      today.getMonth() + 1
-    ).padStart(2,"0"),
-    String(
-      today.getDate()
-    ).padStart(2,"0")
-  ].join("-");
+  const today =
+    new Date();
 
 
-document.getElementById(
-  "tradeDate"
-).addEventListener(
-  "change",
-  loadDay
-);
+  document.getElementById(
+    "tradeDate"
+  ).value =
+    [
+      today.getFullYear(),
+      String(
+        today.getMonth() + 1
+      ).padStart(2,"0"),
+      String(
+        today.getDate()
+      ).padStart(2,"0")
+    ].join("-");
+
+}
+
+
+document
+  .getElementById(
+    "saveBtn"
+  )
+  .addEventListener(
+    "click",
+    saveDay
+  );
+
+
+document
+  .getElementById(
+    "loadBtn"
+  )
+  .addEventListener(
+    "click",
+    loadDay
+  );
+
+
+document
+  .getElementById(
+    "deleteBtn"
+  )
+  .addEventListener(
+    "click",
+    deleteDay
+  );
+
+
+document
+  .getElementById(
+    "tradeDate"
+  )
+  .addEventListener(
+    "change",
+    loadDay
+  );
+
+
+setToday();
 
 calculateDailyTotal();
+
+loadDay();
 
 </script>
 
