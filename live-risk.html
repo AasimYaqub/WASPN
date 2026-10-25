@@ -42,7 +42,8 @@ body{
   margin-bottom:14px;
 }
 
-.btn,a.btn{
+.btn,
+a.btn{
   border:0;
   background:#293342;
   color:white;
@@ -53,21 +54,30 @@ body{
   cursor:pointer;
 }
 
-.reset{background:#5b2630}
+.reset{
+  background:#5b2630;
+}
 
-.hero,.card{
+.hero,
+.card{
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:18px;
   padding:20px;
 }
 
-.card{margin-top:14px}
+.card{
+  margin-top:14px;
+}
 
 h1{
   color:var(--blue);
   font-size:40px;
   margin:4px 0 7px;
+}
+
+h2{
+  margin-top:0;
 }
 
 .muted{
@@ -161,6 +171,12 @@ input[type="number"]{
   border:1px solid #702c39;
 }
 
+.closed{
+  color:var(--muted);
+  background:#15191e;
+  border:1px solid #3b4652;
+}
+
 .summary{
   display:grid;
   grid-template-columns:repeat(4,1fr);
@@ -187,6 +203,26 @@ input[type="number"]{
   font-size:12px;
 }
 
+.weekend-box{
+  display:none;
+  margin-top:14px;
+  padding:16px;
+  border-radius:13px;
+  border:1px solid #3b4652;
+  background:#15191e;
+  text-align:center;
+}
+
+.weekend-box.active{
+  display:block;
+}
+
+.weekend-title{
+  font-size:22px;
+  font-weight:900;
+  color:var(--muted);
+}
+
 @media(max-width:620px){
   .wrap{padding:12px}
   .hero,.card{padding:16px}
@@ -197,25 +233,55 @@ input[type="number"]{
 </head>
 
 <body>
+
 <div class="wrap">
 
 <div class="top">
-  <a href="index.html" class="btn">← Home</a>
+
+  <a href="index.html" class="btn">
+    ← Home
+  </a>
 
   <div>
-    <a href="journal.html" class="btn">Journal</a>
-    <button id="resetBtn" class="btn reset">Reset Today</button>
+    <a href="journal.html" class="btn">
+      Journal
+    </a>
+
+    <button id="resetBtn" class="btn reset">
+      Reset Today
+    </button>
   </div>
+
 </div>
 
 
 <section class="hero">
-  <div class="muted">WASPN • Live Trading Control</div>
-  <h1>Live Risk</h1>
+
   <div class="muted">
-    New York time controls the session. Live state autosaves into today's master record.
+    WASPN • Live Trading Control
   </div>
+
+  <h1>Live Risk</h1>
+
+  <div class="muted">
+    New York time and trading day control the session.
+    Saturday and Sunday are automatically treated as market closed.
+  </div>
+
 </section>
+
+
+<div id="weekendBox" class="weekend-box">
+
+  <div class="weekend-title">
+    MARKET CLOSED — WEEKEND
+  </div>
+
+  <div class="small" style="margin-top:7px;">
+    No WASPN trading window is active on Saturday or Sunday.
+  </div>
+
+</div>
 
 
 <section class="card">
@@ -223,34 +289,81 @@ input[type="number"]{
   <div class="grid">
 
     <div class="metric">
-      <div class="label">UK Time</div>
-      <div id="ukTime" class="value">--:--</div>
+
+      <div class="label">
+        UK Time
+      </div>
+
+      <div id="ukTime" class="value">
+        --:--
+      </div>
+
     </div>
 
+
     <div class="metric">
-      <div class="label">New York Time</div>
-      <div id="etTime" class="value">--:--</div>
+
+      <div class="label">
+        New York Time
+      </div>
+
+      <div id="etTime" class="value">
+        --:--
+      </div>
+
+      <div id="nyDay" class="small"></div>
+
       <div id="windowText" class="small"></div>
+
     </div>
 
+
     <div class="metric">
-      <div class="label">Attempt</div>
+
+      <div class="label">
+        Attempt
+      </div>
+
       <div class="value">
         <span id="attempt">0</span>/5
       </div>
 
       <div class="controls">
-        <button id="minus" class="btn">−</button>
-        <button id="plus" class="btn">+</button>
+
+        <button id="minus" class="btn">
+          −
+        </button>
+
+        <button id="plus" class="btn">
+          +
+        </button>
+
       </div>
+
     </div>
 
+
     <div class="metric">
-      <div class="label">Realised P&amp;L</div>
-      <div id="pnlDisplay" class="value">0.00</div>
-      <div class="controls">
-        <input id="pnl" type="number" step="0.01" value="0">
+
+      <div class="label">
+        Realised P&amp;L
       </div>
+
+      <div id="pnlDisplay" class="value">
+        0.00
+      </div>
+
+      <div class="controls">
+
+        <input
+          id="pnl"
+          type="number"
+          step="0.01"
+          value="0"
+        >
+
+      </div>
+
     </div>
 
   </div>
@@ -261,11 +374,17 @@ input[type="number"]{
 <section class="card">
 
   <label class="switch">
+
     <input id="tilt" type="checkbox">
+
     Tilt signal active
+
   </label>
 
-  <div class="small" style="text-align:center;margin-top:8px;">
+  <div
+    class="small"
+    style="text-align:center;margin-top:8px;"
+  >
     Recovery sizing • rushed entries • repeated re-entry • anger • “just one more”
   </div>
 
@@ -284,28 +403,61 @@ input[type="number"]{
 
 <section class="card">
 
-  <h2 style="margin-top:0;">Today's Connected Record</h2>
+  <h2>
+    Today's Connected Record
+  </h2>
 
   <div class="summary">
 
     <div class="summary-item">
-      <div class="label">Journal Trades</div>
-      <strong id="journalTrades">0</strong>
+
+      <div class="label">
+        Journal Trades
+      </div>
+
+      <strong id="journalTrades">
+        0
+      </strong>
+
     </div>
 
-    <div class="summary-item">
-      <div class="label">Journal P&amp;L</div>
-      <strong id="journalPnl">—</strong>
-    </div>
 
     <div class="summary-item">
-      <div class="label">Compliance</div>
-      <strong id="compliance">—</strong>
+
+      <div class="label">
+        Journal P&amp;L
+      </div>
+
+      <strong id="journalPnl">
+        —
+      </strong>
+
     </div>
 
+
     <div class="summary-item">
-      <div class="label">Session Score</div>
-      <strong id="sessionScore">—</strong>
+
+      <div class="label">
+        Compliance
+      </div>
+
+      <strong id="compliance">
+        —
+      </strong>
+
+    </div>
+
+
+    <div class="summary-item">
+
+      <div class="label">
+        Session Score
+      </div>
+
+      <strong id="sessionScore">
+        —
+      </strong>
+
     </div>
 
   </div>
@@ -318,25 +470,58 @@ input[type="number"]{
   <div class="summary">
 
     <div class="summary-item">
-      <div class="label">Preliminary</div>
-      <strong>6:30–7:00 AM ET</strong>
+
+      <div class="label">
+        Preliminary
+      </div>
+
+      <strong>
+        6:30–7:00 AM ET
+      </strong>
+
       <div id="prelimUk" class="small"></div>
+
     </div>
 
+
     <div class="summary-item">
-      <div class="label">Main Window</div>
-      <strong>9:00–11:00 AM ET</strong>
+
+      <div class="label">
+        Main Window
+      </div>
+
+      <strong>
+        9:00–11:00 AM ET
+      </strong>
+
       <div id="mainUk" class="small"></div>
+
     </div>
 
-    <div class="summary-item">
-      <div class="label">Warning</div>
-      <strong style="color:var(--amber);">-$75</strong>
-    </div>
 
     <div class="summary-item">
-      <div class="label">Hard Stop</div>
-      <strong style="color:var(--red);">-$100 / 5 / 11 ET</strong>
+
+      <div class="label">
+        Warning
+      </div>
+
+      <strong style="color:var(--amber);">
+        -$75
+      </strong>
+
+    </div>
+
+
+    <div class="summary-item">
+
+      <div class="label">
+        Hard Stop
+      </div>
+
+      <strong style="color:var(--red);">
+        -$100 / 5 / 11 ET
+      </strong>
+
     </div>
 
   </div>
@@ -347,346 +532,995 @@ input[type="number"]{
 
 
 <script>
-const STORAGE_KEY = "waspnJournalV2";
 
-let attempt = 0;
-let sessionEnded = false;
-let loadedDate = "";
-let saveTimer = null;
+const STORAGE_KEY =
+  "waspnJournalV2";
+
+
+let attempt =
+  0;
+
+
+let sessionEnded =
+  false;
+
+
+let loadedDate =
+  "";
+
+
+let saveTimer =
+  null;
+
 
 
 function getJournal(){
+
   try{
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-  }catch{
-    return {};
+
+    return JSON.parse(
+      localStorage.getItem(
+        STORAGE_KEY
+      )
+    ) || {};
+
   }
+
+  catch{
+
+    return {};
+
+  }
+
 }
 
 
-function saveJournal(j){
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(j));
+
+function saveJournal(
+  journal
+){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(
+      journal
+    )
+  );
+
 }
 
 
-function parts(zone){
 
-  const x = new Intl.DateTimeFormat(
-    "en-GB",
-    {
-      timeZone:zone,
-      year:"numeric",
-      month:"2-digit",
-      day:"2-digit",
-      hour:"2-digit",
-      minute:"2-digit",
-      second:"2-digit",
-      hour12:false
+function getParts(
+  zone
+){
+
+  const formatted =
+    new Intl.DateTimeFormat(
+      "en-GB",
+      {
+        timeZone:
+          zone,
+
+        year:
+          "numeric",
+
+        month:
+          "2-digit",
+
+        day:
+          "2-digit",
+
+        weekday:
+          "long",
+
+        hour:
+          "2-digit",
+
+        minute:
+          "2-digit",
+
+        second:
+          "2-digit",
+
+        hour12:
+          false
+      }
+    )
+    .formatToParts(
+      new Date()
+    );
+
+
+  const data =
+    {};
+
+
+  formatted.forEach(
+    part => {
+
+      if(
+        part.type !==
+        "literal"
+      ){
+
+        data[
+          part.type
+        ] =
+          part.value;
+
+      }
+
     }
-  ).formatToParts(new Date());
+  );
 
-  const d = {};
-
-  x.forEach(p=>{
-    if(p.type !== "literal") d[p.type] = p.value;
-  });
 
   return {
-    year:Number(d.year),
-    month:Number(d.month),
-    day:Number(d.day),
-    hour:Number(d.hour),
-    minute:Number(d.minute),
-    second:Number(d.second),
-    text:`${d.hour}:${d.minute}:${d.second}`
+
+    year:
+      Number(
+        data.year
+      ),
+
+    month:
+      Number(
+        data.month
+      ),
+
+    day:
+      Number(
+        data.day
+      ),
+
+    weekday:
+      data.weekday,
+
+    hour:
+      Number(
+        data.hour
+      ),
+
+    minute:
+      Number(
+        data.minute
+      ),
+
+    second:
+      Number(
+        data.second
+      ),
+
+    text:
+      data.hour +
+      ":" +
+      data.minute +
+      ":" +
+      data.second
+
   };
+
 }
+
+
+
+function isWeekend(){
+
+  const ny =
+    getParts(
+      "America/New_York"
+    );
+
+
+  return (
+    ny.weekday ===
+      "Saturday" ||
+    ny.weekday ===
+      "Sunday"
+  );
+
+}
+
 
 
 function tradingDate(){
-  const d = parts("America/New_York");
+
+  const d =
+    getParts(
+      "America/New_York"
+    );
+
 
   return [
     d.year,
-    String(d.month).padStart(2,"0"),
-    String(d.day).padStart(2,"0")
-  ].join("-");
-}
-
-
-function money(v){
-  const n = Number(v || 0);
-
-  if(n > 0) return "+$" + n.toFixed(2);
-  if(n < 0) return "-$" + Math.abs(n).toFixed(2);
-
-  return "$0.00";
-}
-
-
-function formatUk(etHour,etMinute){
-
-  const ny = parts("America/New_York");
-
-  const approximate = Date.UTC(
-    ny.year,
-    ny.month-1,
-    ny.day,
-    etHour+5,
-    etMinute
+    String(
+      d.month
+    ).padStart(
+      2,
+      "0"
+    ),
+    String(
+      d.day
+    ).padStart(
+      2,
+      "0"
+    )
+  ].join(
+    "-"
   );
 
-  for(let offset=-180;offset<=180;offset++){
+}
 
-    const candidate = new Date(
-      approximate + offset*60000
+
+
+function money(
+  value
+){
+
+  const n =
+    Number(
+      value || 0
     );
+
+
+  if(
+    n > 0
+  ){
+
+    return (
+      "+$" +
+      n.toFixed(
+        2
+      )
+    );
+
+  }
+
+
+  if(
+    n < 0
+  ){
+
+    return (
+      "-$" +
+      Math.abs(
+        n
+      ).toFixed(
+        2
+      )
+    );
+
+  }
+
+
+  return "$0.00";
+
+}
+
+
+
+function formatUk(
+  etHour,
+  etMinute
+){
+
+  const ny =
+    getParts(
+      "America/New_York"
+    );
+
+
+  const approximate =
+    Date.UTC(
+      ny.year,
+      ny.month - 1,
+      ny.day,
+      etHour + 5,
+      etMinute
+    );
+
+
+  for(
+    let offset = -180;
+    offset <= 180;
+    offset++
+  ){
+
+    const candidate =
+      new Date(
+        approximate +
+        offset * 60000
+      );
+
 
     const formatted =
       new Intl.DateTimeFormat(
         "en-CA",
         {
-          timeZone:"America/New_York",
-          year:"numeric",
-          month:"2-digit",
-          day:"2-digit",
-          hour:"2-digit",
-          minute:"2-digit",
-          hour12:false
+          timeZone:
+            "America/New_York",
+
+          year:
+            "numeric",
+
+          month:
+            "2-digit",
+
+          day:
+            "2-digit",
+
+          hour:
+            "2-digit",
+
+          minute:
+            "2-digit",
+
+          hour12:
+            false
         }
-      ).formatToParts(candidate);
+      )
+      .formatToParts(
+        candidate
+      );
 
-    const x = {};
 
-    formatted.forEach(p=>{
-      if(p.type !== "literal") x[p.type] = p.value;
-    });
+    const data =
+      {};
+
+
+    formatted.forEach(
+      part => {
+
+        if(
+          part.type !==
+          "literal"
+        ){
+
+          data[
+            part.type
+          ] =
+            part.value;
+
+        }
+
+      }
+    );
+
 
     if(
-      Number(x.year) === ny.year &&
-      Number(x.month) === ny.month &&
-      Number(x.day) === ny.day &&
-      Number(x.hour) === etHour &&
-      Number(x.minute) === etMinute
+      Number(
+        data.year
+      ) ===
+        ny.year &&
+
+      Number(
+        data.month
+      ) ===
+        ny.month &&
+
+      Number(
+        data.day
+      ) ===
+        ny.day &&
+
+      Number(
+        data.hour
+      ) ===
+        etHour &&
+
+      Number(
+        data.minute
+      ) ===
+        etMinute
     ){
+
       return new Intl.DateTimeFormat(
         "en-GB",
         {
-          timeZone:"Europe/London",
-          hour:"numeric",
-          minute:"2-digit",
-          hour12:true
+          timeZone:
+            "Europe/London",
+
+          hour:
+            "numeric",
+
+          minute:
+            "2-digit",
+
+          hour12:
+            true
         }
-      ).format(candidate);
+      )
+      .format(
+        candidate
+      );
+
     }
+
   }
 
+
   return "";
+
 }
+
 
 
 function updateWindowLabels(){
-  document.getElementById("prelimUk").textContent =
-    formatUk(6,30) + "–" + formatUk(7,0) + " UK";
 
-  document.getElementById("mainUk").textContent =
-    formatUk(9,0) + "–" + formatUk(11,0) + " UK";
+  document.getElementById(
+    "prelimUk"
+  ).textContent =
+    formatUk(
+      6,
+      30
+    ) +
+    "–" +
+    formatUk(
+      7,
+      0
+    ) +
+    " UK";
+
+
+  document.getElementById(
+    "mainUk"
+  ).textContent =
+    formatUk(
+      9,
+      0
+    ) +
+    "–" +
+    formatUk(
+      11,
+      0
+    ) +
+    " UK";
+
 }
+
 
 
 function renderConnected(){
 
-  const day = getJournal()[tradingDate()] || {};
+  const day =
+    getJournal()[
+      tradingDate()
+    ] || {};
 
-  document.getElementById("journalTrades").textContent =
-    Array.isArray(day.trades)
+
+  document.getElementById(
+    "journalTrades"
+  ).textContent =
+    Array.isArray(
+      day.trades
+    )
       ? day.trades.length
       : 0;
 
-  document.getElementById("journalPnl").textContent =
-    typeof day.totalNet === "number"
-      ? money(day.totalNet)
+
+  document.getElementById(
+    "journalPnl"
+  ).textContent =
+    typeof day.totalNet ===
+      "number"
+      ? money(
+          day.totalNet
+        )
       : "—";
 
-  document.getElementById("compliance").textContent =
+
+  document.getElementById(
+    "compliance"
+  ).textContent =
     day.compliance &&
-    typeof day.compliance.score === "number"
-      ? day.compliance.score + "/3"
+    typeof day.compliance.score ===
+      "number"
+      ? day.compliance.score +
+        "/3"
       : "—";
 
-  document.getElementById("sessionScore").textContent =
+
+  document.getElementById(
+    "sessionScore"
+  ).textContent =
     day.sessionScore &&
-    typeof day.sessionScore.score === "number"
-      ? day.sessionScore.score + "/5"
+    typeof day.sessionScore.score ===
+      "number"
+      ? day.sessionScore.score +
+        "/5"
       : "—";
+
 }
+
 
 
 function saveLiveState(){
 
-  const date = tradingDate();
+  const date =
+    tradingDate();
 
-  const journal = getJournal();
 
-  const existing = journal[date] || {date};
+  const journal =
+    getJournal();
 
-  const previous = existing.liveRisk || {};
 
-  const pnl = Number(
-    document.getElementById("pnl").value || 0
-  );
+  const existing =
+    journal[
+      date
+    ] || {
+      date
+    };
 
-  journal[date] = {
+
+  const previous =
+    existing.liveRisk ||
+    {};
+
+
+  const pnl =
+    Number(
+      document.getElementById(
+        "pnl"
+      ).value || 0
+    );
+
+
+  journal[
+    date
+  ] = {
+
     ...existing,
+
     date,
 
     liveRisk:{
+
       ...previous,
+
       attempt,
-      realisedPnl:pnl,
-      tilt:document.getElementById("tilt").checked,
+
+      realisedPnl:
+        pnl,
+
+      tilt:
+        document.getElementById(
+          "tilt"
+        ).checked,
+
       warningReached:
-        !!previous.warningReached || pnl <= -75,
+        !!previous.warningReached ||
+        pnl <= -75,
+
       hardStopReached:
-        !!previous.hardStopReached || pnl <= -100,
-      maxAttemptReached:Math.max(
-        Number(previous.maxAttemptReached || 0),
-        attempt
-      ),
+        !!previous.hardStopReached ||
+        pnl <= -100,
+
+      maxAttemptReached:
+        Math.max(
+          Number(
+            previous.maxAttemptReached ||
+            0
+          ),
+          attempt
+        ),
+
       sessionEnded,
-      updatedAt:new Date().toISOString()
+
+      updatedAt:
+        new Date()
+          .toISOString()
+
     },
 
-    lastUpdated:new Date().toISOString()
+    lastUpdated:
+      new Date()
+        .toISOString()
+
   };
 
-  saveJournal(journal);
 
-  document.getElementById("saveState").textContent =
+  saveJournal(
+    journal
+  );
+
+
+  document.getElementById(
+    "saveState"
+  ).textContent =
     "Autosaved • " +
     new Intl.DateTimeFormat(
       "en-GB",
       {
-        timeZone:"Europe/London",
-        hour:"2-digit",
-        minute:"2-digit",
-        second:"2-digit"
+        timeZone:
+          "Europe/London",
+
+        hour:
+          "2-digit",
+
+        minute:
+          "2-digit",
+
+        second:
+          "2-digit"
       }
-    ).format(new Date());
+    )
+    .format(
+      new Date()
+    );
+
 
   renderConnected();
+
 }
+
 
 
 function queueSave(){
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(saveLiveState,120);
+
+  clearTimeout(
+    saveTimer
+  );
+
+
+  saveTimer =
+    setTimeout(
+      saveLiveState,
+      120
+    );
+
 }
+
 
 
 function loadLive(){
 
-  const date = tradingDate();
+  const date =
+    tradingDate();
 
-  loadedDate = date;
 
-  const day = getJournal()[date];
+  loadedDate =
+    date;
 
-  const live = day?.liveRisk;
 
-  if(!live){
+  const day =
+    getJournal()[
+      date
+    ];
 
-    attempt = 0;
-    sessionEnded = false;
 
-    document.getElementById("attempt").textContent = "0";
-    document.getElementById("pnl").value = "0";
-    document.getElementById("tilt").checked = false;
+  const live =
+    day?.liveRisk;
 
-  }else{
 
-    attempt = Math.max(
-      0,
-      Math.min(5,Number(live.attempt || 0))
-    );
+  if(
+    !live
+  ){
 
-    sessionEnded = !!live.sessionEnded;
+    attempt =
+      0;
 
-    document.getElementById("attempt").textContent = attempt;
-    document.getElementById("pnl").value =
-      Number(live.realisedPnl || 0);
-    document.getElementById("tilt").checked =
-      !!live.tilt;
+
+    sessionEnded =
+      false;
+
+
+    document.getElementById(
+      "attempt"
+    ).textContent =
+      "0";
+
+
+    document.getElementById(
+      "pnl"
+    ).value =
+      "0";
+
+
+    document.getElementById(
+      "tilt"
+    ).checked =
+      false;
+
   }
+
+  else{
+
+    attempt =
+      Math.max(
+        0,
+        Math.min(
+          5,
+          Number(
+            live.attempt ||
+            0
+          )
+        )
+      );
+
+
+    sessionEnded =
+      !!live.sessionEnded;
+
+
+    document.getElementById(
+      "attempt"
+    ).textContent =
+      attempt;
+
+
+    document.getElementById(
+      "pnl"
+    ).value =
+      Number(
+        live.realisedPnl ||
+        0
+      );
+
+
+    document.getElementById(
+      "tilt"
+    ).checked =
+      !!live.tilt;
+
+  }
+
 
   renderConnected();
-  update(false);
+
+
+  update(
+    false
+  );
+
 }
 
 
-function changeAttempt(delta){
 
-  if(sessionEnded){
-    alert("The session is already marked finished. Use Reset Today only if this was entered by mistake.");
+function changeAttempt(
+  delta
+){
+
+  if(
+    isWeekend()
+  ){
+
+    alert(
+      "Market closed — weekend."
+    );
+
     return;
+
   }
 
-  attempt = Math.max(
-    0,
-    Math.min(5,attempt+delta)
+
+  if(
+    sessionEnded
+  ){
+
+    alert(
+      "The session is already marked finished. Use Reset Today only if this was entered by mistake."
+    );
+
+    return;
+
+  }
+
+
+  attempt =
+    Math.max(
+      0,
+      Math.min(
+        5,
+        attempt +
+        delta
+      )
+    );
+
+
+  if(
+    attempt >= 5
+  ){
+
+    sessionEnded =
+      true;
+
+  }
+
+
+  document.getElementById(
+    "attempt"
+  ).textContent =
+    attempt;
+
+
+  update(
+    true
   );
 
-  if(attempt >= 5){
-    sessionEnded = true;
-  }
-
-  document.getElementById("attempt").textContent = attempt;
-
-  update(true);
 }
 
 
-function update(shouldSave=false){
 
-  const uk = parts("Europe/London");
-  const et = parts("America/New_York");
+function update(
+  shouldSave = false
+){
 
-  document.getElementById("ukTime").textContent = uk.text;
-  document.getElementById("etTime").textContent = et.text;
+  const uk =
+    getParts(
+      "Europe/London"
+    );
 
-  const mins = et.hour*60 + et.minute;
 
-  const prelimStart = 6*60+30;
-  const prelimEnd = 7*60;
-  const mainStart = 9*60;
-  const close = 11*60;
+  const et =
+    getParts(
+      "America/New_York"
+    );
 
-  let active = false;
-  let windowText = "OUTSIDE ACTIVE WINDOW";
 
-  if(mins >= prelimStart && mins < prelimEnd){
-    active = true;
-    windowText = "PRELIMINARY WINDOW";
-  }else if(mins >= mainStart && mins < close){
-    active = true;
-    windowText = "MAIN WINDOW";
-  }else if(mins >= prelimEnd && mins < mainStart){
-    windowText = "WAIT — MAIN WINDOW NOT OPEN";
-  }else if(mins >= close){
-    windowText = "SESSION CLOSED";
-  }else{
-    windowText = "WAIT — PRELIMINARY WINDOW NOT OPEN";
+  document.getElementById(
+    "ukTime"
+  ).textContent =
+    uk.text;
+
+
+  document.getElementById(
+    "etTime"
+  ).textContent =
+    et.text;
+
+
+  document.getElementById(
+    "nyDay"
+  ).textContent =
+    et.weekday;
+
+
+  const weekend =
+    isWeekend();
+
+
+  const weekendBox =
+    document.getElementById(
+      "weekendBox"
+    );
+
+
+  if(
+    weekend
+  ){
+
+    weekendBox.classList.add(
+      "active"
+    );
+
   }
 
-  document.getElementById("windowText").textContent = windowText;
+  else{
 
-  const pnl = Number(
-    document.getElementById("pnl").value || 0
-  );
+    weekendBox.classList.remove(
+      "active"
+    );
 
-  const pnlDisplay = document.getElementById("pnlDisplay");
+  }
 
-  pnlDisplay.textContent = pnl.toFixed(2);
+
+  const mins =
+    et.hour * 60 +
+    et.minute;
+
+
+  const prelimStart =
+    6 * 60 + 30;
+
+
+  const prelimEnd =
+    7 * 60;
+
+
+  const mainStart =
+    9 * 60;
+
+
+  const close =
+    11 * 60;
+
+
+  let active =
+    false;
+
+
+  let windowText =
+    "OUTSIDE ACTIVE WINDOW";
+
+
+  if(
+    weekend
+  ){
+
+    windowText =
+      "MARKET CLOSED — WEEKEND";
+
+  }
+
+  else if(
+    mins >= prelimStart &&
+    mins < prelimEnd
+  ){
+
+    active =
+      true;
+
+
+    windowText =
+      "PRELIMINARY WINDOW";
+
+  }
+
+  else if(
+    mins >= mainStart &&
+    mins < close
+  ){
+
+    active =
+      true;
+
+
+    windowText =
+      "MAIN WINDOW";
+
+  }
+
+  else if(
+    mins >= prelimEnd &&
+    mins < mainStart
+  ){
+
+    windowText =
+      "WAIT — MAIN WINDOW NOT OPEN";
+
+  }
+
+  else if(
+    mins >= close
+  ){
+
+    windowText =
+      "SESSION CLOSED";
+
+  }
+
+  else{
+
+    windowText =
+      "WAIT — PRELIMINARY WINDOW NOT OPEN";
+
+  }
+
+
+  document.getElementById(
+    "windowText"
+  ).textContent =
+    windowText;
+
+
+  const pnl =
+    Number(
+      document.getElementById(
+        "pnl"
+      ).value || 0
+    );
+
+
+  const pnlDisplay =
+    document.getElementById(
+      "pnlDisplay"
+    );
+
+
+  pnlDisplay.textContent =
+    pnl.toFixed(
+      2
+    );
+
 
   pnlDisplay.style.color =
     pnl > 0
@@ -695,121 +1529,329 @@ function update(shouldSave=false){
         ? "var(--red)"
         : "var(--text)";
 
-  if(pnl <= -100){
-    sessionEnded = true;
-  }
-
-  const tilt = document.getElementById("tilt").checked;
-
-  const status = document.getElementById("status");
 
   if(
+    !weekend &&
+    pnl <= -100
+  ){
+
+    sessionEnded =
+      true;
+
+  }
+
+
+  const tilt =
+    document.getElementById(
+      "tilt"
+    ).checked;
+
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+
+  if(
+    weekend
+  ){
+
+    status.className =
+      "status closed";
+
+
+    status.textContent =
+      "MARKET CLOSED — WEEKEND";
+
+  }
+
+  else if(
     sessionEnded ||
     attempt >= 5 ||
     pnl <= -100 ||
     mins >= close
   ){
-    status.className = "status stop";
-    status.textContent = "STOP TRADING — SESSION OVER";
-  }
-  else if(tilt){
-    status.className = "status warn";
-    status.textContent = "5-MINUTE STOP — NO ORDERS";
-  }
-  else if(pnl <= -75){
-    status.className = "status warn";
-    status.textContent = "WARNING STATE — STEP AWAY 5 MINUTES";
-  }
-  else if(active){
-    status.className = "status ok";
-    status.textContent = "WITHIN WASPN";
-  }
-  else{
-    status.className = "status warn";
-    status.textContent = windowText;
+
+    status.className =
+      "status stop";
+
+
+    status.textContent =
+      "STOP TRADING — SESSION OVER";
+
   }
 
-  if(shouldSave){
-    queueSave();
+  else if(
+    tilt
+  ){
+
+    status.className =
+      "status warn";
+
+
+    status.textContent =
+      "5-MINUTE STOP — NO ORDERS";
+
   }
+
+  else if(
+    pnl <= -75
+  ){
+
+    status.className =
+      "status warn";
+
+
+    status.textContent =
+      "WARNING STATE — STEP AWAY 5 MINUTES";
+
+  }
+
+  else if(
+    active
+  ){
+
+    status.className =
+      "status ok";
+
+
+    status.textContent =
+      "WITHIN WASPN";
+
+  }
+
+  else{
+
+    status.className =
+      "status warn";
+
+
+    status.textContent =
+      windowText;
+
+  }
+
+
+  if(
+    shouldSave
+  ){
+
+    queueSave();
+
+  }
+
 }
+
 
 
 function resetToday(){
 
-  if(!confirm(
-    "Reset today's Live Risk state? Journal, Compliance and Session Score will be preserved."
-  )){
+  if(
+    !confirm(
+      "Reset today's Live Risk state? Journal, Compliance and Session Score will be preserved."
+    )
+  ){
+
     return;
+
   }
 
-  attempt = 0;
-  sessionEnded = false;
 
-  document.getElementById("attempt").textContent = "0";
-  document.getElementById("pnl").value = "0";
-  document.getElementById("tilt").checked = false;
+  attempt =
+    0;
 
-  const date = tradingDate();
 
-  const journal = getJournal();
+  sessionEnded =
+    false;
 
-  const existing = journal[date] || {date};
 
-  journal[date] = {
+  document.getElementById(
+    "attempt"
+  ).textContent =
+    "0";
+
+
+  document.getElementById(
+    "pnl"
+  ).value =
+    "0";
+
+
+  document.getElementById(
+    "tilt"
+  ).checked =
+    false;
+
+
+  const date =
+    tradingDate();
+
+
+  const journal =
+    getJournal();
+
+
+  const existing =
+    journal[
+      date
+    ] || {
+      date
+    };
+
+
+  journal[
+    date
+  ] = {
+
     ...existing,
+
     liveRisk:{
-      attempt:0,
-      realisedPnl:0,
-      tilt:false,
-      warningReached:false,
-      hardStopReached:false,
-      maxAttemptReached:0,
-      sessionEnded:false,
-      resetAt:new Date().toISOString(),
-      updatedAt:new Date().toISOString()
+
+      attempt:
+        0,
+
+      realisedPnl:
+        0,
+
+      tilt:
+        false,
+
+      warningReached:
+        false,
+
+      hardStopReached:
+        false,
+
+      maxAttemptReached:
+        0,
+
+      sessionEnded:
+        false,
+
+      resetAt:
+        new Date()
+          .toISOString(),
+
+      updatedAt:
+        new Date()
+          .toISOString()
+
     },
-    lastUpdated:new Date().toISOString()
+
+    lastUpdated:
+      new Date()
+        .toISOString()
+
   };
 
-  saveJournal(journal);
 
-  update(false);
+  saveJournal(
+    journal
+  );
+
+
+  update(
+    false
+  );
+
+
   renderConnected();
+
 }
 
 
-document.getElementById("plus").addEventListener(
-  "click",()=>changeAttempt(1)
+
+document.getElementById(
+  "plus"
+)
+.addEventListener(
+  "click",
+  () =>
+    changeAttempt(
+      1
+    )
 );
 
-document.getElementById("minus").addEventListener(
-  "click",()=>changeAttempt(-1)
+
+
+document.getElementById(
+  "minus"
+)
+.addEventListener(
+  "click",
+  () =>
+    changeAttempt(
+      -1
+    )
 );
 
-document.getElementById("pnl").addEventListener(
-  "input",()=>update(true)
+
+
+document.getElementById(
+  "pnl"
+)
+.addEventListener(
+  "input",
+  () =>
+    update(
+      true
+    )
 );
 
-document.getElementById("tilt").addEventListener(
-  "change",()=>update(true)
+
+
+document.getElementById(
+  "tilt"
+)
+.addEventListener(
+  "change",
+  () =>
+    update(
+      true
+    )
 );
 
-document.getElementById("resetBtn").addEventListener(
-  "click",resetToday
+
+
+document.getElementById(
+  "resetBtn"
+)
+.addEventListener(
+  "click",
+  resetToday
 );
+
+
 
 updateWindowLabels();
+
 loadLive();
 
-setInterval(()=>{
-  if(loadedDate !== tradingDate()){
-    loadLive();
-    updateWindowLabels();
-  }
 
-  update(false);
-},1000);
+setInterval(
+  () => {
+
+    if(
+      loadedDate !==
+      tradingDate()
+    ){
+
+      loadLive();
+
+      updateWindowLabels();
+
+    }
+
+
+    update(
+      false
+    );
+
+  },
+  1000
+);
+
 </script>
 
 </body>
