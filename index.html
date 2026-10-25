@@ -59,14 +59,66 @@ h2{
   margin:0 0 12px;
 }
 
-h3{
-  margin:0 0 6px;
-}
-
 .muted{
   color:var(--muted);
   line-height:1.55;
 }
+
+.green{
+  color:var(--green);
+}
+
+.red{
+  color:var(--red);
+}
+
+.blue{
+  color:var(--blue);
+}
+
+.amber{
+  color:var(--amber);
+}
+
+
+/* MARKET STATUS */
+
+.market-status{
+  margin-top:16px;
+  border-radius:14px;
+  padding:15px;
+  text-align:center;
+  border:1px solid var(--border);
+}
+
+.market-status.open{
+  background:#102018;
+  border-color:#275c3e;
+}
+
+.market-status.waiting{
+  background:#251d0f;
+  border-color:#6b5125;
+}
+
+.market-status.closed{
+  background:#15191e;
+  border-color:#3b4652;
+}
+
+.market-main{
+  font-size:20px;
+  font-weight:900;
+}
+
+.market-detail{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+
+/* METRICS */
 
 .metrics{
   display:grid;
@@ -95,21 +147,24 @@ h3{
   font-weight:900;
 }
 
-.green{
-  color:var(--green);
+
+/* TODAY */
+
+.today-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
 }
 
-.red{
-  color:var(--red);
+.today-item{
+  background:#0d131a;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:12px;
 }
 
-.blue{
-  color:var(--blue);
-}
 
-.amber{
-  color:var(--amber);
-}
+/* NAV */
 
 .nav-grid{
   display:grid;
@@ -178,18 +233,8 @@ h3{
   color:#c9d3dd;
 }
 
-.today-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:9px;
-}
 
-.today-item{
-  background:#0d131a;
-  border:1px solid var(--border);
-  border-radius:11px;
-  padding:12px;
-}
+/* WORKFLOW */
 
 .workflow-section{
   margin-top:14px;
@@ -352,6 +397,7 @@ h3{
 </style>
 </head>
 
+
 <body>
 
 <div class="wrap">
@@ -363,19 +409,42 @@ h3{
     Data-backed small-cap momentum operating system
   </div>
 
-  <h1>WASPN</h1>
+  <h1>
+    WASPN
+  </h1>
 
   <div class="muted">
     Trade the process in the correct order.
     Live Risk stays open throughout the session.
     Trade Duration starts when you enter.
-    Live Risk and Journal are updated only after the trade closes.
+    Live Risk and Journal are updated after the trade closes.
+  </div>
+
+
+  <div
+    id="marketStatus"
+    class="market-status closed"
+  >
+
+    <div
+      id="marketMain"
+      class="market-main"
+    >
+      Checking market status...
+    </div>
+
+    <div
+      id="marketDetail"
+      class="market-detail"
+    ></div>
+
   </div>
 
 
   <div class="metrics">
 
     <div class="metric">
+
       <div class="label">
         Primary Window
       </div>
@@ -383,10 +452,12 @@ h3{
       <div class="value blue">
         9–11 AM ET
       </div>
+
     </div>
 
 
     <div class="metric">
+
       <div class="label">
         Max Attempts
       </div>
@@ -394,10 +465,12 @@ h3{
       <div class="value">
         5
       </div>
+
     </div>
 
 
     <div class="metric">
+
       <div class="label">
         Hard Stop
       </div>
@@ -405,10 +478,12 @@ h3{
       <div class="value red">
         -$100
       </div>
+
     </div>
 
 
     <div class="metric">
+
       <div class="label">
         Green Objective
       </div>
@@ -416,6 +491,7 @@ h3{
       <div class="value green">
         +$50
       </div>
+
     </div>
 
   </div>
@@ -426,7 +502,9 @@ h3{
 
 <section class="card">
 
-  <h2>Today</h2>
+  <h2>
+    Today
+  </h2>
 
   <div class="today-grid">
 
@@ -436,7 +514,10 @@ h3{
         Journal Trades
       </div>
 
-      <div class="value" id="todayTrades">
+      <div
+        class="value"
+        id="todayTrades"
+      >
         0
       </div>
 
@@ -449,7 +530,10 @@ h3{
         Saved P&amp;L
       </div>
 
-      <div class="value" id="todayPnl">
+      <div
+        class="value"
+        id="todayPnl"
+      >
         —
       </div>
 
@@ -462,7 +546,10 @@ h3{
         Compliance
       </div>
 
-      <div class="value" id="todayCompliance">
+      <div
+        class="value"
+        id="todayCompliance"
+      >
         —
       </div>
 
@@ -475,7 +562,10 @@ h3{
         Session Score
       </div>
 
-      <div class="value" id="todayScore">
+      <div
+        class="value"
+        id="todayScore"
+      >
         —
       </div>
 
@@ -489,10 +579,13 @@ h3{
 
 <section class="card">
 
-  <h2>Live Trading Workflow</h2>
+  <h2>
+    Live Trading Workflow
+  </h2>
 
   <div class="muted">
-    Follow this order for every trade. You do not need to use every page every time.
+    Follow this order for every trade.
+    You do not need to use every page every time.
   </div>
 
 
@@ -541,7 +634,7 @@ h3{
 
           <div class="step-copy">
             Do not increase the attempt count yet.
-            A trade becomes an attempt only after it has been completed.
+            A trade becomes an attempt after it has been completed.
           </div>
 
         </div>
@@ -562,7 +655,6 @@ h3{
 
     <div class="workflow-body">
 
-
       <div class="step">
 
         <div class="num">
@@ -577,7 +669,7 @@ h3{
 
           <div class="step-copy">
             Start the timer when the position is entered.
-            The timer is for reassessment while the position is still open.
+            It exists to trigger reassessment while the trade remains open.
           </div>
 
         </div>
@@ -599,7 +691,7 @@ h3{
 
           <div class="step-copy">
             Trade Duration can prompt reassessment at 3, 5 and 10 minutes.
-            Do not fill out Journal while you are still managing the position.
+            Do not fill out Journal while you are managing the position.
           </div>
 
         </div>
@@ -619,7 +711,6 @@ h3{
     </div>
 
     <div class="workflow-body">
-
 
       <div class="step">
 
@@ -678,8 +769,8 @@ h3{
           </div>
 
           <div class="step-copy">
-            If the session has hit Attempt 5, -$100 realised or 11:00 AM ET,
-            you are finished.
+            If the session has reached Attempt 5, -$100 realised or 11:00 AM ET,
+            trading is finished.
           </div>
 
         </div>
@@ -717,7 +808,6 @@ h3{
     <div class="optional-title">
       USE THESE ONLY WHEN NEEDED
     </div>
-
 
     <div class="optional-row">
 
@@ -767,7 +857,9 @@ h3{
 
 <section class="card">
 
-  <h2>End-of-Session Workflow</h2>
+  <h2>
+    End-of-Session Workflow
+  </h2>
 
   <div class="workflow-section">
 
@@ -791,7 +883,7 @@ h3{
           </div>
 
           <div class="step-copy">
-            Confirm all completed attempts and the final daily P&amp;L are correct.
+            Confirm all completed attempts and final daily P&amp;L are correct.
           </div>
 
         </div>
@@ -856,7 +948,7 @@ h3{
           </div>
 
           <div class="step-copy">
-            Confirm P&amp;L, trade count, compliance and Session Score all appear correctly.
+            Confirm P&amp;L, trade count, compliance and Session Score appear correctly.
           </div>
 
         </div>
@@ -873,12 +965,16 @@ h3{
 
 <section class="card">
 
-  <h2>WASPN Control Centre</h2>
+  <h2>
+    WASPN Control Centre
+  </h2>
 
   <div class="nav-grid">
 
-
-    <a href="live-risk.html" class="nav-card live">
+    <a
+      href="live-risk.html"
+      class="nav-card live"
+    >
 
       <div class="nav-title">
         Live Risk Dashboard
@@ -891,7 +987,10 @@ h3{
     </a>
 
 
-    <a href="trade-duration.html" class="nav-card duration">
+    <a
+      href="trade-duration.html"
+      class="nav-card duration"
+    >
 
       <div class="nav-title">
         Trade Duration Warning
@@ -904,7 +1003,10 @@ h3{
     </a>
 
 
-    <a href="journal.html" class="nav-card journal">
+    <a
+      href="journal.html"
+      class="nav-card journal"
+    >
 
       <div class="nav-title">
         Trading Journal
@@ -917,7 +1019,10 @@ h3{
     </a>
 
 
-    <a href="post-trade-reset.html" class="nav-card">
+    <a
+      href="post-trade-reset.html"
+      class="nav-card"
+    >
 
       <div class="nav-title">
         Post-Trade Reset
@@ -930,7 +1035,10 @@ h3{
     </a>
 
 
-    <a href="tilt.html" class="nav-card tilt">
+    <a
+      href="tilt.html"
+      class="nav-card tilt"
+    >
 
       <div class="nav-title">
         Tilt Checklist
@@ -943,7 +1051,10 @@ h3{
     </a>
 
 
-    <a href="compliance.html" class="nav-card compliance">
+    <a
+      href="compliance.html"
+      class="nav-card compliance"
+    >
 
       <div class="nav-title">
         Daily Compliance
@@ -956,7 +1067,10 @@ h3{
     </a>
 
 
-    <a href="session-score.html" class="nav-card compliance">
+    <a
+      href="session-score.html"
+      class="nav-card compliance"
+    >
 
       <div class="nav-title">
         Session Score
@@ -969,7 +1083,10 @@ h3{
     </a>
 
 
-    <a href="calendar-2026.html" class="nav-card calendar">
+    <a
+      href="calendar-2026.html"
+      class="nav-card calendar"
+    >
 
       <div class="nav-title">
         2026 Interactive Calendar
@@ -982,7 +1099,10 @@ h3{
     </a>
 
 
-    <a href="data-backup.html" class="nav-card backup">
+    <a
+      href="data-backup.html"
+      class="nav-card backup"
+    >
 
       <div class="nav-title">
         Data Backup
@@ -994,7 +1114,6 @@ h3{
 
     </a>
 
-
   </div>
 
 </section>
@@ -1003,7 +1122,9 @@ h3{
 
 <section class="card">
 
-  <h2>Core Structure</h2>
+  <h2>
+    Core Structure
+  </h2>
 
   <div class="muted">
 
@@ -1025,6 +1146,17 @@ h3{
     <br>
 
     Primary trading and study window.
+
+    <br><br>
+
+
+    <strong>
+      Saturday &amp; Sunday
+    </strong>
+
+    <br>
+
+    Market closed — no WASPN trading session.
 
     <br><br>
 
@@ -1078,6 +1210,7 @@ const STORAGE_KEY =
   "waspnJournalV2";
 
 
+
 function getJournal(){
 
   try{
@@ -1099,11 +1232,8 @@ function getJournal(){
 }
 
 
-function todayKey(){
 
-  const now =
-    new Date();
-
+function getNyParts(){
 
   const parts =
     new Intl.DateTimeFormat(
@@ -1112,6 +1242,9 @@ function todayKey(){
         timeZone:
           "America/New_York",
 
+        weekday:
+          "long",
+
         year:
           "numeric",
 
@@ -1119,31 +1252,80 @@ function todayKey(){
           "2-digit",
 
         day:
-          "2-digit"
+          "2-digit",
+
+        hour:
+          "2-digit",
+
+        minute:
+          "2-digit",
+
+        hour12:
+          false
       }
     )
     .formatToParts(
-      now
+      new Date()
     );
 
 
-  const d = {};
+  const d =
+    {};
 
 
   parts.forEach(
-    p => {
+    part => {
 
       if(
-        p.type !== "literal"
+        part.type !==
+        "literal"
       ){
 
-        d[p.type] =
-          p.value;
+        d[
+          part.type
+        ] =
+          part.value;
 
       }
 
     }
   );
+
+
+  return {
+
+    weekday:
+      d.weekday,
+
+    year:
+      d.year,
+
+    month:
+      d.month,
+
+    day:
+      d.day,
+
+    hour:
+      Number(
+        d.hour
+      ),
+
+    minute:
+      Number(
+        d.minute
+      )
+
+  };
+
+}
+
+
+
+function todayKey(){
+
+  const d =
+    getNyParts();
 
 
   return (
@@ -1157,7 +1339,10 @@ function todayKey(){
 }
 
 
-function money(value){
+
+function money(
+  value
+){
 
   const n =
     Number(
@@ -1165,21 +1350,31 @@ function money(value){
     );
 
 
-  if(n > 0){
+  if(
+    n > 0
+  ){
 
     return (
       "+$" +
-      n.toFixed(2)
+      n.toFixed(
+        2
+      )
     );
 
   }
 
 
-  if(n < 0){
+  if(
+    n < 0
+  ){
 
     return (
       "-$" +
-      Math.abs(n).toFixed(2)
+      Math.abs(
+        n
+      ).toFixed(
+        2
+      )
     );
 
   }
@@ -1188,6 +1383,183 @@ function money(value){
   return "$0.00";
 
 }
+
+
+
+function renderMarketStatus(){
+
+  const ny =
+    getNyParts();
+
+
+  const mins =
+    ny.hour * 60 +
+    ny.minute;
+
+
+  const weekend =
+    ny.weekday ===
+      "Saturday" ||
+    ny.weekday ===
+      "Sunday";
+
+
+  const preliminaryStart =
+    6 * 60 + 30;
+
+
+  const preliminaryEnd =
+    7 * 60;
+
+
+  const mainStart =
+    9 * 60;
+
+
+  const close =
+    11 * 60;
+
+
+  const box =
+    document.getElementById(
+      "marketStatus"
+    );
+
+
+  const main =
+    document.getElementById(
+      "marketMain"
+    );
+
+
+  const detail =
+    document.getElementById(
+      "marketDetail"
+    );
+
+
+  if(
+    weekend
+  ){
+
+    box.className =
+      "market-status closed";
+
+
+    main.textContent =
+      "MARKET CLOSED — WEEKEND";
+
+
+    detail.textContent =
+      ny.weekday +
+      " in New York • No WASPN trading session";
+
+
+    return;
+
+  }
+
+
+  if(
+    mins >= preliminaryStart &&
+    mins < preliminaryEnd
+  ){
+
+    box.className =
+      "market-status open";
+
+
+    main.textContent =
+      "PRELIMINARY WINDOW ACTIVE";
+
+
+    detail.textContent =
+      "6:30–7:00 AM ET • Exceptional setups only";
+
+
+    return;
+
+  }
+
+
+  if(
+    mins >= mainStart &&
+    mins < close
+  ){
+
+    box.className =
+      "market-status open";
+
+
+    main.textContent =
+      "MAIN WASPN WINDOW ACTIVE";
+
+
+    detail.textContent =
+      "9:00–11:00 AM ET";
+
+
+    return;
+
+  }
+
+
+  if(
+    mins >= preliminaryEnd &&
+    mins < mainStart
+  ){
+
+    box.className =
+      "market-status waiting";
+
+
+    main.textContent =
+      "WAIT — MAIN WINDOW NOT OPEN";
+
+
+    detail.textContent =
+      "Primary trading begins at 9:00 AM ET";
+
+
+    return;
+
+  }
+
+
+  if(
+    mins >= close
+  ){
+
+    box.className =
+      "market-status closed";
+
+
+    main.textContent =
+      "SESSION CLOSED";
+
+
+    detail.textContent =
+      "11:00 AM ET has passed • No reopening later";
+
+
+    return;
+
+  }
+
+
+  box.className =
+    "market-status waiting";
+
+
+  main.textContent =
+    "WAIT — SESSION NOT OPEN";
+
+
+  detail.textContent =
+    "Preliminary window begins at 6:30 AM ET";
+
+}
+
 
 
 function renderToday(){
@@ -1271,7 +1643,16 @@ function renderToday(){
 }
 
 
+
+renderMarketStatus();
+
 renderToday();
+
+
+setInterval(
+  renderMarketStatus,
+  1000
+);
 
 
 window.addEventListener(
