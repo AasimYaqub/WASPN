@@ -1,2199 +1,549 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>WASPN</title>
-
-
-  <style>
-
-    :root {
-
-      --bg:#0b0f14;
-      --panel:#121820;
-      --panel2:#171f29;
-      --border:#293342;
-      --text:#e8eef6;
-      --muted:#8e9aaa;
-
-      --green:#35d07f;
-      --red:#ff5f6d;
-      --blue:#63a7ff;
-      --amber:#f3b84b;
-
-    }
-
-
-    * {
-      box-sizing:border-box;
-    }
-
-
-    body {
-
-      margin:0;
-
-      background:
-        linear-gradient(
-          180deg,
-          #090d12 0%,
-          #0d131a 100%
-        );
-
-      color:var(--text);
-
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    }
-
-
-    .wrap {
-
-      max-width:1100px;
-
-      margin:0 auto;
-
-      padding:24px;
-
-    }
-
-
-    .hero {
-
-      background:
-        linear-gradient(
-          135deg,
-          #101720,
-          #151d27
-        );
-
-      border:
-        1px solid
-        var(--border);
-
-      border-radius:22px;
-
-      padding:28px;
-
-      box-shadow:
-        0 16px 40px
-        rgba(0,0,0,.25);
-
-    }
-
-
-    .eyebrow {
-
-      color:var(--muted);
-
-      font-size:12px;
-
-      letter-spacing:1.6px;
-
-      font-weight:700;
-
-      text-transform:uppercase;
-
-    }
-
-
-    h1 {
-
-      margin:
-        6px 0 6px;
-
-      font-size:
-        clamp(
-          44px,
-          8vw,
-          74px
-        );
-
-      line-height:1;
-
-      color:var(--green);
-
-    }
-
-
-    h2 {
-
-      margin-top:0;
-
-      font-size:22px;
-
-    }
-
-
-    .subtitle {
-
-      color:var(--muted);
-
-      font-size:17px;
-
-      line-height:1.5;
-
-    }
-
-
-    .grid {
-
-      display:grid;
-
-      grid-template-columns:
-        repeat(
-          auto-fit,
-          minmax(
-            220px,
-            1fr
-          )
-        );
-
-      gap:14px;
-
-      margin-top:18px;
-
-    }
-
-
-    .card {
-
-      background:
-        var(--panel);
-
-      border:
-        1px solid
-        var(--border);
-
-      border-radius:16px;
-
-      padding:18px;
-
-    }
-
-
-    .label {
-
-      color:var(--muted);
-
-      font-size:12px;
-
-      text-transform:uppercase;
-
-      font-weight:700;
-
-      letter-spacing:.7px;
-
-    }
-
-
-    .value {
-
-      font-size:28px;
-
-      font-weight:800;
-
-      margin-top:8px;
-
-    }
-
-
-    .green {
-      color:var(--green);
-    }
-
-
-    .red {
-      color:var(--red);
-    }
-
-
-    .blue {
-      color:var(--blue);
-    }
-
-
-    .amber {
-      color:var(--amber);
-    }
-
-
-    .section {
-      margin-top:22px;
-    }
-
-
-    .rule {
-
-      padding:
-        14px 0;
-
-      border-bottom:
-        1px solid
-        var(--border);
-
-      line-height:1.5;
-
-    }
-
-
-    .rule:last-child {
-      border-bottom:0;
-    }
-
-
-    .small {
-
-      color:var(--muted);
-
-      font-size:14px;
-
-      line-height:1.6;
-
-    }
-
-
-    /* NAVIGATION */
-
-
-    .nav-grid {
-
-      display:grid;
-
-      grid-template-columns:
-        repeat(
-          auto-fit,
-          minmax(
-            230px,
-            1fr
-          )
-        );
-
-      gap:12px;
-
-      margin-top:14px;
-
-    }
-
-
-    .nav-card {
-
-      display:block;
-
-      text-decoration:none;
-
-      border-radius:14px;
-
-      padding:17px;
-
-      transition:
-        transform .15s ease;
-
-    }
-
-
-    .nav-card:active {
-
-      transform:
-        scale(.98);
-
-    }
-
-
-    .nav-title {
-
-      font-size:18px;
-
-      font-weight:800;
-
-    }
-
-
-    .nav-desc {
-
-      font-size:12px;
-
-      color:var(--muted);
-
-      margin-top:7px;
-
-      line-height:1.45;
-
-    }
-
-
-    .nav-live {
-
-      background:#152033;
-
-      border:
-        1px solid
-        #315887;
-
-      color:var(--blue);
-
-    }
-
-
-    .nav-tilt {
-
-      background:#27171b;
-
-      border:
-        1px solid
-        #5b2630;
-
-      color:var(--red);
-
-    }
-
-
-    .nav-compliance {
-
-      background:#132119;
-
-      border:
-        1px solid
-        #275c3e;
-
-      color:var(--green);
-
-    }
-
-
-    .nav-duration {
-
-      background:#251d0f;
-
-      border:
-        1px solid
-        #6b5125;
-
-      color:var(--amber);
-
-    }
-
-
-    .nav-reset {
-
-      background:#171d23;
-
-      border:
-        1px solid
-        #374554;
-
-      color:var(--text);
-
-    }
-
-
-    .nav-score {
-
-      background:#132119;
-
-      border:
-        1px solid
-        #275c3e;
-
-      color:var(--green);
-
-    }
-
-
-    .nav-calendar {
-
-      background:#171a28;
-
-      border:
-        1px solid
-        #4a4f80;
-
-      color:#aeb7ff;
-
-    }
-
-
-    .nav-journal {
-
-      background:#132025;
-
-      border:
-        1px solid
-        #2f6670;
-
-      color:#77d7e5;
-
-    }
-
-
-    /* DAILY WORKFLOW */
-
-
-    .workflow-step {
-
-      display:grid;
-
-      grid-template-columns:
-        48px 1fr;
-
-      gap:14px;
-
-      padding:
-        16px 0;
-
-      border-bottom:
-        1px solid
-        var(--border);
-
-    }
-
-
-    .workflow-step:last-child {
-      border-bottom:0;
-    }
-
-
-    .step-number {
-
-      width:42px;
-      height:42px;
-
-      display:flex;
-
-      align-items:center;
-
-      justify-content:center;
-
-      border-radius:50%;
-
-      background:#1b2633;
-
-      color:var(--blue);
-
-      font-weight:900;
-
-      font-size:18px;
-
-    }
-
-
-    .workflow-title {
-
-      font-weight:800;
-
-      font-size:16px;
-
-      margin-bottom:5px;
-
-    }
-
-
-    .workflow-copy {
-
-      color:var(--muted);
-
-      font-size:14px;
-
-      line-height:1.55;
-
-    }
-
-
-    .stop-box {
-
-      margin-top:16px;
-
-      background:#251419;
-
-      border:
-        1px solid
-        #5b2630;
-
-      border-radius:14px;
-
-      padding:16px;
-
-      color:var(--red);
-
-      font-weight:800;
-
-      line-height:1.5;
-
-    }
-
-
-    /* CALENDAR */
-
-
-    .calendar {
-
-      display:grid;
-
-      grid-template-columns:
-        repeat(
-          5,
-          1fr
-        );
-
-      gap:8px;
-
-      margin-top:14px;
-
-    }
-
-
-    .day {
-
-      min-height:88px;
-
-      background:
-        var(--panel2);
-
-      border:
-        1px solid
-        var(--border);
-
-      border-radius:12px;
-
-      padding:10px;
-
-    }
-
-
-    .day .date {
-
-      font-size:12px;
-
-      color:var(--muted);
-
-      margin-bottom:7px;
-
-    }
-
-
-    .day .pnl {
-
-      font-size:18px;
-
-      font-weight:800;
-
-    }
-
-
-    .weekday {
-
-      text-align:center;
-
-      color:var(--muted);
-
-      font-size:12px;
-
-      font-weight:700;
-
-    }
-
-
-    .footer {
-
-      margin:
-        26px 0 10px;
-
-      color:var(--muted);
-
-      font-size:12px;
-
-      text-align:center;
-
-    }
-
-
-    @media(
-      max-width:700px
-    ) {
-
-      .wrap {
-        padding:14px;
-      }
-
-
-      .hero {
-        padding:20px;
-      }
-
-
-      .nav-grid {
-        grid-template-columns:1fr;
-      }
-
-
-      .calendar {
-        gap:5px;
-      }
-
-
-      .day {
-
-        min-height:72px;
-
-        padding:7px;
-
-      }
-
-
-      .day .pnl {
-        font-size:14px;
-      }
-
-
-      .weekday {
-        font-size:11px;
-      }
-
-
-      .workflow-step {
-
-        grid-template-columns:
-          40px 1fr;
-
-      }
-
-
-      .step-number {
-
-        width:36px;
-
-        height:36px;
-
-        font-size:15px;
-
-      }
-
-    }
-
-  </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>WASPN</title>
+
+<style>
+:root{
+  --bg:#0b0f14;
+  --panel:#121820;
+  --panel2:#171f29;
+  --border:#293342;
+  --text:#e8eef6;
+  --muted:#8e9aaa;
+  --green:#35d07f;
+  --red:#ff5f6d;
+  --blue:#63a7ff;
+  --amber:#f3b84b;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:linear-gradient(180deg,#090d12,#0d131a);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+.wrap{
+  max-width:1000px;
+  margin:0 auto;
+  padding:18px;
+}
+
+.hero,.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+}
+
+.card{margin-top:16px}
+
+h1{
+  margin:4px 0 8px;
+  font-size:clamp(46px,10vw,76px);
+  line-height:1;
+  color:var(--green);
+}
+
+h2{margin:0 0 12px}
+
+.muted{
+  color:var(--muted);
+  line-height:1.55;
+}
+
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-top:18px;
+}
+
+.metric{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:14px;
+}
+
+.label{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+  text-transform:uppercase;
+}
+
+.value{
+  margin-top:6px;
+  font-size:23px;
+  font-weight:900;
+}
+
+.green{color:var(--green)}
+.red{color:var(--red)}
+.blue{color:var(--blue)}
+.amber{color:var(--amber)}
+
+.nav-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:10px;
+}
+
+.nav-card{
+  display:block;
+  text-decoration:none;
+  color:var(--text);
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:15px;
+}
+
+.nav-card:active{transform:scale(.98)}
+
+.nav-title{
+  font-weight:900;
+  font-size:17px;
+}
+
+.nav-desc{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+  margin-top:6px;
+}
+
+.live{border-color:#315887;color:var(--blue)}
+.journal{border-color:#2f6670;color:#77d7e5}
+.duration{border-color:#6b5125;color:var(--amber)}
+.tilt{border-color:#5b2630;color:var(--red)}
+.compliance{border-color:#275c3e;color:var(--green)}
+.calendar{border-color:#4a4f80;color:#aeb7ff}
+.backup{border-color:#53606c;color:#c9d3dd}
+
+.workflow{
+  display:grid;
+  gap:0;
+}
+
+.step{
+  display:grid;
+  grid-template-columns:42px 1fr;
+  gap:12px;
+  padding:14px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.step:last-child{border-bottom:0}
+
+.num{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#1b2633;
+  color:var(--blue);
+  font-weight:900;
+}
+
+.step-title{
+  font-weight:900;
+  margin-bottom:4px;
+}
+
+.step-copy{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.stop{
+  margin-top:14px;
+  background:#251419;
+  border:1px solid #5b2630;
+  color:var(--red);
+  padding:15px;
+  border-radius:13px;
+  font-weight:900;
+  line-height:1.5;
+}
+
+.today-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+}
+
+.today-item{
+  background:#0d131a;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:12px;
+}
+
+.footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  margin:24px 0 8px;
+}
+
+@media(max-width:700px){
+  .wrap{padding:12px}
+  .hero,.card{padding:16px}
+  .metrics{grid-template-columns:1fr 1fr}
+  .today-grid{grid-template-columns:1fr 1fr}
+}
+</style>
 </head>
 
-
 <body>
-
-
 <div class="wrap">
 
+<section class="hero">
+  <div class="muted">Data-backed small-cap momentum operating system</div>
+  <h1>WASPN</h1>
 
-  <!-- HERO -->
+  <div class="muted">
+    One date = one master record. Live risk, Trades 1–5, compliance,
+    Session Score and calendar history all use the same daily data.
+  </div>
 
-
-  <section class="hero">
-
-
-    <div class="eyebrow">
-
-      Momentum Trading Journal
-
+  <div class="metrics">
+    <div class="metric">
+      <div class="label">Primary Window</div>
+      <div class="value blue">9–11 AM ET</div>
     </div>
 
-
-    <h1>
-      WASPN
-    </h1>
-
-
-    <div class="subtitle">
-
-      Data-backed small-cap momentum trading framework.
-
-      The goal is not to recover old losses —
-      it is to prove a repeatable profitable
-      operating system.
-
+    <div class="metric">
+      <div class="label">Max Attempts</div>
+      <div class="value">5</div>
     </div>
 
+    <div class="metric">
+      <div class="label">Hard Stop</div>
+      <div class="value red">-$100</div>
+    </div>
 
-    <div class="grid">
+    <div class="metric">
+      <div class="label">Green Objective</div>
+      <div class="value green">+$50</div>
+    </div>
+  </div>
+</section>
 
 
-      <div class="card">
+<section class="card">
+  <h2>Today</h2>
 
-        <div class="label">
-          Primary Window
-        </div>
+  <div class="today-grid">
 
-        <div class="value blue">
-          9:00–11:00 AM ET
-        </div>
+    <div class="today-item">
+      <div class="label">Journal Trades</div>
+      <div class="value" id="todayTrades">0</div>
+    </div>
 
+    <div class="today-item">
+      <div class="label">Saved P&amp;L</div>
+      <div class="value" id="todayPnl">—</div>
+    </div>
+
+    <div class="today-item">
+      <div class="label">Compliance</div>
+      <div class="value" id="todayCompliance">—</div>
+    </div>
+
+    <div class="today-item">
+      <div class="label">Session Score</div>
+      <div class="value" id="todayScore">—</div>
+    </div>
+
+  </div>
+</section>
+
+
+<section class="card">
+
+  <h2>WASPN Control Centre</h2>
+
+  <div class="nav-grid">
+
+    <a href="live-risk.html" class="nav-card live">
+      <div class="nav-title">Live Risk Dashboard</div>
+      <div class="nav-desc">
+        Attempts, realised P&amp;L, tilt, dynamic ET windows and hard-stop state.
       </div>
+    </a>
 
-
-      <div class="card">
-
-        <div class="label">
-          Max Attempts
-        </div>
-
-        <div class="value">
-          5
-        </div>
-
+    <a href="trade-duration.html" class="nav-card duration">
+      <div class="nav-title">Trade Duration Warning</div>
+      <div class="nav-desc">
+        Start on entry. Reassess momentum at 3, 5 and 10 minutes.
       </div>
+    </a>
 
-
-      <div class="card">
-
-        <div class="label">
-          Hard Daily Stop
-        </div>
-
-        <div class="value red">
-          -$100
-        </div>
-
+    <a href="journal.html" class="nav-card journal">
+      <div class="nav-title">Trading Journal</div>
+      <div class="nav-desc">
+        Record Trades 1–5 and exact broker net P&amp;L.
       </div>
+    </a>
 
-
-      <div class="card">
-
-        <div class="label">
-          Green Day Objective
-        </div>
-
-        <div class="value green">
-          +$50
-        </div>
-
+    <a href="post-trade-reset.html" class="nav-card">
+      <div class="nav-title">Post-Trade Reset</div>
+      <div class="nav-desc">
+        Use after a meaningful losing trade before another entry.
       </div>
-
-
-    </div>
-
-
-  </section>
-
-
-
-  <!-- CONTROL CENTRE -->
-
-
-  <section class="section card">
-
-
-    <h2>
-      WASPN Control Centre
-    </h2>
-
-
-    <div class="small">
-
-      Live trading controls,
-      journal,
-      mental checks
-      and end-of-day review.
-
-    </div>
-
-
-    <div class="nav-grid">
-
-
-      <a
-        href="live-risk.html"
-        class="nav-card nav-live"
-      >
-
-        <div class="nav-title">
-          Live Risk Dashboard
-        </div>
-
-        <div class="nav-desc">
-
-          Main live control page.
-
-          Track attempts,
-          realised P&amp;L,
-          session status
-          and hard-stop conditions.
-
-        </div>
-
-      </a>
-
-
-
-      <a
-        href="trade-duration.html"
-        class="nav-card nav-duration"
-      >
-
-        <div class="nav-title">
-          Trade Duration Warning
-        </div>
-
-        <div class="nav-desc">
-
-          Start when entering a trade.
-
-          Reassess momentum
-          at 3, 5 and 10 minutes.
-
-        </div>
-
-      </a>
-
-
-
-      <a
-        href="journal.html"
-        class="nav-card nav-journal"
-      >
-
-        <div class="nav-title">
-          Trading Journal
-        </div>
-
-        <div class="nav-desc">
-
-          Record Trades 1–5,
-          entry and exit details,
-          notes,
-          compliance
-          and daily P&amp;L.
-
-        </div>
-
-      </a>
-
-
-
-      <a
-        href="post-trade-reset.html"
-        class="nav-card nav-reset"
-      >
-
-        <div class="nav-title">
-          Post-Trade Reset
-        </div>
-
-        <div class="nav-desc">
-
-          Use after a losing trade
-          before considering
-          another entry.
-
-        </div>
-
-      </a>
-
-
-
-      <a
-        href="tilt.html"
-        class="nav-card nav-tilt"
-      >
-
-        <div class="nav-title">
-          Tilt Checklist
-        </div>
-
-        <div class="nav-desc">
-
-          Use whenever urgency,
-          anger,
-          revenge,
-          repeated re-entry
-          or “just one more”
-          appears.
-
-        </div>
-
-      </a>
-
-
-
-      <a
-        href="compliance.html"
-        class="nav-card nav-compliance"
-      >
-
-        <div class="nav-title">
-          Daily Compliance
-        </div>
-
-        <div class="nav-desc">
-
-          End-of-session check:
-
-          window,
-          attempt 5
-          and -$100 stop.
-
-        </div>
-
-      </a>
-
-
-
-      <a
-        href="session-score.html"
-        class="nav-card nav-score"
-      >
-
-        <div class="nav-title">
-          Session Score
-        </div>
-
-        <div class="nav-desc">
-
-          Final process score.
-
-          Grade the session
-          out of five
-          before judging P&amp;L.
-
-        </div>
-
-      </a>
-
-
-
-      <a
-        href="calendar-2026.html"
-        class="nav-card nav-calendar"
-      >
-
-        <div class="nav-title">
-          2026 Interactive Calendar
-        </div>
-
-        <div class="nav-desc">
-
-          Browse daily
-          and monthly P&amp;L.
-
-          Saved journal days
-          update automatically.
-
-        </div>
-
-      </a>
-
-
-    </div>
-
-
-  </section>
-
-
-
-  <!-- DAILY WORKFLOW -->
-
-
-  <section class="section card">
-
-
-    <h2>
-      How to Use WASPN Each Trading Day
-    </h2>
-
-
-    <div class="small">
-
-      Use the tools in this order.
-      Not every page needs to be used
-      after every trade.
-
-    </div>
-
-
-
-    <div class="workflow-step">
-
-
-      <div class="step-number">
-        1
+    </a>
+
+    <a href="tilt.html" class="nav-card tilt">
+      <div class="nav-title">Tilt Checklist</div>
+      <div class="nav-desc">
+        Use when urgency, revenge, repeated re-entry or “just one more” appears.
       </div>
+    </a>
+
+    <a href="compliance.html" class="nav-card compliance">
+      <div class="nav-title">Daily Compliance</div>
+      <div class="nav-desc">
+        Save the three structural rules into the daily master record.
+      </div>
+    </a>
+
+    <a href="session-score.html" class="nav-card compliance">
+      <div class="nav-title">Session Score</div>
+      <div class="nav-desc">
+        Compliance is loaded automatically; score the remaining behavioural rules.
+      </div>
+    </a>
+
+    <a href="calendar-2026.html" class="nav-card calendar">
+      <div class="nav-title">2026 Interactive Calendar</div>
+      <div class="nav-desc">
+        Daily P&amp;L plus complete saved WASPN record.
+      </div>
+    </a>
+
+    <a href="data-backup.html" class="nav-card backup">
+      <div class="nav-title">Data Backup</div>
+      <div class="nav-desc">
+        Export or restore the entire local WASPN database.
+      </div>
+    </a>
+
+  </div>
+</section>
 
 
+<section class="card">
+
+  <h2>How to Use WASPN Each Trading Day</h2>
+
+  <div class="workflow">
+
+    <div class="step">
+      <div class="num">1</div>
       <div>
-
-        <div class="workflow-title">
-
-          Before trading —
-          Live Risk Dashboard
-
+        <div class="step-title">Open Live Risk</div>
+        <div class="step-copy">
+          Keep attempts and realised P&amp;L current. The page autosaves.
         </div>
-
-
-        <div class="workflow-copy">
-
-          Open this before the session.
-
-          Start at Attempt 0
-          and $0 realised P&amp;L.
-
-          Keep it as the main
-          live control screen.
-
-        </div>
-
       </div>
-
-
     </div>
 
-
-
-    <div class="workflow-step">
-
-
-      <div class="step-number">
-        2
-      </div>
-
-
+    <div class="step">
+      <div class="num">2</div>
       <div>
-
-        <div class="workflow-title">
-
-          When entering a trade —
-          Trade Duration Warning
-
+        <div class="step-title">Start Trade Duration on entry</div>
+        <div class="step-copy">
+          Reassess at 3, 5 and 10 minutes.
         </div>
-
-
-        <div class="workflow-copy">
-
-          Start the timer
-          when the position is entered.
-
-          Reassess at 3,
-          5 and 10 minutes.
-
-          The purpose is to stop
-          a failed momentum trade
-          quietly becoming
-          a hope trade.
-
-        </div>
-
       </div>
-
-
     </div>
 
-
-
-    <div class="workflow-step">
-
-
-      <div class="step-number">
-        3
-      </div>
-
-
+    <div class="step">
+      <div class="num">3</div>
       <div>
-
-        <div class="workflow-title">
-
-          After the trade —
-          Trading Journal
-
+        <div class="step-title">Record the completed attempt in Journal</div>
+        <div class="step-copy">
+          Use the broker's actual net P&amp;L when available.
         </div>
-
-
-        <div class="workflow-copy">
-
-          Record the completed attempt:
-
-          ticker,
-          entry time,
-          exit time,
-          entry price,
-          exit price,
-          shares,
-          fees,
-          setup,
-          reason for entry,
-          reason for exit,
-          lesson
-          and whether tilt was present.
-
-          Repeat for a maximum
-          of five attempts.
-
-        </div>
-
       </div>
-
-
     </div>
 
-
-
-    <div class="workflow-step">
-
-
-      <div class="step-number">
-        4
-      </div>
-
-
+    <div class="step">
+      <div class="num">4</div>
       <div>
-
-        <div class="workflow-title">
-
-          After a losing trade —
-          Post-Trade Reset
-
+        <div class="step-title">After a meaningful loss, use Post-Trade Reset</div>
+        <div class="step-copy">
+          Do this before deciding on another entry.
         </div>
-
-
-        <div class="workflow-copy">
-
-          Complete this before
-          taking another entry.
-
-          If the next trade
-          is really an attempt
-          to recover the previous loss,
-          take the five-minute stop.
-
-        </div>
-
       </div>
-
-
     </div>
 
-
-
-    <div class="workflow-step">
-
-
-      <div class="step-number">
-        5
-      </div>
-
-
+    <div class="step">
+      <div class="num">5</div>
       <div>
-
-        <div class="workflow-title">
-
-          If mentality changes —
-          Tilt Checklist
-
+        <div class="step-title">Use Tilt Checklist when triggered</div>
+        <div class="step-copy">
+          Any active tilt signal = five-minute stop.
         </div>
-
-
-        <div class="workflow-copy">
-
-          Open this whenever
-          anger,
-          urgency,
-          repeated re-entry,
-          increased size,
-          fixation on daily P&amp;L,
-          or “just one more”
-          appears.
-
-          Any active tilt signal
-          means a five-minute stop.
-
-        </div>
-
       </div>
-
-
     </div>
 
-
-
-    <div class="workflow-step">
-
-
-      <div class="step-number">
-        6
-      </div>
-
-
+    <div class="step">
+      <div class="num">6</div>
       <div>
-
-        <div class="workflow-title">
-
-          Session finished —
-          Save the Journal Day
-
+        <div class="step-title">Save Journal at session end</div>
+        <div class="step-copy">
+          This updates daily P&amp;L and the calendar.
         </div>
-
-
-        <div class="workflow-copy">
-
-          Complete the daily notes
-          and save the day.
-
-          The journal stores
-          Trades 1–5
-          and the calculated daily P&amp;L.
-
-          The saved result
-          is then read automatically
-          by the 2026 calendar
-          on this device.
-
-        </div>
-
       </div>
-
-
     </div>
 
-
-
-    <div class="workflow-step">
-
-
-      <div class="step-number">
-        7
-      </div>
-
-
+    <div class="step">
+      <div class="num">7</div>
       <div>
-
-        <div class="workflow-title">
-
-          End of trading —
-          Daily Compliance
-
+        <div class="step-title">Save Daily Compliance</div>
+        <div class="step-copy">
+          Window, Attempt 5 and -$100 are answered once here.
         </div>
-
-
-        <div class="workflow-copy">
-
-          Answer three questions:
-
-          Did I stay inside
-          the trading window?
-
-          Did I stop by attempt 5?
-
-          Did I respect
-          the -$100 hard stop?
-
-        </div>
-
       </div>
-
-
     </div>
 
-
-
-    <div class="workflow-step">
-
-
-      <div class="step-number">
-        8
-      </div>
-
-
+    <div class="step">
+      <div class="num">8</div>
       <div>
-
-        <div class="workflow-title">
-
-          Final review —
-          Session Score
-
+        <div class="step-title">Complete Session Score</div>
+        <div class="step-copy">
+          The first three answers are imported from Daily Compliance automatically.
         </div>
-
-
-        <div class="workflow-copy">
-
-          Score the session
-          out of five
-          based on process.
-
-          A controlled red day
-          can be a better WASPN day
-          than a green day
-          produced by broken rules.
-
-        </div>
-
       </div>
-
-
     </div>
 
-
-
-    <div class="workflow-step">
-
-
-      <div class="step-number">
-        9
-      </div>
-
-
+    <div class="step">
+      <div class="num">9</div>
       <div>
-
-        <div class="workflow-title">
-
-          Review progress —
-          2026 Interactive Calendar
-
+        <div class="step-title">Review Calendar</div>
+        <div class="step-copy">
+          Review process and P&amp;L together, not one trade in isolation.
         </div>
-
-
-        <div class="workflow-copy">
-
-          Use the calendar
-          to review daily
-          and monthly performance.
-
-          Journal-saved dates
-          are marked with a J.
-
-        </div>
-
       </div>
-
-
     </div>
-
-
-
-    <div class="stop-box">
-
-      SESSION ENDS:
-
-      Attempt 5,
-      realised P&amp;L at -$100,
-      or the end of the allowed trading window.
-
-      No reopening later.
-
-    </div>
-
-
-  </section>
-
-
-
-  <!-- CORE STRUCTURE -->
-
-
-  <section class="section card">
-
-
-    <h2>
-      Core WASPN Structure
-    </h2>
-
-
-    <div class="rule">
-
-      <strong>
-        6:30–7:00 AM ET
-      </strong>
-
-      <br>
-
-      Preliminary monitoring window only.
-
-      Trade only if the setup
-      is unusually strong.
-
-    </div>
-
-
-    <div class="rule">
-
-      <strong>
-        9:00–11:00 AM ET
-      </strong>
-
-      <br>
-
-      Primary trading
-      and study window.
-
-    </div>
-
-
-    <div class="rule">
-
-      <strong>
-        Maximum 5 completed attempts
-      </strong>
-
-      <br>
-
-      Attempt 5 ends the session.
-
-      No reopening later.
-
-    </div>
-
-
-    <div class="rule">
-
-      <strong>
-        Hard realised loss stop:
-        -$100
-      </strong>
-
-      <br>
-
-      Once reached,
-      the session is over.
-
-      No recovery trading.
-
-    </div>
-
-
-    <div class="rule">
-
-      <strong>
-        Green-day objective:
-        +$50
-      </strong>
-
-      <br>
-
-      A successful day.
-
-      Not a reason
-      to force more trades.
-
-    </div>
-
-
-  </section>
-
-
-
-  <!-- DATA -->
-
-
-  <section class="section">
-
-
-    <div class="grid">
-
-
-      <div class="card">
-
-        <div class="label">
-          7–9 AM ET — Full 2026
-        </div>
-
-        <div class="value red">
-          -$3,323.15
-        </div>
-
-        <div class="small">
-
-          318 trades
-
-          <br>
-
-          Average:
-          -$10.45 per trade
-
-          <br>
-
-          Win rate:
-          46.2%
-
-        </div>
-
-      </div>
-
-
-
-      <div class="card">
-
-        <div class="label">
-
-          9–11 AM ET —
-          Attempts 1–5
-
-        </div>
-
-        <div class="value green">
-          +$343.08
-        </div>
-
-        <div class="small">
-
-          38 trades
-
-          <br>
-
-          Average:
-          +$9.03 per trade
-
-          <br>
-
-          Win rate:
-          50.0%
-
-        </div>
-
-      </div>
-
-
-
-      <div class="card">
-
-        <div class="label">
-          9:00–9:30 AM ET
-        </div>
-
-        <div class="value green">
-          +$544.11
-        </div>
-
-        <div class="small">
-
-          51 trades
-
-          <br>
-
-          Average:
-          +$10.67 per trade
-
-          <br>
-
-          Win rate:
-          62.7%
-
-        </div>
-
-      </div>
-
-
-
-      <div class="card">
-
-        <div class="label">
-
-          October Through
-          23 Oct 2026
-
-        </div>
-
-        <div class="value red">
-          -$1,447.99
-        </div>
-
-        <div class="small">
-
-          Big red days
-          dominated the month.
-
-        </div>
-
-      </div>
-
-
-    </div>
-
-
-  </section>
-
-
-
-  <!-- WHY -->
-
-
-  <section class="section card">
-
-
-    <h2>
-      Why the Structure Changed
-    </h2>
-
-
-    <p class="small">
-
-      The 2026 data shows
-      that time-of-day
-      and attempt count
-      matter together.
-
-      Trading from
-      7–9 AM ET
-      was materially negative,
-      while the first five attempts
-      inside the 9–11 AM ET window
-      were positive in the sample.
-
-    </p>
-
-
-    <p class="small">
-
-      The main problem
-      has not been
-      a lack of winning trades.
-
-      It has been allowing
-      a small number
-      of losing sessions
-      to expand into
-      catastrophic red days.
-
-    </p>
-
-
-  </section>
-
-
-
-  <!-- OCTOBER -->
-
-
-  <section class="section card">
-
-
-    <h2>
-      October Lesson
-    </h2>
-
-
-    <p class="small">
-
-      Three major red days —
-      5 October,
-      15 October
-      and 22 October —
-
-      accounted for approximately
-
-      <strong>
-        -$2,017.15
-      </strong>
-
-      combined.
-
-    </p>
-
-
-    <p class="small">
-
-      The other October sessions
-      through 23 October
-      combined were approximately
-
-      <strong class="green">
-        +$569.16
-      </strong>.
-
-    </p>
-
-
-    <p class="small">
-
-      WASPN therefore
-      does not need
-      bigger home runs.
-
-      It needs fewer
-      catastrophic continuation
-      sessions.
-
-    </p>
-
-
-  </section>
-
-
-
-  <!-- OCTOBER CALENDAR -->
-
-
-  <section class="section card">
-
-
-    <h2>
-      October 2026 Calendar
-    </h2>
-
-
-    <div class="calendar">
-
-
-      <div class="weekday">
-        Mon
-      </div>
-
-      <div class="weekday">
-        Tue
-      </div>
-
-      <div class="weekday">
-        Wed
-      </div>
-
-      <div class="weekday">
-        Thu
-      </div>
-
-      <div class="weekday">
-        Fri
-      </div>
-
-
-
-      <div class="day"></div>
-      <div class="day"></div>
-      <div class="day"></div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          1 Oct
-        </div>
-
-        <div class="pnl green">
-          +$39.76
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          2 Oct
-        </div>
-
-        <div class="pnl red">
-          -$19.49
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          5 Oct
-        </div>
-
-        <div class="pnl red">
-          -$509.05
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          6 Oct
-        </div>
-
-        <div class="pnl green">
-          +$176.03
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          7 Oct
-        </div>
-
-        <div class="pnl green">
-          +$48.84
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          8 Oct
-        </div>
-
-        <div class="pnl red">
-          -$142.03
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          9 Oct
-        </div>
-
-        <div class="pnl red">
-          -$86.05
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          12 Oct
-        </div>
-
-        <div class="pnl green">
-          +$293.19
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          13 Oct
-        </div>
-
-        <div class="pnl green">
-          +$339.95
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          14 Oct
-        </div>
-
-        <div class="pnl green">
-          +$122.73
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          15 Oct
-        </div>
-
-        <div class="pnl red">
-          -$908.32
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          16 Oct
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          19 Oct
-        </div>
-
-        <div class="pnl red">
-          -$2.53
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          20 Oct
-        </div>
-
-        <div class="pnl red">
-          -$74.58
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          21 Oct
-        </div>
-
-        <div class="pnl red">
-          -$31.44
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          22 Oct
-        </div>
-
-        <div class="pnl red">
-          -$599.78
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          23 Oct
-        </div>
-
-        <div class="pnl red">
-          -$95.22
-        </div>
-
-      </div>
-
-
-
-      <div class="day">
-
-        <div class="date">
-          26 Oct
-        </div>
-
-      </div>
-
-
-      <div class="day">
-
-        <div class="date">
-          27 Oct
-        </div>
-
-      </div>
-
-
-      <div class="day">
-
-        <div class="date">
-          28 Oct
-        </div>
-
-      </div>
-
-
-      <div class="day">
-
-        <div class="date">
-          29 Oct
-        </div>
-
-      </div>
-
-
-      <div class="day">
-
-        <div class="date">
-          30 Oct
-        </div>
-
-      </div>
-
-
-    </div>
-
-
-  </section>
-
-
-
-  <!-- MONTH END -->
-
-
-  <section class="section card">
-
-
-    <h2>
-      Month-End Objective
-    </h2>
-
-
-    <div class="grid">
-
-
-      <div>
-
-        <div class="label">
-          Current October P&amp;L
-        </div>
-
-        <div class="value red">
-          -$1,447.99
-        </div>
-
-      </div>
-
-
-
-      <div>
-
-        <div class="label">
-          October Finish Goal
-        </div>
-
-        <div class="value amber">
-          ≈ -$1,200
-        </div>
-
-      </div>
-
-
-    </div>
-
-
-    <p class="small">
-
-      Five +$50 green days
-      would add approximately
-      +$250
-
-      and bring October
-      to roughly
-
-      -$1,197.99.
-
-      The objective is
-      to finish the month
-      cleanly,
-
-      not force a recovery.
-
-    </p>
-
-
-  </section>
-
-
-
-  <!-- NOVEMBER -->
-
-
-  <section class="section card">
-
-
-    <h2>
-      November Mission
-    </h2>
-
-
-    <p class="small">
-
-      November is the first opportunity
-      to test WASPN
-      from day one
-      under the complete structure:
-
-    </p>
-
-
-    <div class="rule">
-
-      Protect the downside.
-
-    </div>
-
-
-    <div class="rule">
-
-      Respect the
-      5-attempt limit.
-
-    </div>
-
-
-    <div class="rule">
-
-      Trade primarily
-      between
-      9–11 AM ET.
-
-    </div>
-
-
-    <div class="rule">
-
-      Treat +$50
-      as enough.
-
-    </div>
-
-
-    <div class="rule">
-
-      Do not allow
-      one bad session
-      to define the month.
-
-    </div>
-
-
-  </section>
-
-
-
-  <div class="footer">
-
-    WASPN • 2026 Data-Backed Trading Framework
 
   </div>
 
+  <div class="stop">
+    SESSION ENDS AT ATTEMPT 5, -$100 REALISED, OR 11:00 AM ET.
+    NO REOPENING LATER.
+  </div>
+
+</section>
+
+
+<section class="card">
+  <h2>Core Structure</h2>
+
+  <div class="muted">
+    <strong>6:30–7:00 AM ET:</strong> preliminary monitoring / exceptional setup only.
+    <br><br>
+    <strong>9:00–11:00 AM ET:</strong> primary trading and study window.
+    <br><br>
+    <strong>-$75:</strong> warning state — five-minute step-away.
+    <br><br>
+    <strong>-$100:</strong> hard realised-loss stop.
+    <br><br>
+    <strong>Attempt 5:</strong> session finished.
+  </div>
+</section>
+
+
+<div class="footer">
+  WASPN • Process Over Recovery
+</div>
 
 </div>
 
 
-</body>
+<script>
+const STORAGE_KEY = "waspnJournalV2";
 
+function getJournal(){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  }catch{
+    return {};
+  }
+}
+
+function todayKey(){
+  const now = new Date();
+
+  const parts = new Intl.DateTimeFormat(
+    "en-GB",
+    {
+      timeZone:"America/New_York",
+      year:"numeric",
+      month:"2-digit",
+      day:"2-digit"
+    }
+  ).formatToParts(now);
+
+  const d = {};
+
+  parts.forEach(p=>{
+    if(p.type !== "literal") d[p.type] = p.value;
+  });
+
+  return `${d.year}-${d.month}-${d.day}`;
+}
+
+function money(v){
+  const n = Number(v || 0);
+  if(n > 0) return "+$" + n.toFixed(2);
+  if(n < 0) return "-$" + Math.abs(n).toFixed(2);
+  return "$0.00";
+}
+
+function renderToday(){
+  const day = getJournal()[todayKey()] || {};
+
+  document.getElementById("todayTrades").textContent =
+    Array.isArray(day.trades) ? day.trades.length : 0;
+
+  const pnl = document.getElementById("todayPnl");
+
+  if(typeof day.totalNet === "number"){
+    pnl.textContent = money(day.totalNet);
+    pnl.className = "value " + (day.totalNet >= 0 ? "green" : "red");
+  }else{
+    pnl.textContent = "—";
+    pnl.className = "value";
+  }
+
+  document.getElementById("todayCompliance").textContent =
+    day.compliance && typeof day.compliance.score === "number"
+      ? day.compliance.score + "/3"
+      : "—";
+
+  document.getElementById("todayScore").textContent =
+    day.sessionScore && typeof day.sessionScore.score === "number"
+      ? day.sessionScore.score + "/5"
+      : "—";
+}
+
+renderToday();
+
+window.addEventListener("storage",renderToday);
+</script>
+
+</body>
 </html>
