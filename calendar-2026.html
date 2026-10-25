@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>WASPN 2026 Calendar</title>
 
   <style>
@@ -42,6 +43,13 @@
       align-items:center;
       gap:10px;
       margin-bottom:14px;
+      flex-wrap:wrap;
+    }
+
+    .topbar-actions {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
     }
 
     .btn,
@@ -125,10 +133,21 @@
       margin-top:5px;
     }
 
-    .green { color:var(--green); }
-    .red { color:var(--red); }
-    .blue { color:var(--blue); }
-    .amber { color:var(--amber); }
+    .green {
+      color:var(--green);
+    }
+
+    .red {
+      color:var(--red);
+    }
+
+    .blue {
+      color:var(--blue);
+    }
+
+    .amber {
+      color:var(--amber);
+    }
 
     .calendar {
       display:grid;
@@ -174,6 +193,16 @@
       background:#231317;
     }
 
+    .day.saved-day::after {
+      content:"J";
+      position:absolute;
+      top:6px;
+      right:7px;
+      color:var(--blue);
+      font-weight:900;
+      font-size:11px;
+    }
+
     .date {
       color:var(--muted);
       font-size:12px;
@@ -198,6 +227,21 @@
     .detail-title {
       font-size:18px;
       font-weight:800;
+    }
+
+    .detail-trades {
+      margin-top:14px;
+      display:grid;
+      gap:8px;
+    }
+
+    .detail-trade {
+      background:var(--panel2);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:10px;
+      font-size:13px;
+      line-height:1.5;
     }
 
     .month-buttons {
@@ -227,6 +271,15 @@
       grid-template-columns:repeat(2,1fr);
       gap:10px;
       margin-top:14px;
+    }
+
+    .legend {
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:14px;
+      font-size:12px;
+      color:var(--muted);
     }
 
     @media(max-width:600px) {
@@ -273,17 +326,38 @@
 <div class="wrap">
 
   <div class="topbar">
-    <a href="index.html" class="btn">← Home</a>
+
+    <a href="index.html" class="btn">
+      ← Home
+    </a>
+
+    <div class="topbar-actions">
+
+      <a href="journal.html" class="btn">
+        Trading Journal
+      </a>
+
+    </div>
+
   </div>
 
+
   <section class="hero">
-    <div class="muted">WASPN • Full Trading History</div>
-    <h1>2026 Interactive Calendar</h1>
+
     <div class="muted">
-      Full broker-history calendar through 23 October 2026.
-      Tap any trading day to inspect its result.
+      WASPN • Full Trading History
     </div>
+
+    <h1>2026 Interactive Calendar</h1>
+
+    <div class="muted">
+      Broker-history calendar plus journal-saved days.
+      Journal entries automatically override the historical value
+      for that date on this device.
+    </div>
+
   </section>
+
 
   <section class="card">
 
@@ -303,7 +377,9 @@
 
     </div>
 
+
     <div class="month-buttons" id="monthButtons"></div>
+
 
     <div class="stats">
 
@@ -339,6 +415,24 @@
 
     </div>
 
+
+    <div class="legend">
+
+      <span>
+        Green = profitable day
+      </span>
+
+      <span>
+        Red = losing day
+      </span>
+
+      <span>
+        J = saved journal entry
+      </span>
+
+    </div>
+
+
     <div class="calendar">
 
       <div class="weekday">Mon</div>
@@ -351,13 +445,17 @@
 
     </div>
 
+
     <div class="detail" id="detail">
+
       <div class="muted">
         Tap a trading day to see its result.
       </div>
+
     </div>
 
   </section>
+
 
   <section class="card">
 
@@ -366,23 +464,23 @@
     <div class="year-summary">
 
       <div class="stat">
-        <div class="label">Net P&amp;L</div>
-        <div class="value red">-$9,403.62</div>
+        <div class="label">Combined Net P&amp;L</div>
+        <div class="value" id="yearPnl">—</div>
       </div>
 
       <div class="stat">
         <div class="label">Trading Days</div>
-        <div class="value">79</div>
+        <div class="value" id="yearDays">—</div>
       </div>
 
       <div class="stat">
-        <div class="label">First Trading Day</div>
-        <div class="value blue">30 Jun</div>
+        <div class="label">Green Days</div>
+        <div class="value green" id="yearGreen">—</div>
       </div>
 
       <div class="stat">
-        <div class="label">Latest Data</div>
-        <div class="value blue">23 Oct</div>
+        <div class="label">Red Days</div>
+        <div class="value red" id="yearRed">—</div>
       </div>
 
     </div>
@@ -391,7 +489,12 @@
 
 </div>
 
+
 <script>
+
+const JOURNAL_KEY =
+  "waspnJournalV2";
+
 
 const tradingData = {
 
@@ -481,6 +584,7 @@ const tradingData = {
 
 };
 
+
 const monthNames = [
   "January",
   "February",
@@ -496,89 +600,177 @@ const monthNames = [
   "December"
 ];
 
+
 let currentMonth = 9;
+
+
+function getSavedJournal() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(
+        JOURNAL_KEY
+      )
+    ) || {};
+
+  } catch(error) {
+
+    return {};
+
+  }
+
+}
+
+
+function getCombinedTradingData() {
+
+  const combined = {
+    ...tradingData
+  };
+
+  const journal =
+    getSavedJournal();
+
+  Object.keys(journal)
+    .forEach(date => {
+
+      const day =
+        journal[date];
+
+      if(
+        day &&
+        typeof day.totalNet === "number"
+      ) {
+
+        combined[date] =
+          day.totalNet;
+
+      }
+
+    });
+
+  return combined;
+
+}
+
 
 function money(value) {
 
-  if (value > 0) {
-    return "+$" + value.toFixed(2);
+  const n =
+    Number(value || 0);
+
+  if(n > 0) {
+    return "+$" + n.toFixed(2);
   }
 
-  if (value < 0) {
-    return "-$" + Math.abs(value).toFixed(2);
+  if(n < 0) {
+    return "-$" + Math.abs(n).toFixed(2);
   }
 
   return "$0.00";
+
 }
 
-function dateKey(year, month, day) {
+
+function dateKey(year,month,day) {
 
   return (
     year +
     "-" +
-    String(month + 1).padStart(2, "0") +
+    String(month + 1)
+      .padStart(2,"0") +
     "-" +
-    String(day).padStart(2, "0")
+    String(day)
+      .padStart(2,"0")
   );
+
 }
+
 
 function getMonthData(month) {
 
   const prefix =
     "2026-" +
-    String(month + 1).padStart(2, "0");
+    String(month + 1)
+      .padStart(2,"0");
 
-  return Object.entries(tradingData)
-    .filter(([date]) =>
-      date.startsWith(prefix)
+  const data =
+    getCombinedTradingData();
+
+  return Object.entries(data)
+    .filter(
+      ([date]) =>
+        date.startsWith(prefix)
     );
+
 }
+
 
 function updateStats(month) {
 
   const entries =
     getMonthData(month);
 
-  if (entries.length === 0) {
+  const monthPnl =
+    document.getElementById(
+      "monthPnl"
+    );
 
-    document.getElementById("monthPnl").textContent =
+  if(entries.length === 0) {
+
+    monthPnl.textContent =
       "No data";
 
-    document.getElementById("monthPnl").className =
+    monthPnl.className =
       "value";
 
-    document.getElementById("tradingDays").textContent =
-      "0";
+    document.getElementById(
+      "tradingDays"
+    ).textContent = "0";
 
-    document.getElementById("greenDays").textContent =
-      "0";
+    document.getElementById(
+      "greenDays"
+    ).textContent = "0";
 
-    document.getElementById("redDays").textContent =
-      "0";
+    document.getElementById(
+      "redDays"
+    ).textContent = "0";
 
-    document.getElementById("bestDay").textContent =
-      "—";
+    document.getElementById(
+      "bestDay"
+    ).textContent = "—";
 
-    document.getElementById("worstDay").textContent =
-      "—";
+    document.getElementById(
+      "worstDay"
+    ).textContent = "—";
 
     return;
+
   }
 
+
   const values =
-    entries.map(entry => entry[1]);
+    entries.map(
+      entry => entry[1]
+    );
 
   const total =
     values.reduce(
-      (sum,value) => sum + value,
+      (sum,value) =>
+        sum + value,
       0
     );
 
   const green =
-    values.filter(value => value > 0).length;
+    values.filter(
+      value => value > 0
+    ).length;
 
   const red =
-    values.filter(value => value < 0).length;
+    values.filter(
+      value => value < 0
+    ).length;
 
   const bestEntry =
     entries.reduce(
@@ -596,8 +788,6 @@ function updateStats(month) {
           : worst
     );
 
-  const monthPnl =
-    document.getElementById("monthPnl");
 
   monthPnl.textContent =
     money(total);
@@ -607,45 +797,142 @@ function updateStats(month) {
       ? "value green"
       : "value red";
 
-  document.getElementById("tradingDays").textContent =
+
+  document.getElementById(
+    "tradingDays"
+  ).textContent =
     entries.length;
 
-  document.getElementById("greenDays").textContent =
+
+  document.getElementById(
+    "greenDays"
+  ).textContent =
     green;
 
-  document.getElementById("redDays").textContent =
+
+  document.getElementById(
+    "redDays"
+  ).textContent =
     red;
 
-  document.getElementById("bestDay").textContent =
+
+  document.getElementById(
+    "bestDay"
+  ).textContent =
     money(bestEntry[1]);
 
-  document.getElementById("worstDay").textContent =
+
+  document.getElementById(
+    "worstDay"
+  ).textContent =
     money(worstEntry[1]);
+
 }
+
+
+function updateYearStats() {
+
+  const entries =
+    Object.entries(
+      getCombinedTradingData()
+    );
+
+  const values =
+    entries.map(
+      entry => entry[1]
+    );
+
+  const total =
+    values.reduce(
+      (sum,value) =>
+        sum + value,
+      0
+    );
+
+  const green =
+    values.filter(
+      value => value > 0
+    ).length;
+
+  const red =
+    values.filter(
+      value => value < 0
+    ).length;
+
+
+  const yearPnl =
+    document.getElementById(
+      "yearPnl"
+    );
+
+  yearPnl.textContent =
+    money(total);
+
+  yearPnl.className =
+    total >= 0
+      ? "value green"
+      : "value red";
+
+
+  document.getElementById(
+    "yearDays"
+  ).textContent =
+    entries.length;
+
+
+  document.getElementById(
+    "yearGreen"
+  ).textContent =
+    green;
+
+
+  document.getElementById(
+    "yearRed"
+  ).textContent =
+    red;
+
+}
+
 
 function renderCalendar() {
 
-  document.getElementById("monthTitle").textContent =
+  document.getElementById(
+    "monthTitle"
+  ).textContent =
     monthNames[currentMonth] +
     " 2026";
 
-  updateStats(currentMonth);
+
+  updateStats(
+    currentMonth
+  );
+
+  updateYearStats();
+
 
   document
-    .querySelectorAll(".month-jump")
-    .forEach((button,index) => {
+    .querySelectorAll(
+      ".month-jump"
+    )
+    .forEach(
+      (button,index) => {
 
-      button.classList.toggle(
-        "active",
-        index === currentMonth
-      );
+        button.classList.toggle(
+          "active",
+          index === currentMonth
+        );
 
-    });
+      }
+    );
+
 
   const container =
-    document.getElementById("calendarDays");
+    document.getElementById(
+      "calendarDays"
+    );
 
   container.innerHTML = "";
+
 
   const first =
     new Date(
@@ -654,12 +941,14 @@ function renderCalendar() {
       1
     );
 
+
   const daysInMonth =
     new Date(
       2026,
       currentMonth + 1,
       0
     ).getDate();
+
 
   let weekday =
     first.getDay();
@@ -669,29 +958,45 @@ function renderCalendar() {
       ? 7
       : weekday;
 
+
   let mondayIndex =
     weekday - 1;
 
-  if (mondayIndex > 4) {
+
+  if(mondayIndex > 4) {
     mondayIndex = 0;
   }
 
-  for (
+
+  for(
     let i = 0;
     i < mondayIndex;
     i++
   ) {
 
     const empty =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     empty.className =
       "day empty";
 
-    container.appendChild(empty);
+    container.appendChild(
+      empty
+    );
+
   }
 
-  for (
+
+  const combinedData =
+    getCombinedTradingData();
+
+  const journal =
+    getSavedJournal();
+
+
+  for(
     let day = 1;
     day <= daysInMonth;
     day++
@@ -704,15 +1009,18 @@ function renderCalendar() {
         day
       );
 
+
     const jsDay =
       date.getDay();
 
-    if (
+
+    if(
       jsDay === 0 ||
       jsDay === 6
     ) {
       continue;
     }
+
 
     const key =
       dateKey(
@@ -721,64 +1029,92 @@ function renderCalendar() {
         day
       );
 
+
     const value =
-      tradingData[key];
+      combinedData[key];
+
 
     const cell =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     cell.className =
       "day";
 
-    if (
+
+    if(
       typeof value === "number"
     ) {
 
-      if (value > 0) {
+      if(value > 0) {
+
         cell.classList.add(
           "green-day"
         );
+
       }
 
-      else if (value < 0) {
+      else if(value < 0) {
+
         cell.classList.add(
           "red-day"
         );
+
       }
 
     }
 
-    else {
 
-      if (
-        key > "2026-10-23"
-      ) {
-        cell.classList.add(
-          "future"
-        );
-      }
+    if(journal[key]) {
+
+      cell.classList.add(
+        "saved-day"
+      );
 
     }
+
+
+    if(
+      typeof value !== "number" &&
+      key > "2026-10-23"
+    ) {
+
+      cell.classList.add(
+        "future"
+      );
+
+    }
+
 
     const dateEl =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     dateEl.className =
       "date";
 
     dateEl.textContent =
       day + " " +
-      monthNames[currentMonth].slice(0,3);
+      monthNames[currentMonth]
+        .slice(0,3);
 
-    cell.appendChild(dateEl);
+    cell.appendChild(
+      dateEl
+    );
+
 
     const pnl =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     pnl.className =
       "pnl";
 
-    if (
+
+    if(
       typeof value === "number"
     ) {
 
@@ -801,11 +1137,16 @@ function renderCalendar() {
       pnl.classList.add(
         "muted"
       );
+
     }
 
-    cell.appendChild(pnl);
 
-    if (
+    cell.appendChild(
+      pnl
+    );
+
+
+    if(
       typeof value === "number"
     ) {
 
@@ -820,9 +1161,15 @@ function renderCalendar() {
 
     }
 
-    container.appendChild(cell);
+
+    container.appendChild(
+      cell
+    );
+
   }
+
 }
+
 
 function showDetail(date,value) {
 
@@ -830,6 +1177,7 @@ function showDetail(date,value) {
     new Date(
       date + "T12:00:00"
     );
+
 
   const formatted =
     d.toLocaleDateString(
@@ -842,19 +1190,124 @@ function showDetail(date,value) {
       }
     );
 
-  const detail =
-    document.getElementById("detail");
 
-  detail.innerHTML =
-    '<div class="detail-title">' +
-    formatted +
-    '</div>' +
-    '<div class="' +
-    (value >= 0 ? "green" : "red") +
-    '" style="font-size:30px;font-weight:900;margin-top:8px;">' +
-    money(value) +
-    '</div>';
+  const journal =
+    getSavedJournal();
+
+  const saved =
+    journal[date];
+
+
+  let extra = "";
+
+
+  if(saved) {
+
+    const trades =
+      saved.trades || [];
+
+
+    let tradeHtml = "";
+
+
+    trades.forEach(
+      (trade,index) => {
+
+        tradeHtml += `
+
+          <div class="detail-trade">
+
+            <strong>
+              Trade ${index + 1}
+              ${trade.ticker ? " • " + trade.ticker : ""}
+            </strong>
+
+            <br>
+
+            ${trade.side || ""}
+
+            ${trade.entryTime
+              ? " • Entry " + trade.entryTime
+              : ""
+            }
+
+            ${trade.exitTime
+              ? " • Exit " + trade.exitTime
+              : ""
+            }
+
+            <br>
+
+            Net:
+            <strong class="${trade.netPnl >= 0 ? "green" : "red"}">
+              ${money(trade.netPnl)}
+            </strong>
+
+            ${trade.setup
+              ? "<br>Setup: " + trade.setup
+              : ""
+            }
+
+          </div>
+
+        `;
+
+      }
+    );
+
+
+    extra = `
+
+      <div class="muted" style="margin-top:10px;">
+        Saved from Trading Journal
+      </div>
+
+      <div class="detail-trades">
+        ${tradeHtml || '<div class="muted">No trade details saved.</div>'}
+      </div>
+
+      ${
+        saved.notes
+          ? '<div class="muted" style="margin-top:12px;"><strong>Daily notes:</strong><br>' +
+            saved.notes +
+            '</div>'
+          : ""
+      }
+
+    `;
+
+  }
+
+
+  const detail =
+    document.getElementById(
+      "detail"
+    );
+
+
+  detail.innerHTML = `
+
+    <div class="detail-title">
+      ${formatted}
+    </div>
+
+    <div
+      class="${value >= 0 ? "green" : "red"}"
+      style="
+        font-size:30px;
+        font-weight:900;
+        margin-top:8px;
+      "
+    >
+      ${money(value)}
+    </div>
+
+    ${extra}
+
+  `;
+
 }
+
 
 function buildMonthButtons() {
 
@@ -862,6 +1315,7 @@ function buildMonthButtons() {
     document.getElementById(
       "monthButtons"
     );
+
 
   monthNames.forEach(
     (month,index) => {
@@ -877,6 +1331,7 @@ function buildMonthButtons() {
       button.textContent =
         month.slice(0,3);
 
+
       button.addEventListener(
         "click",
         () => {
@@ -889,15 +1344,21 @@ function buildMonthButtons() {
         }
       );
 
+
       holder.appendChild(
         button
       );
+
     }
   );
+
 }
 
+
 document
-  .getElementById("prevBtn")
+  .getElementById(
+    "prevBtn"
+  )
   .addEventListener(
     "click",
     () => {
@@ -912,8 +1373,11 @@ document
     }
   );
 
+
 document
-  .getElementById("nextBtn")
+  .getElementById(
+    "nextBtn"
+  )
   .addEventListener(
     "click",
     () => {
@@ -927,6 +1391,13 @@ document
 
     }
   );
+
+
+window.addEventListener(
+  "storage",
+  renderCalendar
+);
+
 
 buildMonthButtons();
 renderCalendar();
