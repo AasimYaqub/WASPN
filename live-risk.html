@@ -1,1410 +1,692 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>WASPN Live Risk</title>
 
-  <title>WASPN Live Risk Dashboard</title>
+<style>
+:root{
+  --bg:#0b0f14;
+  --panel:#121820;
+  --panel2:#171f29;
+  --border:#293342;
+  --text:#e8eef6;
+  --muted:#8e9aaa;
+  --green:#35d07f;
+  --red:#ff5f6d;
+  --amber:#f3b84b;
+  --blue:#63a7ff;
+}
 
-  <style>
-    :root {
-      --bg:#0b0f14;
-      --panel:#121820;
-      --border:#293342;
-      --text:#e8eef6;
-      --muted:#8e9aaa;
-      --green:#35d07f;
-      --red:#ff5f6d;
-      --amber:#f3b84b;
-      --blue:#63a7ff;
-    }
+*{box-sizing:border-box}
 
-    * {
-      box-sizing:border-box;
-    }
+body{
+  margin:0;
+  background:linear-gradient(180deg,#090d12,#0d131a);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
 
-    body {
-      margin:0;
-      background:linear-gradient(180deg,#090d12,#0d131a);
-      color:var(--text);
-      font-family:Arial,Helvetica,sans-serif;
-    }
+.wrap{
+  max-width:840px;
+  margin:auto;
+  padding:18px;
+}
 
-    .wrap {
-      max-width:820px;
-      margin:0 auto;
-      padding:20px;
-    }
+.top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
 
-    .top {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:14px;
-    }
+.btn,a.btn{
+  border:0;
+  background:#293342;
+  color:white;
+  padding:11px 14px;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:700;
+  cursor:pointer;
+}
 
-    .btn,
-    a.btn {
-      background:#293342;
-      color:white;
-      border:0;
-      border-radius:10px;
-      padding:11px 14px;
-      font-weight:700;
-      text-decoration:none;
-      cursor:pointer;
-    }
+.reset{background:#5b2630}
 
-    .reset-btn {
-      background:#5b2630;
-    }
+.hero,.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+}
 
-    .hero,
-    .card {
-      background:var(--panel);
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:20px;
-    }
+.card{margin-top:14px}
 
-    .card {
-      margin-top:16px;
-    }
+h1{
+  color:var(--blue);
+  font-size:40px;
+  margin:4px 0 7px;
+}
 
-    h1 {
-      margin:4px 0 6px;
-      color:var(--blue);
-      font-size:40px;
-    }
+.muted{
+  color:var(--muted);
+  line-height:1.5;
+}
 
-    .muted {
-      color:var(--muted);
-      line-height:1.5;
-    }
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
 
-    .grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-      gap:12px;
-    }
+.metric{
+  text-align:center;
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:14px;
+}
 
-    .metric {
-      text-align:center;
-    }
+.label{
+  color:var(--muted);
+  text-transform:uppercase;
+  font-size:11px;
+  font-weight:700;
+}
 
-    .label {
-      font-size:12px;
-      color:var(--muted);
-      text-transform:uppercase;
-      font-weight:700;
-    }
+.value{
+  font-size:35px;
+  font-weight:900;
+  margin-top:7px;
+}
 
-    .value {
-      font-size:36px;
-      font-weight:900;
-      margin-top:8px;
-    }
+.controls{
+  display:flex;
+  justify-content:center;
+  gap:9px;
+  margin-top:10px;
+}
 
-    .controls {
-      display:flex;
-      gap:10px;
-      justify-content:center;
-      flex-wrap:wrap;
-      margin-top:12px;
-    }
+input[type="number"]{
+  width:150px;
+  padding:10px;
+  background:#0d131a;
+  border:1px solid var(--border);
+  border-radius:9px;
+  color:white;
+  font-size:21px;
+  text-align:center;
+}
 
-    input[type="number"] {
-      width:150px;
-      background:#0d131a;
-      color:white;
-      border:1px solid var(--border);
-      border-radius:10px;
-      padding:12px;
-      font-size:22px;
-      text-align:center;
-    }
+.switch{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  font-weight:900;
+}
 
-    .status {
-      margin-top:16px;
-      border-radius:16px;
-      padding:18px;
-      text-align:center;
-      font-weight:900;
-      font-size:28px;
-    }
+.switch input{
+  width:24px;
+  height:24px;
+  accent-color:var(--red);
+}
 
-    .ok {
-      background:#102018;
-      border:1px solid #275c3e;
-      color:var(--green);
-    }
+.status{
+  margin-top:14px;
+  border-radius:15px;
+  padding:18px;
+  text-align:center;
+  font-weight:900;
+  font-size:26px;
+}
 
-    .warn {
-      background:#251d0f;
-      border:1px solid #6b5125;
-      color:var(--amber);
-    }
+.ok{
+  color:var(--green);
+  background:#102018;
+  border:1px solid #275c3e;
+}
 
-    .stop {
-      background:#261216;
-      border:1px solid #702c39;
-      color:var(--red);
-    }
+.warn{
+  color:var(--amber);
+  background:#251d0f;
+  border:1px solid #6b5125;
+}
 
-    .small {
-      font-size:13px;
-      color:var(--muted);
-      line-height:1.5;
-    }
+.stop{
+  color:var(--red);
+  background:#261216;
+  border:1px solid #702c39;
+}
 
-    .switch {
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      font-weight:700;
-    }
+.summary{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
 
-    .switch input {
-      width:24px;
-      height:24px;
-      accent-color:var(--red);
-    }
+.summary-item{
+  background:#0d131a;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:11px;
+}
 
-    .time-box {
-      margin-top:16px;
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:10px;
-    }
+.small{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+}
 
-    .time-item {
-      background:#0d131a;
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:14px;
-      text-align:center;
-    }
+.save-state{
+  margin-top:12px;
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+}
 
-    .time-main {
-      font-size:24px;
-      font-weight:900;
-      margin-top:5px;
-    }
-
-    .save-state {
-      margin-top:16px;
-      padding:12px;
-      background:#0d131a;
-      border:1px solid var(--border);
-      border-radius:12px;
-      text-align:center;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.5;
-    }
-
-    .saved {
-      color:var(--green);
-    }
-
-    @media(max-width:600px) {
-
-      .wrap {
-        padding:12px;
-      }
-
-      .hero,
-      .card {
-        padding:16px;
-      }
-
-      .time-box {
-        grid-template-columns:1fr;
-      }
-
-      h1 {
-        font-size:34px;
-      }
-
-    }
-  </style>
+@media(max-width:620px){
+  .wrap{padding:12px}
+  .hero,.card{padding:16px}
+  .grid{grid-template-columns:1fr}
+  .summary{grid-template-columns:1fr 1fr}
+}
+</style>
 </head>
 
 <body>
-
 <div class="wrap">
 
-  <div class="top">
+<div class="top">
+  <a href="index.html" class="btn">← Home</a>
 
-    <a class="btn" href="index.html">
-      ← Home
-    </a>
-
-    <button
-      class="btn reset-btn"
-      id="resetBtn"
-    >
-      Reset Today
-    </button>
-
+  <div>
+    <a href="journal.html" class="btn">Journal</a>
+    <button id="resetBtn" class="btn reset">Reset Today</button>
   </div>
+</div>
 
 
-  <section class="hero">
-
-    <div class="muted">
-      WASPN • Live Trading Control
-    </div>
-
-    <h1>Live Risk Dashboard</h1>
-
-    <div class="muted">
-      Session timing is controlled by New York time.
-      Live risk state is saved automatically for the current trading day.
-    </div>
-
-  </section>
+<section class="hero">
+  <div class="muted">WASPN • Live Trading Control</div>
+  <h1>Live Risk</h1>
+  <div class="muted">
+    New York time controls the session. Live state autosaves into today's master record.
+  </div>
+</section>
 
 
-  <section class="card grid">
+<section class="card">
+
+  <div class="grid">
 
     <div class="metric">
-
-      <div class="label">
-        UK Time
-      </div>
-
-      <div
-        class="value"
-        id="ukTime"
-      >
-        --:--
-      </div>
-
+      <div class="label">UK Time</div>
+      <div id="ukTime" class="value">--:--</div>
     </div>
 
-
     <div class="metric">
-
-      <div class="label">
-        New York Time
-      </div>
-
-      <div
-        class="value"
-        id="etTime"
-      >
-        --:--
-      </div>
-
-      <div
-        class="small"
-        id="windowText"
-      ></div>
-
+      <div class="label">New York Time</div>
+      <div id="etTime" class="value">--:--</div>
+      <div id="windowText" class="small"></div>
     </div>
 
-
     <div class="metric">
-
-      <div class="label">
-        Attempt
-      </div>
-
+      <div class="label">Attempt</div>
       <div class="value">
-
-        <span id="attempt">
-          0
-        </span>
-
-        / 5
-
+        <span id="attempt">0</span>/5
       </div>
-
 
       <div class="controls">
-
-        <button
-          type="button"
-          class="btn"
-          id="attemptMinus"
-        >
-          −
-        </button>
-
-        <button
-          type="button"
-          class="btn"
-          id="attemptPlus"
-        >
-          +
-        </button>
-
+        <button id="minus" class="btn">−</button>
+        <button id="plus" class="btn">+</button>
       </div>
-
     </div>
-
 
     <div class="metric">
-
-      <div class="label">
-        Realised P&amp;L ($)
-      </div>
-
-      <div
-        class="value"
-        id="pnlDisplay"
-      >
-        0.00
-      </div>
-
-
+      <div class="label">Realised P&amp;L</div>
+      <div id="pnlDisplay" class="value">0.00</div>
       <div class="controls">
-
-        <input
-          id="pnl"
-          type="number"
-          step="0.01"
-          value="0"
-        >
-
+        <input id="pnl" type="number" step="0.01" value="0">
       </div>
-
     </div>
 
-  </section>
-
-
-  <section class="card">
-
-    <label class="switch">
-
-      <input
-        type="checkbox"
-        id="tilt"
-      >
-
-      Tilt signal active
-
-    </label>
-
-
-    <div
-      class="small"
-      style="text-align:center; margin-top:8px;"
-    >
-      Tick this if you notice recovery sizing,
-      rushed entries,
-      repeated re-entry,
-      anger,
-      “just one more”,
-      or holding a failed momentum trade.
-    </div>
-
-  </section>
-
-
-  <div
-    id="status"
-    class="status ok"
-  >
-    WITHIN WASPN
   </div>
 
+</section>
 
-  <div
-    id="saveState"
-    class="save-state"
-  >
-    Live session state ready.
+
+<section class="card">
+
+  <label class="switch">
+    <input id="tilt" type="checkbox">
+    Tilt signal active
+  </label>
+
+  <div class="small" style="text-align:center;margin-top:8px;">
+    Recovery sizing • rushed entries • repeated re-entry • anger • “just one more”
   </div>
 
-
-  <section class="card">
-
-    <div class="time-box">
+</section>
 
 
-      <div class="time-item">
-
-        <div class="label">
-          Preliminary
-        </div>
-
-        <div class="time-main">
-          6:30–7:00 AM ET
-        </div>
-
-        <div
-          class="small"
-          id="prelimUk"
-        >
-          UK equivalent loading...
-        </div>
-
-      </div>
+<div id="status" class="status warn">
+  OUTSIDE ACTIVE WINDOW
+</div>
 
 
-      <div class="time-item">
-
-        <div class="label">
-          Main Window
-        </div>
-
-        <div class="time-main">
-          9:00–11:00 AM ET
-        </div>
-
-        <div
-          class="small"
-          id="mainUk"
-        >
-          UK equivalent loading...
-        </div>
-
-      </div>
+<div id="saveState" class="save-state">
+  Live state ready.
+</div>
 
 
-      <div class="time-item">
+<section class="card">
 
-        <div class="label">
-          Warning
-        </div>
+  <h2 style="margin-top:0;">Today's Connected Record</h2>
 
-        <div
-          class="time-main"
-          style="color:var(--amber);"
-        >
-          -$75
-        </div>
+  <div class="summary">
 
-        <div class="small">
-          Mandatory 5-minute step-away
-        </div>
-
-      </div>
-
-
-      <div class="time-item">
-
-        <div class="label">
-          Hard Stop
-        </div>
-
-        <div
-          class="time-main"
-          style="color:var(--red);"
-        >
-          -$100 / 5 attempts / 11 AM ET
-        </div>
-
-        <div class="small">
-          Any one of these ends the session
-        </div>
-
-      </div>
-
-
+    <div class="summary-item">
+      <div class="label">Journal Trades</div>
+      <strong id="journalTrades">0</strong>
     </div>
 
-  </section>
+    <div class="summary-item">
+      <div class="label">Journal P&amp;L</div>
+      <strong id="journalPnl">—</strong>
+    </div>
+
+    <div class="summary-item">
+      <div class="label">Compliance</div>
+      <strong id="compliance">—</strong>
+    </div>
+
+    <div class="summary-item">
+      <div class="label">Session Score</div>
+      <strong id="sessionScore">—</strong>
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="card">
+
+  <div class="summary">
+
+    <div class="summary-item">
+      <div class="label">Preliminary</div>
+      <strong>6:30–7:00 AM ET</strong>
+      <div id="prelimUk" class="small"></div>
+    </div>
+
+    <div class="summary-item">
+      <div class="label">Main Window</div>
+      <strong>9:00–11:00 AM ET</strong>
+      <div id="mainUk" class="small"></div>
+    </div>
+
+    <div class="summary-item">
+      <div class="label">Warning</div>
+      <strong style="color:var(--amber);">-$75</strong>
+    </div>
+
+    <div class="summary-item">
+      <div class="label">Hard Stop</div>
+      <strong style="color:var(--red);">-$100 / 5 / 11 ET</strong>
+    </div>
+
+  </div>
+
+</section>
 
 </div>
 
 
 <script>
-
-const STORAGE_KEY =
-  "waspnJournalV2";
-
+const STORAGE_KEY = "waspnJournalV2";
 
 let attempt = 0;
-
-let loadedDate = null;
-
+let sessionEnded = false;
+let loadedDate = "";
 let saveTimer = null;
 
 
-function getJournal() {
-
-  try {
-
-    return JSON.parse(
-      localStorage.getItem(
-        STORAGE_KEY
-      )
-    ) || {};
-
-  }
-
-  catch(error) {
-
+function getJournal(){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  }catch{
     return {};
-
   }
-
 }
 
 
-function saveJournal(journal) {
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(journal)
-  );
-
+function saveJournal(j){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(j));
 }
 
 
-function getTimeParts(timeZone) {
+function parts(zone){
 
-  const parts =
-    new Intl.DateTimeFormat(
-      "en-GB",
-      {
-        timeZone,
-        year:"numeric",
-        month:"2-digit",
-        day:"2-digit",
-        hour:"2-digit",
-        minute:"2-digit",
-        second:"2-digit",
-        hour12:false
-      }
-    )
-    .formatToParts(
-      new Date()
-    );
-
-
-  const data = {};
-
-
-  parts.forEach(part => {
-
-    if(
-      part.type !== "literal"
-    ) {
-
-      data[part.type] =
-        part.value;
-
-    }
-
-  });
-
-
-  return {
-
-    year:
-      Number(data.year),
-
-    month:
-      Number(data.month),
-
-    day:
-      Number(data.day),
-
-    hour:
-      Number(data.hour),
-
-    minute:
-      Number(data.minute),
-
-    second:
-      Number(data.second),
-
-    text:
-      data.hour +
-      ":" +
-      data.minute +
-      ":" +
-      data.second
-
-  };
-
-}
-
-
-function getTradingDate() {
-
-  const ny =
-    getTimeParts(
-      "America/New_York"
-    );
-
-
-  return [
-    ny.year,
-    String(
-      ny.month
-    ).padStart(2,"0"),
-    String(
-      ny.day
-    ).padStart(2,"0")
-  ].join("-");
-
-}
-
-
-function etMinutes() {
-
-  const et =
-    getTimeParts(
-      "America/New_York"
-    );
-
-
-  return (
-    et.hour * 60 +
-    et.minute
-  );
-
-}
-
-
-function formatUkEquivalent(
-  etHour,
-  etMinute
-) {
-
-  const nyDate =
-    getTimeParts(
-      "America/New_York"
-    );
-
-
-  const target = {
-
-    year:
-      nyDate.year,
-
-    month:
-      nyDate.month,
-
-    day:
-      nyDate.day,
-
-    hour:
-      etHour,
-
-    minute:
-      etMinute
-
-  };
-
-
-  const approximateUtc =
-    Date.UTC(
-      target.year,
-      target.month - 1,
-      target.day,
-      target.hour + 5,
-      target.minute
-    );
-
-
-  let match = null;
-
-
-  for(
-    let offset = -180;
-    offset <= 180;
-    offset++
-  ) {
-
-    const candidate =
-      new Date(
-        approximateUtc +
-        offset * 60000
-      );
-
-
-    const parts =
-      new Intl.DateTimeFormat(
-        "en-GB",
-        {
-          timeZone:
-            "America/New_York",
-
-          year:
-            "numeric",
-
-          month:
-            "2-digit",
-
-          day:
-            "2-digit",
-
-          hour:
-            "2-digit",
-
-          minute:
-            "2-digit",
-
-          hour12:
-            false
-        }
-      )
-      .formatToParts(
-        candidate
-      );
-
-
-    const data = {};
-
-
-    parts.forEach(part => {
-
-      if(
-        part.type !== "literal"
-      ) {
-
-        data[part.type] =
-          part.value;
-
-      }
-
-    });
-
-
-    if(
-      Number(data.year) ===
-        target.year &&
-
-      Number(data.month) ===
-        target.month &&
-
-      Number(data.day) ===
-        target.day &&
-
-      Number(data.hour) ===
-        target.hour &&
-
-      Number(data.minute) ===
-        target.minute
-    ) {
-
-      match =
-        candidate;
-
-      break;
-
-    }
-
-  }
-
-
-  if(!match) {
-
-    return "UK time unavailable";
-
-  }
-
-
-  return new Intl.DateTimeFormat(
+  const x = new Intl.DateTimeFormat(
     "en-GB",
     {
-      timeZone:
-        "Europe/London",
-
-      hour:
-        "numeric",
-
-      minute:
-        "2-digit",
-
-      hour12:
-        true
+      timeZone:zone,
+      year:"numeric",
+      month:"2-digit",
+      day:"2-digit",
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit",
+      hour12:false
     }
-  )
-  .format(match);
+  ).formatToParts(new Date());
 
-}
+  const d = {};
 
-
-function updateWindowLabels() {
-
-  const prelimStart =
-    formatUkEquivalent(
-      6,
-      30
-    );
-
-
-  const prelimEnd =
-    formatUkEquivalent(
-      7,
-      0
-    );
-
-
-  const mainStart =
-    formatUkEquivalent(
-      9,
-      0
-    );
-
-
-  const mainEnd =
-    formatUkEquivalent(
-      11,
-      0
-    );
-
-
-  document.getElementById(
-    "prelimUk"
-  ).textContent =
-    prelimStart +
-    " – " +
-    prelimEnd +
-    " UK";
-
-
-  document.getElementById(
-    "mainUk"
-  ).textContent =
-    mainStart +
-    " – " +
-    mainEnd +
-    " UK";
-
-}
-
-
-function showSaveState(
-  text,
-  saved = false
-) {
-
-  const el =
-    document.getElementById(
-      "saveState"
-    );
-
-
-  el.textContent =
-    text;
-
-
-  el.className =
-    saved
-      ? "save-state saved"
-      : "save-state";
-
-}
-
-
-function getLiveRiskObject() {
+  x.forEach(p=>{
+    if(p.type !== "literal") d[p.type] = p.value;
+  });
 
   return {
-
-    attempt:
-      attempt,
-
-    realisedPnl:
-      Number(
-        document.getElementById(
-          "pnl"
-        ).value || 0
-      ),
-
-    tilt:
-      document.getElementById(
-        "tilt"
-      ).checked,
-
-    updatedAt:
-      new Date().toISOString()
-
+    year:Number(d.year),
+    month:Number(d.month),
+    day:Number(d.day),
+    hour:Number(d.hour),
+    minute:Number(d.minute),
+    second:Number(d.second),
+    text:`${d.hour}:${d.minute}:${d.second}`
   };
-
 }
 
 
-function saveLiveState() {
+function tradingDate(){
+  const d = parts("America/New_York");
 
-  const date =
-    getTradingDate();
-
-
-  const journal =
-    getJournal();
-
-
-  const existing =
-    journal[date] || {};
+  return [
+    d.year,
+    String(d.month).padStart(2,"0"),
+    String(d.day).padStart(2,"0")
+  ].join("-");
+}
 
 
-  journal[date] = {
+function money(v){
+  const n = Number(v || 0);
 
-    ...existing,
+  if(n > 0) return "+$" + n.toFixed(2);
+  if(n < 0) return "-$" + Math.abs(n).toFixed(2);
 
-    date,
-
-    liveRisk:
-      getLiveRiskObject(),
-
-    lastUpdated:
-      new Date().toISOString()
-
-  };
+  return "$0.00";
+}
 
 
-  saveJournal(
-    journal
+function formatUk(etHour,etMinute){
+
+  const ny = parts("America/New_York");
+
+  const approximate = Date.UTC(
+    ny.year,
+    ny.month-1,
+    ny.day,
+    etHour+5,
+    etMinute
   );
 
+  for(let offset=-180;offset<=180;offset++){
 
-  const time =
+    const candidate = new Date(
+      approximate + offset*60000
+    );
+
+    const formatted =
+      new Intl.DateTimeFormat(
+        "en-CA",
+        {
+          timeZone:"America/New_York",
+          year:"numeric",
+          month:"2-digit",
+          day:"2-digit",
+          hour:"2-digit",
+          minute:"2-digit",
+          hour12:false
+        }
+      ).formatToParts(candidate);
+
+    const x = {};
+
+    formatted.forEach(p=>{
+      if(p.type !== "literal") x[p.type] = p.value;
+    });
+
+    if(
+      Number(x.year) === ny.year &&
+      Number(x.month) === ny.month &&
+      Number(x.day) === ny.day &&
+      Number(x.hour) === etHour &&
+      Number(x.minute) === etMinute
+    ){
+      return new Intl.DateTimeFormat(
+        "en-GB",
+        {
+          timeZone:"Europe/London",
+          hour:"numeric",
+          minute:"2-digit",
+          hour12:true
+        }
+      ).format(candidate);
+    }
+  }
+
+  return "";
+}
+
+
+function updateWindowLabels(){
+  document.getElementById("prelimUk").textContent =
+    formatUk(6,30) + "–" + formatUk(7,0) + " UK";
+
+  document.getElementById("mainUk").textContent =
+    formatUk(9,0) + "–" + formatUk(11,0) + " UK";
+}
+
+
+function renderConnected(){
+
+  const day = getJournal()[tradingDate()] || {};
+
+  document.getElementById("journalTrades").textContent =
+    Array.isArray(day.trades)
+      ? day.trades.length
+      : 0;
+
+  document.getElementById("journalPnl").textContent =
+    typeof day.totalNet === "number"
+      ? money(day.totalNet)
+      : "—";
+
+  document.getElementById("compliance").textContent =
+    day.compliance &&
+    typeof day.compliance.score === "number"
+      ? day.compliance.score + "/3"
+      : "—";
+
+  document.getElementById("sessionScore").textContent =
+    day.sessionScore &&
+    typeof day.sessionScore.score === "number"
+      ? day.sessionScore.score + "/5"
+      : "—";
+}
+
+
+function saveLiveState(){
+
+  const date = tradingDate();
+
+  const journal = getJournal();
+
+  const existing = journal[date] || {date};
+
+  const previous = existing.liveRisk || {};
+
+  const pnl = Number(
+    document.getElementById("pnl").value || 0
+  );
+
+  journal[date] = {
+    ...existing,
+    date,
+
+    liveRisk:{
+      ...previous,
+      attempt,
+      realisedPnl:pnl,
+      tilt:document.getElementById("tilt").checked,
+      warningReached:
+        !!previous.warningReached || pnl <= -75,
+      hardStopReached:
+        !!previous.hardStopReached || pnl <= -100,
+      maxAttemptReached:Math.max(
+        Number(previous.maxAttemptReached || 0),
+        attempt
+      ),
+      sessionEnded,
+      updatedAt:new Date().toISOString()
+    },
+
+    lastUpdated:new Date().toISOString()
+  };
+
+  saveJournal(journal);
+
+  document.getElementById("saveState").textContent =
+    "Autosaved • " +
     new Intl.DateTimeFormat(
       "en-GB",
       {
-        timeZone:
-          "Europe/London",
-
-        hour:
-          "2-digit",
-
-        minute:
-          "2-digit",
-
-        second:
-          "2-digit"
+        timeZone:"Europe/London",
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
       }
-    )
-    .format(
-      new Date()
-    );
+    ).format(new Date());
 
-
-  showSaveState(
-    "Autosaved " +
-    date +
-    " • " +
-    time,
-    true
-  );
-
+  renderConnected();
 }
 
 
-function queueSave() {
-
-  showSaveState(
-    "Saving live session..."
-  );
-
-
-  clearTimeout(
-    saveTimer
-  );
-
-
-  saveTimer =
-    setTimeout(
-      saveLiveState,
-      150
-    );
-
+function queueSave(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveLiveState,120);
 }
 
 
-function loadLiveState() {
+function loadLive(){
 
-  const date =
-    getTradingDate();
+  const date = tradingDate();
 
+  loadedDate = date;
 
-  loadedDate =
-    date;
+  const day = getJournal()[date];
 
+  const live = day?.liveRisk;
 
-  const journal =
-    getJournal();
-
-
-  const day =
-    journal[date];
-
-
-  const saved =
-    day &&
-    day.liveRisk
-      ? day.liveRisk
-      : null;
-
-
-  if(!saved) {
+  if(!live){
 
     attempt = 0;
+    sessionEnded = false;
 
+    document.getElementById("attempt").textContent = "0";
+    document.getElementById("pnl").value = "0";
+    document.getElementById("tilt").checked = false;
 
-    document.getElementById(
-      "attempt"
-    ).textContent =
-      "0";
+  }else{
 
-
-    document.getElementById(
-      "pnl"
-    ).value =
-      "0";
-
-
-    document.getElementById(
-      "tilt"
-    ).checked =
-      false;
-
-
-    showSaveState(
-      "New trading day • no saved live session yet."
-    );
-
-
-    update(
-      false
-    );
-
-
-    return;
-
-  }
-
-
-  attempt =
-    Math.max(
+    attempt = Math.max(
       0,
-      Math.min(
-        5,
-        Number(
-          saved.attempt || 0
-        )
-      )
+      Math.min(5,Number(live.attempt || 0))
     );
 
+    sessionEnded = !!live.sessionEnded;
 
-  document.getElementById(
-    "attempt"
-  ).textContent =
-    attempt;
-
-
-  document.getElementById(
-    "pnl"
-  ).value =
-    Number(
-      saved.realisedPnl || 0
-    );
-
-
-  document.getElementById(
-    "tilt"
-  ).checked =
-    !!saved.tilt;
-
-
-  showSaveState(
-    "Restored saved live session for " +
-    date +
-    ".",
-    true
-  );
-
-
-  update(
-    false
-  );
-
-}
-
-
-function checkTradingDateChange() {
-
-  const current =
-    getTradingDate();
-
-
-  if(
-    loadedDate !== current
-  ) {
-
-    loadLiveState();
-
-    updateWindowLabels();
-
+    document.getElementById("attempt").textContent = attempt;
+    document.getElementById("pnl").value =
+      Number(live.realisedPnl || 0);
+    document.getElementById("tilt").checked =
+      !!live.tilt;
   }
 
+  renderConnected();
+  update(false);
 }
 
 
-function changeAttempt(change) {
+function changeAttempt(delta){
 
-  attempt =
-    Math.max(
-      0,
-      Math.min(
-        5,
-        attempt + change
-      )
-    );
-
-
-  document.getElementById(
-    "attempt"
-  ).textContent =
-    attempt;
-
-
-  update(
-    true
-  );
-
-}
-
-
-function resetAll() {
-
-  const date =
-    getTradingDate();
-
-
-  const confirmed =
-    confirm(
-      "Reset today's Live Risk state for " +
-      date +
-      "? This resets Attempt, P&L and Tilt only. Journal trades and Session Score will NOT be deleted."
-    );
-
-
-  if(!confirmed) {
-
+  if(sessionEnded){
+    alert("The session is already marked finished. Use Reset Today only if this was entered by mistake.");
     return;
-
   }
 
-
-  attempt = 0;
-
-
-  document.getElementById(
-    "attempt"
-  ).textContent =
-    "0";
-
-
-  document.getElementById(
-    "pnl"
-  ).value =
-    "0";
-
-
-  document.getElementById(
-    "tilt"
-  ).checked =
-    false;
-
-
-  const journal =
-    getJournal();
-
-
-  const existing =
-    journal[date] || {
-      date
-    };
-
-
-  journal[date] = {
-
-    ...existing,
-
-    liveRisk: {
-
-      attempt:
-        0,
-
-      realisedPnl:
-        0,
-
-      tilt:
-        false,
-
-      resetAt:
-        new Date().toISOString(),
-
-      updatedAt:
-        new Date().toISOString()
-
-    },
-
-    lastUpdated:
-      new Date().toISOString()
-
-  };
-
-
-  saveJournal(
-    journal
+  attempt = Math.max(
+    0,
+    Math.min(5,attempt+delta)
   );
 
+  if(attempt >= 5){
+    sessionEnded = true;
+  }
 
-  showSaveState(
-    "Today's Live Risk state reset. Other daily records preserved.",
-    true
-  );
+  document.getElementById("attempt").textContent = attempt;
 
-
-  update(
-    false
-  );
-
+  update(true);
 }
 
 
-function update(
-  shouldSave = false
-) {
+function update(shouldSave=false){
 
-  const uk =
-    getTimeParts(
-      "Europe/London"
-    );
+  const uk = parts("Europe/London");
+  const et = parts("America/New_York");
 
+  document.getElementById("ukTime").textContent = uk.text;
+  document.getElementById("etTime").textContent = et.text;
 
-  const et =
-    getTimeParts(
-      "America/New_York"
-    );
+  const mins = et.hour*60 + et.minute;
 
+  const prelimStart = 6*60+30;
+  const prelimEnd = 7*60;
+  const mainStart = 9*60;
+  const close = 11*60;
 
-  document.getElementById(
-    "ukTime"
-  ).textContent =
-    uk.text;
+  let active = false;
+  let windowText = "OUTSIDE ACTIVE WINDOW";
 
-
-  document.getElementById(
-    "etTime"
-  ).textContent =
-    et.text;
-
-
-  const mins =
-    etMinutes();
-
-
-  const preliminaryStart =
-    6 * 60 + 30;
-
-
-  const preliminaryEnd =
-    7 * 60;
-
-
-  const mainStart =
-    9 * 60;
-
-
-  const close =
-    11 * 60;
-
-
-  let windowText =
-    "Outside active window";
-
-
-  let activeWindow =
-    false;
-
-
-  if(
-    mins >= preliminaryStart &&
-    mins < preliminaryEnd
-  ) {
-
-    windowText =
-      "PRELIMINARY WINDOW";
-
-
-    activeWindow =
-      true;
-
+  if(mins >= prelimStart && mins < prelimEnd){
+    active = true;
+    windowText = "PRELIMINARY WINDOW";
+  }else if(mins >= mainStart && mins < close){
+    active = true;
+    windowText = "MAIN WINDOW";
+  }else if(mins >= prelimEnd && mins < mainStart){
+    windowText = "WAIT — MAIN WINDOW NOT OPEN";
+  }else if(mins >= close){
+    windowText = "SESSION CLOSED";
+  }else{
+    windowText = "WAIT — PRELIMINARY WINDOW NOT OPEN";
   }
 
+  document.getElementById("windowText").textContent = windowText;
 
-  else if(
-    mins >= mainStart &&
-    mins < close
-  ) {
+  const pnl = Number(
+    document.getElementById("pnl").value || 0
+  );
 
-    windowText =
-      "MAIN WINDOW";
+  const pnlDisplay = document.getElementById("pnlDisplay");
 
-
-    activeWindow =
-      true;
-
-  }
-
-
-  else if(
-    mins >= preliminaryEnd &&
-    mins < mainStart
-  ) {
-
-    windowText =
-      "WAIT — MAIN WINDOW NOT OPEN";
-
-  }
-
-
-  else if(
-    mins >= close
-  ) {
-
-    windowText =
-      "SESSION CLOSED";
-
-  }
-
-
-  else {
-
-    windowText =
-      "WAIT — PRELIMINARY WINDOW NOT OPEN";
-
-  }
-
-
-  document.getElementById(
-    "windowText"
-  ).textContent =
-    windowText;
-
-
-  const pnl =
-    Number(
-      document.getElementById(
-        "pnl"
-      ).value || 0
-    );
-
-
-  const pnlDisplay =
-    document.getElementById(
-      "pnlDisplay"
-    );
-
-
-  pnlDisplay.textContent =
-    pnl.toFixed(2);
-
+  pnlDisplay.textContent = pnl.toFixed(2);
 
   pnlDisplay.style.color =
     pnl > 0
@@ -1413,198 +695,121 @@ function update(
         ? "var(--red)"
         : "var(--text)";
 
+  if(pnl <= -100){
+    sessionEnded = true;
+  }
 
-  const tilt =
-    document.getElementById(
-      "tilt"
-    ).checked;
+  const tilt = document.getElementById("tilt").checked;
 
-
-  const status =
-    document.getElementById(
-      "status"
-    );
-
-
-  let statusClass =
-    "status ok";
-
-
-  let statusText =
-    activeWindow
-      ? "WITHIN WASPN"
-      : windowText;
-
+  const status = document.getElementById("status");
 
   if(
+    sessionEnded ||
     attempt >= 5 ||
     pnl <= -100 ||
     mins >= close
-  ) {
-
-    statusClass =
-      "status stop";
-
-
-    statusText =
-      "STOP TRADING — SESSION OVER";
-
+  ){
+    status.className = "status stop";
+    status.textContent = "STOP TRADING — SESSION OVER";
+  }
+  else if(tilt){
+    status.className = "status warn";
+    status.textContent = "5-MINUTE STOP — NO ORDERS";
+  }
+  else if(pnl <= -75){
+    status.className = "status warn";
+    status.textContent = "WARNING STATE — STEP AWAY 5 MINUTES";
+  }
+  else if(active){
+    status.className = "status ok";
+    status.textContent = "WITHIN WASPN";
+  }
+  else{
+    status.className = "status warn";
+    status.textContent = windowText;
   }
 
-
-  else if(tilt) {
-
-    statusClass =
-      "status warn";
-
-
-    statusText =
-      "5-MINUTE STOP — NO ORDERS";
-
-  }
-
-
-  else if(
-    pnl <= -75
-  ) {
-
-    statusClass =
-      "status warn";
-
-
-    statusText =
-      "WARNING STATE — STEP AWAY 5 MINUTES";
-
-  }
-
-
-  else if(
-    !activeWindow
-  ) {
-
-    statusClass =
-      "status warn";
-
-  }
-
-
-  status.className =
-    statusClass;
-
-
-  status.textContent =
-    statusText;
-
-
-  if(
-    shouldSave
-  ) {
-
+  if(shouldSave){
     queueSave();
-
   }
-
 }
 
 
-document
-  .getElementById(
-    "attemptMinus"
-  )
-  .addEventListener(
-    "click",
-    () => {
+function resetToday(){
 
-      changeAttempt(
-        -1
-      );
+  if(!confirm(
+    "Reset today's Live Risk state? Journal, Compliance and Session Score will be preserved."
+  )){
+    return;
+  }
 
-    }
-  );
+  attempt = 0;
+  sessionEnded = false;
 
+  document.getElementById("attempt").textContent = "0";
+  document.getElementById("pnl").value = "0";
+  document.getElementById("tilt").checked = false;
 
-document
-  .getElementById(
-    "attemptPlus"
-  )
-  .addEventListener(
-    "click",
-    () => {
+  const date = tradingDate();
 
-      changeAttempt(
-        1
-      );
+  const journal = getJournal();
 
-    }
-  );
+  const existing = journal[date] || {date};
 
+  journal[date] = {
+    ...existing,
+    liveRisk:{
+      attempt:0,
+      realisedPnl:0,
+      tilt:false,
+      warningReached:false,
+      hardStopReached:false,
+      maxAttemptReached:0,
+      sessionEnded:false,
+      resetAt:new Date().toISOString(),
+      updatedAt:new Date().toISOString()
+    },
+    lastUpdated:new Date().toISOString()
+  };
 
-document
-  .getElementById(
-    "pnl"
-  )
-  .addEventListener(
-    "input",
-    () => {
+  saveJournal(journal);
 
-      update(
-        true
-      );
-
-    }
-  );
+  update(false);
+  renderConnected();
+}
 
 
-document
-  .getElementById(
-    "tilt"
-  )
-  .addEventListener(
-    "change",
-    () => {
+document.getElementById("plus").addEventListener(
+  "click",()=>changeAttempt(1)
+);
 
-      update(
-        true
-      );
+document.getElementById("minus").addEventListener(
+  "click",()=>changeAttempt(-1)
+);
 
-    }
-  );
+document.getElementById("pnl").addEventListener(
+  "input",()=>update(true)
+);
 
+document.getElementById("tilt").addEventListener(
+  "change",()=>update(true)
+);
 
-document
-  .getElementById(
-    "resetBtn"
-  )
-  .addEventListener(
-    "click",
-    resetAll
-  );
-
+document.getElementById("resetBtn").addEventListener(
+  "click",resetToday
+);
 
 updateWindowLabels();
+loadLive();
 
-loadLiveState();
+setInterval(()=>{
+  if(loadedDate !== tradingDate()){
+    loadLive();
+    updateWindowLabels();
+  }
 
-
-setInterval(
-  () => {
-
-    checkTradingDateChange();
-
-    update(
-      false
-    );
-
-  },
-  1000
-);
-
-
-setInterval(
-  updateWindowLabels,
-  60000
-);
-
+  update(false);
+},1000);
 </script>
 
 </body>
