@@ -118,6 +118,7 @@
       border:1px solid var(--border);
       border-radius:12px;
       padding:12px;
+      min-width:0;
     }
 
     .label {
@@ -131,6 +132,9 @@
       font-size:24px;
       font-weight:900;
       margin-top:5px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
     }
 
     .green {
@@ -151,7 +155,7 @@
 
     .calendar {
       display:grid;
-      grid-template-columns:repeat(5,1fr);
+      grid-template-columns:repeat(5,minmax(0,1fr));
       gap:6px;
       margin-top:16px;
     }
@@ -162,16 +166,19 @@
       font-size:12px;
       font-weight:700;
       padding-bottom:4px;
+      min-width:0;
     }
 
     .day {
+      min-width:0;
       min-height:86px;
-      padding:9px;
+      padding:8px 6px;
       background:var(--panel2);
       border:1px solid var(--border);
       border-radius:12px;
       cursor:pointer;
       position:relative;
+      overflow:hidden;
     }
 
     .day.empty {
@@ -196,23 +203,31 @@
     .day.saved-day::after {
       content:"J";
       position:absolute;
-      top:6px;
-      right:7px;
+      top:5px;
+      right:6px;
       color:var(--blue);
       font-weight:900;
-      font-size:11px;
+      font-size:10px;
     }
 
     .date {
       color:var(--muted);
       font-size:12px;
+      line-height:1.2;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
     .pnl {
-      font-size:17px;
+      font-size:clamp(11px,3.1vw,17px);
       font-weight:900;
-      margin-top:10px;
-      word-break:break-word;
+      margin-top:12px;
+      white-space:nowrap;
+      word-break:normal;
+      overflow:hidden;
+      text-overflow:clip;
+      letter-spacing:-0.3px;
     }
 
     .detail {
@@ -285,16 +300,20 @@
     @media(max-width:600px) {
 
       .wrap {
-        padding:12px;
+        padding:10px;
       }
 
       .hero,
       .card {
-        padding:16px;
+        padding:14px;
+      }
+
+      h1 {
+        font-size:34px;
       }
 
       .month-title {
-        font-size:23px;
+        font-size:22px;
       }
 
       .calendar {
@@ -302,20 +321,39 @@
       }
 
       .day {
-        min-height:76px;
-        padding:6px;
+        min-height:82px;
+        padding:7px 5px;
+        border-radius:10px;
+      }
+
+      .date {
+        font-size:11px;
       }
 
       .pnl {
-        font-size:14px;
+        font-size:clamp(10px,3vw,14px);
+        margin-top:12px;
+        letter-spacing:-0.5px;
+      }
+
+      .weekday {
+        font-size:11px;
       }
 
       .stats {
         grid-template-columns:1fr 1fr;
       }
 
+      .value {
+        font-size:21px;
+      }
+
       .month-buttons {
         grid-template-columns:repeat(3,1fr);
+      }
+
+      .year-summary {
+        grid-template-columns:1fr 1fr;
       }
     }
   </style>
@@ -1256,14 +1294,45 @@ function showDetail(date,value) {
     );
 
 
+    let scoreHtml = "";
+
+    if(saved.sessionScore) {
+
+      scoreHtml = `
+
+        <div
+          style="
+            margin-top:12px;
+            padding:10px;
+            border-radius:10px;
+            background:var(--panel2);
+            border:1px solid var(--border);
+          "
+        >
+          <strong>
+            Session Score:
+            ${saved.sessionScore.score}/${saved.sessionScore.outOf || 5}
+          </strong>
+        </div>
+
+      `;
+
+    }
+
+
     extra = `
 
       <div class="muted" style="margin-top:10px;">
-        Saved from Trading Journal
+        Saved WASPN record
       </div>
 
+      ${scoreHtml}
+
       <div class="detail-trades">
-        ${tradeHtml || '<div class="muted">No trade details saved.</div>'}
+        ${
+          tradeHtml ||
+          '<div class="muted">No trade details saved.</div>'
+        }
       </div>
 
       ${
@@ -1400,6 +1469,7 @@ window.addEventListener(
 
 
 buildMonthButtons();
+
 renderCalendar();
 
 </script>
