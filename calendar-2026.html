@@ -1,1477 +1,916 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>WASPN 2026 Calendar</title>
 
-  <title>WASPN 2026 Calendar</title>
+<style>
+:root{
+  --bg:#0b0f14;
+  --panel:#121820;
+  --panel2:#171f29;
+  --border:#293342;
+  --text:#e8eef6;
+  --muted:#8e9aaa;
+  --green:#35d07f;
+  --red:#ff5f6d;
+  --blue:#63a7ff;
+}
 
-  <style>
-    :root {
-      --bg:#0b0f14;
-      --panel:#121820;
-      --panel2:#171f29;
-      --border:#293342;
-      --text:#e8eef6;
-      --muted:#8e9aaa;
-      --green:#35d07f;
-      --red:#ff5f6d;
-      --blue:#63a7ff;
-      --amber:#f3b84b;
-    }
+*{box-sizing:border-box}
 
-    * {
-      box-sizing:border-box;
-    }
+body{
+  margin:0;
+  background:linear-gradient(180deg,#090d12,#0d131a);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
 
-    body {
-      margin:0;
-      background:linear-gradient(180deg,#090d12,#0d131a);
-      color:var(--text);
-      font-family:Arial,Helvetica,sans-serif;
-    }
+.wrap{
+  max-width:900px;
+  margin:auto;
+  padding:18px;
+}
 
-    .wrap {
-      max-width:900px;
-      margin:0 auto;
-      padding:18px;
-    }
+.top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
 
-    .topbar {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-bottom:14px;
-      flex-wrap:wrap;
-    }
+.btn,a.btn{
+  border:0;
+  background:#293342;
+  color:white;
+  padding:11px 14px;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:700;
+  cursor:pointer;
+}
 
-    .topbar-actions {
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
+.hero,.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+}
 
-    .btn,
-    a.btn {
-      border:0;
-      background:#293342;
-      color:white;
-      padding:11px 14px;
-      border-radius:10px;
-      font-weight:700;
-      text-decoration:none;
-      cursor:pointer;
-    }
+.card{margin-top:15px}
 
-    .hero,
-    .card {
-      background:var(--panel);
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:20px;
-    }
+h1{
+  color:var(--green);
+  font-size:40px;
+  margin:4px 0 7px;
+}
 
-    .card {
-      margin-top:16px;
-    }
+h2{margin:0}
 
-    h1 {
-      margin:4px 0 6px;
-      color:var(--green);
-      font-size:40px;
-    }
+.muted{
+  color:var(--muted);
+  line-height:1.5;
+}
 
-    h2 {
-      margin:0;
-    }
+.month-nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
 
-    .muted {
-      color:var(--muted);
-      line-height:1.5;
-    }
+.month-title{
+  flex:1;
+  text-align:center;
+  font-size:27px;
+  font-weight:900;
+}
 
-    .month-nav {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-top:16px;
-    }
+.month-buttons{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
+  margin-top:14px;
+}
 
-    .month-title {
-      font-size:28px;
-      font-weight:900;
-      text-align:center;
-      flex:1;
-    }
+.month-jump{
+  border:1px solid var(--border);
+  background:var(--panel2);
+  color:var(--text);
+  padding:9px;
+  border-radius:9px;
+  font-weight:700;
+}
 
-    .stats {
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:10px;
-      margin-top:16px;
-    }
+.month-jump.active{
+  color:var(--blue);
+  border-color:var(--blue);
+}
 
-    .stat {
-      background:var(--panel2);
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:12px;
-      min-width:0;
-    }
+.stats{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:9px;
+  margin-top:14px;
+}
 
-    .label {
-      color:var(--muted);
-      font-size:11px;
-      text-transform:uppercase;
-      font-weight:700;
-    }
+.stat{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:11px;
+  min-width:0;
+}
 
-    .value {
-      font-size:24px;
-      font-weight:900;
-      margin-top:5px;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-    }
+.label{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+  text-transform:uppercase;
+}
 
-    .green {
-      color:var(--green);
-    }
+.value{
+  margin-top:5px;
+  font-size:22px;
+  font-weight:900;
+  white-space:nowrap;
+  overflow:hidden;
+}
 
-    .red {
-      color:var(--red);
-    }
+.green{color:var(--green)}
+.red{color:var(--red)}
+.blue{color:var(--blue)}
 
-    .blue {
-      color:var(--blue);
-    }
+.legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:13px;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:14px;
+}
 
-    .amber {
-      color:var(--amber);
-    }
+.calendar{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:5px;
+  margin-top:15px;
+}
 
-    .calendar {
-      display:grid;
-      grid-template-columns:repeat(5,minmax(0,1fr));
-      gap:6px;
-      margin-top:16px;
-    }
+.weekday{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
+}
 
-    .weekday {
-      text-align:center;
-      color:var(--muted);
-      font-size:12px;
-      font-weight:700;
-      padding-bottom:4px;
-      min-width:0;
-    }
+.day{
+  min-width:0;
+  min-height:84px;
+  padding:7px 5px;
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  position:relative;
+  cursor:pointer;
+}
 
-    .day {
-      min-width:0;
-      min-height:86px;
-      padding:8px 6px;
-      background:var(--panel2);
-      border:1px solid var(--border);
-      border-radius:12px;
-      cursor:pointer;
-      position:relative;
-      overflow:hidden;
-    }
+.day.empty{
+  opacity:.2;
+  cursor:default;
+}
 
-    .day.empty {
-      opacity:.22;
-      cursor:default;
-    }
+.day.future{opacity:.45}
 
-    .day.future {
-      opacity:.45;
-    }
+.day.green-day{
+  background:#102018;
+  border-color:#275c3e;
+}
 
-    .day.green-day {
-      border-color:#275c3e;
-      background:#102018;
-    }
+.day.red-day{
+  background:#231317;
+  border-color:#5b2630;
+}
 
-    .day.red-day {
-      border-color:#5b2630;
-      background:#231317;
-    }
+.day.saved-day::after{
+  content:"J";
+  position:absolute;
+  top:5px;
+  right:5px;
+  color:var(--blue);
+  font-size:9px;
+  font-weight:900;
+}
 
-    .day.saved-day::after {
-      content:"J";
-      position:absolute;
-      top:5px;
-      right:6px;
-      color:var(--blue);
-      font-weight:900;
-      font-size:10px;
-    }
+.date{
+  color:var(--muted);
+  font-size:11px;
+  white-space:nowrap;
+}
 
-    .date {
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.2;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
+.pnl{
+  margin-top:12px;
+  font-size:clamp(10px,3vw,15px);
+  font-weight:900;
+  white-space:nowrap;
+  letter-spacing:-.4px;
+}
 
-    .pnl {
-      font-size:clamp(11px,3.1vw,17px);
-      font-weight:900;
-      margin-top:12px;
-      white-space:nowrap;
-      word-break:normal;
-      overflow:hidden;
-      text-overflow:clip;
-      letter-spacing:-0.3px;
-    }
+.detail{
+  margin-top:15px;
+  background:#0d131a;
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:15px;
+}
 
-    .detail {
-      margin-top:16px;
-      padding:16px;
-      border-radius:14px;
-      background:#0d131a;
-      border:1px solid var(--border);
-      min-height:84px;
-    }
+.detail-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+  margin-top:12px;
+}
 
-    .detail-title {
-      font-size:18px;
-      font-weight:800;
-    }
+.detail-item{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:10px;
+}
 
-    .detail-trades {
-      margin-top:14px;
-      display:grid;
-      gap:8px;
-    }
+.trade{
+  margin-top:8px;
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:10px;
+  font-size:13px;
+  line-height:1.5;
+}
 
-    .detail-trade {
-      background:var(--panel2);
-      border:1px solid var(--border);
-      border-radius:10px;
-      padding:10px;
-      font-size:13px;
-      line-height:1.5;
-    }
-
-    .month-buttons {
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:8px;
-      margin-top:16px;
-    }
-
-    .month-jump {
-      background:#171f29;
-      color:var(--text);
-      border:1px solid var(--border);
-      border-radius:10px;
-      padding:10px 6px;
-      font-weight:700;
-      cursor:pointer;
-    }
-
-    .month-jump.active {
-      border-color:var(--blue);
-      color:var(--blue);
-    }
-
-    .year-summary {
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:10px;
-      margin-top:14px;
-    }
-
-    .legend {
-      display:flex;
-      gap:14px;
-      flex-wrap:wrap;
-      margin-top:14px;
-      font-size:12px;
-      color:var(--muted);
-    }
-
-    @media(max-width:600px) {
-
-      .wrap {
-        padding:10px;
-      }
-
-      .hero,
-      .card {
-        padding:14px;
-      }
-
-      h1 {
-        font-size:34px;
-      }
-
-      .month-title {
-        font-size:22px;
-      }
-
-      .calendar {
-        gap:4px;
-      }
-
-      .day {
-        min-height:82px;
-        padding:7px 5px;
-        border-radius:10px;
-      }
-
-      .date {
-        font-size:11px;
-      }
-
-      .pnl {
-        font-size:clamp(10px,3vw,14px);
-        margin-top:12px;
-        letter-spacing:-0.5px;
-      }
-
-      .weekday {
-        font-size:11px;
-      }
-
-      .stats {
-        grid-template-columns:1fr 1fr;
-      }
-
-      .value {
-        font-size:21px;
-      }
-
-      .month-buttons {
-        grid-template-columns:repeat(3,1fr);
-      }
-
-      .year-summary {
-        grid-template-columns:1fr 1fr;
-      }
-    }
-  </style>
+@media(max-width:600px){
+  .wrap{padding:10px}
+  .hero,.card{padding:14px}
+  h1{font-size:34px}
+  .month-title{font-size:21px}
+  .calendar{gap:4px}
+  .day{min-height:80px;padding:6px 4px}
+  .pnl{font-size:clamp(10px,3vw,13px)}
+  .month-buttons{grid-template-columns:repeat(3,1fr)}
+  .detail-grid{grid-template-columns:1fr 1fr}
+}
+</style>
 </head>
 
 <body>
-
 <div class="wrap">
 
-  <div class="topbar">
+<div class="top">
+  <a href="index.html" class="btn">← Home</a>
 
-    <a href="index.html" class="btn">
-      ← Home
-    </a>
+  <div>
+    <a href="journal.html" class="btn">Journal</a>
+    <a href="data-backup.html" class="btn">Backup</a>
+  </div>
+</div>
 
-    <div class="topbar-actions">
 
-      <a href="journal.html" class="btn">
-        Trading Journal
-      </a>
+<section class="hero">
+  <div class="muted">WASPN • Full Trading History</div>
+  <h1>2026 Calendar</h1>
+  <div class="muted">
+    Historical broker results plus journal-saved daily records.
+  </div>
+</section>
 
+
+<section class="card">
+
+  <div class="month-nav">
+    <button id="prev" class="btn">←</button>
+    <div id="monthTitle" class="month-title"></div>
+    <button id="next" class="btn">→</button>
+  </div>
+
+  <div id="monthButtons" class="month-buttons"></div>
+
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="label">Month P&amp;L</div>
+      <div id="monthPnl" class="value">—</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">Trading Days</div>
+      <div id="tradingDays" class="value">0</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">Green Days</div>
+      <div id="greenDays" class="value green">0</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">Red Days</div>
+      <div id="redDays" class="value red">0</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">Best Day</div>
+      <div id="bestDay" class="value green">—</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">Worst Day</div>
+      <div id="worstDay" class="value red">—</div>
     </div>
 
   </div>
 
 
-  <section class="hero">
+  <div class="legend">
+    <span>Green = profitable</span>
+    <span>Red = losing</span>
+    <span>J = saved WASPN record</span>
+  </div>
 
+
+  <div class="calendar">
+    <div class="weekday">Mon</div>
+    <div class="weekday">Tue</div>
+    <div class="weekday">Wed</div>
+    <div class="weekday">Thu</div>
+    <div class="weekday">Fri</div>
+
+    <div id="calendarDays" style="display:contents;"></div>
+  </div>
+
+
+  <div id="detail" class="detail">
     <div class="muted">
-      WASPN • Full Trading History
+      Tap a trading day to see its complete record.
+    </div>
+  </div>
+
+</section>
+
+
+<section class="card">
+  <h2>2026 Year-to-Date</h2>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="label">Net P&amp;L</div>
+      <div id="yearPnl" class="value">—</div>
     </div>
 
-    <h1>2026 Interactive Calendar</h1>
-
-    <div class="muted">
-      Broker-history calendar plus journal-saved days.
-      Journal entries automatically override the historical value
-      for that date on this device.
+    <div class="stat">
+      <div class="label">Trading Days</div>
+      <div id="yearDays" class="value">0</div>
     </div>
 
-  </section>
-
-
-  <section class="card">
-
-    <div class="month-nav">
-
-      <button class="btn" id="prevBtn">
-        ←
-      </button>
-
-      <div class="month-title" id="monthTitle">
-        October 2026
-      </div>
-
-      <button class="btn" id="nextBtn">
-        →
-      </button>
-
+    <div class="stat">
+      <div class="label">Green</div>
+      <div id="yearGreen" class="value green">0</div>
     </div>
 
-
-    <div class="month-buttons" id="monthButtons"></div>
-
-
-    <div class="stats">
-
-      <div class="stat">
-        <div class="label">Month P&amp;L</div>
-        <div class="value" id="monthPnl">—</div>
-      </div>
-
-      <div class="stat">
-        <div class="label">Trading Days</div>
-        <div class="value" id="tradingDays">—</div>
-      </div>
-
-      <div class="stat">
-        <div class="label">Green Days</div>
-        <div class="value green" id="greenDays">—</div>
-      </div>
-
-      <div class="stat">
-        <div class="label">Red Days</div>
-        <div class="value red" id="redDays">—</div>
-      </div>
-
-      <div class="stat">
-        <div class="label">Best Day</div>
-        <div class="value green" id="bestDay">—</div>
-      </div>
-
-      <div class="stat">
-        <div class="label">Worst Day</div>
-        <div class="value red" id="worstDay">—</div>
-      </div>
-
+    <div class="stat">
+      <div class="label">Red</div>
+      <div id="yearRed" class="value red">0</div>
     </div>
-
-
-    <div class="legend">
-
-      <span>
-        Green = profitable day
-      </span>
-
-      <span>
-        Red = losing day
-      </span>
-
-      <span>
-        J = saved journal entry
-      </span>
-
-    </div>
-
-
-    <div class="calendar">
-
-      <div class="weekday">Mon</div>
-      <div class="weekday">Tue</div>
-      <div class="weekday">Wed</div>
-      <div class="weekday">Thu</div>
-      <div class="weekday">Fri</div>
-
-      <div id="calendarDays" style="display:contents;"></div>
-
-    </div>
-
-
-    <div class="detail" id="detail">
-
-      <div class="muted">
-        Tap a trading day to see its result.
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <section class="card">
-
-    <h2>2026 Year-to-Date</h2>
-
-    <div class="year-summary">
-
-      <div class="stat">
-        <div class="label">Combined Net P&amp;L</div>
-        <div class="value" id="yearPnl">—</div>
-      </div>
-
-      <div class="stat">
-        <div class="label">Trading Days</div>
-        <div class="value" id="yearDays">—</div>
-      </div>
-
-      <div class="stat">
-        <div class="label">Green Days</div>
-        <div class="value green" id="yearGreen">—</div>
-      </div>
-
-      <div class="stat">
-        <div class="label">Red Days</div>
-        <div class="value red" id="yearRed">—</div>
-      </div>
-
-    </div>
-
-  </section>
+  </div>
+</section>
 
 </div>
 
 
 <script>
-
-const JOURNAL_KEY =
-  "waspnJournalV2";
+const STORAGE_KEY = "waspnJournalV2";
 
 
 const tradingData = {
+  "2026-06-30":50.30,
 
-  "2026-06-30": 50.30,
+  "2026-07-01":39.67,
+  "2026-07-02":-379.18,
+  "2026-07-06":-208.32,
+  "2026-07-07":-225.94,
+  "2026-07-08":-83.53,
+  "2026-07-09":100.11,
+  "2026-07-10":-394.58,
+  "2026-07-13":18.12,
+  "2026-07-14":-116.76,
+  "2026-07-15":5.86,
+  "2026-07-16":-83.74,
+  "2026-07-17":-18.83,
+  "2026-07-20":-35.90,
+  "2026-07-21":45.40,
+  "2026-07-22":85.58,
+  "2026-07-23":-383.95,
+  "2026-07-24":-296.24,
+  "2026-07-27":-481.58,
+  "2026-07-28":-558.70,
+  "2026-07-29":16.89,
+  "2026-07-30":24.27,
+  "2026-07-31":15.92,
 
-  "2026-07-01": 39.67,
-  "2026-07-02": -379.18,
-  "2026-07-06": -208.32,
-  "2026-07-07": -225.94,
-  "2026-07-08": -83.53,
-  "2026-07-09": 100.11,
-  "2026-07-10": -394.58,
-  "2026-07-13": 18.12,
-  "2026-07-14": -116.76,
-  "2026-07-15": 5.86,
-  "2026-07-16": -83.74,
-  "2026-07-17": -18.83,
-  "2026-07-20": -35.90,
-  "2026-07-21": 45.40,
-  "2026-07-22": 85.58,
-  "2026-07-23": -383.95,
-  "2026-07-24": -296.24,
-  "2026-07-27": -481.58,
-  "2026-07-28": -558.70,
-  "2026-07-29": 16.89,
-  "2026-07-30": 24.27,
-  "2026-07-31": 15.92,
+  "2026-08-03":47.24,
+  "2026-08-04":99.86,
+  "2026-08-05":59.42,
+  "2026-08-06":-105.88,
+  "2026-08-07":72.98,
+  "2026-08-10":-386.95,
+  "2026-08-11":-152.17,
+  "2026-08-12":-67.56,
+  "2026-08-13":20.05,
+  "2026-08-14":-29.16,
+  "2026-08-17":-7.59,
+  "2026-08-18":197.55,
+  "2026-08-19":98.21,
+  "2026-08-20":-1577.00,
+  "2026-08-21":10.56,
+  "2026-08-24":-3.68,
+  "2026-08-25":-435.49,
+  "2026-08-26":-840.25,
+  "2026-08-27":33.55,
+  "2026-08-28":46.90,
+  "2026-08-31":96.24,
 
-  "2026-08-03": 47.24,
-  "2026-08-04": 99.86,
-  "2026-08-05": 59.42,
-  "2026-08-06": -105.88,
-  "2026-08-07": 72.98,
-  "2026-08-10": -386.95,
-  "2026-08-11": -152.17,
-  "2026-08-12": -67.56,
-  "2026-08-13": 20.05,
-  "2026-08-14": -29.16,
-  "2026-08-17": -7.59,
-  "2026-08-18": 197.55,
-  "2026-08-19": 98.21,
-  "2026-08-20": -1577.00,
-  "2026-08-21": 10.56,
-  "2026-08-24": -3.68,
-  "2026-08-25": -435.49,
-  "2026-08-26": -840.25,
-  "2026-08-27": 33.55,
-  "2026-08-28": 46.90,
-  "2026-08-31": 96.24,
+  "2026-09-01":-193.99,
+  "2026-09-02":-41.68,
+  "2026-09-03":-232.65,
+  "2026-09-04":-403.03,
+  "2026-09-08":-21.27,
+  "2026-09-09":188.32,
+  "2026-09-10":39.66,
+  "2026-09-11":-42.66,
+  "2026-09-14":-14.48,
+  "2026-09-15":-220.39,
+  "2026-09-16":159.08,
+  "2026-09-17":169.43,
+  "2026-09-18":86.85,
+  "2026-09-21":-544.24,
+  "2026-09-22":182.20,
+  "2026-09-23":-855.48,
+  "2026-09-24":51.15,
+  "2026-09-25":-423.36,
+  "2026-09-30":-150.79,
 
-  "2026-09-01": -193.99,
-  "2026-09-02": -41.68,
-  "2026-09-03": -232.65,
-  "2026-09-04": -403.03,
-  "2026-09-08": -21.27,
-  "2026-09-09": 188.32,
-  "2026-09-10": 39.66,
-  "2026-09-11": -42.66,
-  "2026-09-14": -14.48,
-  "2026-09-15": -220.39,
-  "2026-09-16": 159.08,
-  "2026-09-17": 169.43,
-  "2026-09-18": 86.85,
-  "2026-09-21": -544.24,
-  "2026-09-22": 182.20,
-  "2026-09-23": -855.48,
-  "2026-09-24": 51.15,
-  "2026-09-25": -423.36,
-  "2026-09-30": -150.79,
-
-  "2026-10-01": 39.76,
-  "2026-10-02": -19.49,
-  "2026-10-05": -509.05,
-  "2026-10-06": 176.03,
-  "2026-10-07": 48.84,
-  "2026-10-08": -142.03,
-  "2026-10-09": -86.05,
-  "2026-10-12": 293.19,
-  "2026-10-13": 339.95,
-  "2026-10-14": 122.73,
-  "2026-10-15": -908.32,
-  "2026-10-19": -2.53,
-  "2026-10-20": -74.58,
-  "2026-10-21": -31.44,
-  "2026-10-22": -599.78,
-  "2026-10-23": -95.22
-
+  "2026-10-01":39.76,
+  "2026-10-02":-19.49,
+  "2026-10-05":-509.05,
+  "2026-10-06":176.03,
+  "2026-10-07":48.84,
+  "2026-10-08":-142.03,
+  "2026-10-09":-86.05,
+  "2026-10-12":293.19,
+  "2026-10-13":339.95,
+  "2026-10-14":122.73,
+  "2026-10-15":-908.32,
+  "2026-10-19":-2.53,
+  "2026-10-20":-74.58,
+  "2026-10-21":-31.44,
+  "2026-10-22":-599.78,
+  "2026-10-23":-95.22
 };
 
 
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"
+const months = [
+  "January","February","March","April",
+  "May","June","July","August",
+  "September","October","November","December"
 ];
-
 
 let currentMonth = 9;
 
 
-function getSavedJournal() {
-
-  try {
-
-    return JSON.parse(
-      localStorage.getItem(
-        JOURNAL_KEY
-      )
-    ) || {};
-
-  } catch(error) {
-
+function getJournal(){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  }catch{
     return {};
-
   }
-
 }
 
 
-function getCombinedTradingData() {
+function combined(){
+  const data = {...tradingData};
 
-  const combined = {
-    ...tradingData
-  };
+  const journal = getJournal();
 
-  const journal =
-    getSavedJournal();
+  Object.entries(journal).forEach(([date,day])=>{
+    if(typeof day?.totalNet === "number"){
+      data[date] = day.totalNet;
+    }
+  });
 
-  Object.keys(journal)
-    .forEach(date => {
-
-      const day =
-        journal[date];
-
-      if(
-        day &&
-        typeof day.totalNet === "number"
-      ) {
-
-        combined[date] =
-          day.totalNet;
-
-      }
-
-    });
-
-  return combined;
-
+  return data;
 }
 
 
-function money(value) {
+function money(v){
+  const n = Number(v || 0);
 
-  const n =
-    Number(value || 0);
-
-  if(n > 0) {
-    return "+$" + n.toFixed(2);
-  }
-
-  if(n < 0) {
-    return "-$" + Math.abs(n).toFixed(2);
-  }
+  if(n > 0) return "+$" + n.toFixed(2);
+  if(n < 0) return "-$" + Math.abs(n).toFixed(2);
 
   return "$0.00";
-
 }
 
 
-function dateKey(year,month,day) {
-
-  return (
-    year +
-    "-" +
-    String(month + 1)
-      .padStart(2,"0") +
-    "-" +
-    String(day)
-      .padStart(2,"0")
-  );
-
+function key(month,day){
+  return `2026-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
 }
 
 
-function getMonthData(month) {
+function monthEntries(month){
 
   const prefix =
     "2026-" +
-    String(month + 1)
-      .padStart(2,"0");
+    String(month+1).padStart(2,"0");
 
-  const data =
-    getCombinedTradingData();
-
-  return Object.entries(data)
-    .filter(
-      ([date]) =>
-        date.startsWith(prefix)
-    );
-
+  return Object.entries(combined()).filter(
+    ([date])=>date.startsWith(prefix)
+  );
 }
 
 
-function updateStats(month) {
+function renderStats(){
 
-  const entries =
-    getMonthData(month);
+  const entries = monthEntries(currentMonth);
 
-  const monthPnl =
-    document.getElementById(
-      "monthPnl"
-    );
+  const values = entries.map(x=>x[1]);
 
-  if(entries.length === 0) {
+  const total = values.reduce((a,b)=>a+b,0);
 
-    monthPnl.textContent =
-      "No data";
-
-    monthPnl.className =
-      "value";
-
-    document.getElementById(
-      "tradingDays"
-    ).textContent = "0";
-
-    document.getElementById(
-      "greenDays"
-    ).textContent = "0";
-
-    document.getElementById(
-      "redDays"
-    ).textContent = "0";
-
-    document.getElementById(
-      "bestDay"
-    ).textContent = "—";
-
-    document.getElementById(
-      "worstDay"
-    ).textContent = "—";
-
-    return;
-
-  }
-
-
-  const values =
-    entries.map(
-      entry => entry[1]
-    );
-
-  const total =
-    values.reduce(
-      (sum,value) =>
-        sum + value,
-      0
-    );
-
-  const green =
-    values.filter(
-      value => value > 0
-    ).length;
-
-  const red =
-    values.filter(
-      value => value < 0
-    ).length;
-
-  const bestEntry =
-    entries.reduce(
-      (best,current) =>
-        current[1] > best[1]
-          ? current
-          : best
-    );
-
-  const worstEntry =
-    entries.reduce(
-      (worst,current) =>
-        current[1] < worst[1]
-          ? current
-          : worst
-    );
-
+  const monthPnl = document.getElementById("monthPnl");
 
   monthPnl.textContent =
-    money(total);
+    entries.length ? money(total) : "No data";
 
   monthPnl.className =
-    total >= 0
-      ? "value green"
-      : "value red";
+    "value " +
+    (
+      total >= 0
+        ? "green"
+        : "red"
+    );
 
-
-  document.getElementById(
-    "tradingDays"
-  ).textContent =
+  document.getElementById("tradingDays").textContent =
     entries.length;
 
+  document.getElementById("greenDays").textContent =
+    values.filter(v=>v>0).length;
 
-  document.getElementById(
-    "greenDays"
-  ).textContent =
-    green;
+  document.getElementById("redDays").textContent =
+    values.filter(v=>v<0).length;
 
+  document.getElementById("bestDay").textContent =
+    entries.length
+      ? money(Math.max(...values))
+      : "—";
 
-  document.getElementById(
-    "redDays"
-  ).textContent =
-    red;
-
-
-  document.getElementById(
-    "bestDay"
-  ).textContent =
-    money(bestEntry[1]);
+  document.getElementById("worstDay").textContent =
+    entries.length
+      ? money(Math.min(...values))
+      : "—";
 
 
-  document.getElementById(
-    "worstDay"
-  ).textContent =
-    money(worstEntry[1]);
+  const all = Object.values(combined());
 
+  const ytd = all.reduce((a,b)=>a+b,0);
+
+  const y = document.getElementById("yearPnl");
+
+  y.textContent = money(ytd);
+
+  y.className =
+    "value " +
+    (ytd >= 0 ? "green" : "red");
+
+  document.getElementById("yearDays").textContent =
+    all.length;
+
+  document.getElementById("yearGreen").textContent =
+    all.filter(v=>v>0).length;
+
+  document.getElementById("yearRed").textContent =
+    all.filter(v=>v<0).length;
 }
 
 
-function updateYearStats() {
+function render(){
 
-  const entries =
-    Object.entries(
-      getCombinedTradingData()
-    );
+  document.getElementById("monthTitle").textContent =
+    months[currentMonth] + " 2026";
 
-  const values =
-    entries.map(
-      entry => entry[1]
-    );
-
-  const total =
-    values.reduce(
-      (sum,value) =>
-        sum + value,
-      0
-    );
-
-  const green =
-    values.filter(
-      value => value > 0
-    ).length;
-
-  const red =
-    values.filter(
-      value => value < 0
-    ).length;
-
-
-  const yearPnl =
-    document.getElementById(
-      "yearPnl"
-    );
-
-  yearPnl.textContent =
-    money(total);
-
-  yearPnl.className =
-    total >= 0
-      ? "value green"
-      : "value red";
-
-
-  document.getElementById(
-    "yearDays"
-  ).textContent =
-    entries.length;
-
-
-  document.getElementById(
-    "yearGreen"
-  ).textContent =
-    green;
-
-
-  document.getElementById(
-    "yearRed"
-  ).textContent =
-    red;
-
-}
-
-
-function renderCalendar() {
-
-  document.getElementById(
-    "monthTitle"
-  ).textContent =
-    monthNames[currentMonth] +
-    " 2026";
-
-
-  updateStats(
-    currentMonth
+  document.querySelectorAll(".month-jump").forEach(
+    (b,i)=>b.classList.toggle("active",i===currentMonth)
   );
 
-  updateYearStats();
+  renderStats();
 
-
-  document
-    .querySelectorAll(
-      ".month-jump"
-    )
-    .forEach(
-      (button,index) => {
-
-        button.classList.toggle(
-          "active",
-          index === currentMonth
-        );
-
-      }
-    );
-
-
-  const container =
-    document.getElementById(
-      "calendarDays"
-    );
+  const container = document.getElementById("calendarDays");
 
   container.innerHTML = "";
 
+  const first = new Date(2026,currentMonth,1);
 
-  const first =
-    new Date(
-      2026,
-      currentMonth,
-      1
-    );
+  let dayIndex = first.getDay();
 
+  dayIndex = dayIndex === 0 ? 7 : dayIndex;
 
-  const daysInMonth =
-    new Date(
-      2026,
-      currentMonth + 1,
-      0
-    ).getDate();
+  let offset = dayIndex-1;
 
+  if(offset > 4) offset = 0;
 
-  let weekday =
-    first.getDay();
-
-  weekday =
-    weekday === 0
-      ? 7
-      : weekday;
-
-
-  let mondayIndex =
-    weekday - 1;
-
-
-  if(mondayIndex > 4) {
-    mondayIndex = 0;
+  for(let i=0;i<offset;i++){
+    const empty = document.createElement("div");
+    empty.className = "day empty";
+    container.appendChild(empty);
   }
 
+  const days =
+    new Date(2026,currentMonth+1,0).getDate();
 
-  for(
-    let i = 0;
-    i < mondayIndex;
-    i++
-  ) {
+  const data = combined();
 
-    const empty =
-      document.createElement(
-        "div"
-      );
+  const journal = getJournal();
 
-    empty.className =
-      "day empty";
+  for(let day=1;day<=days;day++){
 
-    container.appendChild(
-      empty
-    );
+    const d = new Date(2026,currentMonth,day);
 
-  }
-
-
-  const combinedData =
-    getCombinedTradingData();
-
-  const journal =
-    getSavedJournal();
-
-
-  for(
-    let day = 1;
-    day <= daysInMonth;
-    day++
-  ) {
-
-    const date =
-      new Date(
-        2026,
-        currentMonth,
-        day
-      );
-
-
-    const jsDay =
-      date.getDay();
-
-
-    if(
-      jsDay === 0 ||
-      jsDay === 6
-    ) {
+    if(d.getDay() === 0 || d.getDay() === 6){
       continue;
     }
 
+    const date = key(currentMonth,day);
 
-    const key =
-      dateKey(
-        2026,
-        currentMonth,
-        day
-      );
+    const value = data[date];
 
+    const cell = document.createElement("div");
 
-    const value =
-      combinedData[key];
+    cell.className = "day";
 
-
-    const cell =
-      document.createElement(
-        "div"
-      );
-
-    cell.className =
-      "day";
-
-
-    if(
-      typeof value === "number"
-    ) {
-
-      if(value > 0) {
-
-        cell.classList.add(
-          "green-day"
-        );
-
-      }
-
-      else if(value < 0) {
-
-        cell.classList.add(
-          "red-day"
-        );
-
-      }
-
-    }
-
-
-    if(journal[key]) {
+    if(typeof value === "number"){
 
       cell.classList.add(
-        "saved-day"
+        value >= 0
+          ? "green-day"
+          : "red-day"
       );
-
     }
 
+    if(journal[date]){
+      cell.classList.add("saved-day");
+    }
 
     if(
       typeof value !== "number" &&
-      key > "2026-10-23"
-    ) {
-
-      cell.classList.add(
-        "future"
-      );
-
+      date > "2026-10-23"
+    ){
+      cell.classList.add("future");
     }
 
+    const dateEl = document.createElement("div");
 
-    const dateEl =
-      document.createElement(
-        "div"
-      );
-
-    dateEl.className =
-      "date";
+    dateEl.className = "date";
 
     dateEl.textContent =
       day + " " +
-      monthNames[currentMonth]
-        .slice(0,3);
+      months[currentMonth].slice(0,3);
 
-    cell.appendChild(
-      dateEl
-    );
+    const pnl = document.createElement("div");
 
+    pnl.className = "pnl";
 
-    const pnl =
-      document.createElement(
-        "div"
-      );
-
-    pnl.className =
-      "pnl";
-
-
-    if(
+    pnl.textContent =
       typeof value === "number"
-    ) {
+        ? money(value)
+        : "—";
 
-      pnl.textContent =
-        money(value);
-
-      pnl.classList.add(
-        value >= 0
-          ? "green"
-          : "red"
-      );
-
+    if(typeof value === "number"){
+      pnl.classList.add(value >= 0 ? "green" : "red");
+    }else{
+      pnl.classList.add("muted");
     }
 
-    else {
+    cell.appendChild(dateEl);
+    cell.appendChild(pnl);
 
-      pnl.textContent =
-        "—";
-
-      pnl.classList.add(
-        "muted"
-      );
-
-    }
-
-
-    cell.appendChild(
-      pnl
-    );
-
-
-    if(
-      typeof value === "number"
-    ) {
-
+    if(typeof value === "number" || journal[date]){
       cell.addEventListener(
         "click",
-        () =>
-          showDetail(
-            key,
-            value
-          )
+        ()=>showDetail(date,value)
       );
-
     }
 
-
-    container.appendChild(
-      cell
-    );
-
+    container.appendChild(cell);
   }
-
 }
 
 
-function showDetail(date,value) {
+function showDetail(date,value){
 
-  const d =
-    new Date(
-      date + "T12:00:00"
-    );
+  const day = getJournal()[date] || {};
 
-
-  const formatted =
-    d.toLocaleDateString(
-      "en-GB",
-      {
-        weekday:"long",
-        day:"numeric",
-        month:"long",
-        year:"numeric"
-      }
-    );
-
-
-  const journal =
-    getSavedJournal();
-
-  const saved =
-    journal[date];
-
-
-  let extra = "";
-
-
-  if(saved) {
-
-    const trades =
-      saved.trades || [];
-
-
-    let tradeHtml = "";
-
-
-    trades.forEach(
-      (trade,index) => {
-
-        tradeHtml += `
-
-          <div class="detail-trade">
-
-            <strong>
-              Trade ${index + 1}
-              ${trade.ticker ? " • " + trade.ticker : ""}
-            </strong>
-
-            <br>
-
-            ${trade.side || ""}
-
-            ${trade.entryTime
-              ? " • Entry " + trade.entryTime
-              : ""
-            }
-
-            ${trade.exitTime
-              ? " • Exit " + trade.exitTime
-              : ""
-            }
-
-            <br>
-
-            Net:
-            <strong class="${trade.netPnl >= 0 ? "green" : "red"}">
-              ${money(trade.netPnl)}
-            </strong>
-
-            ${trade.setup
-              ? "<br>Setup: " + trade.setup
-              : ""
-            }
-
-          </div>
-
-        `;
-
-      }
-    );
-
-
-    let scoreHtml = "";
-
-    if(saved.sessionScore) {
-
-      scoreHtml = `
-
-        <div
-          style="
-            margin-top:12px;
-            padding:10px;
-            border-radius:10px;
-            background:var(--panel2);
-            border:1px solid var(--border);
-          "
-        >
-          <strong>
-            Session Score:
-            ${saved.sessionScore.score}/${saved.sessionScore.outOf || 5}
-          </strong>
-        </div>
-
-      `;
-
+  const pretty = new Date(
+    date+"T12:00:00"
+  ).toLocaleDateString(
+    "en-GB",
+    {
+      weekday:"long",
+      day:"numeric",
+      month:"long",
+      year:"numeric"
     }
+  );
 
+  const trades = day.trades || [];
 
-    extra = `
+  const compliance =
+    day.compliance &&
+    typeof day.compliance.score === "number"
+      ? day.compliance.score + "/3"
+      : "—";
 
-      <div class="muted" style="margin-top:10px;">
-        Saved WASPN record
+  const score =
+    day.sessionScore &&
+    typeof day.sessionScore.score === "number"
+      ? day.sessionScore.score + "/5"
+      : "—";
+
+  const attempt =
+    day.liveRisk
+      ? (
+          day.liveRisk.maxAttemptReached ??
+          day.liveRisk.attempt ??
+          0
+        )
+      : "—";
+
+  const warning =
+    day.liveRisk?.warningReached
+      ? "Yes"
+      : "No";
+
+  const hardStop =
+    day.liveRisk?.hardStopReached
+      ? "Yes"
+      : "No";
+
+  const tilt =
+    day.liveRisk?.tilt ||
+    trades.some(t=>t.tilt === "yes")
+      ? "Yes"
+      : "No";
+
+  const tradeHtml = trades.map(
+    (t,i)=>`
+      <div class="trade">
+        <strong>
+          Trade ${i+1}${t.ticker ? " • "+t.ticker : ""}
+        </strong>
+        <br>
+        ${t.side || ""}
+        ${t.entryTime ? " • "+t.entryTime : ""}
+        ${t.exitTime ? " → "+t.exitTime : ""}
+        <br>
+        Net:
+        <strong class="${Number(t.netPnl)>=0 ? "green" : "red"}">
+          ${money(t.netPnl)}
+        </strong>
+        ${t.actualNet !== null && t.actualNet !== undefined
+          ? " • Broker net"
+          : " • Calculated"}
+        ${t.setup ? "<br>Setup: "+escapeHtml(t.setup) : ""}
       </div>
-
-      ${scoreHtml}
-
-      <div class="detail-trades">
-        ${
-          tradeHtml ||
-          '<div class="muted">No trade details saved.</div>'
-        }
-      </div>
-
-      ${
-        saved.notes
-          ? '<div class="muted" style="margin-top:12px;"><strong>Daily notes:</strong><br>' +
-            saved.notes +
-            '</div>'
-          : ""
-      }
-
-    `;
-
-  }
+    `
+  ).join("");
 
 
-  const detail =
-    document.getElementById(
-      "detail"
-    );
-
-
-  detail.innerHTML = `
-
-    <div class="detail-title">
-      ${formatted}
-    </div>
+  document.getElementById("detail").innerHTML = `
+    <strong>${pretty}</strong>
 
     <div
-      class="${value >= 0 ? "green" : "red"}"
-      style="
-        font-size:30px;
-        font-weight:900;
-        margin-top:8px;
-      "
+      class="${Number(value)>=0 ? "green" : "red"}"
+      style="font-size:30px;font-weight:900;margin-top:7px;"
     >
-      ${money(value)}
+      ${typeof value === "number" ? money(value) : "No saved P&L"}
     </div>
 
-    ${extra}
+    <div class="detail-grid">
 
+      <div class="detail-item">
+        <div class="label">Trades</div>
+        <strong>${trades.length}</strong>
+      </div>
+
+      <div class="detail-item">
+        <div class="label">Max Attempt</div>
+        <strong>${attempt}</strong>
+      </div>
+
+      <div class="detail-item">
+        <div class="label">Compliance</div>
+        <strong>${compliance}</strong>
+      </div>
+
+      <div class="detail-item">
+        <div class="label">Session Score</div>
+        <strong>${score}</strong>
+      </div>
+
+      <div class="detail-item">
+        <div class="label">-$75 Reached</div>
+        <strong>${warning}</strong>
+      </div>
+
+      <div class="detail-item">
+        <div class="label">-$100 Reached</div>
+        <strong>${hardStop}</strong>
+      </div>
+
+      <div class="detail-item">
+        <div class="label">Tilt Recorded</div>
+        <strong>${tilt}</strong>
+      </div>
+
+      <div class="detail-item">
+        <div class="label">Journal</div>
+        <strong>${day.journalSavedAt ? "Saved" : "—"}</strong>
+      </div>
+
+    </div>
+
+    ${tradeHtml}
+
+    ${
+      day.notes
+        ? `
+          <div class="trade">
+            <strong>Daily Notes</strong><br>
+            ${escapeHtml(day.notes)}
+          </div>
+        `
+        : ""
+    }
   `;
-
 }
 
 
-function buildMonthButtons() {
-
-  const holder =
-    document.getElementById(
-      "monthButtons"
-    );
-
-
-  monthNames.forEach(
-    (month,index) => {
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-      button.className =
-        "month-jump";
-
-      button.textContent =
-        month.slice(0,3);
-
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          currentMonth =
-            index;
-
-          renderCalendar();
-
-        }
-      );
-
-
-      holder.appendChild(
-        button
-      );
-
-    }
-  );
-
+function escapeHtml(value){
+  return String(value || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
 
-document
-  .getElementById(
-    "prevBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
+function buildButtons(){
 
-      currentMonth =
-        currentMonth === 0
-          ? 11
-          : currentMonth - 1;
+  const holder = document.getElementById("monthButtons");
 
-      renderCalendar();
+  months.forEach((m,i)=>{
 
-    }
-  );
+    const b = document.createElement("button");
 
+    b.className = "month-jump";
 
-document
-  .getElementById(
-    "nextBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
+    b.textContent = m.slice(0,3);
 
-      currentMonth =
-        currentMonth === 11
-          ? 0
-          : currentMonth + 1;
+    b.addEventListener("click",()=>{
+      currentMonth = i;
+      render();
+    });
 
-      renderCalendar();
-
-    }
-  );
+    holder.appendChild(b);
+  });
+}
 
 
-window.addEventListener(
-  "storage",
-  renderCalendar
-);
+document.getElementById("prev").addEventListener("click",()=>{
+  currentMonth = currentMonth === 0 ? 11 : currentMonth-1;
+  render();
+});
 
+document.getElementById("next").addEventListener("click",()=>{
+  currentMonth = currentMonth === 11 ? 0 : currentMonth+1;
+  render();
+});
 
-buildMonthButtons();
+window.addEventListener("storage",render);
 
-renderCalendar();
-
+buildButtons();
+render();
 </script>
 
 </body>
