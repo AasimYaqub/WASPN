@@ -6,23 +6,27 @@
       label: "Home",
       icon: "⌂",
       href: "index.html",
-      match: ["", "/", "index.html"],
       color: "#22c7ff"
     },
     {
       key: "risk",
       label: "Risk",
       icon: "1",
-      href: "live-risk.html",
-      match: ["live-risk.html"],
+      href: "live-risk.html#top",
       color: "#22c7ff"
+    },
+    {
+      key: "timer",
+      label: "Timer",
+      icon: "◷",
+      href: "live-risk.html#timerSection",
+      color: "#f3b84b"
     },
     {
       key: "journal",
       label: "Journal",
       icon: "2",
       href: "journal.html",
-      match: ["journal.html"],
       color: "#75dbe7"
     },
     {
@@ -30,7 +34,6 @@
       label: "End",
       icon: "3",
       href: "compliance.html",
-      match: ["compliance.html"],
       color: "#35d07f"
     },
     {
@@ -38,38 +41,80 @@
       label: "Review",
       icon: "4",
       href: "calendar-2026.html",
-      match: ["calendar-2026.html"],
       color: "#aeb7ff"
     }
   ];
 
 
-  function currentFile() {
+  function currentFile(){
 
-    const path =
+    return (
       window.location.pathname
         .split("/")
-        .pop() || "";
-
-    return path;
+        .pop() || ""
+    );
 
   }
 
 
-  function activeStep() {
+  function activeKey(){
 
     const file =
       currentFile();
 
-    return STEPS.find(
-      step =>
-        step.match.includes(file)
-    ) || STEPS[0];
+
+    if(
+      file === "" ||
+      file === "index.html"
+    ){
+      return "home";
+    }
+
+
+    if(
+      file === "live-risk.html"
+    ){
+
+      if(
+        window.location.hash ===
+        "#timerSection"
+      ){
+        return "timer";
+      }
+
+
+      return "risk";
+
+    }
+
+
+    if(
+      file === "journal.html"
+    ){
+      return "journal";
+    }
+
+
+    if(
+      file === "compliance.html"
+    ){
+      return "end";
+    }
+
+
+    if(
+      file === "calendar-2026.html"
+    ){
+      return "review";
+    }
+
+
+    return "";
 
   }
 
 
-  function injectStyles() {
+  function injectStyles(){
 
     if(
       document.getElementById(
@@ -81,7 +126,9 @@
 
 
     const style =
-      document.createElement("style");
+      document.createElement(
+        "style"
+      );
 
 
     style.id =
@@ -111,7 +158,7 @@
 
         padding:
           7px
-          7px
+          6px
           max(
             7px,
             env(safe-area-inset-bottom)
@@ -141,7 +188,6 @@
       .waspn-workflow-inner{
 
         width:100%;
-
         max-width:1000px;
 
         margin:0 auto;
@@ -149,9 +195,12 @@
         display:grid;
 
         grid-template-columns:
-          repeat(5,minmax(0,1fr));
+          repeat(
+            6,
+            minmax(0,1fr)
+          );
 
-        gap:5px;
+        gap:4px;
 
       }
 
@@ -161,7 +210,7 @@
         position:relative;
 
         min-width:0;
-        min-height:61px;
+        min-height:59px;
 
         display:flex;
 
@@ -173,7 +222,7 @@
         gap:3px;
 
         padding:
-          6px 2px;
+          6px 1px;
 
         overflow:hidden;
 
@@ -181,7 +230,7 @@
           1px solid
           #283645;
 
-        border-radius:12px;
+        border-radius:11px;
 
         background:
           linear-gradient(
@@ -190,7 +239,7 @@
             #0d141b
           );
 
-        color:#9ba9b7;
+        color:#94a2b0;
 
         text-decoration:none;
 
@@ -198,9 +247,9 @@
 
         font-size:
           clamp(
-            8px,
-            2.3vw,
-            10px
+            7px,
+            2.1vw,
+            9px
           );
 
         font-weight:850;
@@ -210,7 +259,8 @@
         transition:
           transform .12s ease,
           border-color .12s ease,
-          background .12s ease;
+          background .12s ease,
+          color .12s ease;
 
         -webkit-tap-highlight-color:
           transparent;
@@ -221,26 +271,24 @@
       .waspn-workflow-item:active{
 
         transform:
-          scale(.96);
+          scale(.95);
 
       }
 
 
       .waspn-workflow-icon{
 
-        min-width:25px;
-        height:25px;
+        min-width:23px;
+        height:23px;
 
         display:flex;
 
         align-items:center;
         justify-content:center;
 
-        border-radius:50%;
-
         color:white;
 
-        font-size:14px;
+        font-size:13px;
         font-weight:950;
 
         line-height:1;
@@ -251,20 +299,28 @@
       .waspn-workflow-item[data-step="home"]
       .waspn-workflow-icon{
 
-        font-size:18px;
+        font-size:17px;
+
+      }
+
+
+      .waspn-workflow-item[data-step="timer"]
+      .waspn-workflow-icon{
+
+        font-size:17px;
 
       }
 
 
       .waspn-workflow-label{
 
+        width:100%;
+
         overflow:hidden;
 
         text-overflow:ellipsis;
 
         white-space:nowrap;
-
-        max-width:100%;
 
       }
 
@@ -278,33 +334,15 @@
           );
 
         border-color:
-          color-mix(
-            in srgb,
-            var(
-              --workflow-active,
-              #22c7ff
-            )
-            58%,
-            transparent
+          var(
+            --workflow-active,
+            #22c7ff
           );
 
-        background:
-          color-mix(
-            in srgb,
-            var(
-              --workflow-active,
-              #22c7ff
-            )
-            11%,
-            #0d141b
-          );
+        background:#111c24;
 
         box-shadow:
-          inset
-          0
-          0
-          0
-          1px
+          inset 0 0 18px
           color-mix(
             in srgb,
             var(
@@ -327,6 +365,13 @@
             #22c7ff
           );
 
+        text-shadow:
+          0 0 10px
+          var(
+            --workflow-active,
+            #22c7ff
+          );
+
       }
 
 
@@ -336,8 +381,8 @@
 
         position:absolute;
 
-        left:12px;
-        right:12px;
+        left:9px;
+        right:9px;
         top:0;
 
         height:2px;
@@ -352,9 +397,7 @@
           );
 
         box-shadow:
-          0
-          0
-          8px
+          0 0 8px
           var(
             --workflow-active,
             #22c7ff
@@ -365,19 +408,35 @@
 
       @media(max-width:390px){
 
-        .waspn-workflow-inner{
-          gap:4px;
+        .waspn-workflow-nav{
+          padding-left:4px;
+          padding-right:4px;
         }
+
+
+        .waspn-workflow-inner{
+          gap:3px;
+        }
+
 
         .waspn-workflow-item{
-          min-height:58px;
-          border-radius:10px;
+
+          min-height:56px;
+
+          border-radius:9px;
+
+          font-size:7px;
+
         }
 
+
         .waspn-workflow-icon{
-          min-width:23px;
-          height:23px;
-          font-size:13px;
+
+          min-width:21px;
+          height:21px;
+
+          font-size:12px;
+
         }
 
       }
@@ -392,15 +451,66 @@
   }
 
 
-  function buildNav() {
+  function setActive(
+    key
+  ){
+
+    document
+      .querySelectorAll(
+        ".waspn-workflow-item"
+      )
+      .forEach(
+        link => {
+
+          const active =
+            link.dataset.step ===
+            key;
+
+
+          link.classList.toggle(
+            "active",
+            active
+          );
+
+
+          if(
+            active
+          ){
+
+            link.setAttribute(
+              "aria-current",
+              "page"
+            );
+
+          }
+
+          else{
+
+            link.removeAttribute(
+              "aria-current"
+            );
+
+          }
+
+        }
+      );
+
+  }
+
+
+  function refreshActive(){
+
+    setActive(
+      activeKey()
+    );
+
+  }
+
+
+  function buildNav(){
 
     injectStyles();
 
-
-    /*
-      Remove old navigation so there is
-      never a duplicate workflow strip.
-    */
 
     document
       .querySelectorAll(
@@ -410,10 +520,6 @@
         element =>
           element.remove()
       );
-
-
-    const active =
-      activeStep();
 
 
     const nav =
@@ -428,7 +534,7 @@
 
     nav.setAttribute(
       "aria-label",
-      "WASPN workflow"
+      "WASPN chronological workflow"
     );
 
 
@@ -469,26 +575,21 @@
         );
 
 
-        const isActive =
-          step.key ===
-          active.key;
+        link.addEventListener(
+          "click",
+          () => {
 
+            /*
+              Gives immediate visual feedback
+              before navigation / hash movement.
+            */
 
-        if(
-          isActive
-        ){
+            setActive(
+              step.key
+            );
 
-          link.classList.add(
-            "active"
-          );
-
-
-          link.setAttribute(
-            "aria-current",
-            "page"
-          );
-
-        }
+          }
+        );
 
 
         const icon =
@@ -546,7 +647,22 @@
       nav
     );
 
+
+    refreshActive();
+
   }
+
+
+  window.addEventListener(
+    "hashchange",
+    refreshActive
+  );
+
+
+  window.addEventListener(
+    "popstate",
+    refreshActive
+  );
 
 
   if(
