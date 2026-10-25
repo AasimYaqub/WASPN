@@ -1919,8 +1919,6 @@ a{
 >
 
 
-<!-- HEADER -->
-
 <header>
 
   <div class="topbar">
@@ -1971,8 +1969,6 @@ a{
 
 
 
-<!-- STATUS -->
-
 <section
   id="status"
   class="status warn"
@@ -2004,8 +2000,6 @@ a{
 </section>
 
 
-
-<!-- CLOCKS -->
 
 <div class="clocks">
 
@@ -2057,8 +2051,6 @@ a{
 </div>
 
 
-
-<!-- PRIMARY RISK STATE -->
 
 <div class="cockpit">
 
@@ -2120,8 +2112,6 @@ a{
 
 
 
-<!-- TRADE CLOSED -->
-
 <div class="trade-actions">
 
   <button
@@ -2150,8 +2140,6 @@ a{
 </div>
 
 
-
-<!-- TIMER -->
 
 <section
   id="timerSection"
@@ -2224,8 +2212,6 @@ a{
 
 
 
-<!-- BEHAVIOURAL RISK LOCK -->
-
 <section class="behaviour-card">
 
   <div class="behaviour-row">
@@ -2287,8 +2273,6 @@ a{
 
 
 
-<!-- RESET GATE -->
-
 <section
   id="resetGate"
   class="reset-gate"
@@ -2299,7 +2283,7 @@ a{
   </div>
 
   <div class="gate-intro">
-    The five-minute lock has expired. Complete all checks before WASPN can re-enable a new trade.
+    The five-minute behavioural lock has expired. Complete all checks before WASPN can re-enable a new trade.
   </div>
 
 
@@ -2479,8 +2463,6 @@ a{
 
 
 
-<!-- GUARDRAILS -->
-
 <div class="guardrails">
 
   <div class="guardrail">
@@ -2537,8 +2519,6 @@ a{
 </div>
 
 
-
-<!-- RESEARCH -->
 
 <details class="research">
 
@@ -2647,8 +2627,6 @@ a{
 
 
 
-<!-- CONNECTED RECORD -->
-
 <section class="section">
 
   <div class="section-head">
@@ -2717,11 +2695,11 @@ a{
     <div class="summary-item">
 
       <div class="label">
-        Session Score
+        Process Score
       </div>
 
       <div
-        id="sessionScore"
+        id="processScore"
         class="summary-value"
       >
         —
@@ -2743,8 +2721,6 @@ a{
 
 
 
-<!-- HARD RULE -->
-
 <div class="rule-reminder">
 
   <strong>
@@ -2764,8 +2740,6 @@ a{
 </div>
 
 
-
-<!-- NAV -->
 
 <nav class="bottom-nav">
 
@@ -2820,6 +2794,10 @@ const STORAGE_KEY =
 
 
 const BEHAVIOURAL_LOCK_MS =
+  5 * 60 * 1000;
+
+
+const LOSS_WARNING_LOCK_MS =
   5 * 60 * 1000;
 
 
@@ -2878,6 +2856,27 @@ let behaviouralLockEndsAt =
 
 
 let resetGateRequired =
+  false;
+
+
+
+/* ========================================
+   -$75 LOSS WARNING COOLDOWN
+======================================== */
+
+let lossWarningActive =
+  false;
+
+
+let lossWarningStartedAt =
+  null;
+
+
+let lossWarningEndsAt =
+  null;
+
+
+let lossWarningCompleted =
   false;
 
 
@@ -3286,7 +3285,8 @@ function money(
       "-$" +
       Math.abs(
         n
-      ).toFixed(
+      )
+      .toFixed(
         2
       )
     );
@@ -3522,6 +3522,19 @@ function startTimer(){
 
 
   if(
+    lossWarningActive
+  ){
+
+    alert(
+      "-$75 risk-warning cooling period is still active."
+    );
+
+    return;
+
+  }
+
+
+  if(
     !clock.active
   ){
 
@@ -3633,6 +3646,151 @@ function resetTradeTimer(){
   renderTimer();
 
   queueSave();
+
+}
+
+
+
+/* ========================================
+   -$75 LOSS WARNING
+======================================== */
+
+function activateLossWarning(){
+
+  if(
+    lossWarningActive ||
+    lossWarningCompleted ||
+    sessionEnded
+  ){
+
+    return;
+
+  }
+
+
+  lossWarningActive =
+    true;
+
+
+  lossWarningStartedAt =
+    Date.now();
+
+
+  lossWarningEndsAt =
+    lossWarningStartedAt +
+    LOSS_WARNING_LOCK_MS;
+
+
+  queueSave();
+
+}
+
+
+function lossWarningRemaining(){
+
+  if(
+    !lossWarningActive ||
+    !lossWarningEndsAt
+  ){
+
+    return 0;
+
+  }
+
+
+  return Math.max(
+
+    0,
+
+    lossWarningEndsAt -
+    Date.now()
+
+  );
+
+}
+
+
+function updateLossWarning(){
+
+  if(
+    !lossWarningActive
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    lossWarningRemaining() <= 0
+  ){
+
+    lossWarningActive =
+      false;
+
+
+    lossWarningCompleted =
+      true;
+
+
+    lossWarningEndsAt =
+      null;
+
+
+    queueSave();
+
+  }
+
+}
+
+
+function lossWarningCountdownText(){
+
+  const remaining =
+    lossWarningRemaining();
+
+
+  const totalSeconds =
+    Math.ceil(
+      remaining / 1000
+    );
+
+
+  const minutes =
+    Math.floor(
+      totalSeconds / 60
+    );
+
+
+  const seconds =
+    totalSeconds % 60;
+
+
+  return (
+
+    String(
+      minutes
+    )
+    .padStart(
+      2,
+      "0"
+    )
+
+    +
+
+    ":"
+
+    +
+
+    String(
+      seconds
+    )
+    .padStart(
+      2,
+      "0"
+    )
+
+  );
 
 }
 
@@ -3862,9 +4020,7 @@ function renderBehaviouralLock(){
         true;
 
 
-      update(
-        true
-      );
+      queueSave();
 
     }
 
@@ -4130,7 +4286,7 @@ function renderConnected(){
 
 
   document.getElementById(
-    "sessionScore"
+    "processScore"
   ).textContent =
 
     day.sessionScore &&
@@ -4215,6 +4371,22 @@ function saveLiveState(){
 
         resetGateRequired:
           resetGateRequired
+
+      },
+
+      lossWarning:{
+
+        active:
+          lossWarningActive,
+
+        startedAt:
+          lossWarningStartedAt,
+
+        endsAt:
+          lossWarningEndsAt,
+
+        completed:
+          lossWarningCompleted
 
       },
 
@@ -4521,6 +4693,87 @@ function loadLive(){
   }
 
 
+  const lossWarning =
+    live?.lossWarning;
+
+
+  if(
+    lossWarning
+  ){
+
+    lossWarningActive =
+      !!lossWarning.active;
+
+
+    lossWarningStartedAt =
+      lossWarning.startedAt
+        ? Number(
+            lossWarning.startedAt
+          )
+        : null;
+
+
+    lossWarningEndsAt =
+      lossWarning.endsAt
+        ? Number(
+            lossWarning.endsAt
+          )
+        : null;
+
+
+    lossWarningCompleted =
+      !!lossWarning.completed;
+
+
+    if(
+      lossWarningActive &&
+      lossWarningEndsAt &&
+      Date.now() >=
+      lossWarningEndsAt
+    ){
+
+      lossWarningActive =
+        false;
+
+
+      lossWarningEndsAt =
+        null;
+
+
+      lossWarningCompleted =
+        true;
+
+    }
+
+  }
+
+  else{
+
+    /*
+      Backward compatibility:
+      older records may already have warningReached=true
+      without the newer cooldown object.
+      Treat those as already having completed the warning.
+    */
+
+    lossWarningActive =
+      false;
+
+
+    lossWarningStartedAt =
+      null;
+
+
+    lossWarningEndsAt =
+      null;
+
+
+    lossWarningCompleted =
+      !!live?.warningReached;
+
+  }
+
+
   if(
     timerRunning
   ){
@@ -4751,6 +5004,30 @@ function update(
   }
 
 
+  /*
+    Trigger -$75 cooling period only when the P&L
+    is actively updated into the warning zone.
+
+    It runs once per session.
+  */
+
+  if(
+    shouldSave &&
+    !sessionEnded &&
+    pnl <= -75 &&
+    pnl > -100 &&
+    !lossWarningActive &&
+    !lossWarningCompleted
+  ){
+
+    activateLossWarning();
+
+  }
+
+
+  updateLossWarning();
+
+
   const status =
     document.getElementById(
       "status"
@@ -4929,7 +5206,7 @@ function update(
 
 
     detail.textContent =
-      "Five-minute lock expired • New trades remain disabled until the gate is passed";
+      "Behavioural lock expired • New trades remain disabled until the gate is passed";
 
 
     completeBtn.disabled =
@@ -4943,7 +5220,7 @@ function update(
 
 
   else if(
-    pnl <= -75
+    lossWarningActive
   ){
 
     status.className =
@@ -4951,15 +5228,16 @@ function update(
 
 
     mode.textContent =
-      "RISK WARNING";
+      "LOSS WARNING COOLDOWN";
 
 
     title.textContent =
-      "STEP AWAY 5 MINUTES";
+      "STEP AWAY • " +
+      lossWarningCountdownText();
 
 
     detail.textContent =
-      "Realised P&L has reached the -$75 warning threshold";
+      "-$75 realised warning reached • New trades paused for five minutes";
 
 
     completeBtn.disabled =
@@ -4976,23 +5254,49 @@ function update(
     clock.active
   ){
 
-    status.className =
-      "status ok";
+    if(
+      pnl <= -75 &&
+      lossWarningCompleted
+    ){
+
+      status.className =
+        "status warn";
 
 
-    mode.textContent =
-      "SYSTEM ACTIVE";
+      mode.textContent =
+        "ELEVATED RISK";
 
 
-    title.textContent =
-      "WITHIN WASPN";
+      title.textContent =
+        "WASPN ACTIVE — CAUTION";
 
 
-    detail.textContent =
-      clock.label +
-      " • " +
-      attempt +
-      "/5 completed attempts";
+      detail.textContent =
+        "Five-minute -$75 cooldown completed • Trading may continue only within all remaining WASPN rules";
+
+    }
+
+    else{
+
+      status.className =
+        "status ok";
+
+
+      mode.textContent =
+        "SYSTEM ACTIVE";
+
+
+      title.textContent =
+        "WITHIN WASPN";
+
+
+      detail.textContent =
+        clock.label +
+        " • " +
+        attempt +
+        "/5 completed attempts";
+
+    }
 
 
     completeBtn.disabled =
@@ -5056,7 +5360,7 @@ function resetToday(){
 
   if(
     !confirm(
-      "Reset today's entire Live Risk state, trade timer and behavioural lock? Journal, Compliance and Session Score will be preserved."
+      "Reset today's entire Live Risk state, trade timer and risk locks? Journal, Compliance and Process Score will be preserved."
     )
   ){
 
@@ -5098,6 +5402,22 @@ function resetToday(){
 
 
   resetGateRequired =
+    false;
+
+
+  lossWarningActive =
+    false;
+
+
+  lossWarningStartedAt =
+    null;
+
+
+  lossWarningEndsAt =
+    null;
+
+
+  lossWarningCompleted =
     false;
 
 
@@ -5176,6 +5496,22 @@ function resetToday(){
           null,
 
         resetGateRequired:
+          false
+
+      },
+
+      lossWarning:{
+
+        active:
+          false,
+
+        startedAt:
+          null,
+
+        endsAt:
+          null,
+
+        completed:
           false
 
       },
