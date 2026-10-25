@@ -1,210 +1,382 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WASPN Daily Compliance</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>WASPN Daily Compliance</title>
 
-  <style>
-    :root {
-      --bg:#0b0f14;
-      --panel:#121820;
-      --border:#293342;
-      --text:#e8eef6;
-      --muted:#8e9aaa;
-      --green:#35d07f;
-      --red:#ff5f6d;
-      --blue:#63a7ff;
-    }
+<style>
+:root{
+  --bg:#0b0f14;
+  --panel:#121820;
+  --border:#293342;
+  --text:#e8eef6;
+  --muted:#8e9aaa;
+  --green:#35d07f;
+  --red:#ff5f6d;
+  --blue:#63a7ff;
+}
 
-    * { box-sizing:border-box; }
+*{box-sizing:border-box}
 
-    body {
-      margin:0;
-      background:linear-gradient(180deg,#090d12,#0d131a);
-      color:var(--text);
-      font-family:Arial,Helvetica,sans-serif;
-    }
+body{
+  margin:0;
+  background:linear-gradient(180deg,#090d12,#0d131a);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
 
-    .wrap {
-      max-width:760px;
-      margin:0 auto;
-      padding:24px;
-    }
+.wrap{
+  max-width:760px;
+  margin:auto;
+  padding:18px;
+}
 
-    .topbar {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:16px;
-    }
+.top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
 
-    .home {
-      text-decoration:none;
-      color:white;
-      background:#293342;
-      padding:10px 14px;
-      border-radius:10px;
-      font-weight:700;
-    }
+.btn,a.btn{
+  border:0;
+  background:#293342;
+  color:white;
+  padding:11px 14px;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:700;
+  cursor:pointer;
+}
 
-    .hero,.card {
-      background:var(--panel);
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:22px;
-    }
+.save{background:#17693d}
 
-    h1 {
-      margin:0 0 8px;
-      font-size:42px;
-      color:var(--green);
-    }
+.hero,.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+}
 
-    .sub {
-      color:var(--muted);
-      line-height:1.5;
-    }
+.card{margin-top:15px}
 
-    .card { margin-top:18px; }
+h1{
+  color:var(--green);
+  font-size:40px;
+  margin:4px 0 7px;
+}
 
-    .check {
-      display:flex;
-      gap:14px;
-      align-items:center;
-      padding:18px 0;
-      border-bottom:1px solid var(--border);
-      font-size:19px;
-      font-weight:700;
-      cursor:pointer;
-      user-select:none;
-    }
+.muted{
+  color:var(--muted);
+  line-height:1.5;
+}
 
-    .check:last-child {
-      border-bottom:0;
-    }
+input[type="date"]{
+  width:100%;
+  background:#0d131a;
+  border:1px solid var(--border);
+  color:white;
+  padding:11px;
+  border-radius:10px;
+  font-size:16px;
+}
 
-    input[type="checkbox"] {
-      width:24px;
-      height:24px;
-      accent-color:var(--green);
-      cursor:pointer;
-    }
+.check{
+  display:flex;
+  gap:13px;
+  align-items:flex-start;
+  padding:17px 0;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+}
 
-    .scorebox {
-      margin-top:18px;
-      background:#102018;
-      border:1px solid #275c3e;
-      border-radius:16px;
-      padding:20px;
-      text-align:center;
-    }
+.check:last-child{border-bottom:0}
 
-    .score {
-      font-size:52px;
-      font-weight:800;
-      color:var(--green);
-      margin:4px 0;
-    }
+.check input{
+  width:24px;
+  height:24px;
+  flex:0 0 auto;
+  accent-color:var(--green);
+}
 
-    .rule {
-      margin-top:18px;
-      background:#181317;
-      border:1px solid #4b2930;
-      border-radius:16px;
-      padding:18px;
-      line-height:1.6;
-    }
+.title{
+  font-weight:900;
+}
 
-    .footer {
-      margin-top:20px;
-      color:var(--muted);
-      font-size:12px;
-      text-align:center;
-    }
-  </style>
+.copy{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+  margin-top:4px;
+}
+
+.score{
+  text-align:center;
+  font-size:60px;
+  font-weight:900;
+  color:var(--green);
+}
+
+.status{
+  margin-top:12px;
+  background:#0d131a;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:12px;
+  color:var(--muted);
+  text-align:center;
+  line-height:1.5;
+}
+
+.rule{
+  background:#181317;
+  border:1px solid #4b2930;
+}
+
+@media(max-width:600px){
+  .wrap{padding:12px}
+  .hero,.card{padding:16px}
+}
+</style>
 </head>
 
 <body>
-  <div class="wrap">
+<div class="wrap">
 
-    <div class="topbar">
-      <a class="home" href="index.html">← Home</a>
-    </div>
+<div class="top">
+  <a href="index.html" class="btn">← Home</a>
+  <a href="session-score.html" class="btn">Session Score</a>
+</div>
 
-    <section class="hero">
-      <div class="sub">WASPN • Daily Process Scorecard</div>
-      <h1>Compliance Check</h1>
-      <div class="sub">
-        Judge the session by rule-following first. P&amp;L comes second.
-      </div>
-    </section>
 
-    <section class="card">
-
-      <label class="check">
-        <input type="checkbox" class="compliance">
-        <span>Did I stay inside the window?</span>
-      </label>
-
-      <label class="check">
-        <input type="checkbox" class="compliance">
-        <span>Did I stop by attempt 5?</span>
-      </label>
-
-      <label class="check">
-        <input type="checkbox" class="compliance">
-        <span>Did I respect -$100?</span>
-      </label>
-
-    </section>
-
-    <section class="scorebox">
-      <div class="sub">Daily compliance score</div>
-      <div class="score" id="score">0 / 3</div>
-      <div id="message">Complete the process.</div>
-    </section>
-
-    <section class="rule">
-      <strong>UK times next week</strong><br><br>
-
-      Preliminary window:
-      <strong>10:30–11:00 AM</strong><br>
-
-      Main trading window:
-      <strong>1:00–3:00 PM</strong><br><br>
-
-      At <strong>3:00 PM</strong>, trading is finished.<br>
-      At <strong>attempt 5</strong>, trading is finished.<br>
-      At <strong>-$100 realised</strong>, trading is finished.
-    </section>
-
-    <div class="footer">
-      WASPN • Process Over Recovery
-    </div>
-
+<section class="hero">
+  <div class="muted">WASPN • Structural Rules</div>
+  <h1>Daily Compliance</h1>
+  <div class="muted">
+    These three factual rules are answered once here and reused by Session Score.
   </div>
+</section>
 
-  <script>
-    const checks = document.querySelectorAll('.compliance');
-    const score = document.getElementById('score');
-    const message = document.getElementById('message');
 
-    function updateScore() {
-      const total = [...checks].filter(c => c.checked).length;
-      score.textContent = total + ' / 3';
+<section class="card">
+  <label class="muted">Trading date</label>
+  <input id="date" type="date">
+</section>
 
-      if (total === 3) {
-        message.textContent = 'Fully compliant session.';
-      } else {
-        message.textContent = 'Process not yet complete.';
-      }
-    }
 
-    checks.forEach(check => {
-      check.addEventListener('change', updateScore);
-    });
-  </script>
+<section class="card">
+
+  <label class="check">
+    <input id="window" type="checkbox">
+    <span>
+      <div class="title">Stayed inside the allowed trading window</div>
+      <div class="copy">
+        Preliminary 6:30–7:00 AM ET only for exceptional setups;
+        primary session 9:00–11:00 AM ET.
+      </div>
+    </span>
+  </label>
+
+  <label class="check">
+    <input id="attempts" type="checkbox">
+    <span>
+      <div class="title">Stopped by Attempt 5</div>
+      <div class="copy">
+        No sixth completed attempt and no reopening the session later.
+      </div>
+    </span>
+  </label>
+
+  <label class="check">
+    <input id="hardStop" type="checkbox">
+    <span>
+      <div class="title">Respected the -$100 realised hard stop</div>
+      <div class="copy">
+        Once reached, the session was finished.
+      </div>
+    </span>
+  </label>
+
+</section>
+
+
+<section class="card">
+  <div class="muted" style="text-align:center;">COMPLIANCE SCORE</div>
+  <div id="score" class="score">0/3</div>
+
+  <button id="saveBtn" class="btn save" style="width:100%;">
+    Save Daily Compliance
+  </button>
+
+  <div id="status" class="status">
+    No compliance record saved yet.
+  </div>
+</section>
+
+
+<section class="card rule">
+  <strong>Structural finish conditions</strong>
+  <div class="muted" style="margin-top:8px;">
+    Attempt 5 • -$100 realised • 11:00 AM ET
+  </div>
+</section>
+
+</div>
+
+
+<script>
+const STORAGE_KEY = "waspnJournalV2";
+
+const els = {
+  date:document.getElementById("date"),
+  window:document.getElementById("window"),
+  attempts:document.getElementById("attempts"),
+  hardStop:document.getElementById("hardStop")
+};
+
+
+function getJournal(){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  }catch{
+    return {};
+  }
+}
+
+
+function saveJournal(j){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(j));
+}
+
+
+function score(){
+  return [
+    els.window.checked,
+    els.attempts.checked,
+    els.hardStop.checked
+  ].filter(Boolean).length;
+}
+
+
+function updateScore(){
+  document.getElementById("score").textContent = score() + "/3";
+}
+
+
+function loadDay(){
+
+  const day = getJournal()[els.date.value];
+
+  els.window.checked = !!day?.compliance?.window;
+  els.attempts.checked = !!day?.compliance?.attempts;
+  els.hardStop.checked = !!day?.compliance?.stop;
+
+  updateScore();
+
+  const status = document.getElementById("status");
+
+  if(day?.compliance?.savedAt){
+    status.textContent =
+      "Loaded saved compliance • " + day.compliance.score + "/3";
+    status.style.color = "var(--blue)";
+  }else{
+    status.textContent = "No saved compliance for this date.";
+    status.style.color = "var(--muted)";
+  }
+}
+
+
+function saveCompliance(){
+
+  const date = els.date.value;
+
+  if(!date){
+    alert("Choose a date.");
+    return;
+  }
+
+  const journal = getJournal();
+
+  const existing = journal[date] || {date};
+
+  const compliance = {
+    window:els.window.checked,
+    attempts:els.attempts.checked,
+    stop:els.hardStop.checked,
+    score:score(),
+    outOf:3,
+    savedAt:new Date().toISOString()
+  };
+
+  const next = {
+    ...existing,
+    date,
+    compliance,
+    lastUpdated:new Date().toISOString()
+  };
+
+  /*
+    If a Session Score already exists, keep its first
+    three answers synchronised automatically.
+  */
+  if(next.sessionScore){
+
+    const answers = next.sessionScore.answers || {};
+
+    answers.insideWindow = compliance.window;
+    answers.stoppedByFive = compliance.attempts;
+    answers.respectedHardStop = compliance.stop;
+
+    next.sessionScore.answers = answers;
+
+    next.sessionScore.score = [
+      answers.insideWindow,
+      answers.stoppedByFive,
+      answers.respectedHardStop,
+      answers.noRevengeContinuation,
+      answers.noTiltTrade
+    ].filter(Boolean).length;
+
+    next.sessionScore.updatedAt = new Date().toISOString();
+  }
+
+  journal[date] = next;
+
+  saveJournal(journal);
+
+  const status = document.getElementById("status");
+
+  status.textContent =
+    `Saved ${date} • ${compliance.score}/3`;
+
+  status.style.color = "var(--green)";
+}
+
+
+function setToday(){
+  const d = new Date();
+
+  els.date.value = [
+    d.getFullYear(),
+    String(d.getMonth()+1).padStart(2,"0"),
+    String(d.getDate()).padStart(2,"0")
+  ].join("-");
+}
+
+
+[els.window,els.attempts,els.hardStop].forEach(el=>{
+  el.addEventListener("change",updateScore);
+});
+
+els.date.addEventListener("change",loadDay);
+
+document.getElementById("saveBtn").addEventListener("click",saveCompliance);
+
+setToday();
+loadDay();
+</script>
 
 </body>
 </html>
