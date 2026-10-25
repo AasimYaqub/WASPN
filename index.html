@@ -3,19 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
 <title>WASPN</title>
 
 <style>
+
 :root{
-  --bg:#0b0f14;
-  --panel:#121820;
-  --panel2:#171f29;
-  --border:#293342;
-  --text:#e8eef6;
-  --muted:#8e9aaa;
+  --bg:#070b10;
+  --panel:#10171f;
+  --panel2:#151e28;
+  --border:#273442;
+
+  --text:#edf4fb;
+  --muted:#8797a7;
+
   --green:#35d07f;
   --red:#ff5f6d;
-  --blue:#63a7ff;
+  --blue:#22c7ff;
   --amber:#f3b84b;
 }
 
@@ -25,44 +29,367 @@
 
 body{
   margin:0;
-  background:linear-gradient(180deg,#090d12,#0d131a);
+
+  background:
+    radial-gradient(
+      circle at top,
+      #0c1821 0%,
+      #070b10 40%
+    );
+
   color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 }
 
 .wrap{
   max-width:1000px;
   margin:0 auto;
-  padding:18px;
+  padding:16px;
 }
 
-.hero,
-.card{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:20px;
+
+/* =========================
+   HERO
+========================= */
+
+.pro-hero{
+
+  position:relative;
+
+  min-height:620px;
+
+  overflow:hidden;
+
+  border:1px solid #223341;
+
+  border-radius:24px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2,6,10,.12) 0%,
+      rgba(3,8,13,.35) 38%,
+      rgba(5,10,15,.90) 74%,
+      #080d12 100%
+    ),
+    url("trade_the_process_waspn_trading_command_centre.png")
+    center center / cover
+    no-repeat;
+
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.60),
+    inset 0 0 80px rgba(0,183,255,.06);
 }
 
+
+.pro-hero::before{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      rgba(0,196,255,.10),
+      transparent 38%
+    );
+
+  pointer-events:none;
+}
+
+
+.pro-hero-content{
+
+  position:relative;
+
+  z-index:2;
+
+  min-height:620px;
+
+  padding:35px 22px 28px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:flex-end;
+
+  align-items:center;
+
+  text-align:center;
+}
+
+
+.waspn-logo{
+
+  width:min(
+    400px,
+    86vw
+  );
+
+  max-height:290px;
+
+  object-fit:contain;
+
+  margin-bottom:-3px;
+
+  filter:
+    drop-shadow(
+      0 14px 28px
+      rgba(0,0,0,.65)
+    )
+    drop-shadow(
+      0 0 18px
+      rgba(0,190,255,.20)
+    );
+}
+
+
+.hero-kicker{
+
+  margin-top:4px;
+
+  color:#a4b6c7;
+
+  font-size:11px;
+
+  font-weight:900;
+
+  letter-spacing:3px;
+
+  text-transform:uppercase;
+}
+
+
+.hero-title{
+
+  margin:8px 0 0;
+
+  font-size:
+    clamp(
+      38px,
+      8vw,
+      70px
+    );
+
+  line-height:.98;
+
+  font-weight:950;
+
+  letter-spacing:-2px;
+
+  text-shadow:
+    0 7px 25px
+    rgba(0,0,0,.90);
+}
+
+
+.hero-title span{
+  color:var(--blue);
+}
+
+
+.hero-subtitle{
+
+  max-width:650px;
+
+  margin-top:12px;
+
+  color:#c3cfda;
+
+  font-size:15px;
+
+  line-height:1.55;
+}
+
+
+.waspn-definition{
+
+  display:flex;
+
+  justify-content:center;
+
+  flex-wrap:wrap;
+
+  gap:7px;
+
+  margin-top:20px;
+}
+
+
+.waspn-letter{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:6px;
+
+  padding:
+    8px 11px;
+
+  background:
+    rgba(
+      5,
+      12,
+      18,
+      .86
+    );
+
+  border:
+    1px solid
+    rgba(
+      96,
+      131,
+      158,
+      .32
+    );
+
+  border-radius:9px;
+
+  backdrop-filter:
+    blur(8px);
+
+  color:#c6d1dc;
+
+  font-size:12px;
+
+  font-weight:700;
+}
+
+
+.waspn-letter strong{
+
+  color:var(--blue);
+
+  font-size:16px;
+}
+
+
+.waspn-letter:last-child strong{
+  color:var(--amber);
+}
+
+
+.hero-rule-strip{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      1fr
+    );
+
+  gap:8px;
+
+  width:100%;
+
+  max-width:760px;
+
+  margin-top:22px;
+}
+
+
+.hero-rule{
+
+  padding:
+    12px 7px;
+
+  background:
+    rgba(
+      6,
+      13,
+      20,
+      .88
+    );
+
+  border:
+    1px solid
+    rgba(
+      81,
+      111,
+      137,
+      .38
+    );
+
+  border-radius:11px;
+
+  backdrop-filter:
+    blur(9px);
+}
+
+
+.hero-rule-label{
+
+  color:#8294a5;
+
+  font-size:9px;
+
+  font-weight:900;
+
+  letter-spacing:1px;
+
+  text-transform:uppercase;
+}
+
+
+.hero-rule-value{
+
+  margin-top:5px;
+
+  font-size:17px;
+
+  font-weight:950;
+}
+
+
+/* =========================
+   GENERAL
+========================= */
+
 .card{
+
   margin-top:16px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #111921,
+      #0f161e
+    );
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:18px;
+
+  padding:20px;
+
+  box-shadow:
+    0 14px 35px
+    rgba(0,0,0,.18);
 }
 
-h1{
-  margin:4px 0 8px;
-  font-size:clamp(46px,10vw,76px);
-  line-height:1;
-  color:var(--green);
-}
 
 h2{
   margin:0 0 12px;
 }
 
+
 .muted{
   color:var(--muted);
   line-height:1.55;
 }
+
 
 .green{
   color:var(--green);
@@ -81,319 +408,590 @@ h2{
 }
 
 
-/* MARKET STATUS */
-
-.market-status{
-  margin-top:16px;
-  border-radius:14px;
-  padding:15px;
-  text-align:center;
-  border:1px solid var(--border);
-}
-
-.market-status.open{
-  background:#102018;
-  border-color:#275c3e;
-}
-
-.market-status.waiting{
-  background:#251d0f;
-  border-color:#6b5125;
-}
-
-.market-status.closed{
-  background:#15191e;
-  border-color:#3b4652;
-}
-
-.market-main{
-  font-size:20px;
-  font-weight:900;
-}
-
-.market-detail{
-  margin-top:5px;
-  color:var(--muted);
-  font-size:12px;
-}
-
-
-/* METRICS */
-
-.metrics{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-  margin-top:18px;
-}
-
-.metric{
-  background:var(--panel2);
-  border:1px solid var(--border);
-  border-radius:13px;
-  padding:14px;
-}
-
 .label{
+
   color:var(--muted);
+
   font-size:11px;
-  font-weight:700;
+
+  font-weight:800;
+
   text-transform:uppercase;
 }
 
+
 .value{
+
   margin-top:6px;
+
   font-size:23px;
+
   font-weight:900;
 }
 
 
-/* TODAY */
+/* =========================
+   MARKET STATUS
+========================= */
+
+.market-status{
+
+  margin-top:16px;
+
+  border-radius:14px;
+
+  padding:16px;
+
+  text-align:center;
+
+  border:
+    1px solid
+    var(--border);
+}
+
+
+.market-status.open{
+
+  background:#0d2118;
+
+  border-color:#276344;
+
+  box-shadow:
+    inset 0 0 30px
+    rgba(53,208,127,.05);
+}
+
+
+.market-status.waiting{
+
+  background:#21190d;
+
+  border-color:#6b5125;
+}
+
+
+.market-status.closed{
+
+  background:#13191f;
+
+  border-color:#394754;
+}
+
+
+.market-main{
+
+  font-size:20px;
+
+  font-weight:950;
+}
+
+
+.market-detail{
+
+  margin-top:5px;
+
+  color:var(--muted);
+
+  font-size:12px;
+}
+
+
+/* =========================
+   TODAY
+========================= */
 
 .today-grid{
+
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+
+  grid-template-columns:
+    repeat(
+      4,
+      1fr
+    );
+
   gap:9px;
 }
 
+
 .today-item{
-  background:#0d131a;
-  border:1px solid var(--border);
+
+  background:#0b1117;
+
+  border:
+    1px solid
+    var(--border);
+
   border-radius:11px;
-  padding:12px;
+
+  padding:13px;
 }
 
 
-/* NAV */
-
-.nav-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:10px;
-}
-
-.nav-card{
-  display:block;
-  text-decoration:none;
-  color:var(--text);
-  background:var(--panel2);
-  border:1px solid var(--border);
-  border-radius:13px;
-  padding:15px;
-}
-
-.nav-card:active{
-  transform:scale(.98);
-}
-
-.nav-title{
-  font-weight:900;
-  font-size:17px;
-}
-
-.nav-desc{
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.45;
-  margin-top:6px;
-}
-
-.live{
-  border-color:#315887;
-  color:var(--blue);
-}
-
-.journal{
-  border-color:#2f6670;
-  color:#77d7e5;
-}
-
-.duration{
-  border-color:#6b5125;
-  color:var(--amber);
-}
-
-.tilt{
-  border-color:#5b2630;
-  color:var(--red);
-}
-
-.compliance{
-  border-color:#275c3e;
-  color:var(--green);
-}
-
-.calendar{
-  border-color:#4a4f80;
-  color:#aeb7ff;
-}
-
-.backup{
-  border-color:#53606c;
-  color:#c9d3dd;
-}
-
-
-/* WORKFLOW */
+/* =========================
+   WORKFLOW
+========================= */
 
 .workflow-section{
+
   margin-top:14px;
-  border-radius:14px;
+
   overflow:hidden;
-  border:1px solid var(--border);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:14px;
 }
+
 
 .workflow-head{
-  padding:14px 16px;
-  font-weight:900;
+
+  padding:
+    14px 16px;
+
   font-size:18px;
+
+  font-weight:950;
 }
+
 
 .workflow-head.before{
-  background:#102018;
+
   color:var(--green);
+
+  background:#0d2017;
 }
+
 
 .workflow-head.during{
-  background:#131c2a;
+
   color:var(--blue);
+
+  background:#0c1b27;
 }
+
 
 .workflow-head.after{
-  background:#251d0f;
+
   color:var(--amber);
+
+  background:#21190d;
 }
+
 
 .workflow-head.end{
-  background:#17131f;
+
   color:#b9adff;
+
+  background:#171420;
 }
+
 
 .workflow-body{
-  background:var(--panel2);
-  padding:0 16px;
+
+  padding:
+    0 16px;
+
+  background:
+    var(--panel2);
 }
 
+
 .step{
+
   display:grid;
-  grid-template-columns:42px 1fr;
+
+  grid-template-columns:
+    42px 1fr;
+
   gap:12px;
-  padding:14px 0;
-  border-bottom:1px solid var(--border);
+
+  padding:
+    14px 0;
+
+  border-bottom:
+    1px solid
+    var(--border);
 }
+
 
 .step:last-child{
   border-bottom:0;
 }
 
+
 .num{
+
   width:36px;
+
   height:36px;
-  border-radius:50%;
+
   display:flex;
+
   align-items:center;
+
   justify-content:center;
-  background:#1b2633;
+
+  border-radius:50%;
+
+  background:#192735;
+
   color:var(--blue);
-  font-weight:900;
+
+  font-weight:950;
 }
+
 
 .step-title{
-  font-weight:900;
+
   margin-bottom:4px;
+
+  font-weight:900;
 }
 
+
 .step-copy{
+
   color:var(--muted);
+
   font-size:13px;
+
   line-height:1.5;
 }
 
+
 .loop{
+
   margin-top:15px;
-  padding:16px;
-  border:1px solid #315887;
-  background:#101820;
-  border-radius:13px;
+
+  padding:17px;
+
   text-align:center;
+
+  border:
+    1px solid
+    #255f85;
+
+  border-radius:13px;
+
+  background:#0b1720;
 }
+
 
 .loop-title{
-  color:var(--blue);
-  font-weight:900;
-  font-size:17px;
+
   margin-bottom:8px;
+
+  color:var(--blue);
+
+  font-size:17px;
+
+  font-weight:950;
 }
 
+
 .loop-flow{
+
   font-size:15px;
+
   line-height:1.7;
+
   font-weight:800;
 }
 
+
 .optional{
+
   margin-top:14px;
-  background:#181317;
-  border:1px solid #4b2930;
-  border-radius:13px;
+
   padding:15px;
+
+  background:#181216;
+
+  border:
+    1px solid
+    #4a2930;
+
+  border-radius:13px;
 }
+
 
 .optional-title{
-  color:var(--amber);
-  font-weight:900;
+
   margin-bottom:8px;
+
+  color:var(--amber);
+
+  font-weight:950;
 }
 
+
 .optional-row{
-  padding:8px 0;
-  border-bottom:1px solid var(--border);
+
+  padding:
+    8px 0;
+
+  border-bottom:
+    1px solid
+    var(--border);
+
   line-height:1.5;
 }
+
 
 .optional-row:last-child{
   border-bottom:0;
 }
 
+
 .stop{
+
   margin-top:14px;
-  background:#251419;
-  border:1px solid #5b2630;
-  color:var(--red);
-  padding:15px;
-  border-radius:13px;
-  font-weight:900;
-  line-height:1.5;
+
+  padding:16px;
+
   text-align:center;
+
+  color:var(--red);
+
+  background:#241218;
+
+  border:
+    1px solid
+    #632a35;
+
+  border-radius:13px;
+
+  font-weight:950;
+
+  line-height:1.55;
 }
 
-.footer{
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-  margin:24px 0 8px;
+
+/* =========================
+   CONTROL CENTRE
+========================= */
+
+.nav-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(
+        220px,
+        1fr
+      )
+    );
+
+  gap:10px;
 }
+
+
+.nav-card{
+
+  position:relative;
+
+  display:block;
+
+  overflow:hidden;
+
+  padding:16px;
+
+  color:var(--text);
+
+  text-decoration:none;
+
+  background:
+    linear-gradient(
+      145deg,
+      #17222c,
+      #111820
+    );
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:13px;
+
+  transition:
+    transform .15s ease,
+    border-color .15s ease;
+}
+
+
+.nav-card::after{
+
+  content:"";
+
+  position:absolute;
+
+  left:0;
+
+  top:0;
+
+  bottom:0;
+
+  width:3px;
+
+  background:
+    #53606c;
+}
+
+
+.nav-card:active{
+  transform:scale(.98);
+}
+
+
+.nav-title{
+
+  font-size:17px;
+
+  font-weight:950;
+}
+
+
+.nav-desc{
+
+  margin-top:6px;
+
+  color:var(--muted);
+
+  font-size:12px;
+
+  line-height:1.45;
+}
+
+
+.nav-card.live::after{
+  background:var(--blue);
+}
+
+.nav-card.duration::after{
+  background:var(--amber);
+}
+
+.nav-card.journal::after{
+  background:#77d7e5;
+}
+
+.nav-card.tilt::after{
+  background:var(--red);
+}
+
+.nav-card.compliance::after{
+  background:var(--green);
+}
+
+.nav-card.calendar::after{
+  background:#aeb7ff;
+}
+
+.nav-card.backup::after{
+  background:#c9d3dd;
+}
+
+
+.footer{
+
+  margin:
+    24px 0 8px;
+
+  text-align:center;
+
+  color:var(--muted);
+
+  font-size:12px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:700px){
 
   .wrap{
-    padding:12px;
+    padding:10px;
   }
 
-  .hero,
+
+  .pro-hero{
+
+    min-height:560px;
+
+    background-position:
+      center top;
+  }
+
+
+  .pro-hero-content{
+
+    min-height:560px;
+
+    padding:
+      24px 12px 20px;
+  }
+
+
+  .waspn-logo{
+
+    width:min(
+      330px,
+      90vw
+    );
+  }
+
+
+  .hero-title{
+    font-size:40px;
+  }
+
+
+  .hero-subtitle{
+    font-size:13px;
+  }
+
+
+  .hero-rule-strip{
+
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+
+  .waspn-definition{
+    gap:5px;
+  }
+
+
+  .waspn-letter{
+
+    padding:
+      7px 8px;
+
+    font-size:10px;
+  }
+
+
   .card{
     padding:16px;
   }
 
-  .metrics{
-    grid-template-columns:1fr 1fr;
-  }
 
   .today-grid{
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+      1fr 1fr;
   }
 
 }
+
 </style>
 </head>
 
@@ -403,94 +1001,129 @@ h2{
 <div class="wrap">
 
 
-<section class="hero">
+<!-- =========================
+     WASPN HERO
+========================= -->
 
-  <div class="muted">
-    Data-backed small-cap momentum operating system
-  </div>
+<section class="pro-hero">
 
-  <h1>
-    WASPN
-  </h1>
-
-  <div class="muted">
-    Trade the process in the correct order.
-    Live Risk stays open throughout the session.
-    Trade Duration starts when you enter.
-    Live Risk and Journal are updated after the trade closes.
-  </div>
+  <div class="pro-hero-content">
 
 
-  <div
-    id="marketStatus"
-    class="market-status closed"
-  >
-
-    <div
-      id="marketMain"
-      class="market-main"
+    <img
+      src="futuristic_neon_wasp_trading_emblem.png"
+      alt="WASPN Trading System"
+      class="waspn-logo"
     >
-      Checking market status...
-    </div>
-
-    <div
-      id="marketDetail"
-      class="market-detail"
-    ></div>
-
-  </div>
 
 
-  <div class="metrics">
-
-    <div class="metric">
-
-      <div class="label">
-        Primary Window
-      </div>
-
-      <div class="value blue">
-        9–11 AM ET
-      </div>
-
+    <div class="hero-kicker">
+      Small-Cap Momentum Operating System
     </div>
 
 
-    <div class="metric">
+    <div class="hero-title">
+      Trade the
+      <span>Process.</span>
+    </div>
 
-      <div class="label">
-        Max Attempts
+
+    <div class="hero-subtitle">
+      A data-backed day trading framework built around
+      discipline, controlled risk and repeatable execution.
+    </div>
+
+
+    <div class="waspn-definition">
+
+
+      <div class="waspn-letter">
+        <strong>W</strong>
+        Window
       </div>
 
-      <div class="value">
-        5
+
+      <div class="waspn-letter">
+        <strong>A</strong>
+        Attempts
       </div>
+
+
+      <div class="waspn-letter">
+        <strong>S</strong>
+        Share Size
+      </div>
+
+
+      <div class="waspn-letter">
+        <strong>P</strong>
+        P&amp;L
+      </div>
+
+
+      <div class="waspn-letter">
+        <strong>N</strong>
+        No Pennies
+      </div>
+
 
     </div>
 
 
-    <div class="metric">
+    <div class="hero-rule-strip">
 
-      <div class="label">
-        Hard Stop
+
+      <div class="hero-rule">
+
+        <div class="hero-rule-label">
+          Primary Window
+        </div>
+
+        <div class="hero-rule-value blue">
+          9–11 AM ET
+        </div>
+
       </div>
 
-      <div class="value red">
-        -$100
+
+      <div class="hero-rule">
+
+        <div class="hero-rule-label">
+          Max Attempts
+        </div>
+
+        <div class="hero-rule-value">
+          5
+        </div>
+
       </div>
 
-    </div>
 
+      <div class="hero-rule">
 
-    <div class="metric">
+        <div class="hero-rule-label">
+          Hard Stop
+        </div>
 
-      <div class="label">
-        Green Objective
+        <div class="hero-rule-value red">
+          -$100
+        </div>
+
       </div>
 
-      <div class="value green">
-        +$50
+
+      <div class="hero-rule">
+
+        <div class="hero-rule-label">
+          Objective
+        </div>
+
+        <div class="hero-rule-value green">
+          +$50
+        </div>
+
       </div>
+
 
     </div>
 
@@ -500,13 +1133,44 @@ h2{
 
 
 
+<!-- =========================
+     MARKET STATUS
+========================= -->
+
+<div
+  id="marketStatus"
+  class="market-status closed"
+>
+
+  <div
+    id="marketMain"
+    class="market-main"
+  >
+    Checking market status...
+  </div>
+
+  <div
+    id="marketDetail"
+    class="market-detail"
+  ></div>
+
+</div>
+
+
+
+<!-- =========================
+     TODAY
+========================= -->
+
 <section class="card">
 
   <h2>
     Today
   </h2>
 
+
   <div class="today-grid">
+
 
     <div class="today-item">
 
@@ -515,8 +1179,8 @@ h2{
       </div>
 
       <div
-        class="value"
         id="todayTrades"
+        class="value"
       >
         0
       </div>
@@ -531,8 +1195,8 @@ h2{
       </div>
 
       <div
-        class="value"
         id="todayPnl"
+        class="value"
       >
         —
       </div>
@@ -547,8 +1211,8 @@ h2{
       </div>
 
       <div
-        class="value"
         id="todayCompliance"
+        class="value"
       >
         —
       </div>
@@ -563,19 +1227,24 @@ h2{
       </div>
 
       <div
-        class="value"
         id="todayScore"
+        class="value"
       >
         —
       </div>
 
     </div>
 
+
   </div>
 
 </section>
 
 
+
+<!-- =========================
+     LIVE WORKFLOW
+========================= -->
 
 <section class="card">
 
@@ -611,8 +1280,9 @@ h2{
           </div>
 
           <div class="step-copy">
-            Check that you are inside an allowed WASPN window and that
-            Attempt count, realised P&amp;L and Tilt state are correct.
+            Check that you are inside an allowed WASPN window
+            and that Attempt count, realised P&amp;L and Tilt state
+            are correct.
           </div>
 
         </div>
@@ -641,6 +1311,7 @@ h2{
 
       </div>
 
+
     </div>
 
   </div>
@@ -654,6 +1325,7 @@ h2{
     </div>
 
     <div class="workflow-body">
+
 
       <div class="step">
 
@@ -690,13 +1362,15 @@ h2{
           </div>
 
           <div class="step-copy">
-            Trade Duration can prompt reassessment at 3, 5 and 10 minutes.
-            Do not fill out Journal while you are managing the position.
+            Trade Duration can prompt reassessment at
+            3, 5 and 10 minutes.
+            Do not fill out Journal while managing the position.
           </div>
 
         </div>
 
       </div>
+
 
     </div>
 
@@ -712,6 +1386,7 @@ h2{
 
     <div class="workflow-body">
 
+
       <div class="step">
 
         <div class="num">
@@ -725,8 +1400,8 @@ h2{
           </div>
 
           <div class="step-copy">
-            Increase the Attempt count by one and update realised P&amp;L
-            to the new session total.
+            Increase the Attempt count by one and update realised
+            P&amp;L to the new session total.
           </div>
 
         </div>
@@ -769,13 +1444,14 @@ h2{
           </div>
 
           <div class="step-copy">
-            If the session has reached Attempt 5, -$100 realised or 11:00 AM ET,
-            trading is finished.
+            Attempt 5, -$100 realised or 11:00 AM ET
+            means trading is finished.
           </div>
 
         </div>
 
       </div>
+
 
     </div>
 
@@ -790,6 +1466,7 @@ h2{
     </div>
 
     <div class="loop-flow">
+
       Live Risk open
       → Enter trade
       → Start Trade Duration
@@ -797,6 +1474,7 @@ h2{
       → Update Live Risk
       → Record in Journal
       → Repeat only if WASPN still allows it
+
     </div>
 
   </div>
@@ -809,6 +1487,7 @@ h2{
       USE THESE ONLY WHEN NEEDED
     </div>
 
+
     <div class="optional-row">
 
       <strong>
@@ -818,7 +1497,8 @@ h2{
       <br>
 
       <span class="muted">
-        Use after a meaningful losing trade and before considering another entry.
+        Use after a meaningful losing trade
+        and before considering another entry.
       </span>
 
     </div>
@@ -833,8 +1513,9 @@ h2{
       <br>
 
       <span class="muted">
-        Use when you notice urgency, anger, repeated re-entry,
-        recovery thinking or “just one more”.
+        Use when you notice urgency, anger,
+        repeated re-entry, recovery thinking
+        or “just one more”.
       </span>
 
     </div>
@@ -844,16 +1525,26 @@ h2{
 
 
   <div class="stop">
+
     ATTEMPT 5 • -$100 REALISED • 11:00 AM ET
+
     <br>
+
     ANY ONE = SESSION OVER
+
     <br>
+
     NO REOPENING LATER
+
   </div>
 
 </section>
 
 
+
+<!-- =========================
+     END SESSION
+========================= -->
 
 <section class="card">
 
@@ -861,11 +1552,13 @@ h2{
     End-of-Session Workflow
   </h2>
 
+
   <div class="workflow-section">
 
     <div class="workflow-head end">
       WHEN TRADING IS FINISHED
     </div>
+
 
     <div class="workflow-body">
 
@@ -883,7 +1576,8 @@ h2{
           </div>
 
           <div class="step-copy">
-            Confirm all completed attempts and final daily P&amp;L are correct.
+            Confirm all completed attempts
+            and final daily P&amp;L are correct.
           </div>
 
         </div>
@@ -948,12 +1642,14 @@ h2{
           </div>
 
           <div class="step-copy">
-            Confirm P&amp;L, trade count, compliance and Session Score appear correctly.
+            Confirm P&amp;L, trade count,
+            compliance and Session Score appear correctly.
           </div>
 
         </div>
 
       </div>
+
 
     </div>
 
@@ -963,13 +1659,19 @@ h2{
 
 
 
+<!-- =========================
+     CONTROL CENTRE
+========================= -->
+
 <section class="card">
 
   <h2>
     WASPN Control Centre
   </h2>
 
+
   <div class="nav-grid">
+
 
     <a
       href="live-risk.html"
@@ -1029,7 +1731,8 @@ h2{
       </div>
 
       <div class="nav-desc">
-        Use after a meaningful losing trade before another entry.
+        Use after a meaningful losing trade
+        before another entry.
       </div>
 
     </a>
@@ -1045,7 +1748,7 @@ h2{
       </div>
 
       <div class="nav-desc">
-        Use only when mental-state warning signs appear.
+        Use when mental-state warning signs appear.
       </div>
 
     </a>
@@ -1061,7 +1764,7 @@ h2{
       </div>
 
       <div class="nav-desc">
-        Complete once after trading is finished.
+        Complete after trading is finished.
       </div>
 
     </a>
@@ -1093,7 +1796,7 @@ h2{
       </div>
 
       <div class="nav-desc">
-        Final check of the completed daily record.
+        Review the completed daily record.
       </div>
 
     </a>
@@ -1109,10 +1812,11 @@ h2{
       </div>
 
       <div class="nav-desc">
-        Export or restore your local WASPN records.
+        Export or restore local WASPN records.
       </div>
 
     </a>
+
 
   </div>
 
@@ -1120,32 +1824,90 @@ h2{
 
 
 
+<!-- =========================
+     CORE STRUCTURE
+========================= -->
+
 <section class="card">
 
   <h2>
     Core Structure
   </h2>
 
+
   <div class="muted">
 
-    <strong>
-      6:30–7:00 AM ET
+    <strong class="blue">
+      W — WINDOW
     </strong>
 
     <br>
 
-    Preliminary monitoring / exceptional setup window.
+    Preliminary:
+    6:30–7:00 AM ET
+
+    <br>
+
+    Primary:
+    9:00–11:00 AM ET
+
 
     <br><br>
 
 
-    <strong>
-      9:00–11:00 AM ET
+    <strong class="blue">
+      A — ATTEMPTS
     </strong>
 
     <br>
 
-    Primary trading and study window.
+    Maximum 5 completed trade attempts.
+
+
+    <br><br>
+
+
+    <strong class="blue">
+      S — SHARE SIZE
+    </strong>
+
+    <br>
+
+    Control size.
+    Never increase size simply to recover losses.
+
+
+    <br><br>
+
+
+    <strong class="blue">
+      P — P&amp;L
+    </strong>
+
+    <br>
+
+    -$75 warning.
+
+    <br>
+
+    -$100 hard stop.
+
+    <br>
+
+    +$50 objective.
+
+
+    <br><br>
+
+
+    <strong class="amber">
+      N — NO PENNIES
+    </strong>
+
+    <br>
+
+    No penny-stock trading outside the WASPN framework.
+
 
     <br><br>
 
@@ -1156,40 +1918,8 @@ h2{
 
     <br>
 
-    Market closed — no WASPN trading session.
-
-    <br><br>
-
-
-    <strong>
-      -$75
-    </strong>
-
-    <br>
-
-    Warning state — five-minute step-away.
-
-    <br><br>
-
-
-    <strong>
-      -$100
-    </strong>
-
-    <br>
-
-    Hard realised-loss stop.
-
-    <br><br>
-
-
-    <strong>
-      Attempt 5
-    </strong>
-
-    <br>
-
-    Session finished.
+    Market closed.
+    No WASPN trading session.
 
   </div>
 
@@ -1198,10 +1928,12 @@ h2{
 
 
 <div class="footer">
-  WASPN • Process Over Recovery
+  WASPN • Window. Attempts. Share Size. P&amp;L. No Pennies.
 </div>
 
+
 </div>
+
 
 
 <script>
@@ -1292,7 +2024,7 @@ function getNyParts(){
   );
 
 
-  return {
+  return{
 
     weekday:
       d.weekday,
@@ -1588,7 +2320,7 @@ function renderToday(){
 
   if(
     typeof day.totalNet ===
-    "number"
+      "number"
   ){
 
     pnl.textContent =
@@ -1649,10 +2381,12 @@ renderMarketStatus();
 renderToday();
 
 
+
 setInterval(
   renderMarketStatus,
   1000
 );
+
 
 
 window.addEventListener(
@@ -1661,6 +2395,7 @@ window.addEventListener(
 );
 
 </script>
+
 
 </body>
 </html>
