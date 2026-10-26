@@ -1,0 +1,24 @@
+{
+  "name": "WASPN Trading Risk Operating System",
+  "short_name": "WASPN",
+  "description": "Evidence-led intraday risk control, trading journal and performance review.",
+  "id": "/WASPN/",
+  "start_url": "/WASPN/index.html",
+  "scope": "/WASPN/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070b10",
+  "theme_color": "#070b10",
+  "categories": [
+    "finance",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "futuristic_neon_wasp_trading_emblem.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
