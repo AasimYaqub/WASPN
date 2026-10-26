@@ -446,30 +446,57 @@ body{
 }
 
 .evidence{
-  padding:11px;
+  min-height:142px;
+  display:flex;
+  flex-direction:column;
+  padding:12px;
   background:#090f14;
   border:1px solid var(--border);
   border-radius:10px;
 }
 
-.evidence-value{
-  margin-top:4px;
-  font-size:17px;
+.evidence-rule{
+  color:#b6c4d1;
+  font-size:9px;
   font-weight:950;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.evidence-value{
+  margin-top:6px;
+  font-size:19px;
+  font-weight:950;
+  line-height:1.05;
+}
+
+.evidence-value.compact{
+  font-size:15px;
+  line-height:1.25;
 }
 
 .evidence-copy{
-  margin-top:3px;
+  margin-top:7px;
   color:var(--muted);
   font-size:9px;
-  line-height:1.35;
+  line-height:1.45;
+}
+
+.evidence-detail{
+  margin-top:auto;
+  padding-top:8px;
+  color:var(--muted2);
+  font-size:8px;
+  line-height:1.4;
 }
 
 .evidence-note{
-  margin-top:9px;
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px solid rgba(135,151,167,.16);
   color:var(--muted2);
   font-size:9px;
-  line-height:1.45;
+  line-height:1.5;
 }
 
 
@@ -770,43 +797,104 @@ body{
 <section class="card">
 
   <div class="card-title">
-    Evidence Behind the Guardrails
+    Why These Guardrails Exist
   </div>
 
   <div class="card-copy">
-    Selected findings from the historical dataset used to develop this prototype.
+    The current WASPN limits are behavioural risk controls derived from recurring patterns in the historical broker record — not arbitrary targets.
   </div>
 
   <div class="evidence-grid">
 
     <div class="evidence">
-      <div class="label">9:00–9:30 ET</div>
-      <div class="evidence-value green">+$10.67</div>
-      <div class="evidence-copy">Historical average per trade</div>
+
+      <div class="evidence-rule">
+        Why 9–11 AM ET
+      </div>
+
+      <div class="evidence-value red">
+        -$4,768
+      </div>
+
+      <div class="evidence-copy">
+        Net result from completed trades entered at or after 11:00 AM ET.
+      </div>
+
+      <div class="evidence-detail">
+        The strongest early slice was 9:00–9:30 AM ET, averaging +$10.67 per completed trade.
+      </div>
+
     </div>
 
-    <div class="evidence">
-      <div class="label">Attempts 1–5</div>
-      <div class="evidence-value green">+$343</div>
-      <div class="evidence-copy">9–11 ET historical sample</div>
-    </div>
 
     <div class="evidence">
-      <div class="label">Attempts 6+</div>
-      <div class="evidence-value red">-$1,031</div>
-      <div class="evidence-copy">9–11 ET historical sample</div>
+
+      <div class="evidence-rule">
+        Why Maximum 5 Attempts
+      </div>
+
+      <div class="evidence-value compact">
+        <span class="green">+$343</span>
+        /
+        <span class="red">-$1,031</span>
+      </div>
+
+      <div class="evidence-copy">
+        During 9–11 AM ET, trades taken as daily attempts 1–5 produced +$343 net. Trades taken as attempt 6 or later produced -$1,031.
+      </div>
+
+      <div class="evidence-detail">
+        The attempt cap is designed to interrupt the deterioration associated with repeated re-entry and continued recovery attempts.
+      </div>
+
     </div>
 
+
     <div class="evidence">
-      <div class="label">After 11 ET</div>
-      <div class="evidence-value red">-$4,768</div>
-      <div class="evidence-copy">Historical sample</div>
+
+      <div class="evidence-rule">
+        Why the -$100 Hard Stop
+      </div>
+
+      <div class="evidence-value red">
+        -$5,809
+      </div>
+
+      <div class="evidence-copy">
+        On 37 historical days that first reached -$100 or worse in cumulative net P&amp;L, trades taken after that point lost another $5,809 in aggregate.
+      </div>
+
+      <div class="evidence-detail">
+        The hard stop is a circuit breaker against trying to trade back from a damaged session.
+      </div>
+
+    </div>
+
+
+    <div class="evidence">
+
+      <div class="evidence-rule">
+        Why the +$50 Objective
+      </div>
+
+      <div class="evidence-value red">
+        -$1,234
+      </div>
+
+      <div class="evidence-copy">
+        On 28 historical days that first reached +$50 or better, subsequent trades gave back $1,234 in aggregate.
+      </div>
+
+      <div class="evidence-detail">
+        The objective creates a reason to protect a productive session instead of automatically increasing exposure after reaching the daily goal.
+      </div>
+
     </div>
 
   </div>
 
   <div class="evidence-note">
-    Prototype figures describe the historical dataset used to develop the current WASPN ruleset. They are not presented as universal trading-performance claims.
+    Methodology: broker executions were reconstructed into completed flat-to-flat trades and ordered by trading day. Figures use net proceeds and describe this historical dataset only. The threshold figures measure what happened after the first daily crossing of -$100 or +$50; they show historical association, not proof that the thresholds themselves caused later performance. WASPN uses them as personal risk-management guardrails rather than universal trading-performance claims.
   </div>
 
 </section>
