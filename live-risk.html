@@ -15,12 +15,50 @@
   content="#070b10"
 >
 
+<meta
+  name="apple-mobile-web-app-capable"
+  content="yes"
+>
+
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="black-translucent"
+>
+
+<meta
+  name="apple-mobile-web-app-title"
+  content="WASPN"
+>
+
+<meta
+  name="mobile-web-app-capable"
+  content="yes"
+>
+
+<meta
+  name="color-scheme"
+  content="dark"
+>
+
+<link
+  rel="manifest"
+  href="manifest.webmanifest"
+>
+
+<link
+  rel="apple-touch-icon"
+  href="futuristic_neon_wasp_trading_emblem.png"
+>
+
 <title>WASPN • Live Risk Control</title>
+
 
 <style>
 
 :root{
+
   --bg:#070b10;
+
   --panel:#10171f;
   --panel2:#151e28;
   --panel3:#0b1117;
@@ -39,6 +77,7 @@
   --shadow:
     0 18px 50px
     rgba(0,0,0,.26);
+
 }
 
 
@@ -48,15 +87,24 @@
 
 
 html{
+
+  min-height:100%;
+
+  background:#070b10;
+
   -webkit-text-size-adjust:100%;
+
   scroll-behavior:smooth;
+
 }
 
 
 body{
 
   margin:0;
+
   min-height:100vh;
+  min-height:100dvh;
 
   background:
     radial-gradient(
@@ -113,7 +161,10 @@ a{
       env(safe-area-inset-top)
     )
     10px
-    20px;
+    max(
+      24px,
+      env(safe-area-inset-bottom)
+    );
 
 }
 
@@ -145,6 +196,7 @@ a{
   height:48px;
 
   display:flex;
+
   align-items:center;
   justify-content:center;
 
@@ -179,8 +231,11 @@ a{
 
 
 .product-title{
+
   min-width:0;
+
   text-align:center;
+
 }
 
 
@@ -584,6 +639,7 @@ a{
   margin-top:8px;
 
   display:flex;
+
   justify-content:center;
 
 }
@@ -620,8 +676,11 @@ a{
 
 
 .pnl-input::placeholder{
+
   color:#526171;
+
   font-size:11px;
+
 }
 
 
@@ -686,8 +745,11 @@ a{
 
 
 .complete-btn:disabled{
+
   opacity:.3;
+
   cursor:not-allowed;
+
 }
 
 
@@ -728,7 +790,7 @@ a{
 
 
 /* ========================================
-   BEHAVIOURAL RISK LOCK
+   BEHAVIOURAL LOCK
 ======================================== */
 
 .behaviour-card{
@@ -1024,7 +1086,9 @@ a{
 
 
 .gate-option{
+
   position:relative;
+
 }
 
 
@@ -1155,8 +1219,11 @@ a{
 
 
 .clear-lock-btn:disabled{
+
   opacity:.25;
+
   cursor:not-allowed;
+
 }
 
 
@@ -1521,20 +1588,26 @@ a{
 @media(min-width:700px){
 
   .wrap{
+
     padding:
       20px 18px 30px;
+
   }
 
 
   .summary{
+
     grid-template-columns:
       repeat(4,1fr);
+
   }
 
 
   .research-grid{
+
     grid-template-columns:
       repeat(4,1fr);
+
   }
 
 }
@@ -2122,7 +2195,7 @@ a{
           9:00–9:30 ET
         </div>
 
-        <div class="research-value">
+        <div class="research-value green">
           +$10.67
         </div>
 
@@ -2144,7 +2217,7 @@ a{
         </div>
 
         <div class="research-sub">
-          9–11 ET sample
+          Historical 9–11 ET sample
         </div>
 
       </div>
@@ -2161,7 +2234,7 @@ a{
         </div>
 
         <div class="research-sub">
-          9–11 ET sample
+          Historical 9–11 ET sample
         </div>
 
       </div>
@@ -2187,7 +2260,7 @@ a{
 
 
     <div class="research-note">
-      Prototype research reflects the historical trading dataset used to develop this WASPN ruleset and is not presented as universal trading performance.
+      Historical figures describe the dataset used to develop this WASPN prototype and are not universal performance claims.
     </div>
 
   </div>
@@ -2204,8 +2277,11 @@ a{
       Connected Session Record
     </div>
 
-    <div class="section-state">
-      Local storage
+    <div
+      id="recordState"
+      class="section-state"
+    >
+      LOCAL
     </div>
 
   </div>
@@ -2223,7 +2299,7 @@ a{
         id="journalTrades"
         class="summary-value"
       >
-        0
+        —
       </div>
 
     </div>
@@ -2232,11 +2308,11 @@ a{
     <div class="summary-item">
 
       <div class="label">
-        Journal P&amp;L
+        Journal Net
       </div>
 
       <div
-        id="journalPnl"
+        id="journalNet"
         class="summary-value"
       >
         —
@@ -2252,7 +2328,7 @@ a{
       </div>
 
       <div
-        id="compliance"
+        id="complianceSummary"
         class="summary-value"
       >
         —
@@ -2264,11 +2340,11 @@ a{
     <div class="summary-item">
 
       <div class="label">
-        Process Score
+        Process
       </div>
 
       <div
-        id="processScore"
+        id="processSummary"
         class="summary-value"
       >
         —
@@ -2283,7 +2359,7 @@ a{
     id="saveState"
     class="save-state"
   >
-    Live state ready.
+    Session state stored locally.
   </div>
 
 </section>
@@ -2293,14 +2369,13 @@ a{
 <div class="rule-reminder">
 
   <strong>
-    SESSION LOCK:
+    HARD FINISH:
   </strong>
 
   Attempt 5 • -$100 realised • 11:00 AM ET
 
   <br>
 
-  Any one ends the WASPN session.
   No reopening later.
 
 </div>
@@ -2316,70 +2391,20 @@ const STORAGE_KEY =
   "waspnJournalV2";
 
 
-const BEHAVIOURAL_LOCK_MS =
+const WARNING_LEVEL =
+  -75;
+
+
+const HARD_STOP =
+  -100;
+
+
+const MAX_ATTEMPTS =
+  5;
+
+
+const COOLDOWN_MS =
   5 * 60 * 1000;
-
-
-const LOSS_WARNING_LOCK_MS =
-  5 * 60 * 1000;
-
-
-let attempt =
-  0;
-
-
-let sessionEnded =
-  false;
-
-
-let loadedDate =
-  "";
-
-
-let saveTimer =
-  null;
-
-
-
-/* ========================================
-   BEHAVIOURAL LOCK
-======================================== */
-
-let behaviouralLockActive =
-  false;
-
-
-let behaviouralLockStartedAt =
-  null;
-
-
-let behaviouralLockEndsAt =
-  null;
-
-
-let resetGateRequired =
-  false;
-
-
-
-/* ========================================
-   -$75 LOSS WARNING
-======================================== */
-
-let lossWarningActive =
-  false;
-
-
-let lossWarningStartedAt =
-  null;
-
-
-let lossWarningEndsAt =
-  null;
-
-
-let lossWarningCompleted =
-  false;
 
 
 
@@ -2424,107 +2449,10 @@ function saveJournal(
 
 
 /* ========================================
-   P&L INPUT
+   DATE / TIME
 ======================================== */
 
-function parsePnlValue(
-  value
-){
-
-  const cleaned =
-    String(
-      value ?? ""
-    )
-    .trim()
-    .replace(
-      /[−–—]/g,
-      "-"
-    )
-    .replace(
-      /[$£,\s]/g,
-      ""
-    );
-
-
-  if(
-    cleaned === "" ||
-    cleaned === "-" ||
-    cleaned === "." ||
-    cleaned === "-."
-  ){
-
-    return 0;
-
-  }
-
-
-  const number =
-    Number(
-      cleaned
-    );
-
-
-  return Number.isFinite(
-    number
-  )
-    ? number
-    : 0;
-
-}
-
-
-function getPnl(){
-
-  return parsePnlValue(
-    document.getElementById(
-      "pnl"
-    ).value
-  );
-
-}
-
-
-function normalisePnlInput(){
-
-  const input =
-    document.getElementById(
-      "pnl"
-    );
-
-
-  const raw =
-    input.value.trim();
-
-
-  if(
-    raw === ""
-  ){
-
-    input.value =
-      "0.00";
-
-    return;
-
-  }
-
-
-  input.value =
-    getPnl()
-      .toFixed(
-        2
-      );
-
-}
-
-
-
-/* ========================================
-   TIME
-======================================== */
-
-function getParts(
-  zone
-){
+function getNyParts(){
 
   const formatted =
     new Intl.DateTimeFormat(
@@ -2532,7 +2460,10 @@ function getParts(
       {
 
         timeZone:
-          zone,
+          "America/New_York",
+
+        weekday:
+          "long",
 
         year:
           "numeric",
@@ -2542,9 +2473,6 @@ function getParts(
 
         day:
           "2-digit",
-
-        weekday:
-          "long",
 
         hour:
           "2-digit",
@@ -2590,23 +2518,17 @@ function getParts(
 
   return {
 
-    year:
-      Number(
-        data.year
-      ),
-
-    month:
-      Number(
-        data.month
-      ),
-
-    day:
-      Number(
-        data.day
-      ),
-
     weekday:
       data.weekday,
+
+    year:
+      data.year,
+
+    month:
+      data.month,
+
+    day:
+      data.day,
 
     hour:
       Number(
@@ -2621,101 +2543,25 @@ function getParts(
     second:
       Number(
         data.second
-      ),
-
-    text:
-      data.hour +
-      ":" +
-      data.minute +
-      ":" +
-      data.second
+      )
 
   };
 
 }
 
 
-function getLocalTime(){
+function getNyDate(){
 
-  return new Intl.DateTimeFormat(
-    "en-GB",
-    {
-
-      hour:
-        "2-digit",
-
-      minute:
-        "2-digit",
-
-      second:
-        "2-digit",
-
-      hour12:
-        false
-
-    }
-  )
-  .format(
-    new Date()
-  );
-
-}
+  const ny =
+    getNyParts();
 
 
-function getLocalZone(){
-
-  try{
-
-    return (
-      Intl
-        .DateTimeFormat()
-        .resolvedOptions()
-        .timeZone ||
-      "Local"
-    );
-
-  }
-
-  catch{
-
-    return "Local";
-
-  }
-
-}
-
-
-function tradingDate(){
-
-  const d =
-    getParts(
-      "America/New_York"
-    );
-
-
-  return [
-
-    d.year,
-
-    String(
-      d.month
-    )
-    .padStart(
-      2,
-      "0"
-    ),
-
-    String(
-      d.day
-    )
-    .padStart(
-      2,
-      "0"
-    )
-
-  ]
-  .join(
-    "-"
+  return (
+    ny.year +
+    "-" +
+    ny.month +
+    "-" +
+    ny.day
   );
 
 }
@@ -2723,122 +2569,171 @@ function tradingDate(){
 
 function getSessionClockState(){
 
-  const et =
-    getParts(
-      "America/New_York"
-    );
+  const ny =
+    getNyParts();
 
 
   const mins =
-    et.hour * 60 +
-    et.minute;
-
-
-  const preliminaryStart =
-    6 * 60 + 30;
-
-
-  const preliminaryEnd =
-    7 * 60;
-
-
-  const mainStart =
-    9 * 60;
-
-
-  const close =
-    11 * 60;
+    ny.hour * 60 +
+    ny.minute;
 
 
   const weekend =
-    (
-      et.weekday ===
-        "Saturday" ||
-      et.weekday ===
-        "Sunday"
-    );
-
-
-  let active =
-    false;
-
-
-  let label =
-    "OUTSIDE ACTIVE WINDOW";
+    ny.weekday ===
+      "Saturday" ||
+    ny.weekday ===
+      "Sunday";
 
 
   if(
     weekend
   ){
 
-    label =
-      "MARKET CLOSED — WEEKEND";
+    return {
+
+      key:
+        "weekend",
+
+      canStart:
+        false,
+
+      title:
+        "MARKET CLOSED — WEEKEND",
+
+      detail:
+        "No WASPN trading session today.",
+
+      className:
+        "closed"
+
+    };
 
   }
 
-  else if(
-    mins >= preliminaryStart &&
-    mins < preliminaryEnd
+
+  if(
+    mins >= 390 &&
+    mins < 420
   ){
 
-    active =
-      true;
+    return {
 
+      key:
+        "preliminary",
 
-    label =
-      "PRELIMINARY WINDOW";
+      canStart:
+        true,
+
+      title:
+        "PRELIMINARY WINDOW",
+
+      detail:
+        "6:30–7:00 AM ET • Exceptional setup / monitoring window.",
+
+      className:
+        "ok"
+
+    };
 
   }
 
-  else if(
-    mins >= mainStart &&
-    mins < close
+
+  if(
+    mins >= 540 &&
+    mins < 660
   ){
 
-    active =
-      true;
+    return {
 
+      key:
+        "main",
 
-    label =
-      "MAIN WINDOW";
+      canStart:
+        true,
+
+      title:
+        "WITHIN WASPN",
+
+      detail:
+        "Primary trading window • 9:00–11:00 AM ET.",
+
+      className:
+        "ok"
+
+    };
 
   }
 
-  else if(
-    mins >= preliminaryEnd &&
-    mins < mainStart
+
+  if(
+    mins >= 420 &&
+    mins < 540
   ){
 
-    label =
-      "WAIT — MAIN WINDOW NOT OPEN";
+    return {
+
+      key:
+        "wait",
+
+      canStart:
+        false,
+
+      title:
+        "WAIT — MAIN WINDOW NOT OPEN",
+
+      detail:
+        "Main WASPN window begins at 9:00 AM ET.",
+
+      className:
+        "warn"
+
+    };
 
   }
 
-  else if(
-    mins >= close
+
+  if(
+    mins >= 660
   ){
 
-    label =
-      "SESSION CLOSED";
+    return {
 
-  }
+      key:
+        "closed",
 
-  else{
+      canStart:
+        false,
 
-    label =
-      "WAIT — PRELIMINARY WINDOW NOT OPEN";
+      title:
+        "SESSION CLOSED",
+
+      detail:
+        "11:00 AM ET reached • No reopening later.",
+
+      className:
+        "closed"
+
+    };
 
   }
 
 
   return {
 
-    et,
-    mins,
-    weekend,
-    active,
-    label,
-    close
+    key:
+      "before",
+
+    canStart:
+      false,
+
+    title:
+      "WAIT — SESSION NOT OPEN",
+
+    detail:
+      "Preliminary monitoring begins at 6:30 AM ET.",
+
+    className:
+      "warn"
 
   };
 
@@ -2849,6 +2744,52 @@ function getSessionClockState(){
 /* ========================================
    MONEY
 ======================================== */
+
+function parseSignedNumber(
+  value
+){
+
+  const cleaned =
+    String(
+      value ?? ""
+    )
+    .trim()
+    .replace(
+      /[−–—]/g,
+      "-"
+    )
+    .replace(
+      /[$£,\s]/g,
+      ""
+    );
+
+
+  if(
+    cleaned === "" ||
+    cleaned === "-" ||
+    cleaned === "." ||
+    cleaned === "-."
+  ){
+
+    return null;
+
+  }
+
+
+  const n =
+    Number(
+      cleaned
+    );
+
+
+  return Number.isFinite(
+    n
+  )
+    ? n
+    : null;
+
+}
+
 
 function money(
   value
@@ -2898,7 +2839,142 @@ function money(
 
 
 /* ========================================
-   JOURNAL → LIVE RISK SYNC
+   DAILY RECORD
+======================================== */
+
+function getTodayRecord(){
+
+  return getJournal()[
+    getNyDate()
+  ] || {};
+
+}
+
+
+function getLiveState(){
+
+  const day =
+    getTodayRecord();
+
+
+  return {
+
+    attempt:
+      Number(
+        day.liveRisk?.attempt ||
+        0
+      ),
+
+    realisedPnl:
+      Number(
+        day.liveRisk?.realisedPnl ??
+        day.totalNet ??
+        0
+      ),
+
+    warningReached:
+      !!day.liveRisk?.warningReached,
+
+    hardStopReached:
+      !!day.liveRisk?.hardStopReached,
+
+    maxAttemptReached:
+      Number(
+        day.liveRisk?.maxAttemptReached ||
+        day.liveRisk?.attempt ||
+        0
+      ),
+
+    sessionEnded:
+      !!day.liveRisk?.sessionEnded,
+
+    lossWarning:
+      day.liveRisk?.lossWarning ||
+      null,
+
+    behaviouralLock:
+      day.liveRisk?.behaviouralLock ||
+      {
+
+        active:
+          false,
+
+        until:
+          null,
+
+        resetGateRequired:
+          false
+
+      },
+
+    timer:
+      null
+
+  };
+
+}
+
+
+function saveLiveState(
+  live
+){
+
+  const journal =
+    getJournal();
+
+
+  const date =
+    getNyDate();
+
+
+  const existing =
+    journal[
+      date
+    ] || {
+      date
+    };
+
+
+  journal[
+    date
+  ] = {
+
+    ...existing,
+
+    date,
+
+    liveRisk:{
+
+      ...existing.liveRisk,
+
+      ...live,
+
+      timer:
+        null,
+
+      updatedAt:
+        new Date()
+          .toISOString()
+
+    },
+
+    lastUpdated:
+      new Date()
+        .toISOString()
+
+  };
+
+
+  saveJournal(
+    journal
+  );
+
+}
+
+
+
+/* ========================================
+   JOURNAL SYNC
 ======================================== */
 
 function getJournalTradeCount(
@@ -2917,134 +2993,65 @@ function getJournalTradeCount(
 }
 
 
-function hasSavedJournalTrades(
-  day
-){
+function syncFromJournal(){
 
-  return Boolean(
+  const day =
+    getTodayRecord();
 
-    day?.journalSavedAt &&
 
+  if(
+    !day.journalSavedAt
+  ){
+
+    return;
+
+  }
+
+
+  const trades =
     getJournalTradeCount(
       day
-    ) > 0 &&
+    );
 
-    typeof day?.totalNet ===
+
+  const total =
+    typeof day.totalNet ===
       "number"
-
-  );
-
-}
-
-
-function journalAttemptFloor(){
-
-  const day =
-    getJournal()[
-      tradingDate()
-    ];
+      ? day.totalNet
+      : null;
 
 
   if(
-    !hasSavedJournalTrades(
-      day
-    )
+    trades === 0 &&
+    total === null
   ){
 
-    return 0;
+    return;
 
   }
 
 
-  return getJournalTradeCount(
-    day
-  );
-
-}
-
-
-function syncFromJournal(
-  saveAfter = false
-){
-
-  const day =
-    getJournal()[
-      tradingDate()
-    ];
-
-
-  if(
-    !hasSavedJournalTrades(
-      day
-    )
-  ){
-
-    renderConnected();
-
-    return false;
-
-  }
-
-
-  const journalTrades =
-    getJournalTradeCount(
-      day
-    );
-
-
-  const journalPnl =
-    Number(
-      day.totalNet
-    );
+  const live =
+    getLiveState();
 
 
   let changed =
     false;
 
 
-  const syncedAttempt =
-    Math.max(
-      attempt,
-      journalTrades
-    );
-
-
   if(
-    syncedAttempt !== attempt
+    trades >
+    live.attempt
   ){
 
-    attempt =
-      syncedAttempt;
+    live.attempt =
+      trades;
 
 
-    document.getElementById(
-      "attempt"
-    ).textContent =
-      attempt;
-
-
-    changed =
-      true;
-
-  }
-
-
-  const currentPnl =
-    getPnl();
-
-
-  if(
-    Math.abs(
-      currentPnl -
-      journalPnl
-    ) > 0.0001
-  ){
-
-    document.getElementById(
-      "pnl"
-    ).value =
-      journalPnl.toFixed(
-        2
+    live.maxAttemptReached =
+      Math.max(
+        live.maxAttemptReached,
+        trades
       );
 
 
@@ -3055,473 +3062,355 @@ function syncFromJournal(
 
 
   if(
-    attempt >= 5
+    total !== null &&
+    total !==
+      live.realisedPnl
   ){
 
-    sessionEnded =
+    live.realisedPnl =
+      total;
+
+
+    changed =
       true;
 
   }
 
 
-  renderConnected();
-
-
   if(
-    changed &&
-    saveAfter
+    changed
   ){
 
-    update(
-      true
+    evaluateStickyRules(
+      live
+    );
+
+
+    saveLiveState(
+      live
     );
 
   }
-
-
-  return changed;
 
 }
 
 
 
 /* ========================================
-   -$75 WARNING
+   STICKY RULES
 ======================================== */
 
-function activateLossWarning(){
+function evaluateStickyRules(
+  live
+){
 
   if(
-    lossWarningActive ||
-    lossWarningCompleted ||
-    sessionEnded
+    live.realisedPnl <=
+    WARNING_LEVEL
   ){
 
-    return;
+    live.warningReached =
+      true;
 
   }
 
 
-  lossWarningActive =
+  if(
+    live.realisedPnl <=
+    HARD_STOP
+  ){
+
+    live.hardStopReached =
+      true;
+
+    live.sessionEnded =
+      true;
+
+  }
+
+
+  if(
+    live.attempt >=
+    MAX_ATTEMPTS
+  ){
+
+    live.sessionEnded =
+      true;
+
+  }
+
+
+  live.maxAttemptReached =
+    Math.max(
+      Number(
+        live.maxAttemptReached ||
+        0
+      ),
+      Number(
+        live.attempt ||
+        0
+      )
+    );
+
+
+  return live;
+
+}
+
+
+
+/* ========================================
+   LOSS WARNING
+======================================== */
+
+function triggerLossCooldown(
+  live
+){
+
+  const warning =
+    live.lossWarning;
+
+
+  if(
+    live.realisedPnl >
+    WARNING_LEVEL
+  ){
+
+    return live;
+
+  }
+
+
+  if(
+    warning?.triggered
+  ){
+
+    return live;
+
+  }
+
+
+  live.lossWarning = {
+
+    triggered:
+      true,
+
+    active:
+      true,
+
+    startedAt:
+      Date.now(),
+
+    until:
+      Date.now() +
+      COOLDOWN_MS
+
+  };
+
+
+  live.warningReached =
     true;
 
 
-  lossWarningStartedAt =
-    Date.now();
-
-
-  lossWarningEndsAt =
-    lossWarningStartedAt +
-    LOSS_WARNING_LOCK_MS;
-
-
-  queueSave();
+  return live;
 
 }
 
 
-function lossWarningRemaining(){
+function updateLossCooldown(
+  live
+){
 
   if(
-    !lossWarningActive ||
-    !lossWarningEndsAt
+    !live.lossWarning?.active
   ){
 
-    return 0;
-
-  }
-
-
-  return Math.max(
-    0,
-    lossWarningEndsAt -
-    Date.now()
-  );
-
-}
-
-
-function updateLossWarning(){
-
-  if(
-    !lossWarningActive
-  ){
-
-    return;
+    return live;
 
   }
 
 
   if(
-    lossWarningRemaining() <= 0
+    Date.now() >=
+    Number(
+      live.lossWarning.until ||
+      0
+    )
   ){
 
-    lossWarningActive =
-      false;
+    live.lossWarning = {
 
+      ...live.lossWarning,
 
-    lossWarningCompleted =
-      true;
+      active:
+        false
 
-
-    lossWarningEndsAt =
-      null;
-
-
-    queueSave();
+    };
 
   }
 
-}
 
-
-function lossWarningCountdownText(){
-
-  const remaining =
-    lossWarningRemaining();
-
-
-  const totalSeconds =
-    Math.ceil(
-      remaining / 1000
-    );
-
-
-  const minutes =
-    Math.floor(
-      totalSeconds / 60
-    );
-
-
-  const seconds =
-    totalSeconds % 60;
-
-
-  return (
-
-    String(
-      minutes
-    )
-    .padStart(
-      2,
-      "0"
-    )
-
-    +
-
-    ":"
-
-    +
-
-    String(
-      seconds
-    )
-    .padStart(
-      2,
-      "0"
-    )
-
-  );
+  return live;
 
 }
 
 
 
 /* ========================================
-   BEHAVIOURAL CIRCUIT BREAKER
+   BEHAVIOURAL LOCK
 ======================================== */
 
 function activateBehaviouralLock(){
 
+  const live =
+    getLiveState();
+
+
+  live.behaviouralLock = {
+
+    active:
+      true,
+
+    startedAt:
+      Date.now(),
+
+    until:
+      Date.now() +
+      COOLDOWN_MS,
+
+    resetGateRequired:
+      false
+
+  };
+
+
+  saveLiveState(
+    live
+  );
+
+
+  render();
+
+}
+
+
+function updateBehaviouralLock(
+  live
+){
+
   if(
-    sessionEnded
+    live.behaviouralLock?.active &&
+    Date.now() >=
+      Number(
+        live.behaviouralLock.until ||
+        0
+      )
   ){
 
-    document.getElementById(
-      "behaviourToggle"
-    ).checked =
-      false;
+    live.behaviouralLock = {
+
+      ...live.behaviouralLock,
+
+      active:
+        false,
+
+      resetGateRequired:
+        true
+
+    };
 
 
-    alert(
-      "The session is already permanently locked."
+    saveLiveState(
+      live
     );
 
-
-    return;
-
   }
 
 
-  if(
-    behaviouralLockActive ||
-    resetGateRequired
-  ){
+  return live;
 
-    return;
-
-  }
+}
 
 
-  behaviouralLockActive =
-    true;
+function clearBehaviouralLock(){
+
+  const live =
+    getLiveState();
 
 
-  behaviouralLockStartedAt =
-    Date.now();
+  live.behaviouralLock = {
+
+    active:
+      false,
+
+    until:
+      null,
+
+    resetGateRequired:
+      false,
+
+    clearedAt:
+      Date.now()
+
+  };
 
 
-  behaviouralLockEndsAt =
-    behaviouralLockStartedAt +
-    BEHAVIOURAL_LOCK_MS;
-
-
-  resetGateRequired =
-    false;
+  saveLiveState(
+    live
+  );
 
 
   document.getElementById(
     "behaviourToggle"
   ).checked =
-    true;
+    false;
 
-
-  resetGateAnswers();
-
-
-  renderBehaviouralLock();
-
-  update(
-    true
-  );
-
-}
-
-
-function behaviouralRemaining(){
-
-  if(
-    !behaviouralLockActive ||
-    !behaviouralLockEndsAt
-  ){
-
-    return 0;
-
-  }
-
-
-  return Math.max(
-    0,
-    behaviouralLockEndsAt -
-    Date.now()
-  );
-
-}
-
-
-function renderBehaviouralLock(){
-
-  const panel =
-    document.getElementById(
-      "behaviourLockPanel"
-    );
-
-
-  const countdown =
-    document.getElementById(
-      "behaviourCountdown"
-    );
-
-
-  const message =
-    document.getElementById(
-      "behaviourLockMessage"
-    );
-
-
-  const gate =
-    document.getElementById(
-      "resetGate"
-    );
-
-
-  const toggle =
-    document.getElementById(
-      "behaviourToggle"
-    );
-
-
-  if(
-    behaviouralLockActive
-  ){
-
-    panel.classList.add(
-      "active"
-    );
-
-
-    gate.classList.remove(
-      "active"
-    );
-
-
-    toggle.checked =
-      true;
-
-
-    const remaining =
-      behaviouralRemaining();
-
-
-    const seconds =
-      Math.ceil(
-        remaining / 1000
-      );
-
-
-    const mins =
-      Math.floor(
-        seconds / 60
-      );
-
-
-    const secs =
-      seconds % 60;
-
-
-    countdown.textContent =
-
-      String(
-        mins
-      )
-      .padStart(
-        2,
-        "0"
-      )
-
-      +
-
-      ":"
-
-      +
-
-      String(
-        secs
-      )
-      .padStart(
-        2,
-        "0"
-      );
-
-
-    message.textContent =
-      "New WASPN attempts are locked. Existing position management remains available.";
-
-
-    if(
-      remaining <= 0
-    ){
-
-      behaviouralLockActive =
-        false;
-
-
-      resetGateRequired =
-        true;
-
-
-      behaviouralLockEndsAt =
-        null;
-
-
-      panel.classList.remove(
-        "active"
-      );
-
-
-      gate.classList.add(
-        "active"
-      );
-
-
-      toggle.checked =
-        true;
-
-
-      queueSave();
-
-    }
-
-  }
-
-  else if(
-    resetGateRequired
-  ){
-
-    panel.classList.remove(
-      "active"
-    );
-
-
-    gate.classList.add(
-      "active"
-    );
-
-
-    toggle.checked =
-      true;
-
-  }
-
-  else{
-
-    panel.classList.remove(
-      "active"
-    );
-
-
-    gate.classList.remove(
-      "active"
-    );
-
-
-    toggle.checked =
-      false;
-
-  }
-
-}
-
-
-function resetGateAnswers(){
 
   document
     .querySelectorAll(
       '#resetGate input[type="radio"]'
     )
     .forEach(
-      input => {
+      radio => {
 
-        input.checked =
+        radio.checked =
           false;
 
       }
     );
 
 
-  evaluateResetGate();
+  render();
 
 }
 
 
-function evaluateResetGate(){
+
+/* ========================================
+   RESET GATE
+======================================== */
+
+function evaluateGate(){
+
+  const names = [
+
+    "gate1",
+    "gate2",
+    "gate3",
+    "gate4",
+    "gate5"
+
+  ];
+
 
   const answers =
-    [
-      ...document.querySelectorAll(
-        '#resetGate input[type="radio"]:checked'
-      )
-    ];
+    names.map(
+      name =>
+        document.querySelector(
+          `input[name="${name}"]:checked`
+        )?.value ||
+        null
+    );
 
 
   const result =
@@ -3530,33 +3419,28 @@ function evaluateResetGate(){
     );
 
 
-  const button =
+  const clearButton =
     document.getElementById(
       "clearBehaviourLockBtn"
     );
 
 
-  const hasRisk =
+  if(
     answers.some(
       answer =>
-        answer.value ===
-        "risk"
-    );
-
-
-  if(
-    hasRisk
+        answer === null
+    )
   ){
 
     result.className =
-      "gate-result stop";
+      "gate-result";
 
 
     result.textContent =
-      "RESET FAILED — behavioural risk is still present. No new trade.";
+      "Complete all five checks.";
 
 
-    button.disabled =
+    clearButton.disabled =
       true;
 
 
@@ -3566,19 +3450,23 @@ function evaluateResetGate(){
 
 
   if(
-    answers.length === 5
+    answers.some(
+      answer =>
+        answer ===
+        "risk"
+    )
   ){
 
     result.className =
-      "gate-result safe";
+      "gate-result stop";
 
 
     result.textContent =
-      "RESET PASSED — another trade is permitted only if the setup is valid and all WASPN rules still allow it.";
+      "STOP • behavioural risk is still present.";
 
 
-    button.disabled =
-      false;
+    clearButton.disabled =
+      true;
 
 
     return;
@@ -3587,40 +3475,33 @@ function evaluateResetGate(){
 
 
   result.className =
-    "gate-result";
+    "gate-result safe";
 
 
   result.textContent =
-    "Complete all five checks.";
+    "Reset passed • WASPN can resume if all structural rules still allow it.";
 
 
-  button.disabled =
-    true;
+  clearButton.disabled =
+    false;
 
 }
 
 
-function clearBehaviouralLock(){
 
-  const checked =
-    [
-      ...document.querySelectorAll(
-        '#resetGate input[type="radio"]:checked'
-      )
-    ];
+/* ========================================
+   TRADE ACTIONS
+======================================== */
 
+function completeTrade(){
 
-  const valid =
-    checked.length === 5 &&
-    checked.every(
-      answer =>
-        answer.value ===
-        "safe"
-    );
+  const live =
+    getLiveState();
 
 
   if(
-    !valid
+    live.attempt >=
+    MAX_ATTEMPTS
   ){
 
     return;
@@ -3628,240 +3509,310 @@ function clearBehaviouralLock(){
   }
 
 
-  behaviouralLockActive =
-    false;
+  live.attempt +=
+    1;
 
 
-  behaviouralLockStartedAt =
-    null;
-
-
-  behaviouralLockEndsAt =
-    null;
-
-
-  resetGateRequired =
-    false;
-
-
-  document.getElementById(
-    "behaviourToggle"
-  ).checked =
-    false;
-
-
-  resetGateAnswers();
-
-  renderBehaviouralLock();
-
-  update(
-    true
+  evaluateStickyRules(
+    live
   );
 
+
+  saveLiveState(
+    live
+  );
+
+
+  render();
+
 }
 
 
+function correctAttempt(){
 
-/* ========================================
-   CONNECTED RECORD
-======================================== */
-
-function renderConnected(){
-
-  const day =
-    getJournal()[
-      tradingDate()
-    ] || {};
+  const live =
+    getLiveState();
 
 
-  document.getElementById(
-    "journalTrades"
-  ).textContent =
+  if(
+    live.attempt <= 0
+  ){
 
-    Array.isArray(
-      day.trades
-    )
-      ? day.trades.length
-      : 0;
+    return;
+
+  }
 
 
-  document.getElementById(
-    "journalPnl"
-  ).textContent =
-
-    typeof day.totalNet ===
-      "number"
-
-      ? money(
-          day.totalNet
-        )
-
-      : "—";
+  live.attempt -=
+    1;
 
 
-  document.getElementById(
-    "compliance"
-  ).textContent =
-
-    day.compliance &&
-    typeof day.compliance.score ===
-      "number"
-
-      ? day.compliance.score +
-        "/3"
-
-      : "—";
+  /*
+    Hard-stop and session-ended states are
+    intentionally sticky. Correction only
+    fixes accidental attempt counting.
+  */
 
 
-  document.getElementById(
-    "processScore"
-  ).textContent =
+  saveLiveState(
+    live
+  );
 
-    day.sessionScore &&
-    typeof day.sessionScore.score ===
-      "number"
 
-      ? day.sessionScore.score +
-        "/5"
-
-      : "—";
+  render();
 
 }
 
 
 
 /* ========================================
-   SAVE
+   P&L
 ======================================== */
 
-function saveLiveState(){
+function updatePnl(){
 
-  const date =
-    tradingDate();
+  const parsed =
+    parseSignedNumber(
+      document.getElementById(
+        "pnl"
+      ).value
+    );
 
 
-  const journal =
-    getJournal();
+  if(
+    parsed === null
+  ){
+
+    return;
+
+  }
 
 
-  const existing =
-    journal[
-      date
-    ] || {
-      date
+  const live =
+    getLiveState();
+
+
+  live.realisedPnl =
+    parsed;
+
+
+  triggerLossCooldown(
+    live
+  );
+
+
+  evaluateStickyRules(
+    live
+  );
+
+
+  saveLiveState(
+    live
+  );
+
+
+  render();
+
+}
+
+
+
+/* ========================================
+   STATUS LOGIC
+======================================== */
+
+function getOperationalStatus(
+  live,
+  clock
+){
+
+  if(
+    live.hardStopReached ||
+    live.realisedPnl <=
+      HARD_STOP
+  ){
+
+    return {
+
+      title:
+        "HARD STOP — SESSION OVER",
+
+      detail:
+        "-$100 realised reached • No further trading today.",
+
+      className:
+        "stop"
+
     };
 
-
-  const previous =
-    existing.liveRisk ||
-    {};
+  }
 
 
-  const pnl =
-    getPnl();
+  if(
+    live.attempt >=
+    MAX_ATTEMPTS
+  ){
+
+    return {
+
+      title:
+        "ATTEMPT 5 — SESSION OVER",
+
+      detail:
+        "Maximum completed attempts reached • No reopening later.",
+
+      className:
+        "stop"
+
+    };
+
+  }
 
 
-  journal[
-    date
-  ] = {
+  if(
+    clock.key ===
+    "closed"
+  ){
 
-    ...existing,
+    return {
 
-    date,
+      title:
+        "SESSION CLOSED",
 
-    liveRisk:{
+      detail:
+        "11:00 AM ET reached • No reopening later.",
 
-      ...previous,
+      className:
+        "closed"
 
-      attempt,
+    };
 
-      realisedPnl:
-        pnl,
-
-      tilt:
-        behaviouralLockActive ||
-        resetGateRequired,
-
-      behaviouralLock:{
-
-        active:
-          behaviouralLockActive,
-
-        startedAt:
-          behaviouralLockStartedAt,
-
-        endsAt:
-          behaviouralLockEndsAt,
-
-        resetGateRequired:
-          resetGateRequired
-
-      },
-
-      lossWarning:{
-
-        active:
-          lossWarningActive,
-
-        startedAt:
-          lossWarningStartedAt,
-
-        endsAt:
-          lossWarningEndsAt,
-
-        completed:
-          lossWarningCompleted
-
-      },
-
-      warningReached:
-        !!previous.warningReached ||
-        pnl <= -75,
-
-      hardStopReached:
-        !!previous.hardStopReached ||
-        pnl <= -100,
-
-      maxAttemptReached:
-        Math.max(
-          Number(
-            previous.maxAttemptReached ||
-            0
-          ),
-          attempt
-        ),
-
-      sessionEnded,
-
-      timer:
-        null,
-
-      updatedAt:
-        new Date()
-          .toISOString()
-
-    },
-
-    lastUpdated:
-      new Date()
-        .toISOString()
-
-  };
+  }
 
 
-  saveJournal(
-    journal
-  );
+  if(
+    clock.key ===
+    "weekend"
+  ){
+
+    return {
+
+      title:
+        "MARKET CLOSED — WEEKEND",
+
+      detail:
+        "No WASPN trading session today.",
+
+      className:
+        "closed"
+
+    };
+
+  }
+
+
+  if(
+    live.behaviouralLock?.active
+  ){
+
+    return {
+
+      title:
+        "BEHAVIOURAL LOCK ACTIVE",
+
+      detail:
+        "New trade starts are blocked during the five-minute circuit breaker.",
+
+      className:
+        "stop"
+
+    };
+
+  }
+
+
+  if(
+    live.behaviouralLock?.resetGateRequired
+  ){
+
+    return {
+
+      title:
+        "RESET GATE REQUIRED",
+
+      detail:
+        "Complete the behavioural reset before another WASPN trade.",
+
+      className:
+        "warn"
+
+    };
+
+  }
+
+
+  if(
+    live.lossWarning?.active
+  ){
+
+    return {
+
+      title:
+        "-$75 WARNING — STEP AWAY",
+
+      detail:
+        "Mandatory five-minute cooldown. Reassess before another trade.",
+
+      className:
+        "warn"
+
+    };
+
+  }
+
+
+  if(
+    live.realisedPnl <=
+    WARNING_LEVEL
+  ){
+
+    return {
+
+      title:
+        "-$75 WARNING ACTIVE",
+
+      detail:
+        "Cooldown complete • reassess quality before another trade.",
+
+      className:
+        "warn"
+
+    };
+
+  }
+
+
+  return clock;
+
+}
+
+
+
+/* ========================================
+   CLOCK DISPLAY
+======================================== */
+
+function renderClocks(){
+
+  const now =
+    new Date();
 
 
   document.getElementById(
-    "saveState"
+    "localTime"
   ).textContent =
-
-    "Autosaved • " +
-
-    new Intl.DateTimeFormat(
-      "en-GB",
+    now.toLocaleTimeString(
+      [],
       {
 
         hour:
@@ -3874,423 +3825,204 @@ function saveLiveState(){
           "2-digit"
 
       }
-    )
-    .format(
-      new Date()
     );
-
-
-  renderConnected();
-
-}
-
-
-function queueSave(){
-
-  clearTimeout(
-    saveTimer
-  );
-
-
-  saveTimer =
-    setTimeout(
-      saveLiveState,
-      120
-    );
-
-}
-
-
-
-/* ========================================
-   LOAD
-======================================== */
-
-function loadLive(){
-
-  const date =
-    tradingDate();
-
-
-  loadedDate =
-    date;
-
-
-  const day =
-    getJournal()[
-      date
-    ];
-
-
-  const live =
-    day?.liveRisk;
-
-
-  attempt =
-    Math.max(
-      0,
-      Math.min(
-        5,
-        Number(
-          live?.attempt ||
-          0
-        )
-      )
-    );
-
-
-  sessionEnded =
-    !!live?.sessionEnded;
-
-
-  document.getElementById(
-    "attempt"
-  ).textContent =
-    attempt;
-
-
-  document.getElementById(
-    "pnl"
-  ).value =
-    Number(
-      live?.realisedPnl ||
-      0
-    )
-    .toFixed(
-      2
-    );
-
-
-  const lock =
-    live?.behaviouralLock;
-
-
-  if(
-    lock
-  ){
-
-    behaviouralLockActive =
-      !!lock.active;
-
-
-    behaviouralLockStartedAt =
-      lock.startedAt
-        ? Number(
-            lock.startedAt
-          )
-        : null;
-
-
-    behaviouralLockEndsAt =
-      lock.endsAt
-        ? Number(
-            lock.endsAt
-          )
-        : null;
-
-
-    resetGateRequired =
-      !!lock.resetGateRequired;
-
-
-    if(
-      behaviouralLockActive &&
-      behaviouralLockEndsAt &&
-      Date.now() >=
-      behaviouralLockEndsAt
-    ){
-
-      behaviouralLockActive =
-        false;
-
-
-      behaviouralLockEndsAt =
-        null;
-
-
-      resetGateRequired =
-        true;
-
-    }
-
-  }
-
-  else if(
-    live?.tilt
-  ){
-
-    behaviouralLockActive =
-      false;
-
-
-    behaviouralLockStartedAt =
-      null;
-
-
-    behaviouralLockEndsAt =
-      null;
-
-
-    resetGateRequired =
-      true;
-
-  }
-
-  else{
-
-    behaviouralLockActive =
-      false;
-
-
-    behaviouralLockStartedAt =
-      null;
-
-
-    behaviouralLockEndsAt =
-      null;
-
-
-    resetGateRequired =
-      false;
-
-  }
-
-
-  const lossWarning =
-    live?.lossWarning;
-
-
-  if(
-    lossWarning
-  ){
-
-    lossWarningActive =
-      !!lossWarning.active;
-
-
-    lossWarningStartedAt =
-      lossWarning.startedAt
-        ? Number(
-            lossWarning.startedAt
-          )
-        : null;
-
-
-    lossWarningEndsAt =
-      lossWarning.endsAt
-        ? Number(
-            lossWarning.endsAt
-          )
-        : null;
-
-
-    lossWarningCompleted =
-      !!lossWarning.completed;
-
-
-    if(
-      lossWarningActive &&
-      lossWarningEndsAt &&
-      Date.now() >=
-      lossWarningEndsAt
-    ){
-
-      lossWarningActive =
-        false;
-
-
-      lossWarningEndsAt =
-        null;
-
-
-      lossWarningCompleted =
-        true;
-
-    }
-
-  }
-
-  else{
-
-    lossWarningActive =
-      false;
-
-
-    lossWarningStartedAt =
-      null;
-
-
-    lossWarningEndsAt =
-      null;
-
-
-    lossWarningCompleted =
-      !!live?.warningReached;
-
-  }
-
-
-  const synced =
-    syncFromJournal(
-      false
-    );
-
-
-  renderBehaviouralLock();
-
-  renderConnected();
-
-
-  update(
-    synced
-  );
-
-}
-
-
-
-/* ========================================
-   ATTEMPTS
-======================================== */
-
-function changeAttempt(
-  delta
-){
-
-  const clock =
-    getSessionClockState();
-
-
-  if(
-    clock.weekend
-  ){
-
-    alert(
-      "Market closed — weekend."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    delta > 0 &&
-    sessionEnded
-  ){
-
-    alert(
-      "The WASPN session is already locked."
-    );
-
-    return;
-
-  }
-
-
-  const floor =
-    journalAttemptFloor();
-
-
-  attempt =
-    Math.max(
-      floor,
-      Math.min(
-        5,
-        attempt +
-        delta
-      )
-    );
-
-
-  if(
-    attempt >= 5
-  ){
-
-    sessionEnded =
-      true;
-
-  }
-
-
-  document.getElementById(
-    "attempt"
-  ).textContent =
-    attempt;
-
-
-  update(
-    true
-  );
-
-}
-
-
-function completeTrade(){
-
-  if(
-    sessionEnded
-  ){
-
-    alert(
-      "The WASPN session is already locked."
-    );
-
-    return;
-
-  }
-
-
-  changeAttempt(
-    1
-  );
-
-}
-
-
-
-/* ========================================
-   SESSION ENGINE
-======================================== */
-
-function update(
-  shouldSave = false
-){
-
-  const clock =
-    getSessionClockState();
-
-
-  const et =
-    clock.et;
-
-
-  document.getElementById(
-    "localTime"
-  ).textContent =
-    getLocalTime();
 
 
   document.getElementById(
     "localZone"
   ).textContent =
-    getLocalZone();
+    Intl.DateTimeFormat()
+      .resolvedOptions()
+      .timeZone ||
+    "Local";
+
+
+  const ny =
+    getNyParts();
 
 
   document.getElementById(
     "etTime"
   ).textContent =
-    et.text;
+
+    String(
+      ny.hour
+    )
+    .padStart(
+      2,
+      "0"
+    ) +
+    ":" +
+    String(
+      ny.minute
+    )
+    .padStart(
+      2,
+      "0"
+    ) +
+    ":" +
+    String(
+      ny.second
+    )
+    .padStart(
+      2,
+      "0"
+    );
 
 
   document.getElementById(
     "nyDay"
   ).textContent =
-    et.weekday;
+    ny.weekday +
+    " • " +
+    getNyDate();
+
+}
 
 
-  const pnl =
-    getPnl();
+
+/* ========================================
+   CONNECTED RECORD
+======================================== */
+
+function renderConnectedRecord(){
+
+  const day =
+    getTodayRecord();
+
+
+  const trades =
+    Array.isArray(
+      day.trades
+    )
+      ? day.trades.length
+      : null;
+
+
+  document.getElementById(
+    "journalTrades"
+  ).textContent =
+    trades !== null
+      ? trades
+      : "—";
+
+
+  document.getElementById(
+    "journalNet"
+  ).textContent =
+    typeof day.totalNet ===
+      "number"
+      ? money(
+          day.totalNet
+        )
+      : "—";
+
+
+  document.getElementById(
+    "complianceSummary"
+  ).textContent =
+    typeof day.compliance?.score ===
+      "number"
+      ? day.compliance.score +
+        "/3"
+      : "—";
+
+
+  document.getElementById(
+    "processSummary"
+  ).textContent =
+    typeof day.sessionScore?.score ===
+      "number"
+      ? day.sessionScore.score +
+        "/5"
+      : "—";
+
+
+  document.getElementById(
+    "recordState"
+  ).textContent =
+    day.journalSavedAt ||
+    day.liveRisk
+      ? "CONNECTED"
+      : "LOCAL";
+
+}
+
+
+
+/* ========================================
+   RENDER
+======================================== */
+
+function render(){
+
+  syncFromJournal();
+
+
+  let live =
+    getLiveState();
+
+
+  live =
+    updateLossCooldown(
+      live
+    );
+
+
+  live =
+    updateBehaviouralLock(
+      live
+    );
+
+
+  evaluateStickyRules(
+    live
+  );
+
+
+  saveLiveState(
+    live
+  );
+
+
+  const clock =
+    getSessionClockState();
+
+
+  const operational =
+    getOperationalStatus(
+      live,
+      clock
+    );
+
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+
+  status.className =
+    "status " +
+    operational.className;
+
+
+  document.getElementById(
+    "statusTitle"
+  ).textContent =
+    operational.title;
+
+
+  document.getElementById(
+    "statusDetail"
+  ).textContent =
+    operational.detail;
+
+
+  document.getElementById(
+    "attempt"
+  ).textContent =
+    live.attempt;
 
 
   const pnlDisplay =
@@ -4301,359 +4033,165 @@ function update(
 
   pnlDisplay.textContent =
     money(
-      pnl
+      live.realisedPnl
     );
 
 
-  pnlDisplay.style.color =
-
-    pnl > 0
-      ? "var(--green)"
-
-      : pnl < 0
-        ? "var(--red)"
-
-        : "var(--text)";
-
-
-  if(
-    !clock.weekend &&
-    pnl <= -100
-  ){
-
-    sessionEnded =
-      true;
-
-  }
-
-
-  if(
-    !clock.weekend &&
-    clock.mins >= clock.close
-  ){
-
-    sessionEnded =
-      true;
-
-  }
-
-
-  if(
-    shouldSave &&
-    !sessionEnded &&
-    pnl <= -75 &&
-    pnl > -100 &&
-    !lossWarningActive &&
-    !lossWarningCompleted
-  ){
-
-    activateLossWarning();
-
-  }
-
-
-  updateLossWarning();
-
-
-  const status =
-    document.getElementById(
-      "status"
+  pnlDisplay.className =
+    "metric-value " +
+    (
+      live.realisedPnl > 0
+        ? "green"
+        : live.realisedPnl < 0
+          ? "red"
+          : ""
     );
 
 
-  const mode =
+  const pnlInput =
     document.getElementById(
-      "statusMode"
-    );
-
-
-  const title =
-    document.getElementById(
-      "statusTitle"
-    );
-
-
-  const detail =
-    document.getElementById(
-      "statusDetail"
-    );
-
-
-  const completeBtn =
-    document.getElementById(
-      "completeTradeBtn"
+      "pnl"
     );
 
 
   if(
-    clock.weekend
+    document.activeElement !==
+    pnlInput
   ){
 
-    status.className =
-      "status closed";
-
-
-    mode.textContent =
-      "SYSTEM CLOSED";
-
-
-    title.textContent =
-      "MARKET CLOSED — WEEKEND";
-
-
-    detail.textContent =
-      et.weekday +
-      " in New York • No WASPN session";
-
-
-    completeBtn.disabled =
-      true;
+    pnlInput.value =
+      live.realisedPnl !== 0
+        ? String(
+            live.realisedPnl
+          )
+        : "";
 
   }
 
 
-  else if(
-    sessionEnded ||
-    attempt >= 5 ||
-    pnl <= -100 ||
-    clock.mins >= clock.close
-  ){
+  const behaviourToggle =
+    document.getElementById(
+      "behaviourToggle"
+    );
 
-    status.className =
-      "status stop";
 
+  behaviourToggle.checked =
+    !!live.behaviouralLock?.active ||
+    !!live.behaviouralLock?.resetGateRequired;
 
-    mode.textContent =
-      "SESSION LOCKED";
 
+  const behaviourPanel =
+    document.getElementById(
+      "behaviourLockPanel"
+    );
 
-    title.textContent =
-      "STOP TRADING";
 
+  const resetGate =
+    document.getElementById(
+      "resetGate"
+    );
 
-    if(
-      attempt >= 5
-    ){
 
-      detail.textContent =
-        "Attempt 5 reached • Session permanently closed for today";
+  behaviourPanel.classList.toggle(
+    "active",
+    !!live.behaviouralLock?.active
+  );
 
-    }
 
-    else if(
-      pnl <= -100
-    ){
-
-      detail.textContent =
-        "-$100 realised hard stop reached";
-
-    }
-
-    else if(
-      clock.mins >= clock.close
-    ){
-
-      detail.textContent =
-        "11:00 AM ET session boundary reached";
-
-    }
-
-    else{
-
-      detail.textContent =
-        "WASPN session locked";
-
-    }
-
-
-    completeBtn.disabled =
-      true;
-
-  }
-
-
-  else if(
-    behaviouralLockActive
-  ){
-
-    status.className =
-      "status stop";
-
-
-    mode.textContent =
-      "BEHAVIOURAL CIRCUIT BREAKER";
-
-
-    title.textContent =
-      "5-MINUTE LOCK ACTIVE";
-
-
-    detail.textContent =
-      "New attempts are paused • Manage any existing position and step away when flat";
-
-
-    completeBtn.disabled =
-      false;
-
-  }
-
-
-  else if(
-    resetGateRequired
-  ){
-
-    status.className =
-      "status warn";
-
-
-    mode.textContent =
-      "RESET REQUIRED";
-
-
-    title.textContent =
-      "COMPLETE RESET GATE";
-
-
-    detail.textContent =
-      "Behavioural lock expired • No new attempt until the reset gate is passed";
-
-
-    completeBtn.disabled =
-      false;
-
-  }
-
-
-  else if(
-    lossWarningActive
-  ){
-
-    status.className =
-      "status warn";
-
-
-    mode.textContent =
-      "LOSS WARNING COOLDOWN";
-
-
-    title.textContent =
-      "STEP AWAY • " +
-      lossWarningCountdownText();
-
-
-    detail.textContent =
-      "-$75 realised warning reached • No new attempt for five minutes";
-
-
-    completeBtn.disabled =
-      false;
-
-  }
-
-
-  else if(
-    clock.active
-  ){
-
-    if(
-      pnl <= -75 &&
-      lossWarningCompleted
-    ){
-
-      status.className =
-        "status warn";
-
-
-      mode.textContent =
-        "ELEVATED RISK";
-
-
-      title.textContent =
-        "WASPN ACTIVE — CAUTION";
-
-
-      detail.textContent =
-        "Five-minute -$75 cooldown completed • Continue only if all remaining WASPN rules still allow it";
-
-    }
-
-    else{
-
-      status.className =
-        "status ok";
-
-
-      mode.textContent =
-        "SYSTEM ACTIVE";
-
-
-      title.textContent =
-        "WITHIN WASPN";
-
-
-      detail.textContent =
-        clock.label +
-        " • " +
-        attempt +
-        "/5 completed attempts";
-
-    }
-
-
-    completeBtn.disabled =
-      false;
-
-  }
-
-
-  else{
-
-    status.className =
-      "status warn";
-
-
-    mode.textContent =
-      "ENTRY CONTROL";
-
-
-    title.textContent =
-      clock.label;
-
-
-    detail.textContent =
-      "New entries are currently outside the active WASPN window";
-
-
-    completeBtn.disabled =
-      false;
-
-  }
-
-
-  renderBehaviouralLock();
+  resetGate.classList.toggle(
+    "active",
+    !!live.behaviouralLock?.resetGateRequired
+  );
 
 
   if(
-    shouldSave
+    live.behaviouralLock?.active
   ){
 
-    queueSave();
+    const remaining =
+      Math.max(
+        0,
+        Number(
+          live.behaviouralLock.until ||
+          0
+        ) -
+        Date.now()
+      );
+
+
+    const seconds =
+      Math.ceil(
+        remaining /
+        1000
+      );
+
+
+    const mins =
+      Math.floor(
+        seconds /
+        60
+      );
+
+
+    const secs =
+      seconds %
+      60;
+
+
+    document.getElementById(
+      "behaviourCountdown"
+    ).textContent =
+
+      String(
+        mins
+      )
+      .padStart(
+        2,
+        "0"
+      ) +
+      ":" +
+      String(
+        secs
+      )
+      .padStart(
+        2,
+        "0"
+      );
 
   }
+
+
+  /*
+    Trade Closed remains usable to record
+    an already-open position being closed.
+    WASPN status blocks NEW starts, not the
+    recording of a legitimate completed trade.
+  */
+
+  document.getElementById(
+    "completeTradeBtn"
+  ).disabled =
+    live.attempt >=
+      MAX_ATTEMPTS;
+
+
+  renderClocks();
+
+  renderConnectedRecord();
 
 }
 
 
 
 /* ========================================
-   RESET TODAY
+   RESET
 ======================================== */
 
 function resetToday(){
 
   if(
     !confirm(
-      "Reset today's entire Live Risk state and risk locks? Journal, Compliance and Process Score will be preserved."
+      "Reset today's LIVE RISK state? Journal, Compliance and Process Review data will be preserved."
     )
   ){
 
@@ -4662,73 +4200,12 @@ function resetToday(){
   }
 
 
-  attempt =
-    0;
-
-
-  sessionEnded =
-    false;
-
-
-  behaviouralLockActive =
-    false;
-
-
-  behaviouralLockStartedAt =
-    null;
-
-
-  behaviouralLockEndsAt =
-    null;
-
-
-  resetGateRequired =
-    false;
-
-
-  lossWarningActive =
-    false;
-
-
-  lossWarningStartedAt =
-    null;
-
-
-  lossWarningEndsAt =
-    null;
-
-
-  lossWarningCompleted =
-    false;
-
-
-  document.getElementById(
-    "attempt"
-  ).textContent =
-    "0";
-
-
-  document.getElementById(
-    "pnl"
-  ).value =
-    "0.00";
-
-
-  document.getElementById(
-    "behaviourToggle"
-  ).checked =
-    false;
-
-
-  resetGateAnswers();
+  const journal =
+    getJournal();
 
 
   const date =
-    tradingDate();
-
-
-  const journal =
-    getJournal();
+    getNyDate();
 
 
   const existing =
@@ -4739,85 +4216,84 @@ function resetToday(){
     };
 
 
-  journal[
-    date
-  ] = {
+  const tradeCount =
+    Array.isArray(
+      existing.trades
+    )
+      ? Math.min(
+          5,
+          existing.trades.length
+        )
+      : 0;
 
-    ...existing,
 
-    liveRisk:{
+  const journalPnl =
+    typeof existing.totalNet ===
+      "number"
+      ? existing.totalNet
+      : 0;
 
-      attempt:
-        0,
 
-      realisedPnl:
-        0,
+  existing.liveRisk = {
 
-      tilt:
+    attempt:
+      tradeCount,
+
+    realisedPnl:
+      journalPnl,
+
+    maxAttemptReached:
+      tradeCount,
+
+    warningReached:
+      journalPnl <=
+      WARNING_LEVEL,
+
+    hardStopReached:
+      journalPnl <=
+      HARD_STOP,
+
+    sessionEnded:
+      tradeCount >=
+        MAX_ATTEMPTS ||
+      journalPnl <=
+        HARD_STOP,
+
+    lossWarning:
+      null,
+
+    behaviouralLock:{
+
+      active:
         false,
 
-      behaviouralLock:{
-
-        active:
-          false,
-
-        startedAt:
-          null,
-
-        endsAt:
-          null,
-
-        resetGateRequired:
-          false
-
-      },
-
-      lossWarning:{
-
-        active:
-          false,
-
-        startedAt:
-          null,
-
-        endsAt:
-          null,
-
-        completed:
-          false
-
-      },
-
-      warningReached:
-        false,
-
-      hardStopReached:
-        false,
-
-      maxAttemptReached:
-        0,
-
-      sessionEnded:
-        false,
-
-      timer:
+      until:
         null,
 
-      resetAt:
-        new Date()
-          .toISOString(),
-
-      updatedAt:
-        new Date()
-          .toISOString()
+      resetGateRequired:
+        false
 
     },
 
-    lastUpdated:
+    timer:
+      null,
+
+    updatedAt:
       new Date()
         .toISOString()
 
   };
+
+
+  existing.lastUpdated =
+    new Date()
+      .toISOString();
+
+
+  journal[
+    date
+  ] =
+    existing;
 
 
   saveJournal(
@@ -4825,58 +4301,27 @@ function resetToday(){
   );
 
 
-  /*
-    Journal remains authoritative for
-    completed saved trades. If today's
-    journal already contains trades,
-    restore those figures immediately.
-  */
-
-  syncFromJournal(
-    true
-  );
+  document.getElementById(
+    "pnl"
+  ).value =
+    "";
 
 
-  renderBehaviouralLock();
+  document
+    .querySelectorAll(
+      '#resetGate input[type="radio"]'
+    )
+    .forEach(
+      radio => {
 
-  renderConnected();
+        radio.checked =
+          false;
 
-  update(
-    false
-  );
-
-}
-
-
-
-/* ========================================
-   REFRESH FROM JOURNAL
-======================================== */
-
-function refreshFromJournal(){
-
-  if(
-    loadedDate !==
-    tradingDate()
-  ){
-
-    loadLive();
-
-    return;
-
-  }
+      }
+    );
 
 
-  syncFromJournal(
-    true
-  );
-
-
-  renderConnected();
-
-  update(
-    false
-  );
+  render();
 
 }
 
@@ -4900,10 +4345,7 @@ document.getElementById(
 )
 .addEventListener(
   "click",
-  () =>
-    changeAttempt(
-      -1
-    )
+  correctAttempt
 );
 
 
@@ -4911,11 +4353,8 @@ document.getElementById(
   "pnl"
 )
 .addEventListener(
-  "input",
-  () =>
-    update(
-      true
-    )
+  "change",
+  updatePnl
 );
 
 
@@ -4924,15 +4363,7 @@ document.getElementById(
 )
 .addEventListener(
   "blur",
-  () => {
-
-    normalisePnlInput();
-
-    update(
-      true
-    );
-
-  }
+  updatePnl
 );
 
 
@@ -4951,21 +4382,6 @@ document.getElementById(
 
     }
 
-    else if(
-      behaviouralLockActive ||
-      resetGateRequired
-    ){
-
-      event.target.checked =
-        true;
-
-
-      alert(
-        "The Behavioural Risk Lock cannot be manually cleared. Complete the five-minute lock and Reset Gate."
-      );
-
-    }
-
   }
 );
 
@@ -4975,11 +4391,11 @@ document
     '#resetGate input[type="radio"]'
   )
   .forEach(
-    input => {
+    radio => {
 
-      input.addEventListener(
+      radio.addEventListener(
         "change",
-        evaluateResetGate
+        evaluateGate
       );
 
     }
@@ -5005,31 +4421,20 @@ document.getElementById(
 
 
 window.addEventListener(
-  "pageshow",
-  refreshFromJournal
+  "storage",
+  render
 );
 
 
 window.addEventListener(
   "focus",
-  refreshFromJournal
+  render
 );
 
 
-document.addEventListener(
-  "visibilitychange",
-  () => {
-
-    if(
-      document.visibilityState ===
-      "visible"
-    ){
-
-      refreshFromJournal();
-
-    }
-
-  }
+window.addEventListener(
+  "pageshow",
+  render
 );
 
 
@@ -5038,30 +4443,13 @@ document.addEventListener(
    START
 ======================================== */
 
-loadLive();
+syncFromJournal();
+
+render();
 
 
 setInterval(
-  () => {
-
-    if(
-      loadedDate !==
-      tradingDate()
-    ){
-
-      loadLive();
-
-    }
-
-
-    update(
-      false
-    );
-
-
-    renderBehaviouralLock();
-
-  },
+  render,
   1000
 );
 
