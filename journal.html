@@ -47,7 +47,7 @@
 
 <link
   rel="apple-touch-icon"
-  href="futuristic_neon_wasp_trading_emblem.png"
+  href="apple-touch-icon.png"
 >
 
 <title>WASPN • Trading Journal</title>
@@ -1485,6 +1485,92 @@ function clearDirty(
 
 
 /* ========================================
+   NUMBER PARSING
+======================================== */
+
+function parseSignedNumber(
+  value
+){
+
+  const cleaned =
+    String(
+      value ?? ""
+    )
+    .trim()
+    .replace(
+      /[−–—]/g,
+      "-"
+    )
+    .replace(
+      /[$£,\s]/g,
+      ""
+    );
+
+
+  if(
+    cleaned === "" ||
+    cleaned === "-" ||
+    cleaned === "." ||
+    cleaned === "-."
+  ){
+
+    return null;
+
+  }
+
+
+  const n =
+    Number(
+      cleaned
+    );
+
+
+  return Number.isFinite(
+    n
+  )
+    ? n
+    : null;
+
+}
+
+
+function parseNullableNumber(
+  value
+){
+
+  const raw =
+    String(
+      value ?? ""
+    )
+    .trim();
+
+
+  if(
+    raw === ""
+  ){
+
+    return null;
+
+  }
+
+
+  const n =
+    Number(
+      raw
+    );
+
+
+  return Number.isFinite(
+    n
+  )
+    ? n
+    : null;
+
+}
+
+
+
+/* ========================================
    TRADE CARDS
 ======================================== */
 
@@ -1647,7 +1733,7 @@ function createTrade(
         id="calcText${i}"
         class="calculation"
       >
-        Gross: $0.00 • Fees: $0.00 • Calculated Net: $0.00
+        Gross: $0.00 • Fees: $0.00 • Calculated Net: —
       </div>
 
 
@@ -1762,33 +1848,55 @@ for(
 
 
 /* ========================================
-   NUMBER PARSING
+   P&L CALCULATION
 ======================================== */
 
-function parseSignedNumber(
-  value
+function hasTradeEconomics(
+  i
 ){
 
-  const cleaned =
-    String(
-      value ?? ""
-    )
-    .trim()
-    .replace(
-      /[−–—]/g,
-      "-"
-    )
-    .replace(
-      /[$£,\s]/g,
-      ""
+  const entry =
+    parseNullableNumber(
+      document.getElementById(
+        "entryPrice" + i
+      ).value
     );
 
 
+  const exit =
+    parseNullableNumber(
+      document.getElementById(
+        "exitPrice" + i
+      ).value
+    );
+
+
+  const shares =
+    parseNullableNumber(
+      document.getElementById(
+        "shares" + i
+      ).value
+    );
+
+
+  return (
+    entry !== null &&
+    exit !== null &&
+    shares !== null &&
+    shares > 0
+  );
+
+}
+
+
+function grossPnl(
+  i
+){
+
   if(
-    cleaned === "" ||
-    cleaned === "-" ||
-    cleaned === "." ||
-    cleaned === "-."
+    !hasTradeEconomics(
+      i
+    )
   ){
 
     return null;
@@ -1796,35 +1904,11 @@ function parseSignedNumber(
   }
 
 
-  const n =
-    Number(
-      cleaned
-    );
-
-
-  return Number.isFinite(
-    n
-  )
-    ? n
-    : null;
-
-}
-
-
-
-/* ========================================
-   P&L CALCULATION
-======================================== */
-
-function grossPnl(
-  i
-){
-
   const entry =
     Number(
       document.getElementById(
         "entryPrice" + i
-      ).value || 0
+      ).value
     );
 
 
@@ -1832,7 +1916,7 @@ function grossPnl(
     Number(
       document.getElementById(
         "exitPrice" + i
-      ).value || 0
+      ).value
     );
 
 
@@ -1840,7 +1924,7 @@ function grossPnl(
     Number(
       document.getElementById(
         "shares" + i
-      ).value || 0
+      ).value
     );
 
 
@@ -1848,17 +1932,6 @@ function grossPnl(
     document.getElementById(
       "side" + i
     ).value;
-
-
-  if(
-    !entry ||
-    !exit ||
-    !shares
-  ){
-
-    return 0;
-
-  }
 
 
   return (
@@ -1887,22 +1960,27 @@ function tradeFees(
   i
 ){
 
-  const fees =
-    Number(
+  const raw =
+    parseNullableNumber(
       document.getElementById(
         "fees" + i
-      ).value || 0
+      ).value
     );
 
 
-  return Number.isFinite(
-    fees
-  )
-    ? Math.max(
-        0,
-        fees
-      )
-    : 0;
+  if(
+    raw === null
+  ){
+
+    return 0;
+
+  }
+
+
+  return Math.max(
+    0,
+    raw
+  );
 
 }
 
@@ -1911,10 +1989,23 @@ function calculatedNet(
   i
 ){
 
-  return (
+  const gross =
     grossPnl(
       i
-    ) -
+    );
+
+
+  if(
+    gross === null
+  ){
+
+    return null;
+
+  }
+
+
+  return (
+    gross -
     tradeFees(
       i
     )
@@ -1948,18 +2039,31 @@ function calculateTrade(
   document.getElementById(
     "calcText" + i
   ).textContent =
-    "Gross: " +
-    money(
-      gross
-    ) +
-    " • Fees: " +
-    money(
-      -fees
-    ) +
-    " • Calculated Net: " +
-    money(
-      net
-    );
+
+    gross === null
+
+      ? (
+          "Gross: — • Fees: " +
+          money(
+            -fees
+          ) +
+          " • Calculated Net: —"
+        )
+
+      : (
+          "Gross: " +
+          money(
+            gross
+          ) +
+          " • Fees: " +
+          money(
+            -fees
+          ) +
+          " • Calculated Net: " +
+          money(
+            net
+          )
+        );
 
 
   const actualInput =
@@ -1977,7 +2081,9 @@ function calculateTrade(
   const used =
     actualNet !== null
       ? actualNet
-      : net;
+      : net !== null
+        ? net
+        : 0;
 
 
   const display =
@@ -2152,8 +2258,33 @@ function tradeData(
 
 
   const calc =
-    gross -
-    fees;
+    gross !== null
+      ? gross - fees
+      : null;
+
+
+  const entryPrice =
+    parseNullableNumber(
+      document.getElementById(
+        "entryPrice" + i
+      ).value
+    );
+
+
+  const exitPrice =
+    parseNullableNumber(
+      document.getElementById(
+        "exitPrice" + i
+      ).value
+    );
+
+
+  const shares =
+    parseNullableNumber(
+      document.getElementById(
+        "shares" + i
+      ).value
+    );
 
 
   return {
@@ -2175,30 +2306,18 @@ function tradeData(
       ).value,
 
     entryPrice:
-      Number(
-        document.getElementById(
-          "entryPrice" + i
-        ).value || 0
-      ),
+      entryPrice ?? 0,
 
     exitPrice:
-      Number(
-        document.getElementById(
-          "exitPrice" + i
-        ).value || 0
-      ),
+      exitPrice ?? 0,
 
     shares:
-      Number(
-        document.getElementById(
-          "shares" + i
-        ).value || 0
-      ),
+      shares ?? 0,
 
     fees,
 
     grossPnl:
-      gross,
+      gross ?? 0,
 
     calculatedNet:
       calc,
@@ -2208,7 +2327,9 @@ function tradeData(
     netPnl:
       actualNet !== null
         ? actualNet
-        : calc
+        : calc !== null
+          ? calc
+          : 0
 
   };
 
@@ -2228,8 +2349,6 @@ function isTradeUsed(
     trade.exitPrice ||
 
     trade.shares ||
-
-    trade.fees ||
 
     trade.actualNet !== null
 
@@ -2362,7 +2481,18 @@ function saveDay(){
 
 
   const total =
-    calculateDailyTotal();
+    trades.reduce(
+      (
+        sum,
+        trade
+      ) =>
+        sum +
+        Number(
+          trade.netPnl ||
+          0
+        ),
+      0
+    );
 
 
   const now =
@@ -2479,6 +2609,8 @@ function saveDay(){
     )
   );
 
+
+  calculateDailyTotal();
 
   showExisting();
 
