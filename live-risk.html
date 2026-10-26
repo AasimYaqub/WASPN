@@ -626,20 +626,6 @@ a{
 }
 
 
-.metric-foot{
-
-  margin-top:8px;
-
-  color:var(--muted2);
-
-  font-size:9px;
-  font-weight:750;
-
-  line-height:1.35;
-
-}
-
-
 
 /* ========================================
    JOURNAL ACTION
@@ -1550,10 +1536,6 @@ a{
 
     </div>
 
-    <div class="metric-foot">
-      Synced from Trading Journal
-    </div>
-
   </section>
 
 
@@ -1568,10 +1550,6 @@ a{
       class="metric-value"
     >
       $0.00
-    </div>
-
-    <div class="metric-foot">
-      Synced from Trading Journal
     </div>
 
   </section>
@@ -2052,7 +2030,7 @@ a{
     id="saveState"
     class="save-state"
   >
-    Journal is the source of truth for attempts and realised P&amp;L.
+    Live session record
   </div>
 
 </section>
@@ -2593,15 +2571,6 @@ function getLiveState(){
     {};
 
 
-  /*
-    IMPORTANT:
-    Journal is authoritative for:
-      1. completed attempts
-      2. realised P&L
-
-    Live Risk only stores behavioural / sticky risk state.
-  */
-
   const journalAttempt =
     getJournalAttemptCount(
       day
@@ -2687,13 +2656,6 @@ function saveLiveState(
     };
 
 
-  /*
-    Attempts and P&L are deliberately NOT
-    manually changed here.
-
-    They are derived from the Journal.
-  */
-
   journal[
     date
   ] = {
@@ -2763,11 +2725,6 @@ function syncFromJournal(){
   const day =
     getTodayRecord();
 
-
-  /*
-    No journal save means there is nothing
-    authoritative to sync yet.
-  */
 
   if(
     !day.journalSavedAt
@@ -3834,11 +3791,6 @@ function resetBehaviouralControls(){
     );
 
 
-  /*
-    Journal-derived attempts and P&L remain intact.
-    Structural hard-stop state is rebuilt from them.
-  */
-
   existing.liveRisk = {
 
     ...existing.liveRisk,
@@ -4006,6 +3958,7 @@ window.addEventListener(
   "pageshow",
   render
 );
+
 
 
 /* ========================================
