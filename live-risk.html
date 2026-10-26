@@ -1806,7 +1806,7 @@ a{
         id="pnl"
         class="pnl-input"
         type="text"
-        inputmode="text"
+        inputmode="decimal"
         autocomplete="off"
         spellcheck="false"
         placeholder="-25.50 or 40.00"
@@ -2833,6 +2833,35 @@ function money(
 
 
   return "$0.00";
+
+}
+
+
+function cleanPnlInput(
+  value
+){
+
+  const n =
+    Number(
+      value
+    );
+
+
+  if(
+    !Number.isFinite(
+      n
+    ) ||
+    n === 0
+  ){
+
+    return "";
+
+  }
+
+
+  return n.toFixed(
+    2
+  );
 
 }
 
@@ -4060,11 +4089,9 @@ function render(){
   ){
 
     pnlInput.value =
-      live.realisedPnl !== 0
-        ? String(
-            live.realisedPnl
-          )
-        : "";
+      cleanPnlInput(
+        live.realisedPnl
+      );
 
   }
 
