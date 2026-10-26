@@ -2,42 +2,127 @@
 
   const STEPS = [
     {
-      key: "home",
-      label: "Home",
-      icon: "⌂",
-      href: "index.html",
-      color: "#22c7ff"
+      key:"home",
+      label:"Home",
+      icon:"⌂",
+      href:"index.html",
+      color:"#22c7ff"
     },
     {
-      key: "risk",
-      label: "Risk",
-      icon: "1",
-      href: "live-risk.html",
-      color: "#22c7ff"
+      key:"risk",
+      label:"Risk",
+      icon:"1",
+      href:"live-risk.html",
+      color:"#22c7ff"
     },
     {
-      key: "journal",
-      label: "Journal",
-      icon: "2",
-      href: "journal.html",
-      color: "#75dbe7"
+      key:"journal",
+      label:"Journal",
+      icon:"2",
+      href:"journal.html",
+      color:"#75dbe7"
     },
     {
-      key: "end",
-      label: "End",
-      icon: "3",
-      href: "compliance.html",
-      color: "#35d07f"
+      key:"end",
+      label:"End",
+      icon:"3",
+      href:"compliance.html",
+      color:"#35d07f"
     },
     {
-      key: "review",
-      label: "Review",
-      icon: "4",
-      href: "calendar-2026.html",
-      color: "#aeb7ff"
+      key:"review",
+      label:"Review",
+      icon:"4",
+      href:"calendar-2026.html",
+      color:"#aeb7ff"
     }
   ];
 
+
+  /* ========================================
+     PWA SERVICE WORKER
+  ======================================== */
+
+  function registerServiceWorker(){
+
+    if(
+      !(
+        "serviceWorker"
+        in navigator
+      )
+    ){
+      return;
+    }
+
+
+    const register = () => {
+
+      navigator.serviceWorker
+        .register(
+          "./service-worker.js",
+          {
+            scope:"./"
+          }
+        )
+        .then(
+          registration => {
+
+            /*
+              Check GitHub for a newer worker
+              whenever WASPN is opened online.
+            */
+
+            registration.update();
+
+          }
+        )
+        .catch(
+          error => {
+
+            /*
+              A failed registration must never
+              interfere with trading controls.
+            */
+
+            console.warn(
+              "WASPN service worker registration failed:",
+              error
+            );
+
+          }
+        );
+
+    };
+
+
+    if(
+      document.readyState ===
+      "complete"
+    ){
+
+      register();
+
+    }
+
+    else{
+
+      window.addEventListener(
+        "load",
+        register,
+        {
+          once:true
+        }
+      );
+
+    }
+
+  }
+
+
+
+  /* ========================================
+     ACTIVE PAGE
+  ======================================== */
 
   function currentFile(){
 
@@ -97,6 +182,11 @@
   }
 
 
+
+  /* ========================================
+     STYLES
+  ======================================== */
+
   function injectStyles(){
 
     if(
@@ -121,11 +211,13 @@
     style.textContent = `
 
       body{
+
         padding-bottom:
           calc(
             96px +
             env(safe-area-inset-bottom)
           ) !important;
+
       }
 
 
@@ -424,6 +516,11 @@
   }
 
 
+
+  /* ========================================
+     ACTIVE NAV
+  ======================================== */
+
   function setActive(
     key
   ){
@@ -470,6 +567,11 @@
 
   }
 
+
+
+  /* ========================================
+     BUILD NAV
+  ======================================== */
 
   function buildNav(){
 
@@ -612,6 +714,14 @@
     );
 
   }
+
+
+
+  /* ========================================
+     START
+  ======================================== */
+
+  registerServiceWorker();
 
 
   if(
