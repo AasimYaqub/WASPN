@@ -80,6 +80,7 @@ body{
   margin:0;
   min-height:100vh;
   min-height:100dvh;
+
   background:
     radial-gradient(
       circle at 50% -5%,
@@ -91,7 +92,9 @@ body{
       #080d12,
       #070b10
     );
+
   color:var(--text);
+
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -105,19 +108,25 @@ body{
   width:100%;
   max-width:1000px;
   margin:0 auto;
+
   padding:
-    max(10px,env(safe-area-inset-top))
+    max(8px,env(safe-area-inset-top))
     10px
     max(18px,env(safe-area-inset-bottom));
 }
 
 
-/* BRAND */
+/* ========================================
+   BRAND
+======================================== */
 
 .brand{
   overflow:hidden;
-  padding:12px 8px 16px;
+
+  padding:7px 8px 10px;
+
   text-align:center;
+
   background:
     radial-gradient(
       circle at 50% 15%,
@@ -129,83 +138,140 @@ body{
       #101922,
       #090f15
     );
-  border:1px solid var(--border);
-  border-radius:22px;
-  box-shadow:0 22px 58px rgba(0,0,0,.36);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:18px;
+
+  box-shadow:
+    0 18px 46px
+    rgba(0,0,0,.32);
 }
 
 .logo-wrap{
   width:100%;
+
   display:flex;
+
   justify-content:center;
   align-items:center;
+
   overflow:hidden;
 }
 
 .logo{
   display:block;
-  width:min(410px,88vw);
+
+  width:min(330px,76vw);
   max-width:100%;
   height:auto;
+
   margin:0 auto;
+
   object-fit:contain;
+
   filter:
-    drop-shadow(0 14px 28px rgba(0,0,0,.5))
-    drop-shadow(0 0 18px rgba(34,199,255,.12));
+    drop-shadow(
+      0 12px 24px
+      rgba(0,0,0,.5)
+    )
+    drop-shadow(
+      0 0 16px
+      rgba(34,199,255,.12)
+    );
 }
 
 .brand-copy{
   max-width:650px;
-  margin:4px auto 0;
+
+  margin:2px auto 0;
+
   padding:0 10px;
+
   color:#aab8c6;
-  font-size:13px;
-  line-height:1.5;
+
+  font-size:11px;
+
+  line-height:1.4;
 }
 
 .product-label{
-  margin-top:8px;
+  margin-top:4px;
+
   color:var(--blue);
-  font-size:9px;
+
+  font-size:8px;
+
   font-weight:950;
-  letter-spacing:1.8px;
+
+  letter-spacing:1.6px;
+
   text-transform:uppercase;
 }
 
 
-/* CORE RULES */
+/* ========================================
+   CORE RULES
+======================================== */
 
 .rules{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:9px;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:7px;
+
+  margin-top:8px;
 }
 
 .rule{
-  min-height:96px;
+  min-height:76px;
+
   display:flex;
+
   flex-direction:column;
+
   align-items:center;
   justify-content:center;
-  padding:12px 7px;
+
+  padding:9px 6px;
+
   text-align:center;
-  background:linear-gradient(180deg,#0e161e,#091017);
-  border:1px solid #2c3b49;
-  border-radius:15px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #0e161e,
+      #091017
+    );
+
+  border:
+    1px solid
+    #2c3b49;
+
+  border-radius:13px;
 }
 
 .label{
   color:var(--muted);
-  font-size:9px;
+
+  font-size:8px;
+
   font-weight:900;
+
   letter-spacing:1px;
+
   text-transform:uppercase;
 }
 
 .rule-value{
-  margin-top:6px;
-  font-size:22px;
+  margin-top:4px;
+
+  font-size:20px;
+
   font-weight:950;
 }
 
@@ -226,133 +292,229 @@ body{
 }
 
 
-/* MARKET STATUS */
+/* ========================================
+   MARKET STATUS
+======================================== */
 
 .market-status{
-  margin-top:9px;
-  padding:14px 12px 12px;
+  margin-top:8px;
+
+  padding:
+    12px 10px 10px;
+
   text-align:center;
-  border:1px solid var(--border);
-  border-radius:15px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:14px;
 }
 
 .market-status.open{
   color:var(--green);
+
   background:#0e1e16;
+
   border-color:#285c42;
 }
 
 .market-status.waiting{
   color:var(--amber);
+
   background:#1d170d;
+
   border-color:#655027;
 }
 
 .market-status.closed{
   color:#a8b4bf;
+
   background:#121920;
+
   border-color:#394754;
 }
 
 .market-main{
-  font-size:19px;
+  font-size:20px;
+
   font-weight:950;
 }
 
 .market-detail{
-  margin-top:4px;
+  margin-top:3px;
+
   color:var(--muted);
-  font-size:10px;
-  line-height:1.4;
+
+  font-size:9px;
+
+  line-height:1.35;
 }
 
 
-/* LIVE WINDOW COUNTDOWN */
+/* ========================================
+   LIVE WINDOW COUNTDOWN
+======================================== */
 
 .window-countdowns{
   display:grid;
-  grid-template-columns:1fr 1fr;
+
+  grid-template-columns:
+    1fr 1fr;
+
   gap:7px;
-  margin-top:11px;
+
+  margin-top:9px;
 }
 
 .countdown-item{
   min-width:0;
-  padding:9px 8px;
-  background:rgba(4,9,13,.42);
-  border:1px solid rgba(135,151,167,.16);
-  border-radius:10px;
+
+  padding:8px 6px;
+
+  background:
+    rgba(
+      4,
+      9,
+      13,
+      .42
+    );
+
+  border:
+    1px solid
+    rgba(
+      135,
+      151,
+      167,
+      .16
+    );
+
+  border-radius:9px;
 }
 
 .countdown-label{
   color:var(--muted);
-  font-size:8px;
+
+  font-size:7px;
+
   font-weight:900;
-  letter-spacing:.9px;
+
+  letter-spacing:.8px;
+
   text-transform:uppercase;
 }
 
 .countdown-time{
   margin-top:3px;
+
   color:var(--text);
-  font-size:17px;
+
+  font-size:16px;
+
   font-weight:950;
+
   letter-spacing:.2px;
-  font-variant-numeric:tabular-nums;
+
+  font-variant-numeric:
+    tabular-nums;
+
   white-space:nowrap;
 }
 
-.countdown-item.prelim .countdown-time{
+.countdown-item.prelim
+.countdown-time{
   color:var(--amber);
 }
 
-.countdown-item.main .countdown-time{
+.countdown-item.main
+.countdown-time{
   color:var(--blue);
 }
 
 .countdown-item.active{
-  border-color:rgba(53,208,127,.35);
-  background:rgba(53,208,127,.055);
+  border-color:
+    rgba(
+      53,
+      208,
+      127,
+      .35
+    );
+
+  background:
+    rgba(
+      53,
+      208,
+      127,
+      .055
+    );
 }
 
-.countdown-item.active .countdown-time{
+.countdown-item.active
+.countdown-time{
   color:var(--green);
 }
 
 .countdown-caption{
-  margin-top:3px;
+  margin-top:2px;
+
   color:var(--muted2);
-  font-size:8px;
+
+  font-size:7px;
+
   line-height:1.3;
 }
 
 
-/* PRIMARY ACTION */
+/* ========================================
+   PRIMARY ACTION
+======================================== */
 
 .primary-action{
   display:block;
-  margin-top:9px;
-  min-height:70px;
-  padding:15px;
+
+  margin-top:8px;
+
+  min-height:62px;
+
+  padding:12px;
+
   text-decoration:none;
+
   text-align:center;
-  background:linear-gradient(180deg,#1595d4,#0e72aa);
-  border-radius:16px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #1595d4,
+      #0e72aa
+    );
+
+  border-radius:14px;
+
   color:white;
-  box-shadow:0 14px 32px rgba(0,135,205,.20);
+
+  box-shadow:
+    0 12px 28px
+    rgba(0,135,205,.18);
 }
 
 .primary-kicker{
-  font-size:9px;
+  font-size:8px;
+
   font-weight:900;
-  letter-spacing:1.3px;
+
+  letter-spacing:1.2px;
+
   text-transform:uppercase;
+
   opacity:.75;
 }
 
 .primary-title{
-  margin-top:4px;
-  font-size:22px;
+  margin-top:3px;
+
+  font-size:20px;
+
   font-weight:950;
 }
 
@@ -361,131 +523,147 @@ body{
 }
 
 
-/* CARDS */
+/* ========================================
+   CARDS
+======================================== */
 
 .card{
-  margin-top:9px;
-  padding:14px;
-  background:linear-gradient(180deg,#111921,#0e151c);
-  border:1px solid var(--border);
-  border-radius:16px;
+  margin-top:8px;
+
+  padding:13px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #111921,
+      #0e151c
+    );
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:15px;
 }
 
 .card-title{
   font-size:15px;
+
   font-weight:950;
 }
 
 .card-copy{
   margin-top:3px;
+
   color:var(--muted);
-  font-size:10px;
+
+  font-size:9px;
+
   line-height:1.4;
 }
 
 
-/* TODAY */
+/* ========================================
+   TODAY
+======================================== */
 
 .today-grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
+
+  grid-template-columns:
+    1fr 1fr;
+
   gap:7px;
-  margin-top:10px;
+
+  margin-top:9px;
 }
 
 .today-item{
-  min-height:78px;
+  min-height:68px;
+
   display:flex;
+
   flex-direction:column;
+
   justify-content:center;
-  padding:10px;
+
+  padding:9px;
+
   background:#090f14;
-  border:1px solid var(--border);
+
+  border:
+    1px solid
+    var(--border);
+
   border-radius:10px;
 }
 
 .value{
-  margin-top:4px;
-  font-size:20px;
-  font-weight:950;
-}
-
-
-/* FLOW */
-
-.flow{
-  display:grid;
-  gap:7px;
-  margin-top:10px;
-}
-
-.flow-step{
-  display:grid;
-  grid-template-columns:38px 1fr;
-  gap:10px;
-  align-items:center;
-  min-height:68px;
-  padding:10px 11px;
-  background:#0a1015;
-  border:1px solid var(--border);
-  border-radius:11px;
-}
-
-.flow-number{
-  width:34px;
-  height:34px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:50%;
-  background:#122433;
-  color:var(--blue);
-  font-size:14px;
-  font-weight:950;
-}
-
-.flow-title{
-  font-size:13px;
-  font-weight:950;
-}
-
-.flow-copy{
   margin-top:3px;
-  color:var(--muted);
-  font-size:9px;
-  line-height:1.4;
+
+  font-size:19px;
+
+  font-weight:950;
 }
 
 
-/* MODULES */
+/* ========================================
+   MODULES
+======================================== */
 
 .module-grid{
   display:grid;
-  grid-template-columns:1fr;
+
+  grid-template-columns:
+    1fr;
+
   gap:7px;
-  margin-top:10px;
+
+  margin-top:9px;
 }
 
 .module{
   display:block;
-  min-height:76px;
-  padding:12px 14px 12px 16px;
+
+  min-height:70px;
+
+  padding:
+    11px 13px
+    11px 15px;
+
   position:relative;
+
   overflow:hidden;
+
   text-decoration:none;
+
   color:white;
-  background:linear-gradient(145deg,#17222c,#111820);
-  border:1px solid var(--border);
+
+  background:
+    linear-gradient(
+      145deg,
+      #17222c,
+      #111820
+    );
+
+  border:
+    1px solid
+    var(--border);
+
   border-radius:12px;
 }
 
 .module::before{
   content:"";
+
   position:absolute;
+
   left:0;
   top:0;
   bottom:0;
+
   width:4px;
+
   background:var(--blue);
 }
 
@@ -507,122 +685,210 @@ body{
 
 .module-title{
   font-size:15px;
+
   font-weight:950;
 }
 
 .module-desc{
   margin-top:4px;
+
   color:var(--muted);
-  font-size:10px;
+
+  font-size:9px;
+
   line-height:1.4;
 }
 
 
-/* EVIDENCE */
+/* ========================================
+   EVIDENCE
+======================================== */
 
 .evidence-grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
+
+  grid-template-columns:
+    1fr 1fr;
+
   gap:7px;
-  margin-top:10px;
+
+  margin-top:9px;
 }
 
 .evidence{
-  min-height:125px;
+  min-height:115px;
+
   display:flex;
+
   flex-direction:column;
+
   justify-content:center;
-  padding:12px;
+
+  padding:11px;
+
   background:#090f14;
-  border:1px solid var(--border);
+
+  border:
+    1px solid
+    var(--border);
+
   border-radius:10px;
 }
 
 .evidence-value{
   margin-top:5px;
+
   font-size:19px;
+
   font-weight:950;
 }
 
 .evidence-copy{
   margin-top:5px;
+
   color:var(--muted);
+
   font-size:9px;
+
   line-height:1.4;
 }
 
 .evidence-note{
-  margin-top:10px;
-  padding-top:10px;
-  border-top:1px solid rgba(135,151,167,.14);
+  margin-top:9px;
+
+  padding-top:9px;
+
+  border-top:
+    1px solid
+    rgba(
+      135,
+      151,
+      167,
+      .14
+    );
+
   color:var(--muted2);
+
   font-size:9px;
+
   line-height:1.5;
 }
 
 
-/* COMMAND IMAGE */
+/* ========================================
+   COMMAND IMAGE
+======================================== */
 
 .command-centre{
-  margin-top:10px;
+  margin-top:9px;
+
   padding:6px;
+
   overflow:hidden;
-  background:linear-gradient(180deg,#101820,#090f15);
-  border:1px solid var(--border);
+
+  background:
+    linear-gradient(
+      180deg,
+      #101820,
+      #090f15
+    );
+
+  border:
+    1px solid
+    var(--border);
+
   border-radius:17px;
 }
 
 .command-title{
-  padding:7px 6px 9px;
+  padding:
+    7px 6px 9px;
+
   text-align:center;
+
   color:#aab9c8;
+
   font-size:9px;
+
   font-weight:900;
+
   letter-spacing:1.5px;
+
   text-transform:uppercase;
 }
 
 .command-centre img{
   display:block;
+
   width:100%;
+
   height:auto;
+
   border-radius:11px;
 }
 
 .footer{
-  margin:17px 0 5px;
+  margin:
+    17px 0 5px;
+
   text-align:center;
+
   color:var(--muted);
+
   font-size:10px;
 }
 
 
-/* DESKTOP */
+/* ========================================
+   DESKTOP
+======================================== */
 
-@media(min-width:700px){
+@media(
+  min-width:700px
+){
 
   .wrap{
     padding:18px;
   }
 
   .logo{
-    width:min(520px,70vw);
+    width:
+      min(
+        440px,
+        65vw
+      );
   }
 
   .rules{
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:
+      repeat(
+        4,
+        1fr
+      );
   }
 
   .today-grid{
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:
+      repeat(
+        4,
+        1fr
+      );
   }
 
   .module-grid{
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:
+      repeat(
+        2,
+        1fr
+      );
   }
 
   .evidence-grid{
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:
+      repeat(
+        4,
+        1fr
+      );
   }
 
 }
@@ -631,12 +897,18 @@ body{
 
 </head>
 
+
 <body>
 
-<div class="wrap" id="top">
+<div
+  class="wrap"
+  id="top"
+>
 
 
-<!-- BRAND -->
+<!-- ======================================
+     BRAND
+====================================== -->
 
 <section class="brand">
 
@@ -650,22 +922,26 @@ body{
 
   </div>
 
+
   <div class="product-label">
     Intraday Risk &amp; Process Operating System
   </div>
 
+
   <div class="brand-copy">
-    An evidence-led framework designed to control trading windows,
-    attempts, behavioural risk and daily loss exposure while creating
-    a structured record of execution quality.
+    Control the window, attempts, behaviour and daily risk.
+    Trade the process.
   </div>
 
 </section>
 
 
-<!-- CORE RULES -->
+<!-- ======================================
+     CORE RULES
+====================================== -->
 
 <div class="rules">
+
 
   <div class="rule">
 
@@ -718,10 +994,13 @@ body{
 
   </div>
 
+
 </div>
 
 
-<!-- MARKET STATUS + COUNTDOWNS -->
+<!-- ======================================
+     MARKET STATUS + COUNTDOWNS
+====================================== -->
 
 <div
   id="marketStatus"
@@ -735,6 +1014,7 @@ body{
     Checking session…
   </div>
 
+
   <div
     id="marketDetail"
     class="market-detail"
@@ -742,6 +1022,7 @@ body{
 
 
   <div class="window-countdowns">
+
 
     <div
       id="prelimCountdownBox"
@@ -755,12 +1036,14 @@ body{
         Preliminary
       </div>
 
+
       <div
         id="prelimCountdown"
         class="countdown-time"
       >
         --:--:--
       </div>
+
 
       <div
         id="prelimCountdownCaption"
@@ -784,12 +1067,14 @@ body{
         Main Window
       </div>
 
+
       <div
         id="mainCountdown"
         class="countdown-time"
       >
         --:--:--
       </div>
+
 
       <div
         id="mainCountdownCaption"
@@ -800,12 +1085,15 @@ body{
 
     </div>
 
+
   </div>
 
 </div>
 
 
-<!-- PRIMARY ACTION -->
+<!-- ======================================
+     PRIMARY ACTION
+====================================== -->
 
 <a
   href="live-risk.html"
@@ -823,7 +1111,9 @@ body{
 </a>
 
 
-<!-- TODAY -->
+<!-- ======================================
+     TODAY
+====================================== -->
 
 <section class="card">
 
@@ -835,7 +1125,9 @@ body{
     Connected New York trading-day record.
   </div>
 
+
   <div class="today-grid">
+
 
     <div class="today-item">
 
@@ -900,117 +1192,16 @@ body{
 
     </div>
 
-  </div>
-
-</section>
-
-
-<!-- WORKFLOW -->
-
-<section class="card">
-
-  <div class="card-title">
-    WASPN Workflow
-  </div>
-
-  <div class="card-copy">
-    The operating sequence from live control through session review.
-  </div>
-
-  <div class="flow">
-
-    <div class="flow-step">
-
-      <div class="flow-number">
-        1
-      </div>
-
-      <div>
-
-        <div class="flow-title">
-          Live Risk
-        </div>
-
-        <div class="flow-copy">
-          Control trading window, attempts, realised P&amp;L,
-          loss limits and behavioural risk.
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="flow-step">
-
-      <div class="flow-number">
-        2
-      </div>
-
-      <div>
-
-        <div class="flow-title">
-          Journal
-        </div>
-
-        <div class="flow-copy">
-          Capture ticker, side, entry, exit, shares and realised
-          trade result with minimal intraday input.
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="flow-step">
-
-      <div class="flow-number">
-        3
-      </div>
-
-      <div>
-
-        <div class="flow-title">
-          End Session
-        </div>
-
-        <div class="flow-copy">
-          Confirm structural compliance and behavioural process execution.
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="flow-step">
-
-      <div class="flow-number">
-        4
-      </div>
-
-      <div>
-
-        <div class="flow-title">
-          Performance Review
-        </div>
-
-        <div class="flow-copy">
-          Review financial results, risk controls and process outcomes,
-          with broker reconciliation added later.
-        </div>
-
-      </div>
-
-    </div>
 
   </div>
 
 </section>
 
 
-<!-- PLATFORM -->
+<!-- ======================================
+     PLATFORM
+     WORKFLOW SECTION REMOVED
+====================================== -->
 
 <section class="card">
 
@@ -1021,6 +1212,7 @@ body{
   <div class="card-copy">
     Live control, rapid capture and performance review.
   </div>
+
 
   <div class="module-grid">
 
@@ -1108,12 +1300,15 @@ body{
 
     </a>
 
+
   </div>
 
 </section>
 
 
-<!-- EVIDENCE -->
+<!-- ======================================
+     EVIDENCE
+====================================== -->
 
 <section class="card">
 
@@ -1196,18 +1391,21 @@ body{
 
     </div>
 
+
   </div>
 
 
   <div class="evidence-note">
-    The goal is simple: trade early, limit attempts and stop before
-    behaviour starts driving decisions.
+    Trade early, limit attempts and stop before behaviour
+    starts driving decisions.
   </div>
 
 </section>
 
 
-<!-- COMMAND IMAGE -->
+<!-- ======================================
+     COMMAND IMAGE
+====================================== -->
 
 <section class="command-centre">
 
@@ -1226,6 +1424,7 @@ body{
 <div class="footer">
   WASPN • Process Over Recovery
 </div>
+
 
 </div>
 
@@ -1271,15 +1470,32 @@ function getNyParts(){
     new Intl.DateTimeFormat(
       "en-GB",
       {
-        timeZone:"America/New_York",
-        weekday:"long",
-        year:"numeric",
-        month:"2-digit",
-        day:"2-digit",
-        hour:"2-digit",
-        minute:"2-digit",
-        second:"2-digit",
-        hourCycle:"h23"
+        timeZone:
+          "America/New_York",
+
+        weekday:
+          "long",
+
+        year:
+          "numeric",
+
+        month:
+          "2-digit",
+
+        day:
+          "2-digit",
+
+        hour:
+          "2-digit",
+
+        minute:
+          "2-digit",
+
+        second:
+          "2-digit",
+
+        hourCycle:
+          "h23"
       }
     )
     .formatToParts(
@@ -1503,35 +1719,6 @@ function isWeekend(
 }
 
 
-function daysUntilNextTradingDay(
-  weekday
-){
-
-  if(
-    weekday ===
-    "Friday"
-  ){
-
-    return 3;
-
-  }
-
-
-  if(
-    weekday ===
-    "Saturday"
-  ){
-
-    return 2;
-
-  }
-
-
-  return 1;
-
-}
-
-
 function nextSessionCountdown(
   ny,
   targetSeconds
@@ -1711,9 +1898,7 @@ function renderMarketStatus(){
     "countdown-item main";
 
 
-  /*
-    WEEKEND
-  */
+  /* WEEKEND */
 
   if(
     weekend
@@ -1729,7 +1914,7 @@ function renderMarketStatus(){
 
     detail.textContent =
       ny.weekday +
-      " in New York • Next WASPN session shown below";
+      " in New York • Next WASPN session below";
 
 
     prelimLabel.textContent =
@@ -1771,9 +1956,7 @@ function renderMarketStatus(){
   }
 
 
-  /*
-    BEFORE PRELIMINARY
-  */
+  /* BEFORE PRELIMINARY */
 
   if(
     nowSeconds <
@@ -1827,9 +2010,7 @@ function renderMarketStatus(){
   }
 
 
-  /*
-    PRELIMINARY ACTIVE
-  */
+  /* PRELIMINARY ACTIVE */
 
   if(
     nowSeconds >=
@@ -1890,9 +2071,7 @@ function renderMarketStatus(){
   }
 
 
-  /*
-    BETWEEN PRELIMINARY AND MAIN
-  */
+  /* BETWEEN PRELIMINARY AND MAIN */
 
   if(
     nowSeconds >=
@@ -1945,9 +2124,7 @@ function renderMarketStatus(){
   }
 
 
-  /*
-    MAIN WINDOW ACTIVE
-  */
+  /* MAIN WINDOW ACTIVE */
 
   if(
     nowSeconds >=
@@ -2005,9 +2182,7 @@ function renderMarketStatus(){
   }
 
 
-  /*
-    AFTER 11 AM
-  */
+  /* AFTER 11 AM */
 
   box.className =
     "market-status closed";
