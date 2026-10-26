@@ -875,6 +875,50 @@ a{
 }
 
 
+/* ========================================
+   SETUP / REASON
+======================================== */
+
+.setup-review{
+
+  margin-top:12px;
+
+  padding-top:10px;
+
+  border-top:
+    1px solid
+    var(--border);
+
+}
+
+
+.setup-review-label{
+
+  color:#a9c9d6;
+
+  font-size:9px;
+  font-weight:900;
+
+  letter-spacing:.8px;
+
+  text-transform:uppercase;
+
+}
+
+
+.setup-review-text{
+
+  margin-top:6px;
+
+  color:var(--text);
+
+  font-size:11px;
+
+  line-height:1.5;
+
+}
+
+
 
 /* ========================================
    FX
@@ -2844,6 +2888,25 @@ function showDetail(
           );
 
 
+        /*
+          Journal is the authoritative source.
+
+          Current Journal field:
+          trade.setupReason
+
+          Legacy fallback:
+          trade.setup
+        */
+
+        const setupReason =
+          String(
+            trade.setupReason ??
+            trade.setup ??
+            ""
+          )
+          .trim();
+
+
         return `
 
           <div class="trade">
@@ -2989,11 +3052,25 @@ function showDetail(
 
 
             ${
-              trade.setup
-                ? "<br>Setup: " +
-                  escapeHtml(
-                    trade.setup
-                  )
+              setupReason
+                ? `
+
+                  <div class="setup-review">
+
+                    <div class="setup-review-label">
+                      Setup Traded / Reason Trade Taken
+                    </div>
+
+                    <div class="setup-review-text">
+                      ${escapeHtml(
+                        setupReason
+                      )}
+                    </div>
+
+                  </div>
+
+                `
+
                 : ""
             }
 
