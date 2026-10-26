@@ -1,4 +1,4 @@
-const CACHE_NAME = "waspn-pwa-v1";
+const CACHE_NAME = "waspn-pwa-v2";
 
 const BASE_PATH = new URL("./", self.location.href).pathname;
 
@@ -12,8 +12,7 @@ const APP_SHELL = [
   BASE_PATH + "data-backup.html",
   BASE_PATH + "workflow-nav.js",
   BASE_PATH + "manifest.webmanifest",
-  BASE_PATH + "futuristic_neon_wasp_trading_emblem.png",
-  BASE_PATH + "trade_the_process_waspn_trading_command_centre.png"
+  BASE_PATH + "futuristic_neon_wasp_trading_emblem.png"
 ];
 
 
@@ -21,197 +20,229 @@ const APP_SHELL = [
    INSTALL
 ======================================== */
 
-self.addEventListener(
-  "install",
-  event => {
+self.addEventListener("install", event => {
 
-    event.waitUntil(
+  event.waitUntil(
 
-      caches
-        .open(
-          CACHE_NAME
-        )
-        .then(
-          cache =>
-            cache.addAll(
-              APP_SHELL
-            )
-        )
-        .then(
-          () =>
-            self.skipWaiting()
-        )
+    caches
+      .open(CACHE_NAME)
+      .then(cache => cache.addAll(APP_SHELL))
+      .then(() => self.skipWaiting())
 
-    );
+  );
 
-  }
-);
+});
 
 
 /* ========================================
    ACTIVATE
 ======================================== */
 
-self.addEventListener(
-  "activate",
-  event => {
+self.addEventListener("activate", event => {
 
-    event.waitUntil(
+  event.waitUntil(
 
-      caches
-        .keys()
-        .then(
-          keys =>
-            Promise.all(
+    caches
+      .keys()
+      .then(keys =>
 
-              keys
-                .filter(
-                  key =>
-                    key !==
-                    CACHE_NAME
-                )
-                .map(
-                  key =>
-                    caches.delete(
-                      key
-                    )
-                )
+        Promise.all(
 
-            )
-        )
-        .then(
-          () =>
-            self.clients.claim()
+          keys
+            .filter(key => key !== CACHE_NAME)
+            .map(key => caches.delete(key))
+
         )
 
-    );
+      )
+      .then(() => self.clients.claim())
 
-  }
-);
+  );
+
+});
 
 
 /* ========================================
    FETCH
-   NETWORK FIRST → CACHE FALLBACK
 ======================================== */
 
-self.addEventListener(
-  "fetch",
-  event => {
+self.addEventListener("fetch", event => {
 
-    const request =
-      event.request;
+  const request = event.request;
 
-
-    if(
-      request.method !==
-      "GET"
-    ){
-
-      return;
-
-    }
+  if (request.method !== "GET") {
+    return;
+  }
 
 
-    const url =
-      new URL(
-        request.url
-      );
+  const url = new URL(request.url);
+
+  if (url.origin !== self.location.origin) {
+    return;
+  }
 
 
-    if(
-      url.origin !==
-      self.location.origin
-    ){
+  /* ======================================
+     HTML / PAGE NAVIGATION
 
-      return;
+     ALWAYS TRY NETWORK FIRST.
+     Prevents installed PWA from showing
+     an old HTML page after deployment.
+  ====================================== */
 
-    }
-
+  if (request.mode === "navigate") {
 
     event.respondWith(
 
-      fetch(
-        request
-      )
-      .then(
-        response => {
+      fetch(request, {
+        cache: "no-store"
+      })
+      .then(response => {
 
-          if(
-            response &&
-            response.status === 200
-          ){
+        if (
+          response &&
+          response.ok
+        ) {
 
-            const copy =
-              response.clone();
+          const copy = response.clone();
 
-
-            caches
-              .open(
-                CACHE_NAME
+          caches
+            .open(CACHE_NAME)
+            .then(cache =>
+              cache.put(
+                request,
+                copy
               )
-              .then(
-                cache =>
-                  cache.put(
-                    request,
-                    copy
-                  )
-              );
-
-          }
-
-
-          return response;
+            );
 
         }
-      )
-      .catch(
-        async () => {
 
-          const cached =
-            await caches.match(
-              request
-            );
+        return response;
 
+      })
+      .catch(async () => {
 
-          if(
-            cached
-          ){
+        const cached =
+          await caches.match(request);
 
-            return cached;
-
-          }
+        if (cached) {
+          return cached;
+        }
 
 
-          if(
-            request.mode ===
-            "navigate"
-          ){
-
-            return caches.match(
-              BASE_PATH +
-              "index.html"
-            );
-
-          }
-
-
-          return new Response(
-            "WASPN is offline and this resource is not cached.",
-            {
-              status:503,
-              statusText:"Offline",
-              headers:{
-                "Content-Type":
-                  "text/plain"
-              }
-            }
+        const home =
+          await caches.match(
+            BASE_PATH + "index.html"
           );
 
+        if (home) {
+          return home;
         }
-      )
+
+
+        return new Response(
+          "WASPN is offline and this page is not cached.",
+          {
+            status: 503,
+            statusText: "Offline",
+            headers: {
+              "Content-Type":
+                "text/plain; charset=utf-8"
+            }
+          }
+        );
+
+      })
 
     );
 
+    return;
   }
-);
+
+
+  /* ======================================
+     APP ASSETS
+
+     NETWORK FIRST → CACHE FALLBACK
+  ====================================== */
+
+  event.respondWith(
+
+    fetch(request, {
+      cache: "no-store"
+    })
+    .then(response => {
+
+      if (
+        response &&
+        response.ok
+      ) {
+
+        const copy =
+          response.clone();
+
+
+        caches
+          .open(CACHE_NAME)
+          .then(cache =>
+            cache.put(
+              request,
+              copy
+            )
+          );
+
+      }
+
+
+      return response;
+
+    })
+    .catch(async () => {
+
+      const cached =
+        await caches.match(request);
+
+
+      if (cached) {
+        return cached;
+      }
+
+
+      return new Response(
+        "WASPN is offline and this resource is not cached.",
+        {
+          status: 503,
+          statusText: "Offline",
+          headers: {
+            "Content-Type":
+              "text/plain; charset=utf-8"
+          }
+        }
+      );
+
+    })
+
+  );
+
+});
+
+
+/* ========================================
+   FORCE UPDATE MESSAGE
+
+   Allows the main app to tell the service
+   worker to activate immediately.
+======================================== */
+
+self.addEventListener("message", event => {
+
+  if (
+    event.data &&
+    event.data.type === "SKIP_WAITING"
+  ) {
+
+    self.skipWaiting();
+
+  }
+
+});
