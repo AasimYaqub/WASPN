@@ -758,11 +758,76 @@ a{
 }
 
 
+.trade-row{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:10px;
+
+  margin-top:4px;
+
+}
+
+
+.trade-row span:first-child{
+  color:var(--muted);
+}
+
+
 .trade-gbp{
 
   color:var(--muted);
 
   font-size:10px;
+
+}
+
+
+.timing-pending{
+
+  margin-top:7px;
+
+  color:var(--amber);
+
+  font-size:9px;
+  font-weight:850;
+
+}
+
+
+.reconciled{
+
+  margin-top:7px;
+
+  color:var(--blue);
+
+  font-size:9px;
+  font-weight:850;
+
+}
+
+
+.review-note{
+
+  margin-top:8px;
+
+  padding:9px;
+
+  background:#0b151d;
+
+  border:
+    1px solid
+    rgba(34,199,255,.18);
+
+  border-radius:9px;
+
+  color:var(--muted);
+
+  font-size:9px;
+
+  line-height:1.45;
 
 }
 
@@ -966,7 +1031,7 @@ a{
 
 
   <div class="sub">
-    Trading History • Process • Risk Outcomes
+    Trading History • Broker Reconciliation • Process • Risk
   </div>
 
 </header>
@@ -1278,7 +1343,7 @@ a{
   >
 
     <div class="muted">
-      Select a trading day to inspect P&amp;L, attempts and process data.
+      Select a trading day to inspect P&amp;L, attempts, broker timing and process data.
     </div>
 
   </div>
@@ -1360,6 +1425,7 @@ const DEFAULT_FX_RATE =
 
 /* ========================================
    HISTORICAL DATA
+   DO NOT ALTER — BROKER HISTORY
 ======================================== */
 
 const tradingData = {
@@ -1713,6 +1779,173 @@ function gbpMoney(
 
 
   return "≈ £0.00";
+
+}
+
+
+
+/* ========================================
+   TIME / DURATION
+======================================== */
+
+function timeToSeconds(
+  value
+){
+
+  if(
+    !value
+  ){
+
+    return null;
+
+  }
+
+
+  const match =
+    String(
+      value
+    )
+    .trim()
+    .match(
+      /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/
+    );
+
+
+  if(
+    !match
+  ){
+
+    return null;
+
+  }
+
+
+  const hours =
+    Number(
+      match[1]
+    );
+
+
+  const minutes =
+    Number(
+      match[2]
+    );
+
+
+  const seconds =
+    Number(
+      match[3] || 0
+    );
+
+
+  if(
+    hours > 23 ||
+    minutes > 59 ||
+    seconds > 59
+  ){
+
+    return null;
+
+  }
+
+
+  return (
+    hours * 3600 +
+    minutes * 60 +
+    seconds
+  );
+
+}
+
+
+function durationLabel(
+  entry,
+  exit
+){
+
+  const start =
+    timeToSeconds(
+      entry
+    );
+
+
+  const finish =
+    timeToSeconds(
+      exit
+    );
+
+
+  if(
+    start === null ||
+    finish === null
+  ){
+
+    return null;
+
+  }
+
+
+  let duration =
+    finish -
+    start;
+
+
+  if(
+    duration < 0
+  ){
+
+    duration +=
+      24 * 60 * 60;
+
+  }
+
+
+  const minutes =
+    Math.floor(
+      duration / 60
+    );
+
+
+  const seconds =
+    duration % 60;
+
+
+  if(
+    minutes >= 60
+  ){
+
+    const hours =
+      Math.floor(
+        minutes / 60
+      );
+
+
+    const remainingMinutes =
+      minutes % 60;
+
+
+    return (
+      hours +
+      "h " +
+      remainingMinutes +
+      "m"
+    );
+
+  }
+
+
+  return (
+    minutes +
+    "m " +
+    String(
+      seconds
+    )
+    .padStart(
+      2,
+      "0"
+    ) +
+    "s"
+  );
 
 }
 
@@ -2422,8 +2655,11 @@ function showDetail(
 
 
   const trades =
-    day.trades ||
-    [];
+    Array.isArray(
+      day.trades
+    )
+      ? day.trades
+      : [];
 
 
   const compliance =
@@ -2486,6 +2722,29 @@ function showDetail(
       : "No";
 
 
+  const timedTrades =
+    trades.filter(
+      trade =>
+        timeToSeconds(
+          trade?.entryTime
+        ) !== null &&
+        timeToSeconds(
+          trade?.exitTime
+        ) !== null
+    )
+    .length;
+
+
+  const timingStatus =
+    trades.length > 0
+
+      ? timedTrades +
+        "/" +
+        trades.length
+
+      : "—";
+
+
   const tradeHtml =
     trades.map(
       (
@@ -2495,7 +2754,42 @@ function showDetail(
 
         const net =
           Number(
-            trade.netPnl ||
+            trade.netPnl ??
+            trade.actualNet ??
+            trade.calculatedNet ??
+            0
+          );
+
+
+        const duration =
+          durationLabel(
+            trade.entryTime,
+            trade.exitTime
+          );
+
+
+        const hasTiming =
+          duration !==
+          null;
+
+
+        const entryPrice =
+          Number(
+            trade.entryPrice ||
+            0
+          );
+
+
+        const exitPrice =
+          Number(
+            trade.exitPrice ||
+            0
+          );
+
+
+        const shares =
+          Number(
+            trade.shares ||
             0
           );
 
@@ -2525,34 +2819,101 @@ function showDetail(
               )
             }
 
+
             ${
-              trade.entryTime
-                ? " • " +
-                  escapeHtml(
-                    trade.entryTime
-                  )
+              entryPrice
+                ? `
+                  <div class="trade-row">
+                    <span>Entry</span>
+                    <strong>${entryPrice}</strong>
+                  </div>
+                `
                 : ""
             }
 
+
             ${
-              trade.exitTime
-                ? " → " +
-                  escapeHtml(
-                    trade.exitTime
-                  )
+              exitPrice
+                ? `
+                  <div class="trade-row">
+                    <span>Exit</span>
+                    <strong>${exitPrice}</strong>
+                  </div>
+                `
                 : ""
             }
 
-            <br>
 
-            Net:
-            <strong class="${net >= 0 ? "green" : "red"}">
-              ${usdMoney(net)}
-            </strong>
+            ${
+              shares
+                ? `
+                  <div class="trade-row">
+                    <span>Shares</span>
+                    <strong>${shares}</strong>
+                  </div>
+                `
+                : ""
+            }
+
+
+            <div class="trade-row">
+              <span>Net</span>
+
+              <strong class="${net >= 0 ? "green" : "red"}">
+                ${usdMoney(net)}
+              </strong>
+            </div>
+
 
             <div class="trade-gbp">
               ${gbpMoney(net)}
             </div>
+
+
+            ${
+              hasTiming
+                ? `
+
+                  <div class="reconciled">
+                    Broker timing reconciled
+                  </div>
+
+                  <div class="trade-row">
+                    <span>Entry Time</span>
+                    <strong>
+                      ${escapeHtml(
+                        trade.entryTime
+                      )}
+                    </strong>
+                  </div>
+
+                  <div class="trade-row">
+                    <span>Exit Time</span>
+                    <strong>
+                      ${escapeHtml(
+                        trade.exitTime
+                      )}
+                    </strong>
+                  </div>
+
+                  <div class="trade-row">
+                    <span>Duration</span>
+                    <strong>
+                      ${duration}
+                    </strong>
+                  </div>
+
+                `
+
+                : `
+
+                  <div class="timing-pending">
+                    Timing pending broker reconciliation
+                  </div>
+
+                `
+            }
+
 
             ${
               trade.setup
@@ -2724,7 +3085,33 @@ function showDetail(
 
       </div>
 
+
+      <div class="detail-item">
+
+        <div class="label">
+          Broker Timing
+        </div>
+
+        <div class="detail-value">
+          ${timingStatus}
+        </div>
+
+      </div>
+
     </div>
+
+
+    ${
+      trades.length
+        ? `
+
+          <div class="review-note">
+            Trade duration is a review metric only. Entry and exit times are expected to be enriched from the broker record rather than manually captured while trading.
+          </div>
+
+        `
+        : ""
+    }
 
 
     ${tradeHtml}
@@ -2737,7 +3124,7 @@ function showDetail(
           <div class="trade">
 
             <strong>
-              Session Notes
+              Session Note
             </strong>
 
             <br>
