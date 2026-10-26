@@ -21,6 +21,7 @@
 <style>
 
 :root{
+
   --bg:#070b10;
   --panel:#10171f;
   --panel2:#151e28;
@@ -41,6 +42,7 @@
   --shadow:
     0 18px 48px
     rgba(0,0,0,.24);
+
 }
 
 
@@ -150,6 +152,7 @@ a{
   height:48px;
 
   display:flex;
+
   align-items:center;
   justify-content:center;
 
@@ -253,7 +256,7 @@ a{
 
 
 /* ========================================
-   FORM
+   SESSION
 ======================================== */
 
 .session-card{
@@ -332,12 +335,12 @@ textarea{
 input,
 select{
 
-  min-height:46px;
+  min-height:48px;
 
   padding:
     9px 10px;
 
-  font-size:15px;
+  font-size:16px;
 
 }
 
@@ -393,6 +396,40 @@ textarea:focus{
 
   line-height:1.4;
 
+}
+
+
+
+/* ========================================
+   INTRADAY NOTE
+======================================== */
+
+.intraday-note{
+
+  margin-top:8px;
+
+  padding:
+    10px 11px;
+
+  background:#0c1720;
+
+  border:
+    1px solid
+    rgba(34,199,255,.22);
+
+  border-radius:12px;
+
+  color:#9eb4c4;
+
+  font-size:9px;
+
+  line-height:1.45;
+
+}
+
+
+.intraday-note strong{
+  color:var(--blue);
 }
 
 
@@ -589,9 +626,38 @@ textarea:focus{
 }
 
 
-.actual-field{
+.full-width{
+  grid-column:1 / -1;
+}
+
+
+.calculation{
 
   margin-top:10px;
+
+  padding:
+    9px 10px;
+
+  background:#080e13;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:9px;
+
+  color:var(--muted);
+
+  font-size:10px;
+
+  line-height:1.4;
+
+}
+
+
+.actual-field{
+
+  margin-top:9px;
 
   padding:10px;
 
@@ -626,39 +692,6 @@ textarea:focus{
 }
 
 
-.calculation{
-
-  margin-top:9px;
-
-  padding:
-    8px 10px;
-
-  background:#080e13;
-
-  border:
-    1px solid
-    var(--border);
-
-  border-radius:9px;
-
-  color:var(--muted);
-
-  font-size:10px;
-
-}
-
-
-.trade-notes{
-
-  display:grid;
-
-  gap:9px;
-
-  margin-top:10px;
-
-}
-
-
 
 /* ========================================
    SESSION NOTES
@@ -688,10 +721,23 @@ textarea:focus{
 
 .section-title{
 
-  margin-bottom:8px;
+  margin-bottom:4px;
 
   font-size:14px;
   font-weight:950;
+
+}
+
+
+.section-copy{
+
+  margin-bottom:8px;
+
+  color:var(--muted);
+
+  font-size:9px;
+
+  line-height:1.4;
 
 }
 
@@ -961,7 +1007,7 @@ textarea:focus{
 
     <span class="product-dot"></span>
 
-    Structured post-trade capture
+    Fast intraday trade capture
 
   </div>
 
@@ -1012,6 +1058,19 @@ textarea:focus{
   ></div>
 
 </section>
+
+
+
+<div class="intraday-note">
+
+  <strong>
+    Intraday capture only.
+  </strong>
+
+  Record the economics of the trade quickly.
+  Entry time, exit time, duration and deeper review can be reconciled later from the broker record.
+
+</div>
 
 
 
@@ -1092,12 +1151,16 @@ textarea:focus{
 <section class="notes-card">
 
   <div class="section-title">
-    Session Notes
+    Session Note
+  </div>
+
+  <div class="section-copy">
+    Optional. Only capture something here if it is worth remembering before the weekly broker review.
   </div>
 
   <textarea
     id="dailyNotes"
-    placeholder="What worked? What failed? What should be repeated or removed?"
+    placeholder="Optional quick note…"
   ></textarea>
 
 </section>
@@ -1216,7 +1279,8 @@ function money(
       "-$" +
       Math.abs(
         n
-      ).toFixed(
+      )
+      .toFixed(
         2
       )
     );
@@ -1270,6 +1334,7 @@ function getNyDate(){
     new Intl.DateTimeFormat(
       "en-CA",
       {
+
         timeZone:
           "America/New_York",
 
@@ -1281,6 +1346,7 @@ function getNyDate(){
 
         day:
           "2-digit"
+
       }
     )
     .formatToParts(
@@ -1288,7 +1354,7 @@ function getNyDate(){
     );
 
 
-  const d =
+  const data =
     {};
 
 
@@ -1300,7 +1366,7 @@ function getNyDate(){
         "literal"
       ){
 
-        d[
+        data[
           part.type
         ] =
           part.value;
@@ -1312,11 +1378,11 @@ function getNyDate(){
 
 
   return (
-    d.year +
+    data.year +
     "-" +
-    d.month +
+    data.month +
     "-" +
-    d.day
+    data.day
   );
 
 }
@@ -1378,7 +1444,7 @@ function clearDirty(
 
 
 /* ========================================
-   CREATE TRADE CARDS
+   TRADE CARDS
 ======================================== */
 
 function createTrade(
@@ -1468,34 +1534,6 @@ function createTrade(
         <div class="field">
 
           <label>
-            Entry Time
-          </label>
-
-          <input
-            id="entryTime${i}"
-            type="time"
-          >
-
-        </div>
-
-
-        <div class="field">
-
-          <label>
-            Exit Time
-          </label>
-
-          <input
-            id="exitTime${i}"
-            type="time"
-          >
-
-        </div>
-
-
-        <div class="field">
-
-          <label>
             Entry Price
           </label>
 
@@ -1504,6 +1542,7 @@ function createTrade(
             type="number"
             inputmode="decimal"
             step="0.0001"
+            placeholder="Price in"
           >
 
         </div>
@@ -1520,12 +1559,13 @@ function createTrade(
             type="number"
             inputmode="decimal"
             step="0.0001"
+            placeholder="Price out"
           >
 
         </div>
 
 
-        <div class="field">
+        <div class="field full-width">
 
           <label>
             Shares
@@ -1536,60 +1576,8 @@ function createTrade(
             type="number"
             inputmode="numeric"
             step="1"
+            placeholder="Share size"
           >
-
-        </div>
-
-
-        <div class="field">
-
-          <label>
-            Fees
-          </label>
-
-          <input
-            id="fees${i}"
-            type="number"
-            inputmode="decimal"
-            step="0.01"
-            value="0"
-          >
-
-        </div>
-
-
-        <div class="field">
-
-          <label>
-            Setup
-          </label>
-
-          <input
-            id="setup${i}"
-            autocomplete="off"
-            placeholder="Breakout / pullback / etc"
-          >
-
-        </div>
-
-
-        <div class="field">
-
-          <label>
-            Tilt Present?
-          </label>
-
-          <select id="tilt${i}">
-
-            <option value="no">
-              No
-            </option>
-
-            <option value="yes">
-              Yes
-            </option>
-
-          </select>
 
         </div>
 
@@ -1600,7 +1588,7 @@ function createTrade(
         id="calcText${i}"
         class="calculation"
       >
-        Calculated net: $0.00
+        Live calculated net: $0.00 • broker fees not included
       </div>
 
 
@@ -1611,63 +1599,18 @@ function createTrade(
           <label>
             Actual / Broker Net P&amp;L
             <span class="override-note">
-              • overrides calculation
+              • optional override
             </span>
           </label>
 
           <input
             id="actualNet${i}"
-            type="number"
-            inputmode="decimal"
-            step="0.01"
-            placeholder="Exact broker result"
+            type="text"
+            inputmode="text"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="-25.50 or 40.00"
           >
-
-        </div>
-
-      </div>
-
-
-      <div class="trade-notes">
-
-        <div class="field">
-
-          <label>
-            Reason for Entry
-          </label>
-
-          <textarea
-            id="entryReason${i}"
-            placeholder="What was the setup?"
-          ></textarea>
-
-        </div>
-
-
-        <div class="field">
-
-          <label>
-            Reason for Exit
-          </label>
-
-          <textarea
-            id="exitReason${i}"
-            placeholder="Why did you exit?"
-          ></textarea>
-
-        </div>
-
-
-        <div class="field">
-
-          <label>
-            Mistake / Lesson
-          </label>
-
-          <textarea
-            id="lesson${i}"
-            placeholder="What should be repeated or corrected?"
-          ></textarea>
 
         </div>
 
@@ -1685,7 +1628,7 @@ function createTrade(
 
   section
     .querySelectorAll(
-      "input,select,textarea"
+      "input,select"
     )
     .forEach(
       el => {
@@ -1710,7 +1653,6 @@ function createTrade(
     "entryPrice",
     "exitPrice",
     "shares",
-    "fees",
     "actualNet"
   ]
   .forEach(
@@ -1760,6 +1702,57 @@ for(
 
 
 /* ========================================
+   NUMBER PARSING
+======================================== */
+
+function parseSignedNumber(
+  value
+){
+
+  const cleaned =
+    String(
+      value ?? ""
+    )
+    .trim()
+    .replace(
+      /[−–—]/g,
+      "-"
+    )
+    .replace(
+      /[$£,\s]/g,
+      ""
+    );
+
+
+  if(
+    cleaned === "" ||
+    cleaned === "-" ||
+    cleaned === "." ||
+    cleaned === "-."
+  ){
+
+    return null;
+
+  }
+
+
+  const n =
+    Number(
+      cleaned
+    );
+
+
+  return Number.isFinite(
+    n
+  )
+    ? n
+    : null;
+
+}
+
+
+
+/* ========================================
    P&L CALCULATION
 ======================================== */
 
@@ -1791,14 +1784,6 @@ function calculatedNet(
     );
 
 
-  const fees =
-    Number(
-      document.getElementById(
-        "fees" + i
-      ).value || 0
-    );
-
-
   const side =
     document.getElementById(
       "side" + i
@@ -1811,12 +1796,13 @@ function calculatedNet(
     !shares
   ){
 
-    return -fees;
+    return 0;
 
   }
 
 
-  const gross =
+  return (
+
     side ===
       "long"
 
@@ -1830,12 +1816,8 @@ function calculatedNet(
           entry -
           exit
         ) *
-        shares;
+        shares
 
-
-  return (
-    gross -
-    fees
   );
 
 }
@@ -1854,10 +1836,11 @@ function calculateTrade(
   document.getElementById(
     "calcText" + i
   ).textContent =
-    "Calculated net: " +
+    "Live calculated net: " +
     money(
       calc
-    );
+    ) +
+    " • broker fees not included";
 
 
   const actualInput =
@@ -1866,17 +1849,15 @@ function calculateTrade(
     );
 
 
-  const hasActual =
-    actualInput
-      .value
-      .trim() !== "";
+  const actualNet =
+    parseSignedNumber(
+      actualInput.value
+    );
 
 
   const used =
-    hasActual
-      ? Number(
-          actualInput.value
-        )
+    actualNet !== null
+      ? actualNet
       : calc;
 
 
@@ -1997,17 +1978,46 @@ function calculateDailyTotal(){
    TRADE DATA
 ======================================== */
 
-function tradeData(
+function getExistingTrade(
+  date,
   i
 ){
 
-  const actualRaw =
-    document
-      .getElementById(
+  const day =
+    getJournal()[
+      date
+    ];
+
+
+  if(
+    !Array.isArray(
+      day?.trades
+    )
+  ){
+
+    return {};
+
+  }
+
+
+  return day.trades[
+    i - 1
+  ] || {};
+
+}
+
+
+function tradeData(
+  i,
+  existingTrade = {}
+){
+
+  const actualNet =
+    parseSignedNumber(
+      document.getElementById(
         "actualNet" + i
-      )
-      .value
-      .trim();
+      ).value
+    );
 
 
   const calc =
@@ -2016,15 +2026,15 @@ function tradeData(
     );
 
 
-  const actualNet =
-    actualRaw === ""
-      ? null
-      : Number(
-          actualRaw
-        );
-
-
   return {
+
+    /*
+      Preserve enrichment fields that may
+      already exist from older records or
+      future broker reconciliation.
+    */
+
+    ...existingTrade,
 
     ticker:
       document
@@ -2038,16 +2048,6 @@ function tradeData(
     side:
       document.getElementById(
         "side" + i
-      ).value,
-
-    entryTime:
-      document.getElementById(
-        "entryTime" + i
-      ).value,
-
-    exitTime:
-      document.getElementById(
-        "exitTime" + i
       ).value,
 
     entryPrice:
@@ -2070,38 +2070,6 @@ function tradeData(
           "shares" + i
         ).value || 0
       ),
-
-    fees:
-      Number(
-        document.getElementById(
-          "fees" + i
-        ).value || 0
-      ),
-
-    setup:
-      document.getElementById(
-        "setup" + i
-      ).value,
-
-    tilt:
-      document.getElementById(
-        "tilt" + i
-      ).value,
-
-    entryReason:
-      document.getElementById(
-        "entryReason" + i
-      ).value,
-
-    exitReason:
-      document.getElementById(
-        "exitReason" + i
-      ).value,
-
-    lesson:
-      document.getElementById(
-        "lesson" + i
-      ).value,
 
     calculatedNet:
       calc,
@@ -2126,23 +2094,11 @@ function isTradeUsed(
 
     trade.ticker ||
 
-    trade.entryTime ||
-
-    trade.exitTime ||
-
     trade.entryPrice ||
 
     trade.exitPrice ||
 
     trade.shares ||
-
-    trade.setup ||
-
-    trade.entryReason ||
-
-    trade.exitReason ||
-
-    trade.lesson ||
 
     trade.actualNet !== null
 
@@ -2152,6 +2108,12 @@ function isTradeUsed(
 
 
 function updateTradeCount(){
+
+  const date =
+    document.getElementById(
+      "tradeDate"
+    ).value;
+
 
   let count =
     0;
@@ -2166,7 +2128,11 @@ function updateTradeCount(){
     if(
       isTradeUsed(
         tradeData(
-          i
+          i,
+          getExistingTrade(
+            date,
+            i
+          )
         )
       )
     ){
@@ -2222,6 +2188,14 @@ function saveDay(){
     ] || {};
 
 
+  const previousTrades =
+    Array.isArray(
+      existing.trades
+    )
+      ? existing.trades
+      : [];
+
+
   const trades =
     [];
 
@@ -2234,7 +2208,10 @@ function saveDay(){
 
     const trade =
       tradeData(
-        i
+        i,
+        previousTrades[
+          i - 1
+        ] || {}
       );
 
 
@@ -2255,6 +2232,67 @@ function saveDay(){
 
   const total =
     calculateDailyTotal();
+
+
+  const now =
+    new Date()
+      .toISOString();
+
+
+  const previousLive =
+    existing.liveRisk ||
+    {};
+
+
+  const syncedAttempt =
+    Math.max(
+      Number(
+        previousLive.attempt ||
+        0
+      ),
+      trades.length
+    );
+
+
+  const syncedLive = {
+
+    ...previousLive,
+
+    attempt:
+      Math.min(
+        5,
+        syncedAttempt
+      ),
+
+    realisedPnl:
+      total,
+
+    maxAttemptReached:
+      Math.max(
+        Number(
+          previousLive.maxAttemptReached ||
+          0
+        ),
+        syncedAttempt
+      ),
+
+    warningReached:
+      !!previousLive.warningReached ||
+      total <= -75,
+
+    hardStopReached:
+      !!previousLive.hardStopReached ||
+      total <= -100,
+
+    sessionEnded:
+      !!previousLive.sessionEnded ||
+      syncedAttempt >= 5 ||
+      total <= -100,
+
+    updatedAt:
+      now
+
+  };
 
 
   journal[
@@ -2282,13 +2320,14 @@ function saveDay(){
         "dailyNotes"
       ).value,
 
+    liveRisk:
+      syncedLive,
+
     journalSavedAt:
-      new Date()
-        .toISOString(),
+      now,
 
     lastUpdated:
-      new Date()
-        .toISOString()
+      now
 
   };
 
@@ -2355,18 +2394,6 @@ function clearForm(){
 
 
     document.getElementById(
-      "entryTime" + i
-    ).value =
-      "";
-
-
-    document.getElementById(
-      "exitTime" + i
-    ).value =
-      "";
-
-
-    document.getElementById(
       "entryPrice" + i
     ).value =
       "";
@@ -2385,43 +2412,7 @@ function clearForm(){
 
 
     document.getElementById(
-      "fees" + i
-    ).value =
-      "0";
-
-
-    document.getElementById(
-      "setup" + i
-    ).value =
-      "";
-
-
-    document.getElementById(
-      "tilt" + i
-    ).value =
-      "no";
-
-
-    document.getElementById(
       "actualNet" + i
-    ).value =
-      "";
-
-
-    document.getElementById(
-      "entryReason" + i
-    ).value =
-      "";
-
-
-    document.getElementById(
-      "exitReason" + i
-    ).value =
-      "";
-
-
-    document.getElementById(
-      "lesson" + i
     ).value =
       "";
 
@@ -2528,20 +2519,6 @@ function loadDay(){
 
 
       document.getElementById(
-        "entryTime" + i
-      ).value =
-        trade.entryTime ||
-        "";
-
-
-      document.getElementById(
-        "exitTime" + i
-      ).value =
-        trade.exitTime ||
-        "";
-
-
-      document.getElementById(
         "entryPrice" + i
       ).value =
         trade.entryPrice ||
@@ -2563,56 +2540,16 @@ function loadDay(){
 
 
       document.getElementById(
-        "fees" + i
-      ).value =
-        trade.fees ??
-        0;
-
-
-      document.getElementById(
-        "setup" + i
-      ).value =
-        trade.setup ||
-        "";
-
-
-      document.getElementById(
-        "tilt" + i
-      ).value =
-        trade.tilt ||
-        "no";
-
-
-      document.getElementById(
         "actualNet" + i
       ).value =
         trade.actualNet !==
           null &&
         trade.actualNet !==
           undefined
+
           ? trade.actualNet
+
           : "";
-
-
-      document.getElementById(
-        "entryReason" + i
-      ).value =
-        trade.entryReason ||
-        "";
-
-
-      document.getElementById(
-        "exitReason" + i
-      ).value =
-        trade.exitReason ||
-        "";
-
-
-      document.getElementById(
-        "lesson" + i
-      ).value =
-        trade.lesson ||
-        "";
 
 
       calculateTrade(
