@@ -10,10 +10,7 @@
   content="width=device-width,initial-scale=1.0,viewport-fit=cover"
 >
 
-<meta
-  name="theme-color"
-  content="#070b10"
->
+<meta name="theme-color" content="#070b10">
 
 <meta
   name="apple-mobile-web-app-capable"
@@ -47,76 +44,54 @@
 
 <link
   rel="apple-touch-icon"
-  href="futuristic_neon_wasp_trading_emblem.png"
+  href="apple-touch-icon.png"
 >
 
 <title>WASPN • Trading Risk Operating System</title>
 
-
 <style>
 
 :root{
-
   --bg:#070b10;
-
   --panel:#10171f;
   --panel2:#151e28;
-
   --border:#273442;
-
   --text:#edf4fb;
   --muted:#8797a7;
   --muted2:#687989;
-
   --green:#35d07f;
   --red:#ff5f6d;
   --blue:#22c7ff;
   --amber:#f3b84b;
-
 }
-
 
 *{
   box-sizing:border-box;
 }
 
-
 html{
-
   min-height:100%;
-
   background:#070b10;
-
   -webkit-text-size-adjust:100%;
-
   scroll-behavior:smooth;
-
 }
 
-
 body{
-
   margin:0;
-
   min-height:100vh;
   min-height:100dvh;
-
   background:
-
     radial-gradient(
       circle at 50% -5%,
       rgba(34,199,255,.10),
       transparent 35%
     ),
-
     linear-gradient(
       180deg,
       #080d12,
       #070b10
     );
-
   color:var(--text);
-
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -124,833 +99,417 @@ body{
     Arial,
     Helvetica,
     sans-serif;
-
 }
-
 
 .wrap{
-
   width:100%;
-
   max-width:1000px;
-
   margin:0 auto;
-
   padding:
-    max(
-      10px,
-      env(safe-area-inset-top)
-    )
+    max(10px,env(safe-area-inset-top))
     10px
-    max(
-      18px,
-      env(safe-area-inset-bottom)
-    );
-
+    max(18px,env(safe-area-inset-bottom));
 }
 
 
-
-/* ========================================
-   BRAND
-======================================== */
+/* BRAND */
 
 .brand{
-
   overflow:hidden;
-
-  padding:
-    12px 8px 16px;
-
+  padding:12px 8px 16px;
   text-align:center;
-
   background:
-
     radial-gradient(
       circle at 50% 15%,
       rgba(34,199,255,.09),
       transparent 52%
     ),
-
     linear-gradient(
       180deg,
       #101922,
       #090f15
     );
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:22px;
-
-  box-shadow:
-    0 22px 58px
-    rgba(0,0,0,.36);
-
+  box-shadow:0 22px 58px rgba(0,0,0,.36);
 }
-
 
 .logo-wrap{
-
   width:100%;
-
   display:flex;
-
   justify-content:center;
   align-items:center;
-
   overflow:hidden;
-
 }
-
 
 .logo{
-
   display:block;
-
-  width:min(
-    410px,
-    88vw
-  );
-
+  width:min(410px,88vw);
   max-width:100%;
-
   height:auto;
-
   margin:0 auto;
-
   object-fit:contain;
-
   filter:
-
-    drop-shadow(
-      0 14px 28px
-      rgba(0,0,0,.5)
-    )
-
-    drop-shadow(
-      0 0 18px
-      rgba(34,199,255,.12)
-    );
-
+    drop-shadow(0 14px 28px rgba(0,0,0,.5))
+    drop-shadow(0 0 18px rgba(34,199,255,.12));
 }
-
 
 .brand-copy{
-
   max-width:650px;
-
-  margin:
-    4px auto 0;
-
-  padding:
-    0 10px;
-
+  margin:4px auto 0;
+  padding:0 10px;
   color:#aab8c6;
-
   font-size:13px;
-
   line-height:1.5;
-
 }
-
 
 .product-label{
-
   margin-top:8px;
-
   color:var(--blue);
-
   font-size:9px;
   font-weight:950;
-
   letter-spacing:1.8px;
-
   text-transform:uppercase;
-
 }
 
 
-
-/* ========================================
-   CORE RULES
-======================================== */
+/* CORE RULES */
 
 .rules{
-
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns:1fr 1fr;
   gap:8px;
-
   margin-top:9px;
-
 }
-
 
 .rule{
-
   min-height:96px;
-
   display:flex;
-
   flex-direction:column;
-
   align-items:center;
   justify-content:center;
-
   padding:12px 7px;
-
   text-align:center;
-
-  background:
-    linear-gradient(
-      180deg,
-      #0e161e,
-      #091017
-    );
-
-  border:
-    1px solid
-    #2c3b49;
-
+  background:linear-gradient(180deg,#0e161e,#091017);
+  border:1px solid #2c3b49;
   border-radius:15px;
-
 }
-
 
 .label{
-
   color:var(--muted);
-
   font-size:9px;
   font-weight:900;
-
   letter-spacing:1px;
-
   text-transform:uppercase;
-
 }
-
 
 .rule-value{
-
   margin-top:6px;
-
   font-size:22px;
   font-weight:950;
-
 }
 
-
-.blue{
-  color:var(--blue);
-}
-
-
-.green{
-  color:var(--green);
-}
+.blue{color:var(--blue);}
+.green{color:var(--green);}
+.red{color:var(--red);}
+.amber{color:var(--amber);}
 
 
-.red{
-  color:var(--red);
-}
-
-
-.amber{
-  color:var(--amber);
-}
-
-
-
-/* ========================================
-   MARKET STATUS
-======================================== */
+/* MARKET STATUS */
 
 .market-status{
-
   margin-top:9px;
-
-  padding:
-    14px 12px;
-
+  padding:14px 12px;
   text-align:center;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:15px;
-
 }
-
 
 .market-status.open{
-
   color:var(--green);
-
   background:#0e1e16;
-
   border-color:#285c42;
-
 }
-
 
 .market-status.waiting{
-
   color:var(--amber);
-
   background:#1d170d;
-
   border-color:#655027;
-
 }
-
 
 .market-status.closed{
-
   color:#a8b4bf;
-
   background:#121920;
-
   border-color:#394754;
-
 }
-
 
 .market-main{
-
   font-size:19px;
   font-weight:950;
-
 }
-
 
 .market-detail{
-
   margin-top:4px;
-
   color:var(--muted);
-
   font-size:10px;
-
   line-height:1.4;
-
 }
 
 
-
-/* ========================================
-   PRIMARY ACTION
-======================================== */
+/* PRIMARY ACTION */
 
 .primary-action{
-
   display:block;
-
   margin-top:9px;
-
   min-height:70px;
-
-  padding:
-    15px;
-
+  padding:15px;
   text-decoration:none;
-
   text-align:center;
-
-  background:
-
-    linear-gradient(
-      180deg,
-      #1595d4,
-      #0e72aa
-    );
-
+  background:linear-gradient(180deg,#1595d4,#0e72aa);
   border-radius:16px;
-
   color:white;
-
-  box-shadow:
-    0 14px 32px
-    rgba(0,135,205,.20);
-
+  box-shadow:0 14px 32px rgba(0,135,205,.20);
 }
-
 
 .primary-kicker{
-
   font-size:9px;
   font-weight:900;
-
   letter-spacing:1.3px;
-
   text-transform:uppercase;
-
   opacity:.75;
-
 }
-
 
 .primary-title{
-
   margin-top:4px;
-
   font-size:22px;
   font-weight:950;
-
 }
-
 
 .primary-action:active{
   transform:scale(.99);
 }
 
 
-
-/* ========================================
-   TODAY
-======================================== */
+/* CARDS */
 
 .card{
-
   margin-top:9px;
-
   padding:14px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #111921,
-      #0e151c
-    );
-
-  border:
-    1px solid
-    var(--border);
-
+  background:linear-gradient(180deg,#111921,#0e151c);
+  border:1px solid var(--border);
   border-radius:16px;
-
 }
-
 
 .card-title{
-
   font-size:15px;
   font-weight:950;
-
 }
-
 
 .card-copy{
-
   margin-top:3px;
-
   color:var(--muted);
-
   font-size:10px;
-
   line-height:1.4;
-
 }
 
+
+/* TODAY */
 
 .today-grid{
-
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns:1fr 1fr;
   gap:7px;
-
   margin-top:10px;
-
 }
-
 
 .today-item{
-
   min-height:78px;
-
   display:flex;
-
   flex-direction:column;
-
   justify-content:center;
-
   padding:10px;
-
   background:#090f14;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:10px;
-
 }
-
 
 .value{
-
   margin-top:4px;
-
   font-size:20px;
   font-weight:950;
-
 }
 
 
-
-/* ========================================
-   PRODUCT FLOW
-======================================== */
+/* FLOW */
 
 .flow{
-
   display:grid;
-
   gap:7px;
-
   margin-top:10px;
-
 }
-
 
 .flow-step{
-
   display:grid;
-
-  grid-template-columns:
-    38px 1fr;
-
+  grid-template-columns:38px 1fr;
   gap:10px;
-
   align-items:center;
-
   min-height:68px;
-
-  padding:
-    10px 11px;
-
+  padding:10px 11px;
   background:#0a1015;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:11px;
-
 }
-
 
 .flow-number{
-
   width:34px;
   height:34px;
-
   display:flex;
-
   align-items:center;
   justify-content:center;
-
   border-radius:50%;
-
   background:#122433;
-
   color:var(--blue);
-
   font-size:14px;
   font-weight:950;
-
 }
-
 
 .flow-title{
-
   font-size:13px;
   font-weight:950;
-
 }
-
 
 .flow-copy{
-
   margin-top:3px;
-
   color:var(--muted);
-
   font-size:9px;
-
   line-height:1.4;
-
 }
 
 
-
-/* ========================================
-   MODULES
-======================================== */
+/* MODULES */
 
 .module-grid{
-
   display:grid;
-
-  grid-template-columns:
-    1fr;
-
+  grid-template-columns:1fr;
   gap:7px;
-
   margin-top:10px;
-
 }
-
 
 .module{
-
   display:block;
-
   min-height:76px;
-
-  padding:
-    12px 14px 12px 16px;
-
+  padding:12px 14px 12px 16px;
   position:relative;
-
   overflow:hidden;
-
   text-decoration:none;
-
   color:white;
-
-  background:
-    linear-gradient(
-      145deg,
-      #17222c,
-      #111820
-    );
-
-  border:
-    1px solid
-    var(--border);
-
+  background:linear-gradient(145deg,#17222c,#111820);
+  border:1px solid var(--border);
   border-radius:12px;
-
 }
 
-
 .module::before{
-
   content:"";
-
   position:absolute;
-
   left:0;
   top:0;
   bottom:0;
-
   width:4px;
-
   background:var(--blue);
-
 }
 
-
-.module.journal::before{
-  background:#75dbe7;
-}
-
-
-.module.end::before{
-  background:var(--green);
-}
-
-
-.module.review::before{
-  background:#aeb7ff;
-}
-
-
-.module.backup::before{
-  background:#b5c0ca;
-}
-
+.module.journal::before{background:#75dbe7;}
+.module.end::before{background:var(--green);}
+.module.review::before{background:#aeb7ff;}
+.module.backup::before{background:#b5c0ca;}
 
 .module-title{
-
   font-size:15px;
   font-weight:950;
-
 }
-
 
 .module-desc{
-
   margin-top:4px;
-
   color:var(--muted);
-
   font-size:10px;
-
   line-height:1.4;
-
 }
 
 
-
-/* ========================================
-   DATA EVIDENCE
-======================================== */
+/* EVIDENCE */
 
 .evidence-grid{
-
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns:1fr 1fr;
   gap:7px;
-
   margin-top:10px;
-
 }
-
 
 .evidence{
-
   padding:11px;
-
   background:#090f14;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:10px;
-
 }
-
 
 .evidence-value{
-
   margin-top:4px;
-
   font-size:17px;
   font-weight:950;
-
 }
-
 
 .evidence-copy{
-
   margin-top:3px;
-
   color:var(--muted);
-
   font-size:9px;
-
   line-height:1.35;
-
 }
-
 
 .evidence-note{
-
   margin-top:9px;
-
   color:var(--muted2);
-
   font-size:9px;
-
   line-height:1.45;
-
 }
 
 
-
-/* ========================================
-   COMMAND IMAGE
-======================================== */
+/* COMMAND IMAGE */
 
 .command-centre{
-
   margin-top:10px;
-
   padding:6px;
-
   overflow:hidden;
-
-  background:
-    linear-gradient(
-      180deg,
-      #101820,
-      #090f15
-    );
-
-  border:
-    1px solid
-    var(--border);
-
+  background:linear-gradient(180deg,#101820,#090f15);
+  border:1px solid var(--border);
   border-radius:17px;
-
 }
-
 
 .command-title{
-
-  padding:
-    7px 6px 9px;
-
+  padding:7px 6px 9px;
   text-align:center;
-
   color:#aab9c8;
-
   font-size:9px;
   font-weight:900;
-
   letter-spacing:1.5px;
-
   text-transform:uppercase;
-
 }
-
 
 .command-centre img{
-
   display:block;
-
   width:100%;
-
   height:auto;
-
   border-radius:11px;
-
 }
-
 
 .footer{
-
-  margin:
-    17px 0 5px;
-
+  margin:17px 0 5px;
   text-align:center;
-
   color:var(--muted);
-
   font-size:10px;
-
 }
 
 
-
-/* ========================================
-   DESKTOP
-======================================== */
+/* DESKTOP */
 
 @media(min-width:700px){
 
@@ -958,46 +517,24 @@ body{
     padding:18px;
   }
 
-
   .logo{
-
-    width:min(
-      520px,
-      70vw
-    );
-
+    width:min(520px,70vw);
   }
-
 
   .rules{
-
-    grid-template-columns:
-      repeat(4,1fr);
-
+    grid-template-columns:repeat(4,1fr);
   }
-
 
   .today-grid{
-
-    grid-template-columns:
-      repeat(4,1fr);
-
+    grid-template-columns:repeat(4,1fr);
   }
-
 
   .module-grid{
-
-    grid-template-columns:
-      repeat(2,1fr);
-
+    grid-template-columns:repeat(2,1fr);
   }
 
-
   .evidence-grid{
-
-    grid-template-columns:
-      repeat(4,1fr);
-
+    grid-template-columns:repeat(4,1fr);
   }
 
 }
@@ -1006,16 +543,9 @@ body{
 
 </head>
 
-
-
 <body>
 
-
-<div
-  class="wrap"
-  id="top"
->
-
+<div class="wrap" id="top">
 
 <section class="brand">
 
@@ -1029,11 +559,9 @@ body{
 
   </div>
 
-
   <div class="product-label">
     Intraday Risk &amp; Process Operating System
   </div>
-
 
   <div class="brand-copy">
     An evidence-led framework designed to control trading windows, attempts, behavioural risk and daily loss exposure while creating a structured record of execution quality.
@@ -1042,90 +570,47 @@ body{
 </section>
 
 
-
 <div class="rules">
 
   <div class="rule">
-
-    <div class="label">
-      Primary Window
-    </div>
-
-    <div class="rule-value blue">
-      9–11 AM ET
-    </div>
-
+    <div class="label">Primary Window</div>
+    <div class="rule-value blue">9–11 AM ET</div>
   </div>
 
-
   <div class="rule">
-
-    <div class="label">
-      Max Attempts
-    </div>
-
-    <div class="rule-value">
-      5
-    </div>
-
+    <div class="label">Max Attempts</div>
+    <div class="rule-value">5</div>
   </div>
 
-
   <div class="rule">
-
-    <div class="label">
-      Hard Stop
-    </div>
-
-    <div class="rule-value red">
-      -$100
-    </div>
-
+    <div class="label">Hard Stop</div>
+    <div class="rule-value red">-$100</div>
   </div>
 
-
   <div class="rule">
-
-    <div class="label">
-      Objective
-    </div>
-
-    <div class="rule-value green">
-      +$50
-    </div>
-
+    <div class="label">Objective</div>
+    <div class="rule-value green">+$50</div>
   </div>
 
 </div>
-
 
 
 <div
   id="marketStatus"
   class="market-status closed"
 >
-
-  <div
-    id="marketMain"
-    class="market-main"
-  >
+  <div id="marketMain" class="market-main">
     Checking session…
   </div>
 
-  <div
-    id="marketDetail"
-    class="market-detail"
-  ></div>
-
+  <div id="marketDetail" class="market-detail"></div>
 </div>
-
 
 
 <a
   href="live-risk.html"
   class="primary-action"
 >
-
   <div class="primary-kicker">
     Step 1 • Live Trading
   </div>
@@ -1133,9 +618,7 @@ body{
   <div class="primary-title">
     OPEN LIVE RISK →
   </div>
-
 </a>
-
 
 
 <section class="card">
@@ -1148,76 +631,31 @@ body{
     Connected New York trading-day record.
   </div>
 
-
   <div class="today-grid">
 
     <div class="today-item">
-
-      <div class="label">
-        Attempts
-      </div>
-
-      <div
-        id="todayAttempts"
-        class="value"
-      >
-        0/5
-      </div>
-
+      <div class="label">Attempts</div>
+      <div id="todayAttempts" class="value">0/5</div>
     </div>
 
-
     <div class="today-item">
-
-      <div class="label">
-        P&amp;L
-      </div>
-
-      <div
-        id="todayPnl"
-        class="value"
-      >
-        —
-      </div>
-
+      <div class="label">P&amp;L</div>
+      <div id="todayPnl" class="value">—</div>
     </div>
 
-
     <div class="today-item">
-
-      <div class="label">
-        Compliance
-      </div>
-
-      <div
-        id="todayCompliance"
-        class="value"
-      >
-        —
-      </div>
-
+      <div class="label">Compliance</div>
+      <div id="todayCompliance" class="value">—</div>
     </div>
 
-
     <div class="today-item">
-
-      <div class="label">
-        Process
-      </div>
-
-      <div
-        id="todayScore"
-        class="value"
-      >
-        —
-      </div>
-
+      <div class="label">Process</div>
+      <div id="todayScore" class="value">—</div>
     </div>
 
   </div>
 
 </section>
-
 
 
 <section class="card">
@@ -1230,96 +668,51 @@ body{
     The operating sequence from live control through session review.
   </div>
 
-
   <div class="flow">
 
     <div class="flow-step">
-
-      <div class="flow-number">
-        1
-      </div>
-
+      <div class="flow-number">1</div>
       <div>
-
-        <div class="flow-title">
-          Live Risk
-        </div>
-
+        <div class="flow-title">Live Risk</div>
         <div class="flow-copy">
           Control trading window, attempts, realised P&amp;L, loss limits and behavioural risk.
         </div>
-
       </div>
-
     </div>
 
-
     <div class="flow-step">
-
-      <div class="flow-number">
-        2
-      </div>
-
+      <div class="flow-number">2</div>
       <div>
-
-        <div class="flow-title">
-          Journal
-        </div>
-
+        <div class="flow-title">Journal</div>
         <div class="flow-copy">
           Capture ticker, side, entry, exit, shares and realised trade result with minimal intraday input.
         </div>
-
       </div>
-
     </div>
 
-
     <div class="flow-step">
-
-      <div class="flow-number">
-        3
-      </div>
-
+      <div class="flow-number">3</div>
       <div>
-
-        <div class="flow-title">
-          End Session
-        </div>
-
+        <div class="flow-title">End Session</div>
         <div class="flow-copy">
           Confirm structural compliance and behavioural process execution.
         </div>
-
       </div>
-
     </div>
 
-
     <div class="flow-step">
-
-      <div class="flow-number">
-        4
-      </div>
-
+      <div class="flow-number">4</div>
       <div>
-
-        <div class="flow-title">
-          Performance Review
-        </div>
-
+        <div class="flow-title">Performance Review</div>
         <div class="flow-copy">
           Review financial results, risk controls and process outcomes, with broker reconciliation added later.
         </div>
-
       </div>
-
     </div>
 
   </div>
 
 </section>
-
 
 
 <section class="card">
@@ -1332,92 +725,46 @@ body{
     Live control, rapid capture and performance review.
   </div>
 
-
   <div class="module-grid">
 
-    <a
-      href="live-risk.html"
-      class="module"
-    >
-
-      <div class="module-title">
-        Live Risk Control
-      </div>
-
+    <a href="live-risk.html" class="module">
+      <div class="module-title">Live Risk Control</div>
       <div class="module-desc">
         Real-time session guardrails, loss intervention and behavioural circuit breaker.
       </div>
-
     </a>
 
-
-    <a
-      href="journal.html"
-      class="module journal"
-    >
-
-      <div class="module-title">
-        Trading Journal
-      </div>
-
+    <a href="journal.html" class="module journal">
+      <div class="module-title">Trading Journal</div>
       <div class="module-desc">
         Fast intraday capture of trade economics with later broker-data enrichment.
       </div>
-
     </a>
 
-
-    <a
-      href="compliance.html"
-      class="module end"
-    >
-
-      <div class="module-title">
-        End Session
-      </div>
-
+    <a href="compliance.html" class="module end">
+      <div class="module-title">End Session</div>
       <div class="module-desc">
         Structural compliance checks and five-point behavioural process score.
       </div>
-
     </a>
 
-
-    <a
-      href="calendar-2026.html"
-      class="module review"
-    >
-
-      <div class="module-title">
-        Performance Review
-      </div>
-
+    <a href="calendar-2026.html" class="module review">
+      <div class="module-title">Performance Review</div>
       <div class="module-desc">
         Review daily P&amp;L, attempts, risk events and process outcomes over time.
       </div>
-
     </a>
 
-
-    <a
-      href="data-backup.html"
-      class="module backup"
-    >
-
-      <div class="module-title">
-        Data Backup
-      </div>
-
+    <a href="data-backup.html" class="module backup">
+      <div class="module-title">Data Backup</div>
       <div class="module-desc">
         Export and restore WASPN local records.
       </div>
-
     </a>
 
   </div>
 
 </section>
-
 
 
 <section class="card">
@@ -1430,85 +777,39 @@ body{
     Selected findings from the historical dataset used to develop this prototype.
   </div>
 
-
   <div class="evidence-grid">
 
     <div class="evidence">
-
-      <div class="label">
-        9:00–9:30 ET
-      </div>
-
-      <div class="evidence-value green">
-        +$10.67
-      </div>
-
-      <div class="evidence-copy">
-        Historical average per trade
-      </div>
-
+      <div class="label">9:00–9:30 ET</div>
+      <div class="evidence-value green">+$10.67</div>
+      <div class="evidence-copy">Historical average per trade</div>
     </div>
 
-
     <div class="evidence">
-
-      <div class="label">
-        Attempts 1–5
-      </div>
-
-      <div class="evidence-value green">
-        +$343
-      </div>
-
-      <div class="evidence-copy">
-        9–11 ET historical sample
-      </div>
-
+      <div class="label">Attempts 1–5</div>
+      <div class="evidence-value green">+$343</div>
+      <div class="evidence-copy">9–11 ET historical sample</div>
     </div>
 
-
     <div class="evidence">
-
-      <div class="label">
-        Attempts 6+
-      </div>
-
-      <div class="evidence-value red">
-        -$1,031
-      </div>
-
-      <div class="evidence-copy">
-        9–11 ET historical sample
-      </div>
-
+      <div class="label">Attempts 6+</div>
+      <div class="evidence-value red">-$1,031</div>
+      <div class="evidence-copy">9–11 ET historical sample</div>
     </div>
 
-
     <div class="evidence">
-
-      <div class="label">
-        After 11 ET
-      </div>
-
-      <div class="evidence-value red">
-        -$4,768
-      </div>
-
-      <div class="evidence-copy">
-        Historical sample
-      </div>
-
+      <div class="label">After 11 ET</div>
+      <div class="evidence-value red">-$4,768</div>
+      <div class="evidence-copy">Historical sample</div>
     </div>
 
   </div>
-
 
   <div class="evidence-note">
     Prototype figures describe the historical dataset used to develop the current WASPN ruleset. They are not presented as universal trading-performance claims.
   </div>
 
 </section>
-
 
 
 <section class="command-centre">
@@ -1525,14 +826,11 @@ body{
 </section>
 
 
-
 <div class="footer">
   WASPN • Process Over Recovery
 </div>
 
-
 </div>
-
 
 
 <script>
@@ -1568,31 +866,14 @@ function getNyParts(){
     new Intl.DateTimeFormat(
       "en-GB",
       {
-
-        timeZone:
-          "America/New_York",
-
-        weekday:
-          "long",
-
-        year:
-          "numeric",
-
-        month:
-          "2-digit",
-
-        day:
-          "2-digit",
-
-        hour:
-          "2-digit",
-
-        minute:
-          "2-digit",
-
-        hour12:
-          false
-
+        timeZone:"America/New_York",
+        weekday:"long",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit",
+        hour12:false
       }
     )
     .formatToParts(
@@ -1624,29 +905,12 @@ function getNyParts(){
 
 
   return {
-
-    weekday:
-      data.weekday,
-
-    year:
-      data.year,
-
-    month:
-      data.month,
-
-    day:
-      data.day,
-
-    hour:
-      Number(
-        data.hour
-      ),
-
-    minute:
-      Number(
-        data.minute
-      )
-
+    weekday:data.weekday,
+    year:data.year,
+    month:data.month,
+    day:data.day,
+    hour:Number(data.hour),
+    minute:Number(data.minute)
   };
 
 }
@@ -1659,13 +923,11 @@ function todayKey(){
 
 
   return (
-
     d.year +
     "-" +
     d.month +
     "-" +
     d.day
-
   );
 
 }
@@ -1687,9 +949,7 @@ function money(
 
     return (
       "+$" +
-      n.toFixed(
-        2
-      )
+      n.toFixed(2)
     );
 
   }
@@ -1701,11 +961,7 @@ function money(
 
     return (
       "-$" +
-      Math.abs(
-        n
-      ).toFixed(
-        2
-      )
+      Math.abs(n).toFixed(2)
     );
 
   }
@@ -1715,11 +971,6 @@ function money(
 
 }
 
-
-
-/* ========================================
-   MARKET STATUS
-======================================== */
 
 function renderMarketStatus(){
 
@@ -1733,23 +984,18 @@ function renderMarketStatus(){
 
 
   const weekend =
-    ny.weekday ===
-      "Saturday" ||
-    ny.weekday ===
-      "Sunday";
+    ny.weekday === "Saturday" ||
+    ny.weekday === "Sunday";
 
 
   const prelimStart =
     6 * 60 + 30;
 
-
   const prelimEnd =
     7 * 60;
 
-
   const mainStart =
     9 * 60;
-
 
   const close =
     11 * 60;
@@ -1760,12 +1006,10 @@ function renderMarketStatus(){
       "marketStatus"
     );
 
-
   const main =
     document.getElementById(
       "marketMain"
     );
-
 
   const detail =
     document.getElementById(
@@ -1780,15 +1024,12 @@ function renderMarketStatus(){
     box.className =
       "market-status closed";
 
-
     main.textContent =
       "MARKET CLOSED — WEEKEND";
-
 
     detail.textContent =
       ny.weekday +
       " in New York • No WASPN session";
-
 
     return;
 
@@ -1803,14 +1044,11 @@ function renderMarketStatus(){
     box.className =
       "market-status open";
 
-
     main.textContent =
       "PRELIMINARY WINDOW ACTIVE";
 
-
     detail.textContent =
       "6:30–7:00 AM ET • Exceptional setups only";
-
 
     return;
 
@@ -1825,14 +1063,11 @@ function renderMarketStatus(){
     box.className =
       "market-status open";
 
-
     main.textContent =
       "MAIN WASPN WINDOW ACTIVE";
 
-
     detail.textContent =
       "9:00–11:00 AM ET";
-
 
     return;
 
@@ -1847,14 +1082,11 @@ function renderMarketStatus(){
     box.className =
       "market-status waiting";
 
-
     main.textContent =
       "WAIT — MAIN WINDOW NOT OPEN";
 
-
     detail.textContent =
       "Main trading window begins at 9:00 AM ET";
-
 
     return;
 
@@ -1868,14 +1100,11 @@ function renderMarketStatus(){
     box.className =
       "market-status closed";
 
-
     main.textContent =
       "SESSION CLOSED";
 
-
     detail.textContent =
       "11:00 AM ET reached • No reopening later";
-
 
     return;
 
@@ -1885,21 +1114,14 @@ function renderMarketStatus(){
   box.className =
     "market-status waiting";
 
-
   main.textContent =
     "WAIT — SESSION NOT OPEN";
-
 
   detail.textContent =
     "Preliminary monitoring begins at 6:30 AM ET";
 
 }
 
-
-
-/* ========================================
-   TODAY
-======================================== */
 
 function renderToday(){
 
@@ -1917,10 +1139,8 @@ function renderToday(){
   document.getElementById(
     "todayAttempts"
   ).textContent =
-
     Number(
-      live.attempt ||
-      0
+      live.attempt || 0
     ) +
     "/5";
 
@@ -1929,11 +1149,9 @@ function renderToday(){
     typeof day.totalNet ===
       "number"
       ? day.totalNet
-
       : typeof live.realisedPnl ===
         "number"
         ? live.realisedPnl
-
         : null;
 
 
@@ -1950,7 +1168,6 @@ function renderToday(){
     pnlEl.textContent =
       "—";
 
-
     pnlEl.className =
       "value";
 
@@ -1962,7 +1179,6 @@ function renderToday(){
       money(
         pnl
       );
-
 
     pnlEl.className =
       "value " +
@@ -1978,40 +1194,28 @@ function renderToday(){
   document.getElementById(
     "todayCompliance"
   ).textContent =
-
     day.compliance &&
     typeof day.compliance.score ===
       "number"
-
       ? day.compliance.score +
         "/3"
-
       : "—";
 
 
   document.getElementById(
     "todayScore"
   ).textContent =
-
     day.sessionScore &&
     typeof day.sessionScore.score ===
       "number"
-
       ? day.sessionScore.score +
         "/5"
-
       : "—";
 
 }
 
 
-
-/* ========================================
-   START
-======================================== */
-
 renderMarketStatus();
-
 renderToday();
 
 
@@ -2031,5 +1235,4 @@ window.addEventListener(
 <script src="workflow-nav.js?v=3"></script>
 
 </body>
-
 </html>
