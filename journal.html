@@ -15,6 +15,41 @@
   content="#070b10"
 >
 
+<meta
+  name="apple-mobile-web-app-capable"
+  content="yes"
+>
+
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="black-translucent"
+>
+
+<meta
+  name="apple-mobile-web-app-title"
+  content="WASPN"
+>
+
+<meta
+  name="mobile-web-app-capable"
+  content="yes"
+>
+
+<meta
+  name="color-scheme"
+  content="dark"
+>
+
+<link
+  rel="manifest"
+  href="manifest.webmanifest"
+>
+
+<link
+  rel="apple-touch-icon"
+  href="futuristic_neon_wasp_trading_emblem.png"
+>
+
 <title>WASPN • Trading Journal</title>
 
 
@@ -52,8 +87,15 @@
 
 
 html{
+
+  min-height:100%;
+
+  background:#070b10;
+
   -webkit-text-size-adjust:100%;
+
   scroll-behavior:smooth;
+
 }
 
 
@@ -62,6 +104,7 @@ body{
   margin:0;
 
   min-height:100vh;
+  min-height:100dvh;
 
   background:
     radial-gradient(
@@ -120,7 +163,10 @@ a{
       env(safe-area-inset-top)
     )
     10px
-    20px;
+    max(
+      24px,
+      env(safe-area-inset-bottom)
+    );
 
 }
 
@@ -2111,12 +2157,6 @@ function tradeData(
 
 
   return {
-
-    /*
-      Preserve enrichment fields that may
-      already exist from older records or
-      future broker reconciliation.
-    */
 
     ...existingTrade,
 
