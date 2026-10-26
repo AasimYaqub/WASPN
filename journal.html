@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
@@ -50,7 +49,7 @@
   href="apple-touch-icon.png"
 >
 
-<title>WASPN • Live Risk Control</title>
+<title>WASPN • Trading Journal</title>
 
 
 <style>
@@ -64,6 +63,7 @@
   --panel3:#0b1117;
 
   --border:#273442;
+  --border2:#354656;
 
   --text:#edf4fb;
   --muted:#8797a7;
@@ -71,12 +71,12 @@
 
   --green:#35d07f;
   --red:#ff5f6d;
-  --amber:#f3b84b;
   --blue:#22c7ff;
+  --amber:#f3b84b;
 
   --shadow:
-    0 18px 50px
-    rgba(0,0,0,.26);
+    0 18px 48px
+    rgba(0,0,0,.24);
 
 }
 
@@ -109,7 +109,7 @@ body{
   background:
     radial-gradient(
       circle at 50% -10%,
-      rgba(34,199,255,.08),
+      rgba(34,199,255,.07),
       transparent 34%
     ),
     linear-gradient(
@@ -131,8 +131,15 @@ body{
 }
 
 
-button{
+button,
+input,
+select,
+textarea{
   font:inherit;
+}
+
+
+button{
   touch-action:manipulation;
 }
 
@@ -226,11 +233,7 @@ a{
 
 
 .product-title{
-
-  min-width:0;
-
   text-align:center;
-
 }
 
 
@@ -258,12 +261,12 @@ a{
 }
 
 
-.prototype-strip{
+.product-strip{
 
   display:flex;
 
-  align-items:center;
   justify-content:center;
+  align-items:center;
 
   gap:7px;
 
@@ -274,192 +277,214 @@ a{
   font-size:9px;
   font-weight:850;
 
-  letter-spacing:1.4px;
+  letter-spacing:1.3px;
 
   text-transform:uppercase;
 
 }
 
 
-.prototype-dot{
+.product-dot{
 
   width:6px;
   height:6px;
 
   border-radius:50%;
 
-  background:var(--blue);
+  background:var(--green);
 
   box-shadow:
-    0 0 9px
-    rgba(34,199,255,.8);
+    0 0 8px
+    rgba(53,208,127,.8);
 
 }
 
 
 
 /* ========================================
-   STATUS
+   SESSION
 ======================================== */
 
-.status{
+.session-card{
 
-  position:relative;
+  padding:14px;
 
-  overflow:hidden;
-
-  padding:
-    14px 12px 13px;
+  background:
+    linear-gradient(
+      180deg,
+      #111a22,
+      #0d141a
+    );
 
   border:
     1px solid
     var(--border);
 
-  border-radius:18px;
-
-  text-align:center;
+  border-radius:17px;
 
   box-shadow:var(--shadow);
 
 }
 
 
-.status::before{
+.session-grid{
 
-  content:"";
+  display:grid;
 
-  position:absolute;
+  grid-template-columns:
+    1fr 1fr;
 
-  left:0;
-  right:0;
-  top:0;
-
-  height:2px;
+  gap:8px;
 
 }
 
 
-.status-mode{
+.field label{
 
-  margin-bottom:4px;
+  display:block;
+
+  margin-bottom:5px;
+
+  color:var(--muted);
 
   font-size:9px;
-  font-weight:950;
+  font-weight:900;
 
-  letter-spacing:1.8px;
+  letter-spacing:.7px;
 
   text-transform:uppercase;
 
-  opacity:.72;
+}
+
+
+input,
+select,
+textarea{
+
+  width:100%;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:10px;
+
+  outline:none;
+
+  background:#080e13;
+
+  color:white;
 
 }
 
 
-.status-title{
+input,
+select{
 
-  font-size:
-    clamp(
-      21px,
-      5.7vw,
-      30px
-    );
+  min-height:48px;
 
-  font-weight:950;
+  padding:
+    9px 10px;
 
-  letter-spacing:-.5px;
-
-  line-height:1.12;
+  font-size:16px;
 
 }
 
 
-.status-detail{
+textarea{
 
-  max-width:620px;
+  min-height:72px;
 
-  margin:
-    5px auto 0;
+  padding:10px;
 
-  font-size:11px;
-  font-weight:700;
+  resize:vertical;
 
-  line-height:1.35;
+  font-size:14px;
 
-  opacity:.76;
+  line-height:1.45;
 
 }
 
 
-.status.ok{
+input:focus,
+select:focus,
+textarea:focus{
 
-  color:var(--green);
+  border-color:var(--blue);
 
-  background:#0d1c15;
-
-  border-color:#285c42;
-
-}
-
-
-.status.ok::before{
-  background:var(--green);
-}
-
-
-.status.warn{
-
-  color:var(--amber);
-
-  background:#1d170d;
-
-  border-color:#655027;
+  box-shadow:
+    0 0 0 2px
+    rgba(34,199,255,.08);
 
 }
 
 
-.status.warn::before{
-  background:var(--amber);
-}
+.existing{
 
+  display:none;
 
-.status.stop{
+  margin-top:9px;
 
-  color:var(--red);
+  padding:
+    9px 10px;
 
-  background:#201014;
+  background:#0a1015;
 
-  border-color:#6d303a;
+  border:
+    1px solid
+    var(--border);
 
-}
+  border-radius:10px;
 
+  color:var(--muted);
 
-.status.stop::before{
-  background:var(--red);
-}
+  font-size:10px;
 
+  line-height:1.4;
 
-.status.closed{
-
-  color:#a8b4bf;
-
-  background:#121920;
-
-  border-color:#394754;
-
-}
-
-
-.status.closed::before{
-  background:#667685;
 }
 
 
 
 /* ========================================
-   CLOCKS
+   INTRADAY NOTE
 ======================================== */
 
-.clocks{
+.intraday-note{
+
+  margin-top:8px;
+
+  padding:
+    11px 12px;
+
+  background:#0c1720;
+
+  border:
+    1px solid
+    rgba(34,199,255,.22);
+
+  border-radius:12px;
+
+  color:#9eb4c4;
+
+  font-size:9px;
+
+  line-height:1.5;
+
+}
+
+
+.intraday-note strong{
+  color:var(--blue);
+}
+
+
+
+/* ========================================
+   DAILY SUMMARY
+======================================== */
+
+.daily-summary{
 
   display:grid;
 
@@ -473,19 +498,16 @@ a{
 }
 
 
-.clock{
+.summary-box{
+
+  min-width:0;
 
   padding:
-    9px 8px;
+    12px 10px;
 
   text-align:center;
 
-  background:
-    linear-gradient(
-      180deg,
-      #0e151c,
-      #0a1015
-    );
+  background:#0b1117;
 
   border:
     1px solid
@@ -503,18 +525,18 @@ a{
   font-size:9px;
   font-weight:900;
 
-  letter-spacing:1px;
+  letter-spacing:.8px;
 
   text-transform:uppercase;
 
 }
 
 
-.clock-time{
+.summary-value{
 
-  margin-top:3px;
+  margin-top:4px;
 
-  font-size:19px;
+  font-size:24px;
   font-weight:950;
 
   font-variant-numeric:
@@ -523,91 +545,109 @@ a{
 }
 
 
-.clock-detail{
+.green{
+  color:var(--green);
+}
 
-  margin-top:2px;
 
-  overflow:hidden;
+.red{
+  color:var(--red);
+}
 
-  color:var(--muted2);
 
-  font-size:9px;
+.blue{
+  color:var(--blue);
+}
 
-  text-overflow:ellipsis;
-  white-space:nowrap;
 
+.amber{
+  color:var(--amber);
 }
 
 
 
 /* ========================================
-   RISK METRICS
+   TRADE CARDS
 ======================================== */
 
-.cockpit{
+.trade{
 
-  display:grid;
+  margin-top:9px;
 
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:8px;
-
-  margin-top:8px;
-
-}
-
-
-.metric{
-
-  min-width:0;
-
-  min-height:132px;
-
-  display:flex;
-
-  flex-direction:column;
-
-  align-items:center;
-  justify-content:center;
-
-  padding:
-    12px 8px;
+  overflow:hidden;
 
   background:
     linear-gradient(
       180deg,
-      #121b24,
-      #0c1218
+      #121a23,
+      #0d141a
     );
 
   border:
     1px solid
     var(--border);
 
-  border-radius:16px;
-
-  text-align:center;
+  border-radius:17px;
 
 }
 
 
-.metric-value{
+.trade-head{
 
-  margin-top:7px;
+  min-height:56px;
 
-  font-size:
-    clamp(
-      35px,
-      10vw,
-      48px
-    );
+  display:flex;
 
+  justify-content:space-between;
+  align-items:center;
+
+  gap:10px;
+
+  padding:
+    12px 13px;
+
+  border-bottom:
+    1px solid
+    var(--border);
+
+}
+
+
+.trade-title-wrap{
+  min-width:0;
+}
+
+
+.trade-kicker{
+
+  color:var(--muted);
+
+  font-size:9px;
+  font-weight:900;
+
+  letter-spacing:.8px;
+
+  text-transform:uppercase;
+
+}
+
+
+.trade-title{
+
+  margin-top:2px;
+
+  font-size:18px;
   font-weight:950;
 
-  letter-spacing:-1.5px;
+}
 
-  line-height:1;
+
+.pnl{
+
+  flex:0 0 auto;
+
+  font-size:20px;
+  font-weight:950;
 
   font-variant-numeric:
     tabular-nums;
@@ -615,111 +655,113 @@ a{
 }
 
 
-.attempt-max{
+.trade-body{
+  padding:12px;
+}
+
+
+.grid{
+
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:9px;
+
+}
+
+
+.calculation{
+
+  margin-top:10px;
+
+  padding:
+    9px 10px;
+
+  background:#080e13;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:9px;
 
   color:var(--muted);
 
-  font-size:.5em;
+  font-size:10px;
 
-  letter-spacing:0;
-
-}
-
-
-.metric-foot{
-
-  margin-top:8px;
-
-  color:var(--muted2);
-
-  font-size:9px;
-  font-weight:750;
-
-  line-height:1.35;
+  line-height:1.45;
 
 }
 
 
 
 /* ========================================
-   JOURNAL ACTION
+   SETUP / REASON
 ======================================== */
 
-.journal-action{
+.setup-field{
 
-  display:block;
+  margin-top:10px;
 
-  margin-top:8px;
-
-  min-height:58px;
-
-  padding:12px;
-
-  border-radius:15px;
+  padding:10px;
 
   background:
-    linear-gradient(
-      180deg,
-      #1594d3,
-      #0e72aa
+    rgba(
+      34,
+      199,
+      255,
+      .035
     );
 
-  color:white;
+  border:
+    1px solid
+    rgba(34,199,255,.24);
 
-  text-align:center;
-  text-decoration:none;
-
-  box-shadow:
-    0 12px 28px
-    rgba(0,135,205,.16);
+  border-radius:12px;
 
 }
 
 
-.journal-action:active{
-  transform:scale(.99);
+.setup-field label{
+  color:#a9c9d6;
 }
 
 
-.journal-kicker{
+.setup-input{
+  min-height:48px;
+}
+
+
+.setup-help{
+
+  margin-top:6px;
+
+  color:#7fa7b7;
 
   font-size:8px;
-  font-weight:900;
 
-  letter-spacing:1.2px;
-
-  text-transform:uppercase;
-
-  opacity:.72;
-
-}
-
-
-.journal-title{
-
-  margin-top:3px;
-
-  font-size:16px;
-  font-weight:950;
+  line-height:1.4;
 
 }
 
 
 
 /* ========================================
-   BEHAVIOURAL LOCK
+   SESSION NOTES
 ======================================== */
 
-.behaviour-card{
+.notes-card{
 
-  margin-top:8px;
+  margin-top:9px;
 
   padding:13px;
 
   background:
     linear-gradient(
       180deg,
-      #141b22,
+      #111921,
       #0d141a
     );
 
@@ -732,164 +774,89 @@ a{
 }
 
 
-.behaviour-row{
+.section-title{
 
-  display:flex;
+  margin-bottom:4px;
 
-  align-items:center;
-  justify-content:space-between;
-
-  gap:12px;
-
-}
-
-
-.behaviour-title{
-
-  font-size:13px;
+  font-size:14px;
   font-weight:950;
 
 }
 
 
-.behaviour-note{
+.section-copy{
 
-  margin-top:3px;
+  margin-bottom:8px;
 
-  color:var(--muted2);
+  color:var(--muted);
 
   font-size:9px;
 
-  line-height:1.35;
+  line-height:1.4;
 
 }
 
 
-.switch{
 
-  position:relative;
+/* ========================================
+   SAVE
+======================================== */
 
-  width:54px;
-  height:30px;
+.save-panel{
 
-  flex:0 0 auto;
+  margin-top:9px;
 
-}
+  padding:14px;
 
-
-.switch input{
-
-  opacity:0;
-
-  width:0;
-  height:0;
-
-}
-
-
-.slider{
-
-  position:absolute;
-
-  inset:0;
-
-  border-radius:999px;
-
-  background:#303944;
-
-  cursor:pointer;
-
-}
-
-
-.slider::before{
-
-  content:"";
-
-  position:absolute;
-
-  width:24px;
-  height:24px;
-
-  left:3px;
-  top:3px;
-
-  border-radius:50%;
-
-  background:white;
-
-  transition:.15s;
-
-}
-
-
-.switch input:checked + .slider{
-  background:#8b2939;
-}
-
-
-.switch input:checked + .slider::before{
-  transform:translateX(24px);
-}
-
-
-.behaviour-lock-panel{
-
-  display:none;
-
-  margin-top:12px;
-
-  padding:13px;
+  background:
+    linear-gradient(
+      180deg,
+      #111a22,
+      #0c1319
+    );
 
   border:
     1px solid
-    #67323b;
+    var(--border);
 
-  border-radius:13px;
+  border-radius:17px;
 
-  background:#1b1014;
+}
+
+
+.total-label{
 
   text-align:center;
 
-}
-
-
-.behaviour-lock-panel.active{
-  display:block;
-}
-
-
-.lock-kicker{
-
-  color:var(--red);
+  color:var(--muted);
 
   font-size:9px;
-  font-weight:950;
+  font-weight:900;
 
-  letter-spacing:1.5px;
+  letter-spacing:1px;
 
   text-transform:uppercase;
 
 }
 
 
-.lock-countdown{
+.total{
 
   margin:
-    4px 0;
+    5px 0 12px;
 
-  color:var(--red);
+  text-align:center;
 
   font-size:
     clamp(
-      42px,
-      13vw,
-      60px
+      38px,
+      11vw,
+      52px
     );
 
   font-weight:950;
 
-  line-height:1;
+  letter-spacing:-1.5px;
 
   font-variant-numeric:
     tabular-nums;
@@ -897,382 +864,43 @@ a{
 }
 
 
-.lock-message{
-
-  color:#d6bfc3;
-
-  font-size:10px;
-  font-weight:750;
-
-  line-height:1.45;
-
-}
-
-
-
-/* ========================================
-   RESET GATE
-======================================== */
-
-.reset-gate{
-
-  display:none;
-
-  margin-top:10px;
-
-  padding:13px;
-
-  background:#111921;
-
-  border:
-    1px solid
-    #654f29;
-
-  border-radius:15px;
-
-}
-
-
-.reset-gate.active{
-  display:block;
-}
-
-
-.gate-title{
-
-  color:var(--amber);
-
-  font-size:14px;
-  font-weight:950;
-
-}
-
-
-.gate-intro{
-
-  margin-top:4px;
-
-  color:var(--muted);
-
-  font-size:10px;
-
-  line-height:1.4;
-
-}
-
-
-.gate-question{
-
-  margin-top:10px;
-
-  padding:10px;
-
-  background:#090f14;
-
-  border:
-    1px solid
-    var(--border);
-
-  border-radius:10px;
-
-}
-
-
-.gate-question-text{
-
-  font-size:11px;
-  font-weight:850;
-
-  line-height:1.4;
-
-}
-
-
-.gate-options{
-
-  display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:7px;
-
-  margin-top:8px;
-
-}
-
-
-.gate-option{
-
-  position:relative;
-
-}
-
-
-.gate-option input{
-
-  position:absolute;
-
-  opacity:0;
-
-  pointer-events:none;
-
-}
-
-
-.gate-option span{
-
-  min-height:42px;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:center;
-
-  border:
-    1px solid
-    var(--border);
-
-  border-radius:9px;
-
-  background:#121a22;
-
-  color:var(--text);
-
-  font-size:11px;
-  font-weight:900;
-
-  cursor:pointer;
-
-}
-
-
-.gate-option input:checked + span{
-
-  border-color:var(--blue);
-
-  background:#0e2633;
-
-  color:var(--blue);
-
-}
-
-
-.gate-result{
-
-  margin-top:10px;
-
-  padding:10px;
-
-  border-radius:10px;
-
-  text-align:center;
-
-  font-size:10px;
-  font-weight:900;
-
-  line-height:1.4;
-
-  background:#17130c;
-
-  border:
-    1px solid
-    #5e4924;
-
-  color:var(--amber);
-
-}
-
-
-.gate-result.safe{
-
-  background:#0e1c15;
-
-  border-color:#285c42;
-
-  color:var(--green);
-
-}
-
-
-.gate-result.stop{
-
-  background:#1d1014;
-
-  border-color:#65313a;
-
-  color:var(--red);
-
-}
-
-
-.clear-lock-btn{
+.save-btn{
 
   width:100%;
 
-  min-height:49px;
-
-  margin-top:9px;
+  min-height:58px;
 
   border:0;
 
-  border-radius:11px;
+  border-radius:14px;
 
   background:
     linear-gradient(
       180deg,
-      #168b53,
-      #10653d
+      #1a8b53,
+      #11683d
     );
 
   color:white;
 
-  font-size:12px;
+  font-size:16px;
   font-weight:950;
 
   cursor:pointer;
 
-}
-
-
-.clear-lock-btn:disabled{
-
-  opacity:.25;
-
-  cursor:not-allowed;
+  box-shadow:
+    0 12px 28px
+    rgba(20,120,70,.18);
 
 }
 
 
-
-/* ========================================
-   GUARDRAILS
-======================================== */
-
-.guardrails{
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(4,1fr);
-
-  gap:6px;
-
-  margin-top:8px;
-
+.save-btn:active{
+  transform:scale(.99);
 }
 
 
-.guardrail{
-
-  padding:
-    9px 3px;
-
-  text-align:center;
-
-  background:#0a1015;
-
-  border:
-    1px solid
-    var(--border);
-
-  border-radius:11px;
-
-}
-
-
-.guardrail-value{
-
-  margin-top:3px;
-
-  font-size:13px;
-  font-weight:950;
-
-}
-
-
-.blue{
-  color:var(--blue);
-}
-
-
-.green{
-  color:var(--green);
-}
-
-
-.amber{
-  color:var(--amber);
-}
-
-
-.red{
-  color:var(--red);
-}
-
-
-
-/* ========================================
-   CONNECTED RECORD
-======================================== */
-
-.section{
-
-  margin-top:10px;
-
-  padding:13px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #111921,
-      #0d141b
-    );
-
-  border:
-    1px solid
-    var(--border);
-
-  border-radius:16px;
-
-}
-
-
-.section-head{
-
-  display:flex;
-
-  align-items:center;
-  justify-content:space-between;
-
-  gap:10px;
-
-  margin-bottom:9px;
-
-}
-
-
-.section-title{
-
-  font-size:14px;
-  font-weight:950;
-
-}
-
-
-.section-state{
-
-  color:var(--muted2);
-
-  font-size:9px;
-  font-weight:850;
-
-  text-transform:uppercase;
-
-}
-
-
-.summary{
+.secondary-actions{
 
   display:grid;
 
@@ -1281,14 +909,55 @@ a{
 
   gap:7px;
 
+  margin-top:8px;
+
 }
 
 
-.summary-item{
+.secondary-btn{
 
-  padding:10px;
+  min-height:46px;
 
-  background:#090f14;
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:11px;
+
+  background:#151e27;
+
+  color:white;
+
+  font-size:11px;
+  font-weight:900;
+
+  cursor:pointer;
+
+}
+
+
+.secondary-btn.delete{
+
+  color:#ff9ca5;
+
+  border-color:#543039;
+
+  background:#1c1115;
+
+}
+
+
+.status{
+
+  margin-top:9px;
+
+  padding:9px;
+
+  text-align:center;
+
+  color:var(--muted);
+
+  background:#080e13;
 
   border:
     1px solid
@@ -1296,65 +965,15 @@ a{
 
   border-radius:10px;
 
-}
-
-
-.summary-value{
-
-  margin-top:4px;
-
-  font-size:16px;
-  font-weight:950;
-
-}
-
-
-.save-state{
-
-  margin-top:8px;
-
-  text-align:center;
-
-  color:var(--muted2);
-
-  font-size:9px;
-
-}
-
-
-
-/* ========================================
-   RULE REMINDER
-======================================== */
-
-.rule-reminder{
-
-  margin-top:10px;
-
-  padding:12px;
-
-  border:
-    1px solid
-    #573039;
-
-  border-radius:13px;
-
-  background:#1b1014;
-
-  color:#d8c0c5;
-
-  text-align:center;
-
   font-size:10px;
-  font-weight:800;
 
-  line-height:1.5;
+  line-height:1.4;
 
 }
 
 
-.rule-reminder strong{
-  color:var(--red);
+.dirty{
+  color:var(--amber);
 }
 
 
@@ -1373,11 +992,16 @@ a{
   }
 
 
-  .summary{
+  .daily-summary{
 
     grid-template-columns:
       repeat(4,1fr);
 
+  }
+
+
+  .trade-body{
+    padding:16px;
   }
 
 }
@@ -1385,7 +1009,6 @@ a{
 </style>
 
 </head>
-
 
 
 <body>
@@ -1417,29 +1040,28 @@ a{
       </div>
 
       <div class="module-name">
-        Live Risk Control
+        Trading Journal
       </div>
 
     </div>
 
 
-    <button
-      id="resetBtn"
+    <a
+      href="live-risk.html"
       class="icon-btn"
-      type="button"
-      aria-label="Reset behavioural controls"
+      aria-label="Live Risk"
     >
-      ↻
-    </button>
+      R
+    </a>
 
   </div>
 
 
-  <div class="prototype-strip">
+  <div class="product-strip">
 
-    <span class="prototype-dot"></span>
+    <span class="product-dot"></span>
 
-    Evidence-led intraday risk engine
+    Fast intraday trade capture
 
   </div>
 
@@ -1447,79 +1069,126 @@ a{
 
 
 
-<section
-  id="status"
-  class="status warn"
->
+<section class="session-card">
 
-  <div
-    id="statusMode"
-    class="status-mode"
-  >
-    SESSION ENGINE
+  <div class="session-grid">
+
+    <div class="field">
+
+      <label>
+        Trading Date • New York
+      </label>
+
+      <input
+        id="tradeDate"
+        type="date"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Starting Account Value
+      </label>
+
+      <input
+        id="startValue"
+        type="number"
+        inputmode="decimal"
+        step="0.01"
+        placeholder="Optional"
+      >
+
+    </div>
+
   </div>
 
 
   <div
-    id="statusTitle"
-    class="status-title"
-  >
-    CHECKING SESSION
-  </div>
-
-
-  <div
-    id="statusDetail"
-    class="status-detail"
-  >
-    Loading New York trading state…
-  </div>
+    id="existing"
+    class="existing"
+  ></div>
 
 </section>
 
 
 
-<div class="clocks">
+<div class="intraday-note">
 
-  <div class="clock">
+  <strong>
+    One WASPN attempt = one saved trade.
+  </strong>
+
+  Save the Journal after each completed trade.
+  Live Risk will use the saved Journal trades and cumulative
+  Daily Net P&amp;L automatically.
+
+</div>
+
+
+
+<div class="daily-summary">
+
+  <div class="summary-box">
 
     <div class="label">
-      Local Time
+      Trades Recorded
     </div>
 
     <div
-      id="localTime"
-      class="clock-time"
+      id="tradeCount"
+      class="summary-value"
     >
-      --:--
-    </div>
-
-    <div
-      id="localZone"
-      class="clock-detail"
-    >
-      Local
+      0
     </div>
 
   </div>
 
 
-  <div class="clock">
+  <div class="summary-box">
 
     <div class="label">
-      New York
+      Daily Net
     </div>
 
     <div
-      id="etTime"
-      class="clock-time"
+      id="topDailyTotal"
+      class="summary-value"
     >
-      --:--
+      $0.00
+    </div>
+
+  </div>
+
+
+  <div class="summary-box">
+
+    <div class="label">
+      Live Attempts
     </div>
 
     <div
-      id="nyDay"
-      class="clock-detail"
+      id="liveAttempt"
+      class="summary-value"
+    >
+      0/5
+    </div>
+
+  </div>
+
+
+  <div class="summary-box">
+
+    <div class="label">
+      Risk State
+    </div>
+
+    <div
+      id="riskState"
+      class="summary-value"
+      style="font-size:16px;"
     >
       —
     </div>
@@ -1530,548 +1199,84 @@ a{
 
 
 
-<div class="cockpit">
-
-  <section class="metric">
-
-    <div class="label">
-      Completed Attempts
-    </div>
-
-    <div class="metric-value">
-
-      <span id="attempt">
-        0
-      </span>
-
-      <span class="attempt-max">
-        /5
-      </span>
-
-    </div>
-
-    <div class="metric-foot">
-      Synced from Trading Journal
-    </div>
-
-  </section>
-
-
-  <section class="metric">
-
-    <div class="label">
-      Realised P&amp;L
-    </div>
-
-    <div
-      id="pnlDisplay"
-      class="metric-value"
-    >
-      $0.00
-    </div>
-
-    <div class="metric-foot">
-      Synced from Trading Journal
-    </div>
-
-  </section>
-
-</div>
+<div id="trades"></div>
 
 
 
-<a
-  href="journal.html"
-  class="journal-action"
->
+<section class="notes-card">
 
-  <div class="journal-kicker">
-    Record completed trade
+  <div class="section-title">
+    Session Note
   </div>
 
-  <div class="journal-title">
-    OPEN TRADING JOURNAL →
+  <div class="section-copy">
+    Optional. Only capture something here if it is worth remembering
+    before the broker reconciliation or weekly review.
   </div>
 
-</a>
-
-
-
-<section class="behaviour-card">
-
-  <div class="behaviour-row">
-
-    <div>
-
-      <div class="behaviour-title">
-        Behavioural Risk Lock
-      </div>
-
-      <div class="behaviour-note">
-        Activate when recovery thinking, rushed execution, anger,
-        repeated re-entry or “one more” appears.
-      </div>
-
-    </div>
-
-
-    <label class="switch">
-
-      <input
-        id="behaviourToggle"
-        type="checkbox"
-        aria-label="Activate behavioural risk lock"
-      >
-
-      <span class="slider"></span>
-
-    </label>
-
-  </div>
-
-
-  <div
-    id="behaviourLockPanel"
-    class="behaviour-lock-panel"
-  >
-
-    <div class="lock-kicker">
-      Behavioural Circuit Breaker
-    </div>
-
-    <div
-      id="behaviourCountdown"
-      class="lock-countdown"
-    >
-      05:00
-    </div>
-
-    <div
-      id="behaviourLockMessage"
-      class="lock-message"
-    >
-      New WASPN trade starts are locked.
-    </div>
-
-  </div>
+  <textarea
+    id="dailyNotes"
+    placeholder="Optional quick note…"
+  ></textarea>
 
 </section>
 
 
 
-<section
-  id="resetGate"
-  class="reset-gate"
->
+<section class="save-panel">
 
-  <div class="gate-title">
-    Reset Gate
-  </div>
-
-  <div class="gate-intro">
-    The five-minute behavioural lock has expired.
-    Complete all checks before WASPN can re-enable another trade.
-  </div>
-
-
-  <div class="gate-question">
-
-    <div class="gate-question-text">
-      1. Am I trying to make back a previous loss?
-    </div>
-
-    <div class="gate-options">
-
-      <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate1"
-          value="risk"
-        >
-
-        <span>
-          Yes
-        </span>
-
-      </label>
-
-
-      <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate1"
-          value="safe"
-        >
-
-        <span>
-          No
-        </span>
-
-      </label>
-
-    </div>
-
-  </div>
-
-
-  <div class="gate-question">
-
-    <div class="gate-question-text">
-      2. Am I increasing size because I am red?
-    </div>
-
-    <div class="gate-options">
-
-      <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate2"
-          value="risk"
-        >
-
-        <span>
-          Yes
-        </span>
-
-      </label>
-
-
-      <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate2"
-          value="safe"
-        >
-
-        <span>
-          No
-        </span>
-
-      </label>
-
-    </div>
-
-  </div>
-
-
-  <div class="gate-question">
-
-    <div class="gate-question-text">
-      3. Am I re-entering because I need to be right?
-    </div>
-
-    <div class="gate-options">
-
-      <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate3"
-          value="risk"
-        >
-
-        <span>
-          Yes
-        </span>
-
-      </label>
-
-
-      <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate3"
-          value="safe"
-        >
-
-        <span>
-          No
-        </span>
-
-      </label>
-
-    </div>
-
-  </div>
-
-
-  <div class="gate-question">
-
-    <div class="gate-question-text">
-      4. Am I calmer and prepared to wait for a valid setup?
-    </div>
-
-    <div class="gate-options">
-
-      <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate4"
-          value="safe"
-        >
-
-        <span>
-          Yes
-        </span>
-
-      </label>
-
-
-      <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate4"
-          value="risk"
-        >
-
-        <span>
-          No
-        </span>
-
-      </label>
-
-    </div>
-
-  </div>
-
-
-  <div class="gate-question">
-
-    <div class="gate-question-text">
-      5. Is the next trade genuinely inside WASPN rather than a recovery trade?
-    </div>
-
-    <div class="gate-options">
-
-      <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate5"
-          value="safe"
-        >
-
-        <span>
-          Yes
-        </span>
-
-      </label>
-
-
-      <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate5"
-          value="risk"
-        >
-
-        <span>
-          No
-        </span>
-
-      </label>
-
-    </div>
-
+  <div class="total-label">
+    Daily Net P&amp;L
   </div>
 
 
   <div
-    id="gateResult"
-    class="gate-result"
+    id="dailyTotal"
+    class="total"
   >
-    Complete all five checks.
+    $0.00
   </div>
 
 
   <button
-    id="clearBehaviourLockBtn"
-    class="clear-lock-btn"
+    id="saveBtn"
+    class="save-btn"
     type="button"
-    disabled
   >
-    CLEAR BEHAVIOURAL LOCK
+    SAVE JOURNAL
   </button>
 
-</section>
 
+  <div class="secondary-actions">
 
-
-<div class="guardrails">
-
-  <div class="guardrail">
-
-    <div class="label">
-      Window
-    </div>
-
-    <div class="guardrail-value blue">
-      9–11 ET
-    </div>
-
-  </div>
-
-
-  <div class="guardrail">
-
-    <div class="label">
-      Attempts
-    </div>
-
-    <div class="guardrail-value">
-      5 Max
-    </div>
-
-  </div>
-
-
-  <div class="guardrail">
-
-    <div class="label">
-      Warning
-    </div>
-
-    <div class="guardrail-value amber">
-      -$75
-    </div>
-
-  </div>
-
-
-  <div class="guardrail">
-
-    <div class="label">
-      Hard Stop
-    </div>
-
-    <div class="guardrail-value red">
-      -$100
-    </div>
-
-  </div>
-
-</div>
-
-
-
-<section class="section">
-
-  <div class="section-head">
-
-    <div class="section-title">
-      Connected Session Record
-    </div>
-
-    <div
-      id="recordState"
-      class="section-state"
+    <button
+      id="loadBtn"
+      class="secondary-btn"
+      type="button"
     >
-      LOCAL
-    </div>
-
-  </div>
+      RELOAD SAVED
+    </button>
 
 
-  <div class="summary">
-
-    <div class="summary-item">
-
-      <div class="label">
-        Journal Trades
-      </div>
-
-      <div
-        id="journalTrades"
-        class="summary-value"
-      >
-        —
-      </div>
-
-    </div>
-
-
-    <div class="summary-item">
-
-      <div class="label">
-        Journal Net
-      </div>
-
-      <div
-        id="journalNet"
-        class="summary-value"
-      >
-        —
-      </div>
-
-    </div>
-
-
-    <div class="summary-item">
-
-      <div class="label">
-        Compliance
-      </div>
-
-      <div
-        id="complianceSummary"
-        class="summary-value"
-      >
-        —
-      </div>
-
-    </div>
-
-
-    <div class="summary-item">
-
-      <div class="label">
-        Process
-      </div>
-
-      <div
-        id="processSummary"
-        class="summary-value"
-      >
-        —
-      </div>
-
-    </div>
+    <button
+      id="deleteBtn"
+      class="secondary-btn delete"
+      type="button"
+    >
+      DELETE DAY
+    </button>
 
   </div>
 
 
   <div
-    id="saveState"
-    class="save-state"
+    id="status"
+    class="status"
   >
-    Journal is the source of truth for attempts and realised P&amp;L.
+    No changes saved yet.
   </div>
 
 </section>
-
-
-
-<div class="rule-reminder">
-
-  <strong>
-    HARD FINISH:
-  </strong>
-
-  Attempt 5 • -$100 realised • 11:00 AM ET
-
-  <br>
-
-  No reopening later.
-
-</div>
 
 
 </div>
@@ -2079,6 +1284,7 @@ a{
 
 
 <script>
+
 
 const STORAGE_KEY =
   "waspnJournalV2";
@@ -2096,346 +1302,19 @@ const MAX_ATTEMPTS =
   5;
 
 
-const COOLDOWN_MS =
-  5 * 60 * 1000;
+const tradeContainer =
+  document.getElementById(
+    "trades"
+  );
+
+
+let dirty =
+  false;
 
 
 
 /* ========================================
-   STORAGE
-======================================== */
-
-function getJournal(){
-
-  try{
-
-    return JSON.parse(
-      localStorage.getItem(
-        STORAGE_KEY
-      )
-    ) || {};
-
-  }
-
-  catch{
-
-    return {};
-
-  }
-
-}
-
-
-function saveJournal(
-  journal
-){
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(
-      journal
-    )
-  );
-
-}
-
-
-
-/* ========================================
-   DATE / TIME
-======================================== */
-
-function getNyParts(){
-
-  const formatted =
-    new Intl.DateTimeFormat(
-      "en-GB",
-      {
-
-        timeZone:
-          "America/New_York",
-
-        weekday:
-          "long",
-
-        year:
-          "numeric",
-
-        month:
-          "2-digit",
-
-        day:
-          "2-digit",
-
-        hour:
-          "2-digit",
-
-        minute:
-          "2-digit",
-
-        second:
-          "2-digit",
-
-        hourCycle:
-          "h23"
-
-      }
-    )
-    .formatToParts(
-      new Date()
-    );
-
-
-  const data =
-    {};
-
-
-  formatted.forEach(
-    part => {
-
-      if(
-        part.type !==
-        "literal"
-      ){
-
-        data[
-          part.type
-        ] =
-          part.value;
-
-      }
-
-    }
-  );
-
-
-  return {
-
-    weekday:
-      data.weekday,
-
-    year:
-      data.year,
-
-    month:
-      data.month,
-
-    day:
-      data.day,
-
-    hour:
-      Number(
-        data.hour
-      ),
-
-    minute:
-      Number(
-        data.minute
-      ),
-
-    second:
-      Number(
-        data.second
-      )
-
-  };
-
-}
-
-
-function getNyDate(){
-
-  const ny =
-    getNyParts();
-
-
-  return (
-    ny.year +
-    "-" +
-    ny.month +
-    "-" +
-    ny.day
-  );
-
-}
-
-
-function getSessionClockState(){
-
-  const ny =
-    getNyParts();
-
-
-  const mins =
-    ny.hour * 60 +
-    ny.minute;
-
-
-  const weekend =
-    ny.weekday ===
-      "Saturday" ||
-    ny.weekday ===
-      "Sunday";
-
-
-  if(
-    weekend
-  ){
-
-    return {
-
-      key:
-        "weekend",
-
-      canStart:
-        false,
-
-      title:
-        "MARKET CLOSED — WEEKEND",
-
-      detail:
-        "No WASPN trading session today.",
-
-      className:
-        "closed"
-
-    };
-
-  }
-
-
-  if(
-    mins >= 390 &&
-    mins < 420
-  ){
-
-    return {
-
-      key:
-        "preliminary",
-
-      canStart:
-        true,
-
-      title:
-        "PRELIMINARY WINDOW",
-
-      detail:
-        "6:30–7:00 AM ET • Exceptional setup / monitoring window.",
-
-      className:
-        "ok"
-
-    };
-
-  }
-
-
-  if(
-    mins >= 540 &&
-    mins < 660
-  ){
-
-    return {
-
-      key:
-        "main",
-
-      canStart:
-        true,
-
-      title:
-        "WITHIN WASPN",
-
-      detail:
-        "Primary trading window • 9:00–11:00 AM ET.",
-
-      className:
-        "ok"
-
-    };
-
-  }
-
-
-  if(
-    mins >= 420 &&
-    mins < 540
-  ){
-
-    return {
-
-      key:
-        "wait",
-
-      canStart:
-        false,
-
-      title:
-        "WAIT — MAIN WINDOW NOT OPEN",
-
-      detail:
-        "Main WASPN window begins at 9:00 AM ET.",
-
-      className:
-        "warn"
-
-    };
-
-  }
-
-
-  if(
-    mins >= 660
-  ){
-
-    return {
-
-      key:
-        "closed",
-
-      canStart:
-        false,
-
-      title:
-        "SESSION CLOSED",
-
-      detail:
-        "11:00 AM ET reached • No reopening later.",
-
-      className:
-        "closed"
-
-    };
-
-  }
-
-
-  return {
-
-    key:
-      "before",
-
-    canStart:
-      false,
-
-    title:
-      "WAIT — SESSION NOT OPEN",
-
-    detail:
-      "Preliminary monitoring begins at 6:30 AM ET.",
-
-    className:
-      "warn"
-
-  };
-
-}
-
-
-
-/* ========================================
-   MONEY
+   HELPERS
 ======================================== */
 
 function money(
@@ -2485,22 +1364,853 @@ function money(
 
 
 
-/* ========================================
-   DAILY RECORD
-======================================== */
+function getJournal(){
 
-function getTodayRecord(){
+  try{
 
-  return getJournal()[
-    getNyDate()
-  ] || {};
+    return JSON.parse(
+      localStorage.getItem(
+        STORAGE_KEY
+      )
+    ) || {};
+
+  }
+
+  catch{
+
+    return {};
+
+  }
 
 }
 
 
-function getJournalTrades(
-  day
+
+function saveJournal(
+  journal
 ){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(
+      journal
+    )
+  );
+
+}
+
+
+
+function getNyDate(){
+
+  const parts =
+    new Intl.DateTimeFormat(
+      "en-CA",
+      {
+
+        timeZone:
+          "America/New_York",
+
+        year:
+          "numeric",
+
+        month:
+          "2-digit",
+
+        day:
+          "2-digit"
+
+      }
+    )
+    .formatToParts(
+      new Date()
+    );
+
+
+  const data =
+    {};
+
+
+  parts.forEach(
+    part => {
+
+      if(
+        part.type !==
+        "literal"
+      ){
+
+        data[
+          part.type
+        ] =
+          part.value;
+
+      }
+
+    }
+  );
+
+
+  return (
+    data.year +
+    "-" +
+    data.month +
+    "-" +
+    data.day
+  );
+
+}
+
+
+
+function setDirty(){
+
+  dirty =
+    true;
+
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+
+  status.style.color =
+    "";
+
+
+  status.textContent =
+    "Unsaved changes";
+
+
+  status.className =
+    "status dirty";
+
+}
+
+
+
+function clearDirty(
+  message
+){
+
+  dirty =
+    false;
+
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+
+  status.style.color =
+    "";
+
+
+  status.textContent =
+    message;
+
+
+  status.className =
+    "status";
+
+}
+
+
+
+/* ========================================
+   NUMBER PARSING
+======================================== */
+
+function parseNullableNumber(
+  value
+){
+
+  const raw =
+    String(
+      value ?? ""
+    )
+    .trim();
+
+
+  if(
+    raw === ""
+  ){
+
+    return null;
+
+  }
+
+
+  const n =
+    Number(
+      raw
+    );
+
+
+  return Number.isFinite(
+    n
+  )
+    ? n
+    : null;
+
+}
+
+
+
+/* ========================================
+   TRADE CARDS
+======================================== */
+
+function createTrade(
+  i
+){
+
+  const section =
+    document.createElement(
+      "section"
+    );
+
+
+  section.className =
+    "trade";
+
+
+  section.innerHTML = `
+
+    <div class="trade-head">
+
+      <div class="trade-title-wrap">
+
+        <div class="trade-kicker">
+          Attempt ${i}
+        </div>
+
+        <div class="trade-title">
+          Trade ${i}
+        </div>
+
+      </div>
+
+
+      <div
+        id="tradePnl${i}"
+        class="pnl"
+        data-pnl="0"
+      >
+        $0.00
+      </div>
+
+    </div>
+
+
+    <div class="trade-body">
+
+      <div class="grid">
+
+
+        <div class="field">
+
+          <label>
+            Ticker
+          </label>
+
+          <input
+            id="ticker${i}"
+            autocomplete="off"
+            autocapitalize="characters"
+            placeholder="ABCD"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Side
+          </label>
+
+          <select id="side${i}">
+
+            <option value="long">
+              Long
+            </option>
+
+            <option value="short">
+              Short
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Quick / Avg Entry
+          </label>
+
+          <input
+            id="entryPrice${i}"
+            type="number"
+            inputmode="decimal"
+            step="0.0001"
+            placeholder="Optional"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Quick / Avg Exit
+          </label>
+
+          <input
+            id="exitPrice${i}"
+            type="number"
+            inputmode="decimal"
+            step="0.0001"
+            placeholder="Optional"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Total Shares
+          </label>
+
+          <input
+            id="shares${i}"
+            type="number"
+            inputmode="numeric"
+            step="1"
+            placeholder="Optional"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Total Trade Fees
+          </label>
+
+          <input
+            id="fees${i}"
+            type="number"
+            inputmode="decimal"
+            min="0"
+            step="0.01"
+            placeholder="Reconcile later"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="calcText${i}"
+        class="calculation"
+      >
+        Quick estimate only • Gross: — • Fees: $0.00 • Calculated Net: —
+      </div>
+
+
+      <div class="setup-field">
+
+        <div class="field">
+
+          <label>
+            Setup Traded / Reason Trade Taken
+          </label>
+
+          <input
+            id="setupReason${i}"
+            class="setup-input"
+            type="text"
+            autocomplete="off"
+            maxlength="180"
+            placeholder="One sentence — what setup did you trade and why?"
+          >
+
+          <div class="setup-help">
+            Keep this to one sentence. Record the setup and the reason the trade was taken.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  tradeContainer.appendChild(
+    section
+  );
+
+
+  section
+    .querySelectorAll(
+      "input,select"
+    )
+    .forEach(
+      el => {
+
+        el.addEventListener(
+          "input",
+          setDirty
+        );
+
+
+        el.addEventListener(
+          "change",
+          setDirty
+        );
+
+      }
+    );
+
+
+  [
+    "side",
+    "entryPrice",
+    "exitPrice",
+    "shares",
+    "fees"
+  ]
+  .forEach(
+    field => {
+
+      const el =
+        document.getElementById(
+          field + i
+        );
+
+
+      el.addEventListener(
+        "input",
+        () =>
+          calculateTrade(
+            i
+          )
+      );
+
+
+      el.addEventListener(
+        "change",
+        () =>
+          calculateTrade(
+            i
+          )
+      );
+
+    }
+  );
+
+
+  document.getElementById(
+    "ticker" + i
+  )
+  .addEventListener(
+    "input",
+    updateTradeCount
+  );
+
+
+  document.getElementById(
+    "setupReason" + i
+  )
+  .addEventListener(
+    "input",
+    updateTradeCount
+  );
+
+}
+
+
+
+for(
+  let i = 1;
+  i <= MAX_ATTEMPTS;
+  i++
+){
+
+  createTrade(
+    i
+  );
+
+}
+
+
+
+/* ========================================
+   P&L CALCULATION
+======================================== */
+
+function hasTradeEconomics(
+  i
+){
+
+  const entry =
+    parseNullableNumber(
+      document.getElementById(
+        "entryPrice" + i
+      ).value
+    );
+
+
+  const exit =
+    parseNullableNumber(
+      document.getElementById(
+        "exitPrice" + i
+      ).value
+    );
+
+
+  const shares =
+    parseNullableNumber(
+      document.getElementById(
+        "shares" + i
+      ).value
+    );
+
+
+  return (
+    entry !== null &&
+    exit !== null &&
+    shares !== null &&
+    shares > 0
+  );
+
+}
+
+
+
+function grossPnl(
+  i
+){
+
+  if(
+    !hasTradeEconomics(
+      i
+    )
+  ){
+
+    return null;
+
+  }
+
+
+  const entry =
+    Number(
+      document.getElementById(
+        "entryPrice" + i
+      ).value
+    );
+
+
+  const exit =
+    Number(
+      document.getElementById(
+        "exitPrice" + i
+      ).value
+    );
+
+
+  const shares =
+    Number(
+      document.getElementById(
+        "shares" + i
+      ).value
+    );
+
+
+  const side =
+    document.getElementById(
+      "side" + i
+    ).value;
+
+
+  return (
+
+    side ===
+      "long"
+
+      ? (
+          exit -
+          entry
+        ) *
+        shares
+
+      : (
+          entry -
+          exit
+        ) *
+        shares
+
+  );
+
+}
+
+
+
+function tradeFees(
+  i
+){
+
+  const raw =
+    parseNullableNumber(
+      document.getElementById(
+        "fees" + i
+      ).value
+    );
+
+
+  if(
+    raw === null
+  ){
+
+    return 0;
+
+  }
+
+
+  return Math.max(
+    0,
+    raw
+  );
+
+}
+
+
+
+function calculatedNet(
+  i
+){
+
+  const gross =
+    grossPnl(
+      i
+    );
+
+
+  if(
+    gross === null
+  ){
+
+    return null;
+
+  }
+
+
+  return (
+    gross -
+    tradeFees(
+      i
+    )
+  );
+
+}
+
+
+
+function calculateTrade(
+  i
+){
+
+  const gross =
+    grossPnl(
+      i
+    );
+
+
+  const fees =
+    tradeFees(
+      i
+    );
+
+
+  const net =
+    calculatedNet(
+      i
+    );
+
+
+  document.getElementById(
+    "calcText" + i
+  ).textContent =
+
+    gross === null
+
+      ? (
+          "Quick estimate only • Gross: — • Fees: " +
+          money(
+            -fees
+          ) +
+          " • Calculated Net: —"
+        )
+
+      : (
+          "Quick estimate only • Gross: " +
+          money(
+            gross
+          ) +
+          " • Fees: " +
+          money(
+            -fees
+          ) +
+          " • Calculated Net: " +
+          money(
+            net
+          )
+        );
+
+
+  const used =
+    net !== null
+      ? net
+      : 0;
+
+
+  const display =
+    document.getElementById(
+      "tradePnl" + i
+    );
+
+
+  display.dataset.pnl =
+    String(
+      used
+    );
+
+
+  display.textContent =
+    money(
+      used
+    );
+
+
+  display.className =
+    "pnl " +
+    (
+      used >= 0
+        ? "green"
+        : "red"
+    );
+
+
+  calculateDailyTotal();
+
+}
+
+
+
+function calculateDailyTotal(){
+
+  let total =
+    0;
+
+
+  for(
+    let i = 1;
+    i <= MAX_ATTEMPTS;
+    i++
+  ){
+
+    total +=
+      Number(
+        document.getElementById(
+          "tradePnl" + i
+        ).dataset.pnl || 0
+      );
+
+  }
+
+
+  const daily =
+    document.getElementById(
+      "dailyTotal"
+    );
+
+
+  const top =
+    document.getElementById(
+      "topDailyTotal"
+    );
+
+
+  const formatted =
+    money(
+      total
+    );
+
+
+  daily.textContent =
+    formatted;
+
+
+  top.textContent =
+    formatted;
+
+
+  daily.className =
+    "total " +
+    (
+      total >= 0
+        ? "green"
+        : "red"
+    );
+
+
+  top.className =
+    "summary-value " +
+    (
+      total >= 0
+        ? "green"
+        : "red"
+    );
+
+
+  daily.dataset.pnl =
+    String(
+      total
+    );
+
+
+  updateTradeCount();
+
+
+  return total;
+
+}
+
+
+
+/* ========================================
+   TRADE DATA
+======================================== */
+
+function getExistingTrade(
+  date,
+  i
+){
+
+  const day =
+    getJournal()[
+      date
+    ];
+
 
   if(
     !Array.isArray(
@@ -2508,191 +2218,356 @@ function getJournalTrades(
     )
   ){
 
-    return [];
+    return {};
 
   }
 
 
-  return day.trades
-    .slice(
-      0,
-      MAX_ATTEMPTS
-    );
+  return day.trades[
+    i - 1
+  ] || {};
 
 }
 
 
-function getJournalAttemptCount(
-  day
+
+function tradeData(
+  i,
+  existingTrade = {}
 ){
 
-  return Math.min(
-    MAX_ATTEMPTS,
-    getJournalTrades(
-      day
-    ).length
-  );
-
-}
-
-
-function getJournalRealisedPnl(
-  day
-){
-
-  if(
-    typeof day?.totalNet ===
-      "number" &&
-    Number.isFinite(
-      day.totalNet
-    )
-  ){
-
-    return Number(
-      day.totalNet
-    );
-
-  }
-
-
-  const trades =
-    getJournalTrades(
-      day
+  const gross =
+    grossPnl(
+      i
     );
 
 
-  return trades.reduce(
-    (
-      total,
-      trade
-    ) => {
-
-      return (
-        total +
-        Number(
-          trade?.netPnl ||
-          0
-        )
-      );
-
-    },
-    0
-  );
-
-}
-
-
-function getLiveState(){
-
-  const day =
-    getTodayRecord();
-
-
-  const stored =
-    day.liveRisk ||
-    {};
-
-
-  /*
-    IMPORTANT:
-    Journal is authoritative for:
-      1. completed attempts
-      2. realised P&L
-
-    Live Risk only stores behavioural / sticky risk state.
-  */
-
-  const journalAttempt =
-    getJournalAttemptCount(
-      day
+  const fees =
+    tradeFees(
+      i
     );
 
 
-  const journalPnl =
-    getJournalRealisedPnl(
-      day
+  const calc =
+    gross !== null
+      ? gross - fees
+      : null;
+
+
+  const entryPrice =
+    parseNullableNumber(
+      document.getElementById(
+        "entryPrice" + i
+      ).value
+    );
+
+
+  const exitPrice =
+    parseNullableNumber(
+      document.getElementById(
+        "exitPrice" + i
+      ).value
+    );
+
+
+  const shares =
+    parseNullableNumber(
+      document.getElementById(
+        "shares" + i
+      ).value
     );
 
 
   return {
 
-    attempt:
-      journalAttempt,
+    ...existingTrade,
 
-    realisedPnl:
-      journalPnl,
+    ticker:
+      document
+        .getElementById(
+          "ticker" + i
+        )
+        .value
+        .trim()
+        .toUpperCase(),
 
-    warningReached:
-      !!stored.warningReached,
+    side:
+      document.getElementById(
+        "side" + i
+      ).value,
 
-    hardStopReached:
-      !!stored.hardStopReached,
+    entryPrice:
+      entryPrice ?? 0,
 
-    maxAttemptReached:
-      Math.max(
-        Number(
-          stored.maxAttemptReached ||
-          0
-        ),
-        journalAttempt
-      ),
+    exitPrice:
+      exitPrice ?? 0,
 
-    sessionEnded:
-      !!stored.sessionEnded,
+    shares:
+      shares ?? 0,
 
-    lossWarning:
-      stored.lossWarning ||
-      null,
+    fees,
 
-    behaviouralLock:
-      stored.behaviouralLock ||
-      {
+    grossPnl:
+      gross ?? 0,
 
-        active:
-          false,
+    calculatedNet:
+      calc,
 
-        until:
-          null,
+    netPnl:
+      calc !== null
+        ? calc
+        : 0,
 
-        resetGateRequired:
-          false
-
-      },
-
-    timer:
-      null
+    setupReason:
+      document
+        .getElementById(
+          "setupReason" + i
+        )
+        .value
+        .trim()
 
   };
 
 }
 
 
-function saveLiveState(
-  live
+
+function isTradeUsed(
+  trade
 ){
+
+  return Boolean(
+
+    trade.ticker ||
+
+    trade.entryPrice ||
+
+    trade.exitPrice ||
+
+    trade.shares ||
+
+    trade.setupReason
+
+  );
+
+}
+
+
+
+function updateTradeCount(){
+
+  const date =
+    document.getElementById(
+      "tradeDate"
+    ).value;
+
+
+  let count =
+    0;
+
+
+  for(
+    let i = 1;
+    i <= MAX_ATTEMPTS;
+    i++
+  ){
+
+    if(
+      isTradeUsed(
+        tradeData(
+          i,
+          getExistingTrade(
+            date,
+            i
+          )
+        )
+      )
+    ){
+
+      count++;
+
+    }
+
+  }
+
+
+  document.getElementById(
+    "tradeCount"
+  ).textContent =
+    count;
+
+}
+
+
+
+/* ========================================
+   SAVE DAY
+======================================== */
+
+function saveDay(){
+
+  const date =
+    document.getElementById(
+      "tradeDate"
+    ).value;
+
+
+  if(
+    !date
+  ){
+
+    alert(
+      "Choose a trading date first."
+    );
+
+    return;
+
+  }
+
 
   const journal =
     getJournal();
 
 
-  const date =
-    getNyDate();
-
-
   const existing =
     journal[
       date
-    ] || {
-      date
-    };
+    ] || {};
+
+
+  const previousTrades =
+    Array.isArray(
+      existing.trades
+    )
+      ? existing.trades
+      : [];
+
+
+  const trades =
+    [];
+
+
+  for(
+    let i = 1;
+    i <= MAX_ATTEMPTS;
+    i++
+  ){
+
+    const trade =
+      tradeData(
+        i,
+        previousTrades[
+          i - 1
+        ] || {}
+      );
+
+
+    if(
+      isTradeUsed(
+        trade
+      )
+    ){
+
+      trades.push(
+        trade
+      );
+
+    }
+
+  }
+
+
+  const total =
+    trades.reduce(
+      (
+        sum,
+        trade
+      ) =>
+        sum +
+        Number(
+          trade.netPnl ||
+          0
+        ),
+      0
+    );
+
+
+  const now =
+    new Date()
+      .toISOString();
+
+
+  const attempt =
+    Math.min(
+      MAX_ATTEMPTS,
+      trades.length
+    );
+
+
+  const previousLive =
+    existing.liveRisk ||
+    {};
 
 
   /*
-    Attempts and P&L are deliberately NOT
-    manually changed here.
+    JOURNAL IS THE SOURCE OF TRUTH
 
-    They are derived from the Journal.
+    attempt     = number of saved Journal trades
+    realisedPnl = sum of those saved trades
+
+    Behavioural / cooldown state is preserved
+    from Live Risk.
   */
+
+  const warningReached =
+    !!previousLive.warningReached ||
+    total <=
+      WARNING_LEVEL;
+
+
+  const hardStopReached =
+    !!previousLive.hardStopReached ||
+    total <=
+      HARD_STOP;
+
+
+  const sessionEnded =
+    !!previousLive.sessionEnded ||
+    attempt >=
+      MAX_ATTEMPTS ||
+    total <=
+      HARD_STOP;
+
+
+  const syncedLive = {
+
+    ...previousLive,
+
+    attempt,
+
+    realisedPnl:
+      total,
+
+    maxAttemptReached:
+      Math.max(
+        Number(
+          previousLive.maxAttemptReached ||
+          0
+        ),
+        attempt
+      ),
+
+    warningReached,
+
+    hardStopReached,
+
+    sessionEnded,
+
+    updatedAt:
+      now
+
+  };
+
 
   journal[
     date
@@ -2702,46 +2577,31 @@ function saveLiveState(
 
     date,
 
-    liveRisk:{
+    startValue:
+      Number(
+        document.getElementById(
+          "startValue"
+        ).value || 0
+      ),
 
-      ...existing.liveRisk,
+    trades,
 
-      attempt:
-        live.attempt,
+    totalNet:
+      total,
 
-      realisedPnl:
-        live.realisedPnl,
+    notes:
+      document.getElementById(
+        "dailyNotes"
+      ).value,
 
-      warningReached:
-        live.warningReached,
+    liveRisk:
+      syncedLive,
 
-      hardStopReached:
-        live.hardStopReached,
-
-      maxAttemptReached:
-        live.maxAttemptReached,
-
-      sessionEnded:
-        live.sessionEnded,
-
-      lossWarning:
-        live.lossWarning,
-
-      behaviouralLock:
-        live.behaviouralLock,
-
-      timer:
-        null,
-
-      updatedAt:
-        new Date()
-          .toISOString()
-
-    },
+    journalSavedAt:
+      now,
 
     lastUpdated:
-      new Date()
-        .toISOString()
+      now
 
   };
 
@@ -2750,777 +2610,314 @@ function saveLiveState(
     journal
   );
 
-}
 
-
-
-/* ========================================
-   JOURNAL SYNC
-======================================== */
-
-function syncFromJournal(){
-
-  const day =
-    getTodayRecord();
-
-
-  /*
-    No journal save means there is nothing
-    authoritative to sync yet.
-  */
-
-  if(
-    !day.journalSavedAt
-  ){
-
-    return;
-
-  }
-
-
-  const attempt =
-    getJournalAttemptCount(
-      day
-    );
-
-
-  const pnl =
-    getJournalRealisedPnl(
-      day
-    );
-
-
-  const live =
-    getLiveState();
-
-
-  live.attempt =
-    attempt;
-
-
-  live.realisedPnl =
-    pnl;
-
-
-  live.maxAttemptReached =
-    Math.max(
-      Number(
-        live.maxAttemptReached ||
-        0
-      ),
-      attempt
-    );
-
-
-  triggerLossCooldown(
-    live
-  );
-
-
-  evaluateStickyRules(
-    live
-  );
-
-
-  saveLiveState(
-    live
-  );
-
-}
-
-
-
-/* ========================================
-   STICKY RULES
-======================================== */
-
-function evaluateStickyRules(
-  live
-){
-
-  if(
-    live.realisedPnl <=
-    WARNING_LEVEL
-  ){
-
-    live.warningReached =
-      true;
-
-  }
-
-
-  if(
-    live.realisedPnl <=
-    HARD_STOP
-  ){
-
-    live.hardStopReached =
-      true;
-
-    live.sessionEnded =
-      true;
-
-  }
-
-
-  if(
-    live.attempt >=
-    MAX_ATTEMPTS
-  ){
-
-    live.sessionEnded =
-      true;
-
-  }
-
-
-  live.maxAttemptReached =
-    Math.max(
-      Number(
-        live.maxAttemptReached ||
-        0
-      ),
-      Number(
-        live.attempt ||
-        0
-      )
-    );
-
-
-  return live;
-
-}
-
-
-
-/* ========================================
-   LOSS WARNING
-======================================== */
-
-function triggerLossCooldown(
-  live
-){
-
-  const warning =
-    live.lossWarning;
-
-
-  if(
-    live.realisedPnl >
-    WARNING_LEVEL
-  ){
-
-    return live;
-
-  }
-
-
-  if(
-    warning?.triggered
-  ){
-
-    return live;
-
-  }
-
-
-  live.lossWarning = {
-
-    triggered:
-      true,
-
-    active:
-      true,
-
-    startedAt:
-      Date.now(),
-
-    until:
-      Date.now() +
-      COOLDOWN_MS
-
-  };
-
-
-  live.warningReached =
-    true;
-
-
-  return live;
-
-}
-
-
-function updateLossCooldown(
-  live
-){
-
-  if(
-    !live.lossWarning?.active
-  ){
-
-    return live;
-
-  }
-
-
-  if(
-    Date.now() >=
-    Number(
-      live.lossWarning.until ||
-      0
-    )
-  ){
-
-    live.lossWarning = {
-
-      ...live.lossWarning,
-
-      active:
-        false
-
-    };
-
-  }
-
-
-  return live;
-
-}
-
-
-
-/* ========================================
-   BEHAVIOURAL LOCK
-======================================== */
-
-function activateBehaviouralLock(){
-
-  const live =
-    getLiveState();
-
-
-  live.behaviouralLock = {
-
-    active:
-      true,
-
-    startedAt:
-      Date.now(),
-
-    until:
-      Date.now() +
-      COOLDOWN_MS,
-
-    resetGateRequired:
-      false
-
-  };
-
-
-  saveLiveState(
-    live
-  );
-
-
-  render();
-
-}
-
-
-function updateBehaviouralLock(
-  live
-){
-
-  if(
-    live.behaviouralLock?.active &&
-    Date.now() >=
-      Number(
-        live.behaviouralLock.until ||
-        0
-      )
-  ){
-
-    live.behaviouralLock = {
-
-      ...live.behaviouralLock,
-
-      active:
-        false,
-
-      resetGateRequired:
-        true
-
-    };
-
-
-    saveLiveState(
-      live
-    );
-
-  }
-
-
-  return live;
-
-}
-
-
-function clearBehaviouralLock(){
-
-  const live =
-    getLiveState();
-
-
-  live.behaviouralLock = {
-
-    active:
-      false,
-
-    until:
-      null,
-
-    resetGateRequired:
-      false,
-
-    clearedAt:
-      Date.now()
-
-  };
-
-
-  saveLiveState(
-    live
-  );
-
-
-  document.getElementById(
-    "behaviourToggle"
-  ).checked =
-    false;
-
-
-  document
-    .querySelectorAll(
-      '#resetGate input[type="radio"]'
-    )
-    .forEach(
-      radio => {
-
-        radio.checked =
-          false;
-
-      }
-    );
-
-
-  render();
-
-}
-
-
-
-/* ========================================
-   RESET GATE
-======================================== */
-
-function evaluateGate(){
-
-  const names = [
-
-    "gate1",
-    "gate2",
-    "gate3",
-    "gate4",
-    "gate5"
-
-  ];
-
-
-  const answers =
-    names.map(
-      name =>
-        document.querySelector(
-          `input[name="${name}"]:checked`
-        )?.value ||
-        null
-    );
-
-
-  const result =
-    document.getElementById(
-      "gateResult"
-    );
-
-
-  const clearButton =
-    document.getElementById(
-      "clearBehaviourLockBtn"
-    );
-
-
-  if(
-    answers.some(
-      answer =>
-        answer === null
-    )
-  ){
-
-    result.className =
-      "gate-result";
-
-
-    result.textContent =
-      "Complete all five checks.";
-
-
-    clearButton.disabled =
-      true;
-
-
-    return;
-
-  }
-
-
-  if(
-    answers.some(
-      answer =>
-        answer ===
-        "risk"
-    )
-  ){
-
-    result.className =
-      "gate-result stop";
-
-
-    result.textContent =
-      "STOP • behavioural risk is still present.";
-
-
-    clearButton.disabled =
-      true;
-
-
-    return;
-
-  }
-
-
-  result.className =
-    "gate-result safe";
-
-
-  result.textContent =
-    "Reset passed • WASPN can resume if all structural rules still allow it.";
-
-
-  clearButton.disabled =
-    false;
-
-}
-
-
-
-/* ========================================
-   STATUS LOGIC
-======================================== */
-
-function getOperationalStatus(
-  live,
-  clock
-){
-
-  if(
-    live.hardStopReached ||
-    live.realisedPnl <=
-      HARD_STOP
-  ){
-
-    return {
-
-      title:
-        "HARD STOP — SESSION OVER",
-
-      detail:
-        "-$100 realised reached • No further trading today.",
-
-      className:
-        "stop"
-
-    };
-
-  }
-
-
-  if(
-    live.attempt >=
-    MAX_ATTEMPTS
-  ){
-
-    return {
-
-      title:
-        "ATTEMPT 5 — SESSION OVER",
-
-      detail:
-        "Maximum completed attempts reached • No reopening later.",
-
-      className:
-        "stop"
-
-    };
-
-  }
-
-
-  if(
-    clock.key ===
-    "closed"
-  ){
-
-    return {
-
-      title:
-        "SESSION CLOSED",
-
-      detail:
-        "11:00 AM ET reached • No reopening later.",
-
-      className:
-        "closed"
-
-    };
-
-  }
-
-
-  if(
-    clock.key ===
-    "weekend"
-  ){
-
-    return {
-
-      title:
-        "MARKET CLOSED — WEEKEND",
-
-      detail:
-        "No WASPN trading session today.",
-
-      className:
-        "closed"
-
-    };
-
-  }
-
-
-  if(
-    live.behaviouralLock?.active
-  ){
-
-    return {
-
-      title:
-        "BEHAVIOURAL LOCK ACTIVE",
-
-      detail:
-        "New trade starts are blocked during the five-minute circuit breaker.",
-
-      className:
-        "stop"
-
-    };
-
-  }
-
-
-  if(
-    live.behaviouralLock?.resetGateRequired
-  ){
-
-    return {
-
-      title:
-        "RESET GATE REQUIRED",
-
-      detail:
-        "Complete the behavioural reset before another WASPN trade.",
-
-      className:
-        "warn"
-
-    };
-
-  }
-
-
-  if(
-    live.lossWarning?.active
-  ){
-
-    return {
-
-      title:
-        "-$75 WARNING — STEP AWAY",
-
-      detail:
-        "Mandatory five-minute cooldown. Reassess before another trade.",
-
-      className:
-        "warn"
-
-    };
-
-  }
-
-
-  if(
-    live.realisedPnl <=
-    WARNING_LEVEL
-  ){
-
-    return {
-
-      title:
-        "-$75 WARNING ACTIVE",
-
-      detail:
-        "Cooldown complete • reassess quality before another trade.",
-
-      className:
-        "warn"
-
-    };
-
-  }
-
-
-  return clock;
-
-}
-
-
-
-/* ========================================
-   CLOCK DISPLAY
-======================================== */
-
-function renderClocks(){
-
-  const now =
-    new Date();
-
-
-  document.getElementById(
-    "localTime"
-  ).textContent =
-    now.toLocaleTimeString(
-      [],
-      {
-
-        hour:
-          "2-digit",
-
-        minute:
-          "2-digit",
-
-        second:
-          "2-digit"
-
-      }
-    );
-
-
-  document.getElementById(
-    "localZone"
-  ).textContent =
-    Intl.DateTimeFormat()
-      .resolvedOptions()
-      .timeZone ||
-    "Local";
-
-
-  const ny =
-    getNyParts();
-
-
-  document.getElementById(
-    "etTime"
-  ).textContent =
-
-    String(
-      ny.hour
-    )
-    .padStart(
-      2,
-      "0"
-    ) +
-    ":" +
-    String(
-      ny.minute
-    )
-    .padStart(
-      2,
-      "0"
-    ) +
-    ":" +
-    String(
-      ny.second
-    )
-    .padStart(
-      2,
-      "0"
-    );
-
-
-  document.getElementById(
-    "nyDay"
-  ).textContent =
-    ny.weekday +
+  clearDirty(
+    "Saved " +
+    date +
     " • " +
-    getNyDate();
+    attempt +
+    " attempt(s) • " +
+    money(
+      total
+    ) +
+    " • Live Risk synced"
+  );
+
+
+  calculateDailyTotal();
+
+  showExisting();
+
+  renderConnectedState();
 
 }
 
 
 
 /* ========================================
-   CONNECTED RECORD
+   CLEAR / LOAD
 ======================================== */
 
-function renderConnectedRecord(){
+function clearForm(){
+
+  document.getElementById(
+    "startValue"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "dailyNotes"
+  ).value =
+    "";
+
+
+  for(
+    let i = 1;
+    i <= MAX_ATTEMPTS;
+    i++
+  ){
+
+    document.getElementById(
+      "ticker" + i
+    ).value =
+      "";
+
+
+    document.getElementById(
+      "side" + i
+    ).value =
+      "long";
+
+
+    document.getElementById(
+      "entryPrice" + i
+    ).value =
+      "";
+
+
+    document.getElementById(
+      "exitPrice" + i
+    ).value =
+      "";
+
+
+    document.getElementById(
+      "shares" + i
+    ).value =
+      "";
+
+
+    document.getElementById(
+      "fees" + i
+    ).value =
+      "";
+
+
+    document.getElementById(
+      "setupReason" + i
+    ).value =
+      "";
+
+
+    calculateTrade(
+      i
+    );
+
+  }
+
+}
+
+
+
+function loadDay(){
+
+  const date =
+    document.getElementById(
+      "tradeDate"
+    ).value;
+
+
+  if(
+    !date
+  ){
+
+    return;
+
+  }
+
+
+  clearForm();
+
 
   const day =
-    getTodayRecord();
+    getJournal()[
+      date
+    ];
 
 
-  const trades =
+  if(
+    !day
+  ){
+
+    clearDirty(
+      "No saved Journal entry for " +
+      date
+    );
+
+
+    showExisting();
+
+    renderConnectedState();
+
+    return;
+
+  }
+
+
+  document.getElementById(
+    "startValue"
+  ).value =
+    day.startValue ||
+    "";
+
+
+  document.getElementById(
+    "dailyNotes"
+  ).value =
+    day.notes ||
+    "";
+
+
+  (
+    day.trades ||
+    []
+  )
+  .slice(
+    0,
+    MAX_ATTEMPTS
+  )
+  .forEach(
+    (
+      trade,
+      index
+    ) => {
+
+      const i =
+        index +
+        1;
+
+
+      document.getElementById(
+        "ticker" + i
+      ).value =
+        trade.ticker ||
+        "";
+
+
+      document.getElementById(
+        "side" + i
+      ).value =
+        trade.side ||
+        "long";
+
+
+      document.getElementById(
+        "entryPrice" + i
+      ).value =
+        trade.entryPrice ||
+        "";
+
+
+      document.getElementById(
+        "exitPrice" + i
+      ).value =
+        trade.exitPrice ||
+        "";
+
+
+      document.getElementById(
+        "shares" + i
+      ).value =
+        trade.shares ||
+        "";
+
+
+      document.getElementById(
+        "fees" + i
+      ).value =
+        trade.fees !==
+          undefined &&
+        trade.fees !==
+          null
+
+          ? trade.fees
+
+          : "";
+
+
+      document.getElementById(
+        "setupReason" + i
+      ).value =
+        trade.setupReason ||
+        "";
+
+
+      calculateTrade(
+        i
+      );
+
+    }
+  );
+
+
+  clearDirty(
+    "Loaded " +
+    date
+  );
+
+
+  showExisting();
+
+  renderConnectedState();
+
+}
+
+
+
+/* ========================================
+   CONNECTED STATE
+======================================== */
+
+function showExisting(){
+
+  const date =
+    document.getElementById(
+      "tradeDate"
+    ).value;
+
+
+  const box =
+    document.getElementById(
+      "existing"
+    );
+
+
+  const day =
+    getJournal()[
+      date
+    ];
+
+
+  if(
+    !day
+  ){
+
+    box.style.display =
+      "none";
+
+
+    return;
+
+  }
+
+
+  const parts =
+    [];
+
+
+  if(
     Array.isArray(
       day.trades
     )
-      ? day.trades.length
-      : null;
+  ){
 
-
-  const journalTrades =
-    document.getElementById(
-      "journalTrades"
+    parts.push(
+      day.trades.length +
+      " saved attempt(s)"
     );
 
-
-  journalTrades.textContent =
-    trades !== null
-      ? trades
-      : "—";
-
-
-  const journalNet =
-    document.getElementById(
-      "journalNet"
-    );
+  }
 
 
   if(
@@ -3528,277 +2925,214 @@ function renderConnectedRecord(){
       "number"
   ){
 
-    journalNet.textContent =
+    parts.push(
+      "Net " +
       money(
         day.totalNet
-      );
+      )
+    );
+
+  }
 
 
-    journalNet.className =
-      "summary-value " +
+  if(
+    day.compliance
+  ){
+
+    parts.push(
+
+      "Compliance " +
+
       (
-        day.totalNet > 0
-          ? "green"
-          : day.totalNet < 0
-            ? "red"
-            : ""
-      );
+        typeof day.compliance.score ===
+          "number"
+
+          ? day.compliance.score +
+            "/3"
+
+          : "saved"
+      )
+
+    );
+
+  }
+
+
+  if(
+    day.sessionScore
+  ){
+
+    parts.push(
+      "Process Score " +
+      day.sessionScore.score +
+      "/5"
+    );
+
+  }
+
+
+  box.textContent =
+    "Connected record • " +
+    (
+      parts.length
+        ? parts.join(
+            " • "
+          )
+        : "daily record exists"
+    );
+
+
+  box.style.display =
+    "block";
+
+}
+
+
+
+function renderConnectedState(){
+
+  const date =
+    document.getElementById(
+      "tradeDate"
+    ).value;
+
+
+  const day =
+    getJournal()[
+      date
+    ] || {};
+
+
+  const savedTrades =
+    Array.isArray(
+      day.trades
+    )
+      ? Math.min(
+          MAX_ATTEMPTS,
+          day.trades.length
+        )
+      : 0;
+
+
+  const savedPnl =
+    typeof day.totalNet ===
+      "number"
+      ? day.totalNet
+      : 0;
+
+
+  const live =
+    day.liveRisk ||
+    {};
+
+
+  const liveAttempt =
+    document.getElementById(
+      "liveAttempt"
+    );
+
+
+  const riskState =
+    document.getElementById(
+      "riskState"
+    );
+
+
+  /*
+    Display the authoritative Journal count,
+    not a manually maintained Live Risk count.
+  */
+
+  liveAttempt.textContent =
+    savedTrades +
+    "/5";
+
+
+  const behaviouralRisk =
+    !!live.tilt ||
+    !!live.behaviouralLock?.active ||
+    !!live.behaviouralLock?.resetGateRequired;
+
+
+  const lossCooldown =
+    !!live.lossWarning?.active;
+
+
+  if(
+    savedTrades >=
+      MAX_ATTEMPTS ||
+    savedPnl <=
+      HARD_STOP ||
+    live.hardStopReached
+  ){
+
+    riskState.textContent =
+      "LOCKED";
+
+
+    riskState.className =
+      "summary-value red";
+
+  }
+
+  else if(
+    behaviouralRisk ||
+    lossCooldown ||
+    savedPnl <=
+      WARNING_LEVEL
+  ){
+
+    riskState.textContent =
+      "WARNING";
+
+
+    riskState.className =
+      "summary-value amber";
+
+  }
+
+  else if(
+    day.journalSavedAt
+  ){
+
+    riskState.textContent =
+      "ACTIVE";
+
+
+    riskState.className =
+      "summary-value green";
 
   }
 
   else{
 
-    journalNet.textContent =
+    riskState.textContent =
       "—";
 
 
-    journalNet.className =
+    riskState.className =
       "summary-value";
 
   }
 
-
-  document.getElementById(
-    "complianceSummary"
-  ).textContent =
-    typeof day.compliance?.score ===
-      "number"
-      ? day.compliance.score +
-        "/3"
-      : "—";
-
-
-  document.getElementById(
-    "processSummary"
-  ).textContent =
-    typeof day.sessionScore?.score ===
-      "number"
-      ? day.sessionScore.score +
-        "/5"
-      : "—";
-
-
-  document.getElementById(
-    "recordState"
-  ).textContent =
-    day.journalSavedAt
-      ? "SYNCED"
-      : day.liveRisk
-        ? "LOCAL"
-        : "NO JOURNAL";
-
 }
 
 
 
 /* ========================================
-   RENDER
+   DELETE DAY
 ======================================== */
 
-function render(){
+function deleteDay(){
 
-  syncFromJournal();
-
-
-  let live =
-    getLiveState();
-
-
-  live =
-    updateLossCooldown(
-      live
-    );
-
-
-  live =
-    updateBehaviouralLock(
-      live
-    );
-
-
-  evaluateStickyRules(
-    live
-  );
-
-
-  saveLiveState(
-    live
-  );
-
-
-  const clock =
-    getSessionClockState();
-
-
-  const operational =
-    getOperationalStatus(
-      live,
-      clock
-    );
-
-
-  const status =
+  const date =
     document.getElementById(
-      "status"
-    );
-
-
-  status.className =
-    "status " +
-    operational.className;
-
-
-  document.getElementById(
-    "statusTitle"
-  ).textContent =
-    operational.title;
-
-
-  document.getElementById(
-    "statusDetail"
-  ).textContent =
-    operational.detail;
-
-
-  document.getElementById(
-    "attempt"
-  ).textContent =
-    live.attempt;
-
-
-  const pnlDisplay =
-    document.getElementById(
-      "pnlDisplay"
-    );
-
-
-  pnlDisplay.textContent =
-    money(
-      live.realisedPnl
-    );
-
-
-  pnlDisplay.className =
-    "metric-value " +
-    (
-      live.realisedPnl > 0
-        ? "green"
-        : live.realisedPnl < 0
-          ? "red"
-          : ""
-    );
-
-
-  const behaviourToggle =
-    document.getElementById(
-      "behaviourToggle"
-    );
-
-
-  behaviourToggle.checked =
-    !!live.behaviouralLock?.active ||
-    !!live.behaviouralLock?.resetGateRequired;
-
-
-  const behaviourPanel =
-    document.getElementById(
-      "behaviourLockPanel"
-    );
-
-
-  const resetGate =
-    document.getElementById(
-      "resetGate"
-    );
-
-
-  behaviourPanel.classList.toggle(
-    "active",
-    !!live.behaviouralLock?.active
-  );
-
-
-  resetGate.classList.toggle(
-    "active",
-    !!live.behaviouralLock?.resetGateRequired
-  );
+      "tradeDate"
+    ).value;
 
 
   if(
-    live.behaviouralLock?.active
-  ){
-
-    const remaining =
-      Math.max(
-        0,
-        Number(
-          live.behaviouralLock.until ||
-          0
-        ) -
-        Date.now()
-      );
-
-
-    const seconds =
-      Math.ceil(
-        remaining /
-        1000
-      );
-
-
-    const mins =
-      Math.floor(
-        seconds /
-        60
-      );
-
-
-    const secs =
-      seconds %
-      60;
-
-
-    document.getElementById(
-      "behaviourCountdown"
-    ).textContent =
-
-      String(
-        mins
-      )
-      .padStart(
-        2,
-        "0"
-      ) +
-      ":" +
-      String(
-        secs
-      )
-      .padStart(
-        2,
-        "0"
-      );
-
-  }
-
-
-  renderClocks();
-
-  renderConnectedRecord();
-
-}
-
-
-
-/* ========================================
-   RESET
-======================================== */
-
-function resetBehaviouralControls(){
-
-  if(
-    !confirm(
-      "Reset today's behavioural lock and cooldown state? Journal trades and realised P&L will NOT be changed."
-    )
+    !date
   ){
 
     return;
@@ -3810,102 +3144,37 @@ function resetBehaviouralControls(){
     getJournal();
 
 
-  const date =
-    getNyDate();
-
-
-  const existing =
-    journal[
+  if(
+    !journal[
       date
-    ] || {
-      date
-    };
+    ]
+  ){
 
-
-  const attempt =
-    getJournalAttemptCount(
-      existing
+    alert(
+      "No saved record exists for this date."
     );
 
+    return;
 
-  const pnl =
-    getJournalRealisedPnl(
-      existing
-    );
+  }
 
 
-  /*
-    Journal-derived attempts and P&L remain intact.
-    Structural hard-stop state is rebuilt from them.
-  */
+  if(
+    !confirm(
+      "Delete the ENTIRE WASPN record for " +
+      date +
+      "? This removes Journal, Live Risk, Compliance and Process Score."
+    )
+  ){
 
-  existing.liveRisk = {
+    return;
 
-    ...existing.liveRisk,
-
-    attempt,
-
-    realisedPnl:
-      pnl,
-
-    maxAttemptReached:
-      Math.max(
-        Number(
-          existing.liveRisk?.maxAttemptReached ||
-          0
-        ),
-        attempt
-      ),
-
-    warningReached:
-      pnl <=
-      WARNING_LEVEL,
-
-    hardStopReached:
-      pnl <=
-      HARD_STOP,
-
-    sessionEnded:
-      attempt >=
-        MAX_ATTEMPTS ||
-      pnl <=
-        HARD_STOP,
-
-    lossWarning:
-      null,
-
-    behaviouralLock:{
-
-      active:
-        false,
-
-      until:
-        null,
-
-      resetGateRequired:
-        false
-
-    },
-
-    timer:
-      null,
-
-    updatedAt:
-      new Date()
-        .toISOString()
-
-  };
+  }
 
 
-  existing.lastUpdated =
-    new Date()
-      .toISOString();
-
-
-  journal[
+  delete journal[
     date
-  ] =
-    existing;
+  ];
 
 
   saveJournal(
@@ -3913,21 +3182,38 @@ function resetBehaviouralControls(){
   );
 
 
-  document
-    .querySelectorAll(
-      '#resetGate input[type="radio"]'
-    )
-    .forEach(
-      radio => {
-
-        radio.checked =
-          false;
-
-      }
-    );
+  clearForm();
 
 
-  render();
+  clearDirty(
+    "Entire daily record deleted."
+  );
+
+
+  document.getElementById(
+    "status"
+  ).style.color =
+    "var(--red)";
+
+
+  showExisting();
+
+  renderConnectedState();
+
+}
+
+
+
+/* ========================================
+   INITIAL DATE
+======================================== */
+
+function setToday(){
+
+  document.getElementById(
+    "tradeDate"
+  ).value =
+    getNyDate();
 
 }
 
@@ -3938,17 +3224,116 @@ function resetBehaviouralControls(){
 ======================================== */
 
 document.getElementById(
-  "behaviourToggle"
+  "saveBtn"
+)
+.addEventListener(
+  "click",
+  saveDay
+);
+
+
+
+document.getElementById(
+  "loadBtn"
+)
+.addEventListener(
+  "click",
+  loadDay
+);
+
+
+
+document.getElementById(
+  "deleteBtn"
+)
+.addEventListener(
+  "click",
+  deleteDay
+);
+
+
+
+document.getElementById(
+  "tradeDate"
 )
 .addEventListener(
   "change",
+  loadDay
+);
+
+
+
+document.getElementById(
+  "startValue"
+)
+.addEventListener(
+  "input",
+  setDirty
+);
+
+
+
+document.getElementById(
+  "dailyNotes"
+)
+.addEventListener(
+  "input",
+  setDirty
+);
+
+
+
+window.addEventListener(
+  "storage",
+  () => {
+
+    showExisting();
+
+    renderConnectedState();
+
+  }
+);
+
+
+
+window.addEventListener(
+  "focus",
+  () => {
+
+    showExisting();
+
+    renderConnectedState();
+
+  }
+);
+
+
+
+window.addEventListener(
+  "pageshow",
+  () => {
+
+    showExisting();
+
+    renderConnectedState();
+
+  }
+);
+
+
+
+window.addEventListener(
+  "beforeunload",
   event => {
 
     if(
-      event.target.checked
+      dirty
     ){
 
-      activateBehaviouralLock();
+      event.preventDefault();
+
+      event.returnValue =
+        "";
 
     }
 
@@ -3956,74 +3341,25 @@ document.getElementById(
 );
 
 
-document
-  .querySelectorAll(
-    '#resetGate input[type="radio"]'
-  )
-  .forEach(
-    radio => {
-
-      radio.addEventListener(
-        "change",
-        evaluateGate
-      );
-
-    }
-  );
-
-
-document.getElementById(
-  "clearBehaviourLockBtn"
-)
-.addEventListener(
-  "click",
-  clearBehaviouralLock
-);
-
-
-document.getElementById(
-  "resetBtn"
-)
-.addEventListener(
-  "click",
-  resetBehaviouralControls
-);
-
-
-window.addEventListener(
-  "storage",
-  render
-);
-
-
-window.addEventListener(
-  "focus",
-  render
-);
-
-
-window.addEventListener(
-  "pageshow",
-  render
-);
-
 
 /* ========================================
    START
 ======================================== */
 
-render();
+setToday();
 
+loadDay();
 
-setInterval(
-  render,
-  1000
-);
+calculateDailyTotal();
+
+showExisting();
+
+renderConnectedState();
+
 
 </script>
 
 <script src="workflow-nav.js?v=3"></script>
 
 </body>
-
 </html>
