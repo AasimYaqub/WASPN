@@ -21,13 +21,10 @@
 <style>
 
 :root{
-
   --bg:#070b10;
-
   --panel:#10171f;
   --panel2:#151e28;
   --panel3:#0b1117;
-
   --border:#273442;
 
   --text:#edf4fb;
@@ -42,7 +39,6 @@
   --shadow:
     0 18px 50px
     rgba(0,0,0,.26);
-
 }
 
 
@@ -52,28 +48,22 @@
 
 
 html{
-
   -webkit-text-size-adjust:100%;
-
   scroll-behavior:smooth;
-
 }
 
 
 body{
 
   margin:0;
-
   min-height:100vh;
 
   background:
-
     radial-gradient(
       circle at 50% -10%,
       rgba(34,199,255,.08),
       transparent 34%
     ),
-
     linear-gradient(
       180deg,
       #080d12,
@@ -95,43 +85,33 @@ body{
 
 button,
 input{
-
   font:inherit;
-
 }
 
 
 button{
-
   touch-action:manipulation;
-
 }
 
 
 button,
 a{
-
-  -webkit-tap-highlight-color:
-    transparent;
-
+  -webkit-tap-highlight-color:transparent;
 }
 
 
 .wrap{
 
   width:100%;
-
   max-width:900px;
 
   margin:0 auto;
 
   padding:
-
     max(
       10px,
       env(safe-area-inset-top)
     )
-
     10px
     20px;
 
@@ -165,7 +145,6 @@ a{
   height:48px;
 
   display:flex;
-
   align-items:center;
   justify-content:center;
 
@@ -195,18 +174,13 @@ a{
 
 
 .icon-btn:active{
-
   transform:scale(.97);
-
 }
 
 
 .product-title{
-
   min-width:0;
-
   text-align:center;
-
 }
 
 
@@ -378,9 +352,7 @@ a{
 
 
 .status.ok::before{
-
   background:var(--green);
-
 }
 
 
@@ -396,9 +368,7 @@ a{
 
 
 .status.warn::before{
-
   background:var(--amber);
-
 }
 
 
@@ -414,9 +384,7 @@ a{
 
 
 .status.stop::before{
-
   background:var(--red);
-
 }
 
 
@@ -432,9 +400,7 @@ a{
 
 
 .status.closed::before{
-
   background:#667685;
-
 }
 
 
@@ -518,7 +484,6 @@ a{
   font-size:9px;
 
   text-overflow:ellipsis;
-
   white-space:nowrap;
 
 }
@@ -619,7 +584,6 @@ a{
   margin-top:8px;
 
   display:flex;
-
   justify-content:center;
 
 }
@@ -628,13 +592,12 @@ a{
 .pnl-input{
 
   width:100%;
+  max-width:174px;
 
-  max-width:154px;
-
-  min-height:46px;
+  min-height:50px;
 
   padding:
-    7px 9px;
+    8px 10px;
 
   border:
     1px solid
@@ -650,15 +613,30 @@ a{
 
   color:white;
 
-  font-size:19px;
+  font-size:18px;
   font-weight:900;
 
 }
 
 
-.pnl-input:focus{
+.pnl-input::placeholder{
+  color:#526171;
+  font-size:11px;
+}
 
+
+.pnl-input:focus{
   border-color:var(--blue);
+}
+
+
+.pnl-help{
+
+  margin-top:5px;
+
+  color:var(--muted2);
+
+  font-size:8px;
 
 }
 
@@ -708,11 +686,8 @@ a{
 
 
 .complete-btn:disabled{
-
   opacity:.3;
-
   cursor:not-allowed;
-
 }
 
 
@@ -872,16 +847,12 @@ a{
 
 
 .timer-prompt.warning{
-
   color:var(--amber);
-
 }
 
 
 .timer-prompt.danger{
-
   color:var(--red);
-
 }
 
 
@@ -921,11 +892,8 @@ a{
 
 
 .timer-btn:disabled{
-
   opacity:.3;
-
   cursor:not-allowed;
-
 }
 
 
@@ -960,8 +928,7 @@ a{
 
   margin-top:8px;
 
-  padding:
-    13px;
+  padding:13px;
 
   background:
     linear-gradient(
@@ -1071,16 +1038,12 @@ a{
 
 
 .switch input:checked + .slider{
-
   background:#8b2939;
-
 }
 
 
 .switch input:checked + .slider::before{
-
   transform:translateX(24px);
-
 }
 
 
@@ -1090,8 +1053,7 @@ a{
 
   margin-top:12px;
 
-  padding:
-    13px;
+  padding:13px;
 
   border:
     1px solid
@@ -1107,9 +1069,7 @@ a{
 
 
 .behaviour-lock-panel.active{
-
   display:block;
-
 }
 
 
@@ -1188,9 +1148,7 @@ a{
 
 
 .reset-gate.active{
-
   display:block;
-
 }
 
 
@@ -1259,9 +1217,7 @@ a{
 
 
 .gate-option{
-
   position:relative;
-
 }
 
 
@@ -1392,11 +1348,8 @@ a{
 
 
 .clear-lock-btn:disabled{
-
   opacity:.25;
-
   cursor:not-allowed;
-
 }
 
 
@@ -1469,7 +1422,7 @@ a{
 
 
 /* ========================================
-   RESEARCH BASIS
+   RESEARCH
 ======================================== */
 
 .research{
@@ -1516,9 +1469,7 @@ a{
 
 
 .research summary::-webkit-details-marker{
-
   display:none;
-
 }
 
 
@@ -1721,7 +1672,7 @@ a{
 
 
 /* ========================================
-   SESSION LOCK RULE
+   RULE REMINDER
 ======================================== */
 
 .rule-reminder{
@@ -1751,9 +1702,7 @@ a{
 
 
 .rule-reminder strong{
-
   color:var(--red);
-
 }
 
 
@@ -1765,26 +1714,20 @@ a{
 @media(min-width:700px){
 
   .wrap{
-
     padding:
       20px 18px 30px;
-
   }
 
 
   .summary{
-
     grid-template-columns:
       repeat(4,1fr);
-
   }
 
 
   .research-grid{
-
     grid-template-columns:
       repeat(4,1fr);
-
   }
 
 }
@@ -1982,13 +1925,18 @@ a{
       <input
         id="pnl"
         class="pnl-input"
-        type="number"
-        inputmode="decimal"
-        step="0.01"
-        value="0"
+        type="text"
+        inputmode="text"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="-25.50 or 40.00"
         aria-label="Realised P and L"
       >
 
+    </div>
+
+    <div class="pnl-help">
+      Enter losses with a minus sign
     </div>
 
   </section>
@@ -2628,7 +2576,6 @@ a{
 
 <script>
 
-
 const STORAGE_KEY =
   "waspnJournalV2";
 
@@ -2659,7 +2606,7 @@ let saveTimer =
 
 
 /* ========================================
-   TRADE TIMER
+   TRADE TIMER STATE
 ======================================== */
 
 let timerRunning =
@@ -2680,7 +2627,7 @@ let timerInterval =
 
 
 /* ========================================
-   BEHAVIOURAL LOCK
+   BEHAVIOURAL LOCK STATE
 ======================================== */
 
 let behaviouralLockActive =
@@ -2701,7 +2648,7 @@ let resetGateRequired =
 
 
 /* ========================================
-   -$75 LOSS WARNING COOLDOWN
+   LOSS WARNING STATE
 ======================================== */
 
 let lossWarningActive =
@@ -2756,6 +2703,101 @@ function saveJournal(
       journal
     )
   );
+
+}
+
+
+
+/* ========================================
+   P&L INPUT
+======================================== */
+
+function parsePnlValue(
+  value
+){
+
+  const cleaned =
+    String(
+      value ?? ""
+    )
+    .trim()
+    .replace(
+      /[−–—]/g,
+      "-"
+    )
+    .replace(
+      /[$£,\s]/g,
+      ""
+    );
+
+
+  if(
+    cleaned === "" ||
+    cleaned === "-" ||
+    cleaned === "." ||
+    cleaned === "-."
+  ){
+
+    return 0;
+
+  }
+
+
+  const number =
+    Number(
+      cleaned
+    );
+
+
+  return Number.isFinite(
+    number
+  )
+    ? number
+    : 0;
+
+}
+
+
+function getPnl(){
+
+  return parsePnlValue(
+    document.getElementById(
+      "pnl"
+    ).value
+  );
+
+}
+
+
+function normalisePnlInput(){
+
+  const input =
+    document.getElementById(
+      "pnl"
+    );
+
+
+  const raw =
+    input.value.trim();
+
+
+  if(
+    raw === ""
+  ){
+
+    input.value =
+      "0.00";
+
+    return;
+
+  }
+
+
+  input.value =
+    getPnl()
+      .toFixed(
+        2
+      );
 
 }
 
@@ -3141,6 +3183,194 @@ function money(
 
 
 /* ========================================
+   JOURNAL → LIVE RISK SYNC
+======================================== */
+
+function getJournalTradeCount(
+  day
+){
+
+  return Array.isArray(
+    day?.trades
+  )
+    ? Math.min(
+        5,
+        day.trades.length
+      )
+    : 0;
+
+}
+
+
+function hasSavedJournalTrades(
+  day
+){
+
+  return Boolean(
+
+    day?.journalSavedAt &&
+
+    getJournalTradeCount(
+      day
+    ) > 0 &&
+
+    typeof day?.totalNet ===
+      "number"
+
+  );
+
+}
+
+
+function journalAttemptFloor(){
+
+  const day =
+    getJournal()[
+      tradingDate()
+    ];
+
+
+  if(
+    !hasSavedJournalTrades(
+      day
+    )
+  ){
+
+    return 0;
+
+  }
+
+
+  return getJournalTradeCount(
+    day
+  );
+
+}
+
+
+function syncFromJournal(
+  saveAfter = false
+){
+
+  const day =
+    getJournal()[
+      tradingDate()
+    ];
+
+
+  if(
+    !hasSavedJournalTrades(
+      day
+    )
+  ){
+
+    renderConnected();
+
+    return false;
+
+  }
+
+
+  const journalTrades =
+    getJournalTradeCount(
+      day
+    );
+
+
+  const journalPnl =
+    Number(
+      day.totalNet
+    );
+
+
+  let changed =
+    false;
+
+
+  const syncedAttempt =
+    Math.max(
+      attempt,
+      journalTrades
+    );
+
+
+  if(
+    syncedAttempt !== attempt
+  ){
+
+    attempt =
+      syncedAttempt;
+
+
+    document.getElementById(
+      "attempt"
+    ).textContent =
+      attempt;
+
+
+    changed =
+      true;
+
+  }
+
+
+  const currentPnl =
+    getPnl();
+
+
+  if(
+    Math.abs(
+      currentPnl -
+      journalPnl
+    ) > 0.0001
+  ){
+
+    document.getElementById(
+      "pnl"
+    ).value =
+      journalPnl.toFixed(
+        2
+      );
+
+
+    changed =
+      true;
+
+  }
+
+
+  if(
+    attempt >= 5
+  ){
+
+    sessionEnded =
+      true;
+
+  }
+
+
+  renderConnected();
+
+
+  if(
+    changed &&
+    saveAfter
+  ){
+
+    update(
+      true
+    );
+
+  }
+
+
+  return changed;
+
+}
+
+
+
+/* ========================================
    TRADE TIMER
 ======================================== */
 
@@ -3152,12 +3382,9 @@ function currentTimerElapsed(){
   ){
 
     return Math.max(
-
       0,
-
       Date.now() -
       timerStartedAt
-
     );
 
   }
@@ -3539,12 +3766,9 @@ function lossWarningRemaining(){
 
 
   return Math.max(
-
     0,
-
     lossWarningEndsAt -
     Date.now()
-
   );
 
 }
@@ -3720,12 +3944,9 @@ function behaviouralRemaining(){
 
 
   return Math.max(
-
     0,
-
     behaviouralLockEndsAt -
     Date.now()
-
   );
 
 }
@@ -4170,11 +4391,7 @@ function saveLiveState(){
 
 
   const pnl =
-    Number(
-      document.getElementById(
-        "pnl"
-      ).value || 0
-    );
+    getPnl();
 
 
   journal[
@@ -4240,14 +4457,11 @@ function saveLiveState(){
 
       maxAttemptReached:
         Math.max(
-
           Number(
             previous.maxAttemptReached ||
             0
           ),
-
           attempt
-
         ),
 
       sessionEnded,
@@ -4359,20 +4573,14 @@ function loadLive(){
 
   attempt =
     Math.max(
-
       0,
-
       Math.min(
-
         5,
-
         Number(
           live?.attempt ||
           0
         )
-
       )
-
     );
 
 
@@ -4392,6 +4600,9 @@ function loadLive(){
     Number(
       live?.realisedPnl ||
       0
+    )
+    .toFixed(
+      2
     );
 
 
@@ -4625,14 +4836,21 @@ function loadLive(){
   }
 
 
+  const synced =
+    syncFromJournal(
+      false
+    );
+
+
   renderTimer();
 
   renderBehaviouralLock();
 
   renderConnected();
 
+
   update(
-    false
+    synced
   );
 
 }
@@ -4678,20 +4896,18 @@ function changeAttempt(
   }
 
 
+  const floor =
+    journalAttemptFloor();
+
+
   attempt =
     Math.max(
-
-      0,
-
+      floor,
       Math.min(
-
         5,
-
         attempt +
         delta
-
       )
-
     );
 
 
@@ -4785,11 +5001,7 @@ function update(
 
 
   const pnl =
-    Number(
-      document.getElementById(
-        "pnl"
-      ).value || 0
-    );
+    getPnl();
 
 
   const pnlDisplay =
@@ -5265,7 +5477,7 @@ function resetToday(){
   document.getElementById(
     "pnl"
   ).value =
-    "0";
+    "0.00";
 
 
   document.getElementById(
@@ -5404,6 +5616,39 @@ function resetToday(){
 
 
 /* ========================================
+   REFRESH FROM JOURNAL
+======================================== */
+
+function refreshFromJournal(){
+
+  if(
+    loadedDate !==
+    tradingDate()
+  ){
+
+    loadLive();
+
+    return;
+
+  }
+
+
+  syncFromJournal(
+    true
+  );
+
+
+  renderConnected();
+
+  update(
+    false
+  );
+
+}
+
+
+
+/* ========================================
    EVENTS
 ======================================== */
 
@@ -5437,6 +5682,23 @@ document.getElementById(
     update(
       true
     )
+);
+
+
+document.getElementById(
+  "pnl"
+)
+.addEventListener(
+  "blur",
+  () => {
+
+    normalisePnlInput();
+
+    update(
+      true
+    );
+
+  }
 );
 
 
@@ -5535,6 +5797,35 @@ document.getElementById(
 );
 
 
+window.addEventListener(
+  "pageshow",
+  refreshFromJournal
+);
+
+
+window.addEventListener(
+  "focus",
+  refreshFromJournal
+);
+
+
+document.addEventListener(
+  "visibilitychange",
+  () => {
+
+    if(
+      document.visibilityState ===
+      "visible"
+    ){
+
+      refreshFromJournal();
+
+    }
+
+  }
+);
+
+
 
 /* ========================================
    START
@@ -5575,4 +5866,5 @@ setInterval(
 <script src="workflow-nav.js?v=3"></script>
 
 </body>
+
 </html>
