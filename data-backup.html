@@ -15,6 +15,41 @@
   content="#070b10"
 >
 
+<meta
+  name="apple-mobile-web-app-capable"
+  content="yes"
+>
+
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="black-translucent"
+>
+
+<meta
+  name="apple-mobile-web-app-title"
+  content="WASPN"
+>
+
+<meta
+  name="mobile-web-app-capable"
+  content="yes"
+>
+
+<meta
+  name="color-scheme"
+  content="dark"
+>
+
+<link
+  rel="manifest"
+  href="manifest.webmanifest"
+>
+
+<link
+  rel="apple-touch-icon"
+  href="apple-touch-icon.png"
+>
+
 <title>WASPN • Data Backup</title>
 
 
@@ -47,8 +82,15 @@
 
 
 html{
+
+  min-height:100%;
+
+  background:#070b10;
+
   -webkit-text-size-adjust:100%;
+
   scroll-behavior:smooth;
+
 }
 
 
@@ -57,6 +99,7 @@ body{
   margin:0;
 
   min-height:100vh;
+  min-height:100dvh;
 
   background:
     radial-gradient(
@@ -105,7 +148,7 @@ a{
     )
     10px
     max(
-      20px,
+      24px,
       env(safe-area-inset-bottom)
     );
 
