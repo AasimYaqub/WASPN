@@ -55,14 +55,23 @@
   --bg:#070b10;
   --panel:#10171f;
   --panel2:#151e28;
+  --panel3:#090f14;
+
   --border:#273442;
+  --border-strong:#324353;
+
   --text:#edf4fb;
   --muted:#8797a7;
   --muted2:#687989;
+
   --green:#35d07f;
   --red:#ff5f6d;
   --blue:#22c7ff;
   --amber:#f3b84b;
+
+  --shadow:
+    0 18px 48px
+    rgba(0,0,0,.24);
 }
 
 *{
@@ -71,21 +80,25 @@
 
 html{
   min-height:100%;
-  background:#070b10;
+
+  background:var(--bg);
+
   -webkit-text-size-adjust:100%;
+
   scroll-behavior:smooth;
 }
 
 body{
   margin:0;
+
   min-height:100vh;
   min-height:100dvh;
 
   background:
     radial-gradient(
       circle at 50% -5%,
-      rgba(34,199,255,.10),
-      transparent 35%
+      rgba(34,199,255,.08),
+      transparent 34%
     ),
     linear-gradient(
       180deg,
@@ -104,15 +117,25 @@ body{
     sans-serif;
 }
 
+a,
+button{
+  -webkit-tap-highlight-color:transparent;
+}
+
+a{
+  color:inherit;
+}
+
 .wrap{
   width:100%;
   max-width:1000px;
+
   margin:0 auto;
 
   padding:
     max(8px,env(safe-area-inset-top))
     10px
-    max(18px,env(safe-area-inset-bottom));
+    max(24px,env(safe-area-inset-bottom));
 }
 
 
@@ -123,15 +146,17 @@ body{
 .brand{
   overflow:hidden;
 
-  padding:7px 8px 10px;
+  padding:
+    8px 10px
+    12px;
 
   text-align:center;
 
   background:
     radial-gradient(
-      circle at 50% 15%,
-      rgba(34,199,255,.09),
-      transparent 52%
+      circle at 50% 10%,
+      rgba(34,199,255,.075),
+      transparent 54%
     ),
     linear-gradient(
       180deg,
@@ -145,9 +170,7 @@ body{
 
   border-radius:18px;
 
-  box-shadow:
-    0 18px 46px
-    rgba(0,0,0,.32);
+  box-shadow:var(--shadow);
 }
 
 .logo-wrap{
@@ -166,6 +189,7 @@ body{
 
   width:min(330px,76vw);
   max-width:100%;
+
   height:auto;
 
   margin:0 auto;
@@ -178,37 +202,36 @@ body{
       rgba(0,0,0,.5)
     )
     drop-shadow(
-      0 0 16px
-      rgba(34,199,255,.12)
+      0 0 14px
+      rgba(34,199,255,.10)
     );
 }
 
-.brand-copy{
-  max-width:650px;
-
-  margin:2px auto 0;
-
-  padding:0 10px;
-
-  color:#aab8c6;
-
-  font-size:11px;
-
-  line-height:1.4;
-}
-
 .product-label{
-  margin-top:4px;
+  margin-top:3px;
 
   color:var(--blue);
 
   font-size:8px;
-
   font-weight:950;
 
-  letter-spacing:1.6px;
+  letter-spacing:1.7px;
 
   text-transform:uppercase;
+}
+
+.brand-copy{
+  max-width:620px;
+
+  margin:5px auto 0;
+
+  padding:0 10px;
+
+  color:#a5b3c0;
+
+  font-size:10px;
+
+  line-height:1.45;
 }
 
 
@@ -228,7 +251,7 @@ body{
 }
 
 .rule{
-  min-height:76px;
+  min-height:78px;
 
   display:flex;
 
@@ -244,13 +267,13 @@ body{
   background:
     linear-gradient(
       180deg,
-      #0e161e,
+      #0f171f,
       #091017
     );
 
   border:
     1px solid
-    #2c3b49;
+    var(--border);
 
   border-radius:13px;
 }
@@ -268,11 +291,14 @@ body{
 }
 
 .rule-value{
-  margin-top:4px;
+  margin-top:5px;
 
   font-size:20px;
 
   font-weight:950;
+
+  font-variant-numeric:
+    tabular-nums;
 }
 
 .blue{
@@ -300,7 +326,8 @@ body{
   margin-top:8px;
 
   padding:
-    12px 10px 10px;
+    13px 10px
+    10px;
 
   text-align:center;
 
@@ -308,13 +335,22 @@ body{
     1px solid
     var(--border);
 
-  border-radius:14px;
+  border-radius:15px;
+
+  box-shadow:
+    0 12px 30px
+    rgba(0,0,0,.12);
 }
 
 .market-status.open{
   color:var(--green);
 
-  background:#0e1e16;
+  background:
+    linear-gradient(
+      180deg,
+      #102019,
+      #0b1711
+    );
 
   border-color:#285c42;
 }
@@ -322,7 +358,12 @@ body{
 .market-status.waiting{
   color:var(--amber);
 
-  background:#1d170d;
+  background:
+    linear-gradient(
+      180deg,
+      #1d180e,
+      #151108
+    );
 
   border-color:#655027;
 }
@@ -330,7 +371,12 @@ body{
 .market-status.closed{
   color:#a8b4bf;
 
-  background:#121920;
+  background:
+    linear-gradient(
+      180deg,
+      #121a21,
+      #0c1218
+    );
 
   border-color:#394754;
 }
@@ -339,16 +385,18 @@ body{
   font-size:20px;
 
   font-weight:950;
+
+  letter-spacing:-.2px;
 }
 
 .market-detail{
-  margin-top:3px;
+  margin-top:4px;
 
   color:var(--muted);
 
   font-size:9px;
 
-  line-height:1.35;
+  line-height:1.4;
 }
 
 
@@ -364,13 +412,14 @@ body{
 
   gap:7px;
 
-  margin-top:9px;
+  margin-top:10px;
 }
 
 .countdown-item{
   min-width:0;
 
-  padding:8px 6px;
+  padding:
+    9px 6px;
 
   background:
     rgba(
@@ -389,7 +438,7 @@ body{
       .16
     );
 
-  border-radius:9px;
+  border-radius:10px;
 }
 
 .countdown-label{
@@ -405,7 +454,7 @@ body{
 }
 
 .countdown-time{
-  margin-top:3px;
+  margin-top:4px;
 
   color:var(--text);
 
@@ -455,7 +504,7 @@ body{
 }
 
 .countdown-caption{
-  margin-top:2px;
+  margin-top:3px;
 
   color:var(--muted2);
 
@@ -474,7 +523,7 @@ body{
 
   margin-top:8px;
 
-  min-height:62px;
+  min-height:64px;
 
   padding:12px;
 
@@ -485,17 +534,21 @@ body{
   background:
     linear-gradient(
       180deg,
-      #1595d4,
-      #0e72aa
+      #1698d7,
+      #0d74ac
     );
+
+  border:
+    1px solid
+    rgba(65,202,255,.34);
 
   border-radius:14px;
 
   color:white;
 
   box-shadow:
-    0 12px 28px
-    rgba(0,135,205,.18);
+    0 12px 30px
+    rgba(0,135,205,.17);
 }
 
 .primary-kicker{
@@ -503,11 +556,11 @@ body{
 
   font-weight:900;
 
-  letter-spacing:1.2px;
+  letter-spacing:1.3px;
 
   text-transform:uppercase;
 
-  opacity:.75;
+  opacity:.78;
 }
 
 .primary-title{
@@ -516,6 +569,8 @@ body{
   font-size:20px;
 
   font-weight:950;
+
+  letter-spacing:-.2px;
 }
 
 .primary-action:active{
@@ -530,36 +585,42 @@ body{
 .card{
   margin-top:8px;
 
-  padding:13px;
+  padding:14px;
 
   background:
     linear-gradient(
       180deg,
       #111921,
-      #0e151c
+      #0d141b
     );
 
   border:
     1px solid
     var(--border);
 
-  border-radius:15px;
+  border-radius:16px;
+
+  box-shadow:
+    0 12px 30px
+    rgba(0,0,0,.10);
 }
 
 .card-title{
-  font-size:15px;
+  font-size:16px;
 
   font-weight:950;
+
+  letter-spacing:-.15px;
 }
 
 .card-copy{
-  margin-top:3px;
+  margin-top:4px;
 
   color:var(--muted);
 
   font-size:9px;
 
-  line-height:1.4;
+  line-height:1.45;
 }
 
 
@@ -575,11 +636,11 @@ body{
 
   gap:7px;
 
-  margin-top:9px;
+  margin-top:10px;
 }
 
 .today-item{
-  min-height:68px;
+  min-height:72px;
 
   display:flex;
 
@@ -589,21 +650,26 @@ body{
 
   padding:9px;
 
+  text-align:center;
+
   background:#090f14;
 
   border:
     1px solid
     var(--border);
 
-  border-radius:10px;
+  border-radius:11px;
 }
 
 .value{
-  margin-top:3px;
+  margin-top:4px;
 
-  font-size:19px;
+  font-size:20px;
 
   font-weight:950;
+
+  font-variant-numeric:
+    tabular-nums;
 }
 
 
@@ -619,17 +685,17 @@ body{
 
   gap:7px;
 
-  margin-top:9px;
+  margin-top:10px;
 }
 
 .module{
   display:block;
 
-  min-height:70px;
+  min-height:72px;
 
   padding:
-    11px 13px
-    11px 15px;
+    12px 13px
+    12px 16px;
 
   position:relative;
 
@@ -643,7 +709,7 @@ body{
     linear-gradient(
       145deg,
       #17222c,
-      #111820
+      #10171e
     );
 
   border:
@@ -651,6 +717,14 @@ body{
     var(--border);
 
   border-radius:12px;
+
+  transition:
+    transform .12s ease,
+    border-color .12s ease;
+}
+
+.module:active{
+  transform:scale(.99);
 }
 
 .module::before{
@@ -690,13 +764,15 @@ body{
 }
 
 .module-desc{
+  max-width:700px;
+
   margin-top:4px;
 
   color:var(--muted);
 
   font-size:9px;
 
-  line-height:1.4;
+  line-height:1.45;
 }
 
 
@@ -712,11 +788,11 @@ body{
 
   gap:7px;
 
-  margin-top:9px;
+  margin-top:10px;
 }
 
 .evidence{
-  min-height:115px;
+  min-height:116px;
 
   display:flex;
 
@@ -732,31 +808,34 @@ body{
     1px solid
     var(--border);
 
-  border-radius:10px;
+  border-radius:11px;
 }
 
 .evidence-value{
   margin-top:5px;
 
-  font-size:19px;
+  font-size:20px;
 
   font-weight:950;
+
+  font-variant-numeric:
+    tabular-nums;
 }
 
 .evidence-copy{
-  margin-top:5px;
+  margin-top:6px;
 
   color:var(--muted);
 
   font-size:9px;
 
-  line-height:1.4;
+  line-height:1.45;
 }
 
 .evidence-note{
-  margin-top:9px;
+  margin-top:10px;
 
-  padding-top:9px;
+  padding-top:10px;
 
   border-top:
     1px solid
@@ -767,7 +846,7 @@ body{
       .14
     );
 
-  color:var(--muted2);
+  color:#8393a2;
 
   font-size:9px;
 
@@ -776,66 +855,25 @@ body{
 
 
 /* ========================================
-   COMMAND IMAGE
+   FOOTER
 ======================================== */
-
-.command-centre{
-  margin-top:9px;
-
-  padding:6px;
-
-  overflow:hidden;
-
-  background:
-    linear-gradient(
-      180deg,
-      #101820,
-      #090f15
-    );
-
-  border:
-    1px solid
-    var(--border);
-
-  border-radius:17px;
-}
-
-.command-title{
-  padding:
-    7px 6px 9px;
-
-  text-align:center;
-
-  color:#aab9c8;
-
-  font-size:9px;
-
-  font-weight:900;
-
-  letter-spacing:1.5px;
-
-  text-transform:uppercase;
-}
-
-.command-centre img{
-  display:block;
-
-  width:100%;
-
-  height:auto;
-
-  border-radius:11px;
-}
 
 .footer{
   margin:
-    17px 0 5px;
+    18px 0
+    6px;
 
   text-align:center;
 
-  color:var(--muted);
+  color:#687989;
 
-  font-size:10px;
+  font-size:9px;
+
+  font-weight:750;
+
+  letter-spacing:.6px;
+
+  text-transform:uppercase;
 }
 
 
@@ -848,7 +886,9 @@ body{
 ){
 
   .wrap{
-    padding:18px;
+    padding:
+      18px 18px
+      30px;
   }
 
   .logo{
@@ -929,8 +969,8 @@ body{
 
 
   <div class="brand-copy">
-    Control the window, attempts, behaviour and daily risk.
-    Trade the process.
+    Control the trading window, attempts, behaviour and daily risk.
+    Execute the process.
   </div>
 
 </section>
@@ -1122,7 +1162,7 @@ body{
   </div>
 
   <div class="card-copy">
-    Connected New York trading-day record.
+    Current New York trading-day record.
   </div>
 
 
@@ -1200,7 +1240,6 @@ body{
 
 <!-- ======================================
      PLATFORM
-     WORKFLOW SECTION REMOVED
 ====================================== -->
 
 <section class="card">
@@ -1210,7 +1249,7 @@ body{
   </div>
 
   <div class="card-copy">
-    Live control, rapid capture and performance review.
+    Risk control, trade capture, session governance and performance review.
   </div>
 
 
@@ -1244,8 +1283,8 @@ body{
       </div>
 
       <div class="module-desc">
-        Fast intraday capture of trade economics
-        with later broker-data enrichment.
+        Intraday trade capture with cumulative realised
+        P&amp;L and later broker reconciliation.
       </div>
 
     </a>
@@ -1261,8 +1300,8 @@ body{
       </div>
 
       <div class="module-desc">
-        Structural compliance checks and five-point
-        behavioural process score.
+        Session close, structural compliance checks
+        and behavioural process scoring.
       </div>
 
     </a>
@@ -1278,8 +1317,8 @@ body{
       </div>
 
       <div class="module-desc">
-        Review daily P&amp;L, attempts, risk events
-        and process outcomes over time.
+        Review P&amp;L, attempts, risk events and
+        process outcomes across trading sessions.
       </div>
 
     </a>
@@ -1295,7 +1334,7 @@ body{
       </div>
 
       <div class="module-desc">
-        Export and restore WASPN local records.
+        Export and restore the local WASPN trading record.
       </div>
 
     </a>
@@ -1313,11 +1352,11 @@ body{
 <section class="card">
 
   <div class="card-title">
-    Why These Guardrails Exist
+    Evidence Behind the Guardrails
   </div>
 
   <div class="card-copy">
-    Simple rules built from the strongest patterns in my trading history.
+    Operating constraints derived from observed patterns in historical trading performance.
   </div>
 
 
@@ -1335,7 +1374,7 @@ body{
       </div>
 
       <div class="evidence-copy">
-        9:00–9:30 AM ET was the strongest historical trading period.
+        9:00–9:30 AM ET produced the strongest historical result.
       </div>
 
     </div>
@@ -1352,7 +1391,7 @@ body{
       </div>
 
       <div class="evidence-copy">
-        Early attempts performed better before repeated trading took over.
+        The first five attempts produced positive aggregate performance.
       </div>
 
     </div>
@@ -1369,7 +1408,7 @@ body{
       </div>
 
       <div class="evidence-copy">
-        Performance deteriorated sharply after the fifth attempt.
+        Aggregate performance deteriorated materially beyond attempt five.
       </div>
 
     </div>
@@ -1386,7 +1425,7 @@ body{
       </div>
 
       <div class="evidence-copy">
-        Later trading produced the largest historical losses.
+        Trading after 11:00 AM ET generated the largest historical loss segment.
       </div>
 
     </div>
@@ -1396,33 +1435,19 @@ body{
 
 
   <div class="evidence-note">
-    Trade early, limit attempts and stop before behaviour
-    starts driving decisions.
+    Operating principle: concentrate activity early, cap attempts and terminate
+    the session before repeated trading begins to degrade decision quality.
   </div>
 
 </section>
 
 
 <!-- ======================================
-     COMMAND IMAGE
+     FOOTER
 ====================================== -->
 
-<section class="command-centre">
-
-  <div class="command-title">
-    WASPN • Trade the Process
-  </div>
-
-  <img
-    src="trade_the_process_waspn_trading_command_centre.png"
-    alt="WASPN Trading Command Centre"
-  >
-
-</section>
-
-
 <div class="footer">
-  WASPN • Process Over Recovery
+  WASPN • Risk Controlled • Process Led
 </div>
 
 
@@ -2249,12 +2274,30 @@ function renderToday(){
     {};
 
 
+  const savedTrades =
+    Array.isArray(
+      day.trades
+    )
+      ? day.trades.length
+      : 0;
+
+
+  const attempts =
+    Math.min(
+      5,
+      Math.max(
+        savedTrades,
+        Number(
+          live.attempt || 0
+        )
+      )
+    );
+
+
   document.getElementById(
     "todayAttempts"
   ).textContent =
-    Number(
-      live.attempt || 0
-    ) +
+    attempts +
     "/5";
 
 
@@ -2355,6 +2398,18 @@ setInterval(
 
 window.addEventListener(
   "storage",
+  renderToday
+);
+
+
+window.addEventListener(
+  "focus",
+  renderToday
+);
+
+
+window.addEventListener(
+  "pageshow",
   renderToday
 );
 
