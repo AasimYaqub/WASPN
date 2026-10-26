@@ -625,55 +625,6 @@ a{
 
 
 /* ========================================
-   TODAY
-======================================== */
-
-.today-grid{
-  display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:7px;
-
-  margin-top:10px;
-}
-
-.today-item{
-  min-height:72px;
-
-  display:flex;
-
-  flex-direction:column;
-
-  justify-content:center;
-
-  padding:9px;
-
-  text-align:center;
-
-  background:#090f14;
-
-  border:
-    1px solid
-    var(--border);
-
-  border-radius:11px;
-}
-
-.value{
-  margin-top:4px;
-
-  font-size:20px;
-
-  font-weight:950;
-
-  font-variant-numeric:
-    tabular-nums;
-}
-
-
-/* ========================================
    MODULES
 ======================================== */
 
@@ -900,14 +851,6 @@ a{
   }
 
   .rules{
-    grid-template-columns:
-      repeat(
-        4,
-        1fr
-      );
-  }
-
-  .today-grid{
     grid-template-columns:
       repeat(
         4,
@@ -1152,93 +1095,6 @@ a{
 
 
 <!-- ======================================
-     TODAY
-====================================== -->
-
-<section class="card">
-
-  <div class="card-title">
-    Today
-  </div>
-
-  <div class="card-copy">
-    Current New York trading-day record.
-  </div>
-
-
-  <div class="today-grid">
-
-
-    <div class="today-item">
-
-      <div class="label">
-        Attempts
-      </div>
-
-      <div
-        id="todayAttempts"
-        class="value"
-      >
-        0/5
-      </div>
-
-    </div>
-
-
-    <div class="today-item">
-
-      <div class="label">
-        P&amp;L
-      </div>
-
-      <div
-        id="todayPnl"
-        class="value"
-      >
-        —
-      </div>
-
-    </div>
-
-
-    <div class="today-item">
-
-      <div class="label">
-        Compliance
-      </div>
-
-      <div
-        id="todayCompliance"
-        class="value"
-      >
-        —
-      </div>
-
-    </div>
-
-
-    <div class="today-item">
-
-      <div class="label">
-        Process
-      </div>
-
-      <div
-        id="todayScore"
-        class="value"
-      >
-        —
-      </div>
-
-    </div>
-
-
-  </div>
-
-</section>
-
-
-<!-- ======================================
      PLATFORM
 ====================================== -->
 
@@ -1456,34 +1312,6 @@ a{
 
 <script>
 
-const STORAGE_KEY =
-  "waspnJournalV2";
-
-
-/* ========================================
-   JOURNAL
-======================================== */
-
-function getJournal(){
-
-  try{
-
-    return JSON.parse(
-      localStorage.getItem(
-        STORAGE_KEY
-      )
-    ) || {};
-
-  }
-
-  catch{
-
-    return {};
-
-  }
-
-}
-
 
 /* ========================================
    NEW YORK TIME
@@ -1528,8 +1356,7 @@ function getNyParts(){
     );
 
 
-  const data =
-    {};
+  const data = {};
 
 
   formatted.forEach(
@@ -1581,73 +1408,6 @@ function getNyParts(){
       )
 
   };
-
-}
-
-
-function todayKey(){
-
-  const d =
-    getNyParts();
-
-
-  return (
-    d.year +
-    "-" +
-    d.month +
-    "-" +
-    d.day
-  );
-
-}
-
-
-/* ========================================
-   MONEY
-======================================== */
-
-function money(
-  value
-){
-
-  const n =
-    Number(
-      value || 0
-    );
-
-
-  if(
-    n > 0
-  ){
-
-    return (
-      "+$" +
-      n.toFixed(
-        2
-      )
-    );
-
-  }
-
-
-  if(
-    n < 0
-  ){
-
-    return (
-      "-$" +
-      Math.abs(
-        n
-      )
-      .toFixed(
-        2
-      )
-    );
-
-  }
-
-
-  return "$0.00";
 
 }
 
@@ -2258,159 +2018,15 @@ function renderMarketStatus(){
 
 
 /* ========================================
-   TODAY
-======================================== */
-
-function renderToday(){
-
-  const day =
-    getJournal()[
-      todayKey()
-    ] || {};
-
-
-  const live =
-    day.liveRisk ||
-    {};
-
-
-  const savedTrades =
-    Array.isArray(
-      day.trades
-    )
-      ? day.trades.length
-      : 0;
-
-
-  const attempts =
-    Math.min(
-      5,
-      Math.max(
-        savedTrades,
-        Number(
-          live.attempt || 0
-        )
-      )
-    );
-
-
-  document.getElementById(
-    "todayAttempts"
-  ).textContent =
-    attempts +
-    "/5";
-
-
-  const pnl =
-    typeof day.totalNet ===
-      "number"
-
-      ? day.totalNet
-
-      : typeof live.realisedPnl ===
-        "number"
-
-        ? live.realisedPnl
-
-        : null;
-
-
-  const pnlEl =
-    document.getElementById(
-      "todayPnl"
-    );
-
-
-  if(
-    pnl === null
-  ){
-
-    pnlEl.textContent =
-      "—";
-
-
-    pnlEl.className =
-      "value";
-
-  }
-
-  else{
-
-    pnlEl.textContent =
-      money(
-        pnl
-      );
-
-
-    pnlEl.className =
-      "value " +
-      (
-        pnl >= 0
-          ? "green"
-          : "red"
-      );
-
-  }
-
-
-  document.getElementById(
-    "todayCompliance"
-  ).textContent =
-    day.compliance &&
-    typeof day.compliance.score ===
-      "number"
-
-      ? day.compliance.score +
-        "/3"
-
-      : "—";
-
-
-  document.getElementById(
-    "todayScore"
-  ).textContent =
-    day.sessionScore &&
-    typeof day.sessionScore.score ===
-      "number"
-
-      ? day.sessionScore.score +
-        "/5"
-
-      : "—";
-
-}
-
-
-/* ========================================
    START
 ======================================== */
 
 renderMarketStatus();
 
-renderToday();
-
 
 setInterval(
   renderMarketStatus,
   1000
-);
-
-
-window.addEventListener(
-  "storage",
-  renderToday
-);
-
-
-window.addEventListener(
-  "focus",
-  renderToday
-);
-
-
-window.addEventListener(
-  "pageshow",
-  renderToday
 );
 
 </script>
