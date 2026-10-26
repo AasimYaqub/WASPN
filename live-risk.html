@@ -17,7 +17,6 @@
 
 <title>WASPN • Live Risk Control</title>
 
-
 <style>
 
 :root{
@@ -25,6 +24,7 @@
   --panel:#10171f;
   --panel2:#151e28;
   --panel3:#0b1117;
+
   --border:#273442;
 
   --text:#edf4fb;
@@ -728,205 +728,12 @@ a{
 
 
 /* ========================================
-   TRADE TIMER
-======================================== */
-
-.timer-card{
-
-  margin-top:8px;
-
-  padding:
-    13px 13px 14px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #111921,
-      #0c1218
-    );
-
-  border:
-    1px solid
-    var(--border);
-
-  border-radius:17px;
-
-  scroll-margin-top:12px;
-
-}
-
-
-.timer-top{
-
-  display:flex;
-
-  align-items:center;
-  justify-content:space-between;
-
-  gap:10px;
-
-}
-
-
-.timer-heading{
-
-  color:var(--amber);
-
-  font-size:11px;
-  font-weight:950;
-
-  letter-spacing:1.1px;
-
-  text-transform:uppercase;
-
-}
-
-
-.timer-state{
-
-  color:var(--muted);
-
-  font-size:9px;
-  font-weight:950;
-
-  letter-spacing:1.3px;
-
-  text-transform:uppercase;
-
-}
-
-
-.timer{
-
-  margin:
-    7px 0 3px;
-
-  text-align:center;
-
-  font-size:
-    clamp(
-      54px,
-      17vw,
-      76px
-    );
-
-  font-weight:950;
-
-  letter-spacing:-2px;
-
-  line-height:1;
-
-  font-variant-numeric:
-    tabular-nums;
-
-}
-
-
-.timer-prompt{
-
-  min-height:38px;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:center;
-
-  padding:
-    7px 5px;
-
-  text-align:center;
-
-  color:var(--green);
-
-  font-size:11px;
-  font-weight:900;
-
-  line-height:1.35;
-
-}
-
-
-.timer-prompt.warning{
-  color:var(--amber);
-}
-
-
-.timer-prompt.danger{
-  color:var(--red);
-}
-
-
-.timer-controls{
-
-  display:grid;
-
-  grid-template-columns:
-    1fr 1fr 56px;
-
-  gap:7px;
-
-  margin-top:7px;
-
-}
-
-
-.timer-btn{
-
-  min-height:47px;
-
-  border:
-    1px solid
-    var(--border);
-
-  border-radius:11px;
-
-  background:#18222c;
-
-  color:white;
-
-  font-weight:900;
-
-  cursor:pointer;
-
-}
-
-
-.timer-btn:disabled{
-  opacity:.3;
-  cursor:not-allowed;
-}
-
-
-.timer-btn.start{
-
-  background:#143824;
-
-  border-color:#285d40;
-
-  color:var(--green);
-
-}
-
-
-.timer-btn.stop-timer{
-
-  background:#352812;
-
-  border-color:#655027;
-
-  color:var(--amber);
-
-}
-
-
-
-/* ========================================
    BEHAVIOURAL RISK LOCK
 ======================================== */
 
 .behaviour-card{
 
-  margin-top:8px;
+  margin-top:10px;
 
   padding:13px;
 
@@ -1974,77 +1781,6 @@ a{
 
 
 
-<section
-  id="timerSection"
-  class="timer-card"
->
-
-  <div class="timer-top">
-
-    <div class="timer-heading">
-      Trade Management Timer
-    </div>
-
-    <div
-      id="timerState"
-      class="timer-state"
-    >
-      READY
-    </div>
-
-  </div>
-
-
-  <div
-    id="timer"
-    class="timer"
-  >
-    00:00
-  </div>
-
-
-  <div
-    id="timerPrompt"
-    class="timer-prompt"
-  >
-    Start when the position is entered.
-  </div>
-
-
-  <div class="timer-controls">
-
-    <button
-      id="startTimerBtn"
-      class="timer-btn start"
-      type="button"
-    >
-      START TRADE
-    </button>
-
-
-    <button
-      id="stopTimerBtn"
-      class="timer-btn stop-timer"
-      type="button"
-    >
-      STOP TIMER
-    </button>
-
-
-    <button
-      id="resetTimerBtn"
-      class="timer-btn"
-      type="button"
-    >
-      ↻
-    </button>
-
-  </div>
-
-</section>
-
-
-
 <section class="behaviour-card">
 
   <div class="behaviour-row">
@@ -2116,7 +1852,7 @@ a{
   </div>
 
   <div class="gate-intro">
-    The five-minute behavioural lock has expired. Complete all checks before WASPN can re-enable a new trade.
+    The five-minute behavioural lock has expired. Complete all checks before WASPN can re-enable another trade.
   </div>
 
 
@@ -2606,28 +2342,7 @@ let saveTimer =
 
 
 /* ========================================
-   TRADE TIMER STATE
-======================================== */
-
-let timerRunning =
-  false;
-
-
-let timerStartedAt =
-  null;
-
-
-let timerElapsed =
-  0;
-
-
-let timerInterval =
-  null;
-
-
-
-/* ========================================
-   BEHAVIOURAL LOCK STATE
+   BEHAVIOURAL LOCK
 ======================================== */
 
 let behaviouralLockActive =
@@ -2648,7 +2363,7 @@ let resetGateRequired =
 
 
 /* ========================================
-   LOSS WARNING STATE
+   -$75 LOSS WARNING
 ======================================== */
 
 let lossWarningActive =
@@ -3371,355 +3086,7 @@ function syncFromJournal(
 
 
 /* ========================================
-   TRADE TIMER
-======================================== */
-
-function currentTimerElapsed(){
-
-  if(
-    timerRunning &&
-    timerStartedAt
-  ){
-
-    return Math.max(
-      0,
-      Date.now() -
-      timerStartedAt
-    );
-
-  }
-
-
-  return Math.max(
-    0,
-    timerElapsed
-  );
-
-}
-
-
-function renderTimer(){
-
-  const elapsed =
-    currentTimerElapsed();
-
-
-  const totalSeconds =
-    Math.floor(
-      elapsed / 1000
-    );
-
-
-  const minutes =
-    Math.floor(
-      totalSeconds / 60
-    );
-
-
-  const seconds =
-    totalSeconds % 60;
-
-
-  document.getElementById(
-    "timer"
-  ).textContent =
-
-    String(
-      minutes
-    )
-    .padStart(
-      2,
-      "0"
-    )
-
-    +
-
-    ":"
-
-    +
-
-    String(
-      seconds
-    )
-    .padStart(
-      2,
-      "0"
-    );
-
-
-  const prompt =
-    document.getElementById(
-      "timerPrompt"
-    );
-
-
-  const state =
-    document.getElementById(
-      "timerState"
-    );
-
-
-  if(
-    !timerRunning &&
-    totalSeconds === 0
-  ){
-
-    state.textContent =
-      "READY";
-
-
-    prompt.className =
-      "timer-prompt";
-
-
-    prompt.textContent =
-      "Start when the position is entered.";
-
-
-    return;
-
-  }
-
-
-  state.textContent =
-    timerRunning
-      ? "LIVE"
-      : "PAUSED";
-
-
-  if(
-    totalSeconds >= 600
-  ){
-
-    prompt.className =
-      "timer-prompt danger";
-
-
-    prompt.textContent =
-      "10+ MIN — WHY ARE YOU STILL IN THIS TRADE?";
-
-  }
-
-  else if(
-    totalSeconds >= 300
-  ){
-
-    prompt.className =
-      "timer-prompt warning";
-
-
-    prompt.textContent =
-      "5 MIN — ORIGINAL SETUP OR HOPE?";
-
-  }
-
-  else if(
-    totalSeconds >= 180
-  ){
-
-    prompt.className =
-      "timer-prompt warning";
-
-
-    prompt.textContent =
-      "3 MIN — HAS MOMENTUM FOLLOWED THROUGH?";
-
-  }
-
-  else{
-
-    prompt.className =
-      "timer-prompt";
-
-
-    prompt.textContent =
-      timerRunning
-        ? "Trade active — manage the setup, not the P&L."
-        : "Timer paused.";
-
-  }
-
-}
-
-
-function startTimer(){
-
-  const clock =
-    getSessionClockState();
-
-
-  if(
-    clock.weekend
-  ){
-
-    alert(
-      "Market closed — weekend."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    sessionEnded
-  ){
-
-    alert(
-      "This WASPN session is already locked."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    behaviouralLockActive ||
-    resetGateRequired
-  ){
-
-    alert(
-      "Behavioural Risk Lock is active. Complete the five-minute lock and Reset Gate before starting another trade."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    lossWarningActive
-  ){
-
-    alert(
-      "-$75 risk-warning cooling period is still active."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    !clock.active
-  ){
-
-    alert(
-      "New entries are outside an active WASPN trading window."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    timerRunning
-  ){
-
-    return;
-
-  }
-
-
-  timerStartedAt =
-    Date.now() -
-    timerElapsed;
-
-
-  timerRunning =
-    true;
-
-
-  clearInterval(
-    timerInterval
-  );
-
-
-  timerInterval =
-    setInterval(
-      renderTimer,
-      250
-    );
-
-
-  renderTimer();
-
-  queueSave();
-
-}
-
-
-function stopTimer(){
-
-  if(
-    timerRunning
-  ){
-
-    timerElapsed =
-      currentTimerElapsed();
-
-  }
-
-
-  timerRunning =
-    false;
-
-
-  timerStartedAt =
-    null;
-
-
-  clearInterval(
-    timerInterval
-  );
-
-
-  timerInterval =
-    null;
-
-
-  renderTimer();
-
-  queueSave();
-
-}
-
-
-function resetTradeTimer(){
-
-  timerRunning =
-    false;
-
-
-  timerStartedAt =
-    null;
-
-
-  timerElapsed =
-    0;
-
-
-  clearInterval(
-    timerInterval
-  );
-
-
-  timerInterval =
-    null;
-
-
-  renderTimer();
-
-  queueSave();
-
-}
-
-
-
-/* ========================================
-   -$75 LOSS WARNING
+   -$75 WARNING
 ======================================== */
 
 function activateLossWarning(){
@@ -4048,7 +3415,7 @@ function renderBehaviouralLock(){
 
 
     message.textContent =
-      "New WASPN trade starts are locked. Closing or managing an existing position remains available.";
+      "New WASPN attempts are locked. Existing position management remains available.";
 
 
     if(
@@ -4207,7 +3574,7 @@ function evaluateResetGate(){
 
 
     result.textContent =
-      "RESET PASSED — a new trade is permitted only if the setup is valid and all WASPN rules still allow it.";
+      "RESET PASSED — another trade is permitted only if the setup is valid and all WASPN rules still allow it.";
 
 
     button.disabled =
@@ -4466,20 +3833,8 @@ function saveLiveState(){
 
       sessionEnded,
 
-      timer:{
-
-        running:
-          timerRunning,
-
-        startedAt:
-          timerRunning
-            ? timerStartedAt
-            : null,
-
-        elapsed:
-          currentTimerElapsed()
-
-      },
+      timer:
+        null,
 
       updatedAt:
         new Date()
@@ -4604,49 +3959,6 @@ function loadLive(){
     .toFixed(
       2
     );
-
-
-  if(
-    live?.timer
-  ){
-
-    timerRunning =
-      !!live.timer.running;
-
-
-    timerElapsed =
-      Number(
-        live.timer.elapsed ||
-        0
-      );
-
-
-    timerStartedAt =
-      timerRunning &&
-      live.timer.startedAt
-
-        ? Number(
-            live.timer.startedAt
-          )
-
-        : null;
-
-  }
-
-  else{
-
-    timerRunning =
-      false;
-
-
-    timerElapsed =
-      0;
-
-
-    timerStartedAt =
-      null;
-
-  }
 
 
   const lock =
@@ -4818,31 +4130,11 @@ function loadLive(){
   }
 
 
-  if(
-    timerRunning
-  ){
-
-    clearInterval(
-      timerInterval
-    );
-
-
-    timerInterval =
-      setInterval(
-        renderTimer,
-        250
-      );
-
-  }
-
-
   const synced =
     syncFromJournal(
       false
     );
 
-
-  renderTimer();
 
   renderBehaviouralLock();
 
@@ -4947,9 +4239,6 @@ function completeTrade(){
     return;
 
   }
-
-
-  stopTimer();
 
 
   changeAttempt(
@@ -5096,12 +4385,6 @@ function update(
     );
 
 
-  const startBtn =
-    document.getElementById(
-      "startTimerBtn"
-    );
-
-
   if(
     clock.weekend
   ){
@@ -5124,10 +4407,6 @@ function update(
 
 
     completeBtn.disabled =
-      true;
-
-
-    startBtn.disabled =
       true;
 
   }
@@ -5190,10 +4469,6 @@ function update(
     completeBtn.disabled =
       true;
 
-
-    startBtn.disabled =
-      true;
-
   }
 
 
@@ -5214,15 +4489,11 @@ function update(
 
 
     detail.textContent =
-      "New trade starts disabled • Existing position management remains available";
+      "New attempts are paused • Manage any existing position and step away when flat";
 
 
     completeBtn.disabled =
       false;
-
-
-    startBtn.disabled =
-      true;
 
   }
 
@@ -5244,15 +4515,11 @@ function update(
 
 
     detail.textContent =
-      "Behavioural lock expired • New trades remain disabled until the gate is passed";
+      "Behavioural lock expired • No new attempt until the reset gate is passed";
 
 
     completeBtn.disabled =
       false;
-
-
-    startBtn.disabled =
-      true;
 
   }
 
@@ -5275,15 +4542,11 @@ function update(
 
 
     detail.textContent =
-      "-$75 realised warning reached • New trades paused for five minutes";
+      "-$75 realised warning reached • No new attempt for five minutes";
 
 
     completeBtn.disabled =
       false;
-
-
-    startBtn.disabled =
-      true;
 
   }
 
@@ -5310,7 +4573,7 @@ function update(
 
 
       detail.textContent =
-        "Five-minute -$75 cooldown completed • Trading may continue only within all remaining WASPN rules";
+        "Five-minute -$75 cooldown completed • Continue only if all remaining WASPN rules still allow it";
 
     }
 
@@ -5340,10 +4603,6 @@ function update(
     completeBtn.disabled =
       false;
 
-
-    startBtn.disabled =
-      false;
-
   }
 
 
@@ -5367,10 +4626,6 @@ function update(
 
     completeBtn.disabled =
       false;
-
-
-    startBtn.disabled =
-      true;
 
   }
 
@@ -5398,7 +4653,7 @@ function resetToday(){
 
   if(
     !confirm(
-      "Reset today's entire Live Risk state, trade timer and risk locks? Journal, Compliance and Process Score will be preserved."
+      "Reset today's entire Live Risk state and risk locks? Journal, Compliance and Process Score will be preserved."
     )
   ){
 
@@ -5413,18 +4668,6 @@ function resetToday(){
 
   sessionEnded =
     false;
-
-
-  timerRunning =
-    false;
-
-
-  timerStartedAt =
-    null;
-
-
-  timerElapsed =
-    0;
 
 
   behaviouralLockActive =
@@ -5457,15 +4700,6 @@ function resetToday(){
 
   lossWarningCompleted =
     false;
-
-
-  clearInterval(
-    timerInterval
-  );
-
-
-  timerInterval =
-    null;
 
 
   document.getElementById(
@@ -5566,18 +4800,8 @@ function resetToday(){
       sessionEnded:
         false,
 
-      timer:{
-
-        running:
-          false,
-
-        startedAt:
-          null,
-
-        elapsed:
-          0
-
-      },
+      timer:
+        null,
 
       resetAt:
         new Date()
@@ -5601,7 +4825,17 @@ function resetToday(){
   );
 
 
-  renderTimer();
+  /*
+    Journal remains authoritative for
+    completed saved trades. If today's
+    journal already contains trades,
+    restore those figures immediately.
+  */
+
+  syncFromJournal(
+    true
+  );
+
 
   renderBehaviouralLock();
 
@@ -5699,33 +4933,6 @@ document.getElementById(
     );
 
   }
-);
-
-
-document.getElementById(
-  "startTimerBtn"
-)
-.addEventListener(
-  "click",
-  startTimer
-);
-
-
-document.getElementById(
-  "stopTimerBtn"
-)
-.addEventListener(
-  "click",
-  stopTimer
-);
-
-
-document.getElementById(
-  "resetTimerBtn"
-)
-.addEventListener(
-  "click",
-  resetTradeTimer
 );
 
 
@@ -5850,9 +5057,6 @@ setInterval(
     update(
       false
     );
-
-
-    renderTimer();
 
 
     renderBehaviouralLock();
