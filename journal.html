@@ -626,11 +626,6 @@ textarea:focus{
 }
 
 
-.full-width{
-  grid-column:1 / -1;
-}
-
-
 .calculation{
 
   margin-top:10px;
@@ -650,7 +645,7 @@ textarea:focus{
 
   font-size:10px;
 
-  line-height:1.4;
+  line-height:1.45;
 
 }
 
@@ -1565,7 +1560,7 @@ function createTrade(
         </div>
 
 
-        <div class="field full-width">
+        <div class="field">
 
           <label>
             Shares
@@ -1581,6 +1576,24 @@ function createTrade(
 
         </div>
 
+
+        <div class="field">
+
+          <label>
+            Fees
+          </label>
+
+          <input
+            id="fees${i}"
+            type="number"
+            inputmode="decimal"
+            min="0"
+            step="0.01"
+            placeholder="0.00"
+          >
+
+        </div>
+
       </div>
 
 
@@ -1588,7 +1601,7 @@ function createTrade(
         id="calcText${i}"
         class="calculation"
       >
-        Live calculated net: $0.00 • broker fees not included
+        Gross: $0.00 • Fees: $0.00 • Calculated Net: $0.00
       </div>
 
 
@@ -1653,6 +1666,7 @@ function createTrade(
     "entryPrice",
     "exitPrice",
     "shares",
+    "fees",
     "actualNet"
   ]
   .forEach(
@@ -1756,7 +1770,7 @@ function parseSignedNumber(
    P&L CALCULATION
 ======================================== */
 
-function calculatedNet(
+function grossPnl(
   i
 ){
 
@@ -1823,11 +1837,63 @@ function calculatedNet(
 }
 
 
+function tradeFees(
+  i
+){
+
+  const fees =
+    Number(
+      document.getElementById(
+        "fees" + i
+      ).value || 0
+    );
+
+
+  return Number.isFinite(
+    fees
+  )
+    ? Math.max(
+        0,
+        fees
+      )
+    : 0;
+
+}
+
+
+function calculatedNet(
+  i
+){
+
+  return (
+    grossPnl(
+      i
+    ) -
+    tradeFees(
+      i
+    )
+  );
+
+}
+
+
 function calculateTrade(
   i
 ){
 
-  const calc =
+  const gross =
+    grossPnl(
+      i
+    );
+
+
+  const fees =
+    tradeFees(
+      i
+    );
+
+
+  const net =
     calculatedNet(
       i
     );
@@ -1836,11 +1902,18 @@ function calculateTrade(
   document.getElementById(
     "calcText" + i
   ).textContent =
-    "Live calculated net: " +
+    "Gross: " +
     money(
-      calc
+      gross
     ) +
-    " • broker fees not included";
+    " • Fees: " +
+    money(
+      -fees
+    ) +
+    " • Calculated Net: " +
+    money(
+      net
+    );
 
 
   const actualInput =
@@ -1858,7 +1931,7 @@ function calculateTrade(
   const used =
     actualNet !== null
       ? actualNet
-      : calc;
+      : net;
 
 
   const display =
@@ -2020,10 +2093,21 @@ function tradeData(
     );
 
 
-  const calc =
-    calculatedNet(
+  const gross =
+    grossPnl(
       i
     );
+
+
+  const fees =
+    tradeFees(
+      i
+    );
+
+
+  const calc =
+    gross -
+    fees;
 
 
   return {
@@ -2071,6 +2155,11 @@ function tradeData(
         ).value || 0
       ),
 
+    fees,
+
+    grossPnl:
+      gross,
+
     calculatedNet:
       calc,
 
@@ -2099,6 +2188,8 @@ function isTradeUsed(
     trade.exitPrice ||
 
     trade.shares ||
+
+    trade.fees ||
 
     trade.actualNet !== null
 
@@ -2412,6 +2503,12 @@ function clearForm(){
 
 
     document.getElementById(
+      "fees" + i
+    ).value =
+      "";
+
+
+    document.getElementById(
       "actualNet" + i
     ).value =
       "";
@@ -2537,6 +2634,19 @@ function loadDay(){
       ).value =
         trade.shares ||
         "";
+
+
+      document.getElementById(
+        "fees" + i
+      ).value =
+        trade.fees !==
+          undefined &&
+        trade.fees !==
+          null
+
+          ? trade.fees
+
+          : "";
 
 
       document.getElementById(
