@@ -15,6 +15,41 @@
   content="#070b10"
 >
 
+<meta
+  name="apple-mobile-web-app-capable"
+  content="yes"
+>
+
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="black-translucent"
+>
+
+<meta
+  name="apple-mobile-web-app-title"
+  content="WASPN"
+>
+
+<meta
+  name="mobile-web-app-capable"
+  content="yes"
+>
+
+<meta
+  name="color-scheme"
+  content="dark"
+>
+
+<link
+  rel="manifest"
+  href="manifest.webmanifest"
+>
+
+<link
+  rel="apple-touch-icon"
+  href="futuristic_neon_wasp_trading_emblem.png"
+>
+
 <title>WASPN • Performance Review</title>
 
 
@@ -49,6 +84,10 @@
 
 html{
 
+  min-height:100%;
+
+  background:#070b10;
+
   -webkit-text-size-adjust:100%;
 
   scroll-behavior:smooth;
@@ -61,6 +100,7 @@ body{
   margin:0;
 
   min-height:100vh;
+  min-height:100dvh;
 
   background:
 
@@ -110,7 +150,10 @@ a{
       env(safe-area-inset-top)
     )
     10px
-    22px;
+    max(
+      24px,
+      env(safe-area-inset-bottom)
+    );
 
 }
 
@@ -2794,6 +2837,13 @@ function showDetail(
           );
 
 
+        const fees =
+          Number(
+            trade.fees ||
+            0
+          );
+
+
         return `
 
           <div class="trade">
@@ -2856,12 +2906,26 @@ function showDetail(
             }
 
 
+            ${
+              fees
+                ? `
+                  <div class="trade-row">
+                    <span>Fees</span>
+                    <strong>-$${fees.toFixed(2)}</strong>
+                  </div>
+                `
+                : ""
+            }
+
+
             <div class="trade-row">
+
               <span>Net</span>
 
               <strong class="${net >= 0 ? "green" : "red"}">
                 ${usdMoney(net)}
               </strong>
+
             </div>
 
 
@@ -2879,28 +2943,37 @@ function showDetail(
                   </div>
 
                   <div class="trade-row">
+
                     <span>Entry Time</span>
+
                     <strong>
                       ${escapeHtml(
                         trade.entryTime
                       )}
                     </strong>
+
                   </div>
 
                   <div class="trade-row">
+
                     <span>Exit Time</span>
+
                     <strong>
                       ${escapeHtml(
                         trade.exitTime
                       )}
                     </strong>
+
                   </div>
 
                   <div class="trade-row">
+
                     <span>Duration</span>
+
                     <strong>
                       ${duration}
                     </strong>
+
                   </div>
 
                 `
