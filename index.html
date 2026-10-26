@@ -230,7 +230,7 @@ body{
 
 .market-status{
   margin-top:9px;
-  padding:14px 12px;
+  padding:14px 12px 12px;
   text-align:center;
   border:1px solid var(--border);
   border-radius:15px;
@@ -264,6 +264,66 @@ body{
   color:var(--muted);
   font-size:10px;
   line-height:1.4;
+}
+
+
+/* LIVE WINDOW COUNTDOWN */
+
+.window-countdowns{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin-top:11px;
+}
+
+.countdown-item{
+  min-width:0;
+  padding:9px 8px;
+  background:rgba(4,9,13,.42);
+  border:1px solid rgba(135,151,167,.16);
+  border-radius:10px;
+}
+
+.countdown-label{
+  color:var(--muted);
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.9px;
+  text-transform:uppercase;
+}
+
+.countdown-time{
+  margin-top:3px;
+  color:var(--text);
+  font-size:17px;
+  font-weight:950;
+  letter-spacing:.2px;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+
+.countdown-item.prelim .countdown-time{
+  color:var(--amber);
+}
+
+.countdown-item.main .countdown-time{
+  color:var(--blue);
+}
+
+.countdown-item.active{
+  border-color:rgba(53,208,127,.35);
+  background:rgba(53,208,127,.055);
+}
+
+.countdown-item.active .countdown-time{
+  color:var(--green);
+}
+
+.countdown-caption{
+  margin-top:3px;
+  color:var(--muted2);
+  font-size:8px;
+  line-height:1.3;
 }
 
 
@@ -661,7 +721,7 @@ body{
 </div>
 
 
-<!-- MARKET STATUS -->
+<!-- MARKET STATUS + COUNTDOWNS -->
 
 <div
   id="marketStatus"
@@ -679,6 +739,68 @@ body{
     id="marketDetail"
     class="market-detail"
   ></div>
+
+
+  <div class="window-countdowns">
+
+    <div
+      id="prelimCountdownBox"
+      class="countdown-item prelim"
+    >
+
+      <div
+        id="prelimCountdownLabel"
+        class="countdown-label"
+      >
+        Preliminary
+      </div>
+
+      <div
+        id="prelimCountdown"
+        class="countdown-time"
+      >
+        --:--:--
+      </div>
+
+      <div
+        id="prelimCountdownCaption"
+        class="countdown-caption"
+      >
+        6:30–7:00 AM ET
+      </div>
+
+    </div>
+
+
+    <div
+      id="mainCountdownBox"
+      class="countdown-item main"
+    >
+
+      <div
+        id="mainCountdownLabel"
+        class="countdown-label"
+      >
+        Main Window
+      </div>
+
+      <div
+        id="mainCountdown"
+        class="countdown-time"
+      >
+        --:--:--
+      </div>
+
+      <div
+        id="mainCountdownCaption"
+        class="countdown-caption"
+      >
+        9:00–11:00 AM ET
+      </div>
+
+    </div>
+
+  </div>
 
 </div>
 
@@ -1114,6 +1236,10 @@ const STORAGE_KEY =
   "waspnJournalV2";
 
 
+/* ========================================
+   JOURNAL
+======================================== */
+
 function getJournal(){
 
   try{
@@ -1135,6 +1261,10 @@ function getJournal(){
 }
 
 
+/* ========================================
+   NEW YORK TIME
+======================================== */
+
 function getNyParts(){
 
   const formatted =
@@ -1148,7 +1278,8 @@ function getNyParts(){
         day:"2-digit",
         hour:"2-digit",
         minute:"2-digit",
-        hour12:false
+        second:"2-digit",
+        hourCycle:"h23"
       }
     )
     .formatToParts(
@@ -1180,12 +1311,34 @@ function getNyParts(){
 
 
   return {
-    weekday:data.weekday,
-    year:data.year,
-    month:data.month,
-    day:data.day,
-    hour:Number(data.hour),
-    minute:Number(data.minute)
+
+    weekday:
+      data.weekday,
+
+    year:
+      data.year,
+
+    month:
+      data.month,
+
+    day:
+      data.day,
+
+    hour:
+      Number(
+        data.hour
+      ),
+
+    minute:
+      Number(
+        data.minute
+      ),
+
+    second:
+      Number(
+        data.second
+      )
+
   };
 
 }
@@ -1208,6 +1361,10 @@ function todayKey(){
 }
 
 
+/* ========================================
+   MONEY
+======================================== */
+
 function money(
   value
 ){
@@ -1224,7 +1381,9 @@ function money(
 
     return (
       "+$" +
-      n.toFixed(2)
+      n.toFixed(
+        2
+      )
     );
 
   }
@@ -1236,7 +1395,12 @@ function money(
 
     return (
       "-$" +
-      Math.abs(n).toFixed(2)
+      Math.abs(
+        n
+      )
+      .toFixed(
+        2
+      )
     );
 
   }
@@ -1247,33 +1411,230 @@ function money(
 }
 
 
+/* ========================================
+   COUNTDOWN HELPERS
+======================================== */
+
+function secondsNow(
+  ny
+){
+
+  return (
+    ny.hour * 3600 +
+    ny.minute * 60 +
+    ny.second
+  );
+
+}
+
+
+function formatCountdown(
+  seconds
+){
+
+  const safe =
+    Math.max(
+      0,
+      Math.floor(
+        seconds
+      )
+    );
+
+
+  const hours =
+    Math.floor(
+      safe / 3600
+    );
+
+
+  const minutes =
+    Math.floor(
+      (
+        safe % 3600
+      ) /
+      60
+    );
+
+
+  const secs =
+    safe % 60;
+
+
+  return (
+    String(
+      hours
+    )
+    .padStart(
+      2,
+      "0"
+    ) +
+    ":" +
+    String(
+      minutes
+    )
+    .padStart(
+      2,
+      "0"
+    ) +
+    ":" +
+    String(
+      secs
+    )
+    .padStart(
+      2,
+      "0"
+    )
+  );
+
+}
+
+
+function isWeekend(
+  weekday
+){
+
+  return (
+    weekday ===
+      "Saturday" ||
+    weekday ===
+      "Sunday"
+  );
+
+}
+
+
+function daysUntilNextTradingDay(
+  weekday
+){
+
+  if(
+    weekday ===
+    "Friday"
+  ){
+
+    return 3;
+
+  }
+
+
+  if(
+    weekday ===
+    "Saturday"
+  ){
+
+    return 2;
+
+  }
+
+
+  return 1;
+
+}
+
+
+function nextSessionCountdown(
+  ny,
+  targetSeconds
+){
+
+  const now =
+    secondsNow(
+      ny
+    );
+
+
+  const daySeconds =
+    24 * 60 * 60;
+
+
+  let daysAhead;
+
+
+  if(
+    ny.weekday ===
+    "Saturday"
+  ){
+
+    daysAhead =
+      2;
+
+  }
+
+  else if(
+    ny.weekday ===
+    "Sunday"
+  ){
+
+    daysAhead =
+      1;
+
+  }
+
+  else if(
+    ny.weekday ===
+    "Friday"
+  ){
+
+    daysAhead =
+      3;
+
+  }
+
+  else{
+
+    daysAhead =
+      1;
+
+  }
+
+
+  return (
+    daysAhead *
+    daySeconds -
+    now +
+    targetSeconds
+  );
+
+}
+
+
+/* ========================================
+   MARKET STATUS + LIVE COUNTDOWNS
+======================================== */
+
 function renderMarketStatus(){
 
   const ny =
     getNyParts();
 
 
-  const mins =
-    ny.hour * 60 +
-    ny.minute;
+  const nowSeconds =
+    secondsNow(
+      ny
+    );
 
 
   const weekend =
-    ny.weekday === "Saturday" ||
-    ny.weekday === "Sunday";
+    isWeekend(
+      ny.weekday
+    );
 
 
   const prelimStart =
-    6 * 60 + 30;
+    6 * 3600 +
+    30 * 60;
+
 
   const prelimEnd =
-    7 * 60;
+    7 * 3600;
+
 
   const mainStart =
-    9 * 60;
+    9 * 3600;
+
 
   const close =
-    11 * 60;
+    11 * 3600;
 
 
   const box =
@@ -1281,16 +1642,78 @@ function renderMarketStatus(){
       "marketStatus"
     );
 
+
   const main =
     document.getElementById(
       "marketMain"
     );
+
 
   const detail =
     document.getElementById(
       "marketDetail"
     );
 
+
+  const prelimBox =
+    document.getElementById(
+      "prelimCountdownBox"
+    );
+
+
+  const prelimLabel =
+    document.getElementById(
+      "prelimCountdownLabel"
+    );
+
+
+  const prelimTime =
+    document.getElementById(
+      "prelimCountdown"
+    );
+
+
+  const prelimCaption =
+    document.getElementById(
+      "prelimCountdownCaption"
+    );
+
+
+  const mainBox =
+    document.getElementById(
+      "mainCountdownBox"
+    );
+
+
+  const mainLabel =
+    document.getElementById(
+      "mainCountdownLabel"
+    );
+
+
+  const mainTime =
+    document.getElementById(
+      "mainCountdown"
+    );
+
+
+  const mainCaption =
+    document.getElementById(
+      "mainCountdownCaption"
+    );
+
+
+  prelimBox.className =
+    "countdown-item prelim";
+
+
+  mainBox.className =
+    "countdown-item main";
+
+
+  /*
+    WEEKEND
+  */
 
   if(
     weekend
@@ -1299,104 +1722,344 @@ function renderMarketStatus(){
     box.className =
       "market-status closed";
 
+
     main.textContent =
       "MARKET CLOSED — WEEKEND";
 
+
     detail.textContent =
       ny.weekday +
-      " in New York • No WASPN session";
+      " in New York • Next WASPN session shown below";
+
+
+    prelimLabel.textContent =
+      "Next Preliminary";
+
+
+    prelimTime.textContent =
+      formatCountdown(
+        nextSessionCountdown(
+          ny,
+          prelimStart
+        )
+      );
+
+
+    prelimCaption.textContent =
+      "Until 6:30 AM ET";
+
+
+    mainLabel.textContent =
+      "Next Main Window";
+
+
+    mainTime.textContent =
+      formatCountdown(
+        nextSessionCountdown(
+          ny,
+          mainStart
+        )
+      );
+
+
+    mainCaption.textContent =
+      "Until 9:00 AM ET";
+
 
     return;
 
   }
 
 
-  if(
-    mins >= prelimStart &&
-    mins < prelimEnd
-  ){
-
-    box.className =
-      "market-status open";
-
-    main.textContent =
-      "PRELIMINARY WINDOW ACTIVE";
-
-    detail.textContent =
-      "6:30–7:00 AM ET • Exceptional setups only";
-
-    return;
-
-  }
-
+  /*
+    BEFORE PRELIMINARY
+  */
 
   if(
-    mins >= mainStart &&
-    mins < close
-  ){
-
-    box.className =
-      "market-status open";
-
-    main.textContent =
-      "MAIN WASPN WINDOW ACTIVE";
-
-    detail.textContent =
-      "9:00–11:00 AM ET";
-
-    return;
-
-  }
-
-
-  if(
-    mins >= prelimEnd &&
-    mins < mainStart
+    nowSeconds <
+    prelimStart
   ){
 
     box.className =
       "market-status waiting";
 
+
+    main.textContent =
+      "WAIT — SESSION NOT OPEN";
+
+
+    detail.textContent =
+      "Preliminary monitoring begins at 6:30 AM ET";
+
+
+    prelimLabel.textContent =
+      "Preliminary Opens In";
+
+
+    prelimTime.textContent =
+      formatCountdown(
+        prelimStart -
+        nowSeconds
+      );
+
+
+    prelimCaption.textContent =
+      "6:30–7:00 AM ET";
+
+
+    mainLabel.textContent =
+      "Main Opens In";
+
+
+    mainTime.textContent =
+      formatCountdown(
+        mainStart -
+        nowSeconds
+      );
+
+
+    mainCaption.textContent =
+      "9:00–11:00 AM ET";
+
+
+    return;
+
+  }
+
+
+  /*
+    PRELIMINARY ACTIVE
+  */
+
+  if(
+    nowSeconds >=
+      prelimStart &&
+    nowSeconds <
+      prelimEnd
+  ){
+
+    box.className =
+      "market-status open";
+
+
+    main.textContent =
+      "PRELIMINARY WINDOW ACTIVE";
+
+
+    detail.textContent =
+      "6:30–7:00 AM ET • Exceptional setups only";
+
+
+    prelimBox.classList.add(
+      "active"
+    );
+
+
+    prelimLabel.textContent =
+      "Preliminary Remaining";
+
+
+    prelimTime.textContent =
+      formatCountdown(
+        prelimEnd -
+        nowSeconds
+      );
+
+
+    prelimCaption.textContent =
+      "Closes at 7:00 AM ET";
+
+
+    mainLabel.textContent =
+      "Main Opens In";
+
+
+    mainTime.textContent =
+      formatCountdown(
+        mainStart -
+        nowSeconds
+      );
+
+
+    mainCaption.textContent =
+      "9:00–11:00 AM ET";
+
+
+    return;
+
+  }
+
+
+  /*
+    BETWEEN PRELIMINARY AND MAIN
+  */
+
+  if(
+    nowSeconds >=
+      prelimEnd &&
+    nowSeconds <
+      mainStart
+  ){
+
+    box.className =
+      "market-status waiting";
+
+
     main.textContent =
       "WAIT — MAIN WINDOW NOT OPEN";
+
 
     detail.textContent =
       "Main trading window begins at 9:00 AM ET";
 
+
+    prelimLabel.textContent =
+      "Preliminary";
+
+
+    prelimTime.textContent =
+      "CLOSED";
+
+
+    prelimCaption.textContent =
+      "Ended at 7:00 AM ET";
+
+
+    mainLabel.textContent =
+      "Main Opens In";
+
+
+    mainTime.textContent =
+      formatCountdown(
+        mainStart -
+        nowSeconds
+      );
+
+
+    mainCaption.textContent =
+      "9:00–11:00 AM ET";
+
+
     return;
 
   }
 
 
+  /*
+    MAIN WINDOW ACTIVE
+  */
+
   if(
-    mins >= close
+    nowSeconds >=
+      mainStart &&
+    nowSeconds <
+      close
   ){
 
     box.className =
-      "market-status closed";
+      "market-status open";
+
 
     main.textContent =
-      "SESSION CLOSED";
+      "MAIN WASPN WINDOW ACTIVE";
+
 
     detail.textContent =
-      "11:00 AM ET reached • No reopening later";
+      "9:00–11:00 AM ET";
+
+
+    prelimLabel.textContent =
+      "Preliminary";
+
+
+    prelimTime.textContent =
+      "CLOSED";
+
+
+    prelimCaption.textContent =
+      "Ended at 7:00 AM ET";
+
+
+    mainBox.classList.add(
+      "active"
+    );
+
+
+    mainLabel.textContent =
+      "Main Remaining";
+
+
+    mainTime.textContent =
+      formatCountdown(
+        close -
+        nowSeconds
+      );
+
+
+    mainCaption.textContent =
+      "Hard close at 11:00 AM ET";
+
 
     return;
 
   }
 
 
+  /*
+    AFTER 11 AM
+  */
+
   box.className =
-    "market-status waiting";
+    "market-status closed";
+
 
   main.textContent =
-    "WAIT — SESSION NOT OPEN";
+    "SESSION CLOSED";
+
 
   detail.textContent =
-    "Preliminary monitoring begins at 6:30 AM ET";
+    "11:00 AM ET reached • No reopening later";
+
+
+  prelimLabel.textContent =
+    "Next Preliminary";
+
+
+  prelimTime.textContent =
+    formatCountdown(
+      nextSessionCountdown(
+        ny,
+        prelimStart
+      )
+    );
+
+
+  prelimCaption.textContent =
+    "Until next 6:30 AM ET";
+
+
+  mainLabel.textContent =
+    "Next Main Window";
+
+
+  mainTime.textContent =
+    formatCountdown(
+      nextSessionCountdown(
+        ny,
+        mainStart
+      )
+    );
+
+
+  mainCaption.textContent =
+    "Until next 9:00 AM ET";
 
 }
 
+
+/* ========================================
+   TODAY
+======================================== */
 
 function renderToday(){
 
@@ -1423,10 +2086,14 @@ function renderToday(){
   const pnl =
     typeof day.totalNet ===
       "number"
+
       ? day.totalNet
+
       : typeof live.realisedPnl ===
         "number"
+
         ? live.realisedPnl
+
         : null;
 
 
@@ -1443,6 +2110,7 @@ function renderToday(){
     pnlEl.textContent =
       "—";
 
+
     pnlEl.className =
       "value";
 
@@ -1454,6 +2122,7 @@ function renderToday(){
       money(
         pnl
       );
+
 
     pnlEl.className =
       "value " +
@@ -1472,8 +2141,10 @@ function renderToday(){
     day.compliance &&
     typeof day.compliance.score ===
       "number"
+
       ? day.compliance.score +
         "/3"
+
       : "—";
 
 
@@ -1483,14 +2154,21 @@ function renderToday(){
     day.sessionScore &&
     typeof day.sessionScore.score ===
       "number"
+
       ? day.sessionScore.score +
         "/5"
+
       : "—";
 
 }
 
 
+/* ========================================
+   START
+======================================== */
+
 renderMarketStatus();
+
 renderToday();
 
 
