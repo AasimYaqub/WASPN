@@ -209,10 +209,21 @@ body{
   font-weight:950;
 }
 
-.blue{color:var(--blue);}
-.green{color:var(--green);}
-.red{color:var(--red);}
-.amber{color:var(--amber);}
+.blue{
+  color:var(--blue);
+}
+
+.green{
+  color:var(--green);
+}
+
+.red{
+  color:var(--red);
+}
+
+.amber{
+  color:var(--amber);
+}
 
 
 /* MARKET STATUS */
@@ -418,10 +429,21 @@ body{
   background:var(--blue);
 }
 
-.module.journal::before{background:#75dbe7;}
-.module.end::before{background:var(--green);}
-.module.review::before{background:#aeb7ff;}
-.module.backup::before{background:#b5c0ca;}
+.module.journal::before{
+  background:#75dbe7;
+}
+
+.module.end::before{
+  background:var(--green);
+}
+
+.module.review::before{
+  background:#aeb7ff;
+}
+
+.module.backup::before{
+  background:#b5c0ca;
+}
 
 .module-title{
   font-size:15px;
@@ -446,54 +468,33 @@ body{
 }
 
 .evidence{
-  min-height:142px;
+  min-height:125px;
   display:flex;
   flex-direction:column;
+  justify-content:center;
   padding:12px;
   background:#090f14;
   border:1px solid var(--border);
   border-radius:10px;
 }
 
-.evidence-rule{
-  color:#b6c4d1;
-  font-size:9px;
-  font-weight:950;
-  letter-spacing:1px;
-  text-transform:uppercase;
-}
-
 .evidence-value{
-  margin-top:6px;
+  margin-top:5px;
   font-size:19px;
   font-weight:950;
-  line-height:1.05;
-}
-
-.evidence-value.compact{
-  font-size:15px;
-  line-height:1.25;
 }
 
 .evidence-copy{
-  margin-top:7px;
+  margin-top:5px;
   color:var(--muted);
   font-size:9px;
-  line-height:1.45;
-}
-
-.evidence-detail{
-  margin-top:auto;
-  padding-top:8px;
-  color:var(--muted2);
-  font-size:8px;
   line-height:1.4;
 }
 
 .evidence-note{
   margin-top:10px;
   padding-top:10px;
-  border-top:1px solid rgba(135,151,167,.16);
+  border-top:1px solid rgba(135,151,167,.14);
   color:var(--muted2);
   font-size:9px;
   line-height:1.5;
@@ -574,6 +575,9 @@ body{
 
 <div class="wrap" id="top">
 
+
+<!-- BRAND -->
+
 <section class="brand">
 
   <div class="logo-wrap">
@@ -591,53 +595,101 @@ body{
   </div>
 
   <div class="brand-copy">
-    An evidence-led framework designed to control trading windows, attempts, behavioural risk and daily loss exposure while creating a structured record of execution quality.
+    An evidence-led framework designed to control trading windows,
+    attempts, behavioural risk and daily loss exposure while creating
+    a structured record of execution quality.
   </div>
 
 </section>
 
 
+<!-- CORE RULES -->
+
 <div class="rules">
 
   <div class="rule">
-    <div class="label">Primary Window</div>
-    <div class="rule-value blue">9–11 AM ET</div>
+
+    <div class="label">
+      Primary Window
+    </div>
+
+    <div class="rule-value blue">
+      9–11 AM ET
+    </div>
+
   </div>
 
-  <div class="rule">
-    <div class="label">Max Attempts</div>
-    <div class="rule-value">5</div>
-  </div>
 
   <div class="rule">
-    <div class="label">Hard Stop</div>
-    <div class="rule-value red">-$100</div>
+
+    <div class="label">
+      Max Attempts
+    </div>
+
+    <div class="rule-value">
+      5
+    </div>
+
   </div>
 
+
   <div class="rule">
-    <div class="label">Objective</div>
-    <div class="rule-value green">+$50</div>
+
+    <div class="label">
+      Hard Stop
+    </div>
+
+    <div class="rule-value red">
+      -$100
+    </div>
+
+  </div>
+
+
+  <div class="rule">
+
+    <div class="label">
+      Objective
+    </div>
+
+    <div class="rule-value green">
+      +$50
+    </div>
+
   </div>
 
 </div>
 
+
+<!-- MARKET STATUS -->
 
 <div
   id="marketStatus"
   class="market-status closed"
 >
-  <div id="marketMain" class="market-main">
+
+  <div
+    id="marketMain"
+    class="market-main"
+  >
     Checking session…
   </div>
 
-  <div id="marketDetail" class="market-detail"></div>
+  <div
+    id="marketDetail"
+    class="market-detail"
+  ></div>
+
 </div>
 
+
+<!-- PRIMARY ACTION -->
 
 <a
   href="live-risk.html"
   class="primary-action"
 >
+
   <div class="primary-kicker">
     Step 1 • Live Trading
   </div>
@@ -645,8 +697,11 @@ body{
   <div class="primary-title">
     OPEN LIVE RISK →
   </div>
+
 </a>
 
+
+<!-- TODAY -->
 
 <section class="card">
 
@@ -661,29 +716,74 @@ body{
   <div class="today-grid">
 
     <div class="today-item">
-      <div class="label">Attempts</div>
-      <div id="todayAttempts" class="value">0/5</div>
+
+      <div class="label">
+        Attempts
+      </div>
+
+      <div
+        id="todayAttempts"
+        class="value"
+      >
+        0/5
+      </div>
+
     </div>
 
-    <div class="today-item">
-      <div class="label">P&amp;L</div>
-      <div id="todayPnl" class="value">—</div>
-    </div>
 
     <div class="today-item">
-      <div class="label">Compliance</div>
-      <div id="todayCompliance" class="value">—</div>
+
+      <div class="label">
+        P&amp;L
+      </div>
+
+      <div
+        id="todayPnl"
+        class="value"
+      >
+        —
+      </div>
+
     </div>
 
+
     <div class="today-item">
-      <div class="label">Process</div>
-      <div id="todayScore" class="value">—</div>
+
+      <div class="label">
+        Compliance
+      </div>
+
+      <div
+        id="todayCompliance"
+        class="value"
+      >
+        —
+      </div>
+
+    </div>
+
+
+    <div class="today-item">
+
+      <div class="label">
+        Process
+      </div>
+
+      <div
+        id="todayScore"
+        class="value"
+      >
+        —
+      </div>
+
     </div>
 
   </div>
 
 </section>
 
+
+<!-- WORKFLOW -->
 
 <section class="card">
 
@@ -698,49 +798,97 @@ body{
   <div class="flow">
 
     <div class="flow-step">
-      <div class="flow-number">1</div>
-      <div>
-        <div class="flow-title">Live Risk</div>
-        <div class="flow-copy">
-          Control trading window, attempts, realised P&amp;L, loss limits and behavioural risk.
-        </div>
+
+      <div class="flow-number">
+        1
       </div>
+
+      <div>
+
+        <div class="flow-title">
+          Live Risk
+        </div>
+
+        <div class="flow-copy">
+          Control trading window, attempts, realised P&amp;L,
+          loss limits and behavioural risk.
+        </div>
+
+      </div>
+
     </div>
 
-    <div class="flow-step">
-      <div class="flow-number">2</div>
-      <div>
-        <div class="flow-title">Journal</div>
-        <div class="flow-copy">
-          Capture ticker, side, entry, exit, shares and realised trade result with minimal intraday input.
-        </div>
-      </div>
-    </div>
 
     <div class="flow-step">
-      <div class="flow-number">3</div>
+
+      <div class="flow-number">
+        2
+      </div>
+
       <div>
-        <div class="flow-title">End Session</div>
+
+        <div class="flow-title">
+          Journal
+        </div>
+
+        <div class="flow-copy">
+          Capture ticker, side, entry, exit, shares and realised
+          trade result with minimal intraday input.
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="flow-step">
+
+      <div class="flow-number">
+        3
+      </div>
+
+      <div>
+
+        <div class="flow-title">
+          End Session
+        </div>
+
         <div class="flow-copy">
           Confirm structural compliance and behavioural process execution.
         </div>
+
       </div>
+
     </div>
 
+
     <div class="flow-step">
-      <div class="flow-number">4</div>
-      <div>
-        <div class="flow-title">Performance Review</div>
-        <div class="flow-copy">
-          Review financial results, risk controls and process outcomes, with broker reconciliation added later.
-        </div>
+
+      <div class="flow-number">
+        4
       </div>
+
+      <div>
+
+        <div class="flow-title">
+          Performance Review
+        </div>
+
+        <div class="flow-copy">
+          Review financial results, risk controls and process outcomes,
+          with broker reconciliation added later.
+        </div>
+
+      </div>
+
     </div>
 
   </div>
 
 </section>
 
+
+<!-- PLATFORM -->
 
 <section class="card">
 
@@ -754,45 +902,96 @@ body{
 
   <div class="module-grid">
 
-    <a href="live-risk.html" class="module">
-      <div class="module-title">Live Risk Control</div>
-      <div class="module-desc">
-        Real-time session guardrails, loss intervention and behavioural circuit breaker.
+
+    <a
+      href="live-risk.html"
+      class="module"
+    >
+
+      <div class="module-title">
+        Live Risk Control
       </div>
+
+      <div class="module-desc">
+        Real-time session guardrails, loss intervention
+        and behavioural circuit breaker.
+      </div>
+
     </a>
 
-    <a href="journal.html" class="module journal">
-      <div class="module-title">Trading Journal</div>
-      <div class="module-desc">
-        Fast intraday capture of trade economics with later broker-data enrichment.
+
+    <a
+      href="journal.html"
+      class="module journal"
+    >
+
+      <div class="module-title">
+        Trading Journal
       </div>
+
+      <div class="module-desc">
+        Fast intraday capture of trade economics
+        with later broker-data enrichment.
+      </div>
+
     </a>
 
-    <a href="compliance.html" class="module end">
-      <div class="module-title">End Session</div>
-      <div class="module-desc">
-        Structural compliance checks and five-point behavioural process score.
+
+    <a
+      href="compliance.html"
+      class="module end"
+    >
+
+      <div class="module-title">
+        End Session
       </div>
+
+      <div class="module-desc">
+        Structural compliance checks and five-point
+        behavioural process score.
+      </div>
+
     </a>
 
-    <a href="calendar-2026.html" class="module review">
-      <div class="module-title">Performance Review</div>
-      <div class="module-desc">
-        Review daily P&amp;L, attempts, risk events and process outcomes over time.
+
+    <a
+      href="calendar-2026.html"
+      class="module review"
+    >
+
+      <div class="module-title">
+        Performance Review
       </div>
+
+      <div class="module-desc">
+        Review daily P&amp;L, attempts, risk events
+        and process outcomes over time.
+      </div>
+
     </a>
 
-    <a href="data-backup.html" class="module backup">
-      <div class="module-title">Data Backup</div>
+
+    <a
+      href="data-backup.html"
+      class="module backup"
+    >
+
+      <div class="module-title">
+        Data Backup
+      </div>
+
       <div class="module-desc">
         Export and restore WASPN local records.
       </div>
+
     </a>
 
   </div>
 
 </section>
 
+
+<!-- EVIDENCE -->
 
 <section class="card">
 
@@ -801,15 +1000,68 @@ body{
   </div>
 
   <div class="card-copy">
-    The current WASPN limits are behavioural risk controls derived from recurring patterns in the historical broker record — not arbitrary targets.
+    Simple rules built from the strongest patterns in my trading history.
   </div>
+
 
   <div class="evidence-grid">
 
+
     <div class="evidence">
 
-      <div class="evidence-rule">
-        Why 9–11 AM ET
+      <div class="label">
+        Best Early Window
+      </div>
+
+      <div class="evidence-value green">
+        +$544
+      </div>
+
+      <div class="evidence-copy">
+        9:00–9:30 AM ET was the strongest historical trading period.
+      </div>
+
+    </div>
+
+
+    <div class="evidence">
+
+      <div class="label">
+        Attempts 1–5
+      </div>
+
+      <div class="evidence-value green">
+        +$343
+      </div>
+
+      <div class="evidence-copy">
+        Early attempts performed better before repeated trading took over.
+      </div>
+
+    </div>
+
+
+    <div class="evidence">
+
+      <div class="label">
+        Attempt 6+
+      </div>
+
+      <div class="evidence-value red">
+        -$1,031
+      </div>
+
+      <div class="evidence-copy">
+        Performance deteriorated sharply after the fifth attempt.
+      </div>
+
+    </div>
+
+
+    <div class="evidence">
+
+      <div class="label">
+        After 11 AM ET
       </div>
 
       <div class="evidence-value red">
@@ -817,88 +1069,23 @@ body{
       </div>
 
       <div class="evidence-copy">
-        Net result from completed trades entered at or after 11:00 AM ET.
-      </div>
-
-      <div class="evidence-detail">
-        The strongest early slice was 9:00–9:30 AM ET, averaging +$10.67 per completed trade.
-      </div>
-
-    </div>
-
-
-    <div class="evidence">
-
-      <div class="evidence-rule">
-        Why Maximum 5 Attempts
-      </div>
-
-      <div class="evidence-value compact">
-        <span class="green">+$343</span>
-        /
-        <span class="red">-$1,031</span>
-      </div>
-
-      <div class="evidence-copy">
-        During 9–11 AM ET, trades taken as daily attempts 1–5 produced +$343 net. Trades taken as attempt 6 or later produced -$1,031.
-      </div>
-
-      <div class="evidence-detail">
-        The attempt cap is designed to interrupt the deterioration associated with repeated re-entry and continued recovery attempts.
-      </div>
-
-    </div>
-
-
-    <div class="evidence">
-
-      <div class="evidence-rule">
-        Why the -$100 Hard Stop
-      </div>
-
-      <div class="evidence-value red">
-        -$5,809
-      </div>
-
-      <div class="evidence-copy">
-        On 37 historical days that first reached -$100 or worse in cumulative net P&amp;L, trades taken after that point lost another $5,809 in aggregate.
-      </div>
-
-      <div class="evidence-detail">
-        The hard stop is a circuit breaker against trying to trade back from a damaged session.
-      </div>
-
-    </div>
-
-
-    <div class="evidence">
-
-      <div class="evidence-rule">
-        Why the +$50 Objective
-      </div>
-
-      <div class="evidence-value red">
-        -$1,234
-      </div>
-
-      <div class="evidence-copy">
-        On 28 historical days that first reached +$50 or better, subsequent trades gave back $1,234 in aggregate.
-      </div>
-
-      <div class="evidence-detail">
-        The objective creates a reason to protect a productive session instead of automatically increasing exposure after reaching the daily goal.
+        Later trading produced the largest historical losses.
       </div>
 
     </div>
 
   </div>
 
+
   <div class="evidence-note">
-    Methodology: broker executions were reconstructed into completed flat-to-flat trades and ordered by trading day. Figures use net proceeds and describe this historical dataset only. The threshold figures measure what happened after the first daily crossing of -$100 or +$50; they show historical association, not proof that the thresholds themselves caused later performance. WASPN uses them as personal risk-management guardrails rather than universal trading-performance claims.
+    The goal is simple: trade early, limit attempts and stop before
+    behaviour starts driving decisions.
   </div>
 
 </section>
 
+
+<!-- COMMAND IMAGE -->
 
 <section class="command-centre">
 
@@ -1323,4 +1510,5 @@ window.addEventListener(
 <script src="workflow-nav.js?v=3"></script>
 
 </body>
+
 </html>
