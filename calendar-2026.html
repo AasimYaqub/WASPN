@@ -1,1121 +1,510 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#070b10">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="WASPN">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="color-scheme" content="dark">
 
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1.0,viewport-fit=cover"
->
-
-<meta
-  name="theme-color"
-  content="#070b10"
->
-
-<meta
-  name="apple-mobile-web-app-capable"
-  content="yes"
->
-
-<meta
-  name="apple-mobile-web-app-status-bar-style"
-  content="black-translucent"
->
-
-<meta
-  name="apple-mobile-web-app-title"
-  content="WASPN"
->
-
-<meta
-  name="mobile-web-app-capable"
-  content="yes"
->
-
-<meta
-  name="color-scheme"
-  content="dark"
->
-
-<link
-  rel="manifest"
-  href="manifest.webmanifest"
->
-
-<link
-  rel="apple-touch-icon"
-  href="apple-touch-icon.png"
->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 
 <title>WASPN • Performance Review</title>
 
-
 <style>
-
 :root{
-
   --bg:#070b10;
-
   --panel:#10171f;
   --panel2:#151e28;
   --panel3:#0b1117;
-
   --border:#273442;
-
   --text:#edf4fb;
   --muted:#8797a7;
   --muted2:#657687;
-
   --green:#35d07f;
   --red:#ff5f6d;
   --blue:#22c7ff;
   --amber:#f3b84b;
-
 }
 
-
-*{
-  box-sizing:border-box;
-}
-
+*{box-sizing:border-box}
 
 html{
-
   min-height:100%;
-
   background:#070b10;
-
   -webkit-text-size-adjust:100%;
-
   scroll-behavior:smooth;
-
 }
-
 
 body{
-
   margin:0;
-
   min-height:100vh;
   min-height:100dvh;
-
   background:
-
-    radial-gradient(
-      circle at 50% -10%,
-      rgba(34,199,255,.07),
-      transparent 35%
-    ),
-
+    radial-gradient(circle at 50% -10%,rgba(34,199,255,.07),transparent 35%),
     #070b10;
-
   color:var(--text);
-
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Arial,
-    Helvetica,
-    sans-serif;
-
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,Helvetica,sans-serif;
 }
 
-
-button,
-input{
-  font:inherit;
-}
-
-
-button,
-a{
-  -webkit-tap-highlight-color:transparent;
-}
-
+button,input{font:inherit}
+button,a{-webkit-tap-highlight-color:transparent}
 
 .wrap{
-
   width:100%;
   max-width:1000px;
-
   margin:0 auto;
-
-  padding:
-    max(
-      10px,
-      env(safe-area-inset-top)
-    )
-    10px
-    max(
-      24px,
-      env(safe-area-inset-bottom)
-    );
-
+  padding:max(10px,env(safe-area-inset-top)) 10px max(24px,env(safe-area-inset-bottom));
 }
-
-
-
-/* ========================================
-   HEADER
-======================================== */
 
 .topbar{
-
   display:grid;
-
-  grid-template-columns:
-    50px 1fr 50px;
-
+  grid-template-columns:50px 1fr 50px;
   align-items:center;
-
   gap:8px;
-
 }
 
-
 .icon-btn{
-
   width:50px;
   height:48px;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:13px;
-
   background:#111922;
-
   color:white;
-
   text-decoration:none;
-
   font-size:19px;
   font-weight:900;
-
 }
 
-
-.icon-btn:active{
-  transform:scale(.97);
-}
-
-
-.product{
-  text-align:center;
-}
-
+.icon-btn:active{transform:scale(.97)}
+.product{text-align:center}
 
 .wordmark{
-
   color:var(--blue);
-
   font-size:11px;
   font-weight:950;
-
   letter-spacing:2.4px;
-
 }
-
 
 .page-title{
-
   margin-top:1px;
-
   font-size:19px;
   font-weight:950;
-
 }
-
 
 .sub{
-
-  margin:
-    8px 0 10px;
-
+  margin:8px 0 10px;
   text-align:center;
-
   color:var(--muted);
-
   font-size:9px;
   font-weight:850;
-
   letter-spacing:1.2px;
-
   text-transform:uppercase;
-
 }
-
-
-
-/* ========================================
-   GENERIC
-======================================== */
 
 .card{
-
   margin-top:8px;
-
   padding:13px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #111921,
-      #0d141a
-    );
-
-  border:
-    1px solid
-    var(--border);
-
+  background:linear-gradient(180deg,#111921,#0d141a);
+  border:1px solid var(--border);
   border-radius:16px;
-
 }
-
 
 .label{
-
   color:var(--muted);
-
   font-size:9px;
   font-weight:900;
-
   letter-spacing:.8px;
-
   text-transform:uppercase;
-
 }
 
-
-.green{
-  color:var(--green);
-}
-
-
-.red{
-  color:var(--red);
-}
-
-
-.blue{
-  color:var(--blue);
-}
-
-
-.amber{
-  color:var(--amber);
-}
-
-
-.muted{
-  color:var(--muted);
-}
-
-
-
-/* ========================================
-   YEAR SUMMARY
-======================================== */
+.green{color:var(--green)}
+.red{color:var(--red)}
+.blue{color:var(--blue)}
+.amber{color:var(--amber)}
+.muted{color:var(--muted)}
 
 .year-grid{
-
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns:1fr 1fr;
   gap:7px;
-
 }
-
 
 .metric{
-
   min-width:0;
-
   padding:11px;
-
   background:#090f14;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:11px;
-
 }
-
 
 .metric-value{
-
   margin-top:4px;
-
   font-size:21px;
   font-weight:950;
-
   white-space:nowrap;
   overflow:hidden;
-
-  font-variant-numeric:
-    tabular-nums;
-
+  font-variant-numeric:tabular-nums;
 }
-
 
 .metric-sub{
-
   margin-top:3px;
-
   color:var(--muted);
-
   font-size:10px;
   font-weight:800;
-
   white-space:nowrap;
   overflow:hidden;
-
 }
-
-
-
-/* ========================================
-   MONTH NAV
-======================================== */
 
 .month-head{
-
   display:grid;
-
-  grid-template-columns:
-    46px 1fr 46px;
-
+  grid-template-columns:46px 1fr 46px;
   gap:7px;
-
   align-items:center;
-
 }
-
 
 .nav-btn{
-
   height:44px;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:10px;
-
   background:#151e27;
-
   color:white;
-
   font-weight:950;
-
   cursor:pointer;
-
 }
-
 
 .month-title{
-
   text-align:center;
-
   font-size:23px;
   font-weight:950;
-
 }
-
 
 .month-buttons{
-
   display:grid;
-
-  grid-template-columns:
-    repeat(4,1fr);
-
+  grid-template-columns:repeat(4,1fr);
   gap:6px;
-
   margin-top:10px;
-
 }
-
 
 .month-jump{
-
   min-height:38px;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:9px;
-
   background:#111820;
-
   color:#abb8c4;
-
   font-size:10px;
   font-weight:900;
-
   cursor:pointer;
-
 }
-
 
 .month-jump.active{
-
   color:var(--blue);
-
-  border-color:
-    rgba(34,199,255,.55);
-
+  border-color:rgba(34,199,255,.55);
   background:#0d202a;
-
 }
-
-
-
-/* ========================================
-   MONTH KPI
-======================================== */
 
 .month-stats{
-
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns:1fr 1fr;
   gap:7px;
-
   margin-top:10px;
-
 }
-
-
-
-/* ========================================
-   CALENDAR
-======================================== */
 
 .legend{
-
   display:flex;
   flex-wrap:wrap;
-
   gap:10px;
-
   margin-top:11px;
-
   color:var(--muted);
-
   font-size:9px;
-
 }
-
 
 .calendar{
-
   display:grid;
-
-  grid-template-columns:
-    repeat(
-      5,
-      minmax(0,1fr)
-    );
-
+  grid-template-columns:repeat(5,minmax(0,1fr));
   gap:4px;
-
   margin-top:12px;
-
 }
-
 
 .weekday{
-
   padding-bottom:3px;
-
   text-align:center;
-
   color:var(--muted);
-
   font-size:9px;
   font-weight:900;
-
   text-transform:uppercase;
-
 }
-
 
 .day{
-
   position:relative;
-
   min-width:0;
   min-height:91px;
-
   overflow:hidden;
-
-  padding:
-    7px 5px;
-
+  padding:7px 5px;
   background:#121a22;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:9px;
-
   cursor:pointer;
-
 }
-
 
 .day.empty{
-
   opacity:.15;
-
   cursor:default;
-
 }
 
-
-.day.future{
-  opacity:.4;
-}
-
+.day.future{opacity:.4}
 
 .day.green-day{
-
   background:#0f1e16;
-
   border-color:#28583e;
-
 }
-
 
 .day.red-day{
-
   background:#211216;
-
   border-color:#58303a;
-
 }
-
 
 .day.saved-day::after{
-
   content:"•";
-
   position:absolute;
-
   top:3px;
   right:6px;
-
   color:var(--blue);
-
   font-size:17px;
   font-weight:950;
-
 }
-
 
 .date{
-
   color:var(--muted);
-
   font-size:9px;
   font-weight:800;
-
   white-space:nowrap;
-
 }
 
-
-.pnl{
-  margin-top:12px;
-}
-
+.pnl{margin-top:12px}
 
 .pnl-usd{
-
-  font-size:
-    clamp(
-      9px,
-      2.8vw,
-      14px
-    );
-
+  font-size:clamp(9px,2.8vw,14px);
   font-weight:950;
-
   letter-spacing:-.3px;
-
   white-space:nowrap;
-
 }
-
 
 .pnl-gbp{
-
   margin-top:4px;
-
   color:var(--muted);
-
-  font-size:
-    clamp(
-      8px,
-      2.3vw,
-      11px
-    );
-
+  font-size:clamp(8px,2.3vw,11px);
   font-weight:800;
-
   white-space:nowrap;
-
 }
-
-
-
-/* ========================================
-   DETAIL
-======================================== */
 
 .detail{
-
   margin-top:10px;
-
   padding:13px;
-
   background:#080e13;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:13px;
-
 }
-
 
 .detail-date{
-
   font-size:13px;
   font-weight:950;
-
 }
-
 
 .detail-main{
-
   margin-top:6px;
-
   font-size:31px;
   font-weight:950;
-
-  font-variant-numeric:
-    tabular-nums;
-
+  font-variant-numeric:tabular-nums;
 }
-
 
 .detail-gbp{
-
   margin-top:2px;
-
   color:var(--muted);
-
   font-size:16px;
   font-weight:850;
-
 }
 
+.pnl-source{
+  margin-top:7px;
+  color:var(--blue);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+}
 
 .detail-grid{
-
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns:1fr 1fr;
   gap:7px;
-
   margin-top:10px;
-
 }
-
 
 .detail-item{
-
   padding:9px;
-
   background:#121a22;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:9px;
-
 }
-
 
 .detail-value{
-
   margin-top:4px;
-
   font-size:14px;
   font-weight:950;
-
 }
-
 
 .trade{
-
   margin-top:7px;
-
   padding:10px;
-
   background:#121a22;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:9px;
-
   font-size:11px;
-
   line-height:1.5;
-
 }
-
 
 .trade-row{
-
   display:flex;
-
   justify-content:space-between;
-
   gap:10px;
-
   margin-top:4px;
-
 }
 
-
-.trade-row span:first-child{
-  color:var(--muted);
-}
-
+.trade-row span:first-child{color:var(--muted)}
 
 .trade-gbp{
-
   color:var(--muted);
-
   font-size:10px;
-
 }
-
 
 .timing-pending{
-
   margin-top:7px;
-
   color:var(--amber);
-
   font-size:9px;
   font-weight:850;
-
 }
-
 
 .reconciled{
-
   margin-top:7px;
-
   color:var(--blue);
-
   font-size:9px;
   font-weight:850;
-
 }
-
-
-/* ========================================
-   SETUP / REASON
-======================================== */
 
 .trade-setup{
-
   margin-top:11px;
-
   padding-top:10px;
-
-  border-top:
-    1px solid
-    var(--border);
-
+  border-top:1px solid var(--border);
 }
-
 
 .trade-setup-label{
-
   color:#a9c9d6;
-
   font-size:9px;
   font-weight:900;
-
   letter-spacing:.8px;
-
   text-transform:uppercase;
-
 }
-
 
 .trade-setup-text{
-
   margin-top:6px;
-
   color:var(--text);
-
   font-size:11px;
-
   line-height:1.5;
-
 }
-
 
 .review-note{
-
   margin-top:8px;
-
   padding:9px;
-
   background:#0b151d;
-
-  border:
-    1px solid
-    rgba(34,199,255,.18);
-
+  border:1px solid rgba(34,199,255,.18);
   border-radius:9px;
-
   color:var(--muted);
-
   font-size:9px;
-
   line-height:1.45;
-
 }
-
-
-
-/* ========================================
-   FX
-======================================== */
 
 .fx-row{
-
   display:flex;
-
   align-items:end;
-
   justify-content:space-between;
-
   gap:10px;
-
 }
-
 
 .fx-wrap{
-
   display:flex;
-
   align-items:center;
-
   gap:7px;
-
   margin-top:5px;
-
 }
-
 
 .fx-wrap input{
-
   width:104px;
-
   min-height:42px;
-
-  padding:
-    8px 9px;
-
-  border:
-    1px solid
-    var(--border);
-
+  padding:8px 9px;
+  border:1px solid var(--border);
   border-radius:9px;
-
   background:#080e13;
-
   color:white;
-
   font-size:15px;
   font-weight:900;
-
 }
-
 
 .save-fx{
-
   min-height:42px;
-
-  padding:
-    0 14px;
-
-  border:
-    1px solid
-    var(--border);
-
+  padding:0 14px;
+  border:1px solid var(--border);
   border-radius:9px;
-
   background:#151e27;
-
   color:white;
-
   font-size:10px;
   font-weight:900;
-
 }
-
 
 .fx-note{
-
   margin-top:8px;
-
   color:var(--muted2);
-
   font-size:9px;
-
   line-height:1.4;
-
 }
-
-
-
-/* ========================================
-   DESKTOP
-======================================== */
 
 @media(min-width:700px){
-
-  .wrap{
-    padding:18px;
-  }
-
-
-  .year-grid{
-
-    grid-template-columns:
-      repeat(4,1fr);
-
-  }
-
-
-  .month-stats{
-
-    grid-template-columns:
-      repeat(6,1fr);
-
-  }
-
-
-  .month-buttons{
-
-    grid-template-columns:
-      repeat(12,1fr);
-
-  }
-
-
-  .day{
-
-    min-height:108px;
-
-    padding:9px;
-
-  }
-
-
-  .detail-grid{
-
-    grid-template-columns:
-      repeat(4,1fr);
-
-  }
-
+  .wrap{padding:18px}
+  .year-grid{grid-template-columns:repeat(4,1fr)}
+  .month-stats{grid-template-columns:repeat(6,1fr)}
+  .month-buttons{grid-template-columns:repeat(12,1fr)}
+  .day{min-height:108px;padding:9px}
+  .detail-grid{grid-template-columns:repeat(4,1fr)}
 }
-
 </style>
-
 </head>
-
-
 
 <body>
 
-
-<div
-  class="wrap"
-  id="top"
->
-
+<div class="wrap" id="top">
 
 <header>
 
   <div class="topbar">
 
-    <a
-      href="index.html"
-      class="icon-btn"
-      aria-label="Home"
-    >
-      ←
-    </a>
-
+    <a href="index.html" class="icon-btn" aria-label="Home">←</a>
 
     <div class="product">
-
-      <div class="wordmark">
-        WASPN
-      </div>
-
-      <div class="page-title">
-        Performance Review
-      </div>
-
+      <div class="wordmark">WASPN</div>
+      <div class="page-title">Performance Review</div>
     </div>
 
-
-    <a
-      href="data-backup.html"
-      class="icon-btn"
-      aria-label="Backup"
-    >
-      ⇩
-    </a>
+    <a href="data-backup.html" class="icon-btn" aria-label="Backup">⇩</a>
 
   </div>
-
 
   <div class="sub">
     Trading History • Broker Reconciliation • Process • Risk
@@ -1123,321 +512,115 @@ a{
 
 </header>
 
-
-
 <section class="card">
 
-  <div class="label">
-    2026 Year-to-Date
-  </div>
+  <div class="label">2026 Year-to-Date</div>
 
-
-  <div
-    class="year-grid"
-    style="margin-top:9px;"
-  >
+  <div class="year-grid" style="margin-top:9px;">
 
     <div class="metric">
-
-      <div class="label">
-        Net P&amp;L
-      </div>
-
-      <div
-        id="yearPnlUsd"
-        class="metric-value"
-      >
-        —
-      </div>
-
-      <div
-        id="yearPnlGbp"
-        class="metric-sub"
-      >
-        —
-      </div>
-
+      <div class="label">Net P&amp;L</div>
+      <div id="yearPnlUsd" class="metric-value">—</div>
+      <div id="yearPnlGbp" class="metric-sub">—</div>
     </div>
 
-
     <div class="metric">
-
-      <div class="label">
-        Trading Days
-      </div>
-
-      <div
-        id="yearDays"
-        class="metric-value"
-      >
-        0
-      </div>
-
+      <div class="label">Trading Days</div>
+      <div id="yearDays" class="metric-value">0</div>
     </div>
 
-
     <div class="metric">
-
-      <div class="label">
-        Green Days
-      </div>
-
-      <div
-        id="yearGreen"
-        class="metric-value green"
-      >
-        0
-      </div>
-
+      <div class="label">Green Days</div>
+      <div id="yearGreen" class="metric-value green">0</div>
     </div>
 
-
     <div class="metric">
-
-      <div class="label">
-        Red Days
-      </div>
-
-      <div
-        id="yearRed"
-        class="metric-value red"
-      >
-        0
-      </div>
-
+      <div class="label">Red Days</div>
+      <div id="yearRed" class="metric-value red">0</div>
     </div>
 
   </div>
 
 </section>
-
-
 
 <section class="card">
 
   <div class="month-head">
 
-    <button
-      id="prev"
-      class="nav-btn"
-      type="button"
-    >
-      ←
-    </button>
+    <button id="prev" class="nav-btn" type="button">←</button>
 
+    <div id="monthTitle" class="month-title">—</div>
 
-    <div
-      id="monthTitle"
-      class="month-title"
-    >
-      —
-    </div>
-
-
-    <button
-      id="next"
-      class="nav-btn"
-      type="button"
-    >
-      →
-    </button>
+    <button id="next" class="nav-btn" type="button">→</button>
 
   </div>
 
-
-  <div
-    id="monthButtons"
-    class="month-buttons"
-  ></div>
-
+  <div id="monthButtons" class="month-buttons"></div>
 
   <div class="month-stats">
 
     <div class="metric">
-
-      <div class="label">
-        Month P&amp;L
-      </div>
-
-      <div
-        id="monthPnlUsd"
-        class="metric-value"
-      >
-        —
-      </div>
-
-      <div
-        id="monthPnlGbp"
-        class="metric-sub"
-      >
-        —
-      </div>
-
+      <div class="label">Month P&amp;L</div>
+      <div id="monthPnlUsd" class="metric-value">—</div>
+      <div id="monthPnlGbp" class="metric-sub">—</div>
     </div>
 
-
     <div class="metric">
-
-      <div class="label">
-        Trading Days
-      </div>
-
-      <div
-        id="tradingDays"
-        class="metric-value"
-      >
-        0
-      </div>
-
+      <div class="label">Trading Days</div>
+      <div id="tradingDays" class="metric-value">0</div>
     </div>
 
-
     <div class="metric">
-
-      <div class="label">
-        Green
-      </div>
-
-      <div
-        id="greenDays"
-        class="metric-value green"
-      >
-        0
-      </div>
-
+      <div class="label">Green</div>
+      <div id="greenDays" class="metric-value green">0</div>
     </div>
 
-
     <div class="metric">
-
-      <div class="label">
-        Red
-      </div>
-
-      <div
-        id="redDays"
-        class="metric-value red"
-      >
-        0
-      </div>
-
+      <div class="label">Red</div>
+      <div id="redDays" class="metric-value red">0</div>
     </div>
 
-
     <div class="metric">
-
-      <div class="label">
-        Best Day
-      </div>
-
-      <div
-        id="bestDayUsd"
-        class="metric-value green"
-      >
-        —
-      </div>
-
-      <div
-        id="bestDayGbp"
-        class="metric-sub"
-      >
-        —
-      </div>
-
+      <div class="label">Best Day</div>
+      <div id="bestDayUsd" class="metric-value green">—</div>
+      <div id="bestDayGbp" class="metric-sub">—</div>
     </div>
 
-
     <div class="metric">
-
-      <div class="label">
-        Worst Day
-      </div>
-
-      <div
-        id="worstDayUsd"
-        class="metric-value red"
-      >
-        —
-      </div>
-
-      <div
-        id="worstDayGbp"
-        class="metric-sub"
-      >
-        —
-      </div>
-
+      <div class="label">Worst Day</div>
+      <div id="worstDayUsd" class="metric-value red">—</div>
+      <div id="worstDayGbp" class="metric-sub">—</div>
     </div>
 
   </div>
-
 
   <div class="legend">
-
-    <span>
-      ● Profit
-    </span>
-
-    <span>
-      ● Loss
-    </span>
-
-    <span>
-      Blue dot = WASPN record
-    </span>
-
-    <span>
-      GBP = approximate
-    </span>
-
+    <span>● Profit</span>
+    <span>● Loss</span>
+    <span>Blue dot = WASPN record</span>
+    <span>Broker history takes priority</span>
+    <span>GBP = approximate</span>
   </div>
-
 
   <div class="calendar">
 
-    <div class="weekday">
-      Mon
-    </div>
+    <div class="weekday">Mon</div>
+    <div class="weekday">Tue</div>
+    <div class="weekday">Wed</div>
+    <div class="weekday">Thu</div>
+    <div class="weekday">Fri</div>
 
-    <div class="weekday">
-      Tue
-    </div>
-
-    <div class="weekday">
-      Wed
-    </div>
-
-    <div class="weekday">
-      Thu
-    </div>
-
-    <div class="weekday">
-      Fri
-    </div>
-
-
-    <div
-      id="calendarDays"
-      style="display:contents;"
-    ></div>
+    <div id="calendarDays" style="display:contents;"></div>
 
   </div>
 
-
-  <div
-    id="detail"
-    class="detail"
-  >
-
+  <div id="detail" class="detail">
     <div class="muted">
       Select a trading day to inspect P&amp;L, attempts, broker timing and process data.
     </div>
-
   </div>
 
 </section>
-
-
 
 <section class="card">
 
@@ -1445,15 +628,11 @@ a{
 
     <div>
 
-      <div class="label">
-        Display Conversion
-      </div>
+      <div class="label">Display Conversion</div>
 
       <div class="fx-wrap">
 
-        <strong>
-          $1 =
-        </strong>
+        <strong>$1 =</strong>
 
         <input
           id="fxRate"
@@ -1464,59 +643,38 @@ a{
           value="0.7500"
         >
 
-        <strong>
-          GBP
-        </strong>
+        <strong>GBP</strong>
 
       </div>
 
     </div>
 
-
-    <button
-      id="saveFxBtn"
-      class="save-fx"
-      type="button"
-    >
+    <button id="saveFxBtn" class="save-fx" type="button">
       SAVE
     </button>
 
   </div>
 
-
   <div class="fx-note">
-    USD is the authoritative record. GBP values are approximate display conversions using the locally saved rate above.
+    USD is authoritative. Historical broker results take priority over Journal estimates. GBP is display-only.
   </div>
 
 </section>
 
-
 </div>
 
-
-
 <script>
+const STORAGE_KEY = "waspnJournalV2";
+const FX_STORAGE_KEY = "waspnUsdGbpRateV1";
+const DEFAULT_FX_RATE = 0.7500;
 
-const STORAGE_KEY =
-  "waspnJournalV2";
+/*
+  BROKER-AUTHORITATIVE HISTORICAL DAILY P&L.
 
-
-const FX_STORAGE_KEY =
-  "waspnUsdGbpRateV1";
-
-
-const DEFAULT_FX_RATE =
-  0.7500;
-
-
-
-/* ========================================
-   HISTORICAL DATA
-   DO NOT ALTER — BROKER HISTORY
-======================================== */
-
+  If a date exists here, this result wins over
+  Journal totalNet in Performance Review.
+*/
 const tradingData = {
-
   "2026-06-30":50.30,
 
   "2026-07-01":39.67,
@@ -1600,416 +758,234 @@ const tradingData = {
   "2026-10-21":-31.44,
   "2026-10-22":-599.78,
   "2026-10-23":-95.22
-
 };
 
-
-
 const months = [
-
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"
-
+  "January","February","March","April",
+  "May","June","July","August",
+  "September","October","November","December"
 ];
 
-
-let currentMonth =
-  9;
-
-
-
-/* ========================================
-   STORAGE
-======================================== */
+let currentMonth = 9;
 
 function getJournal(){
-
   try{
-
     return JSON.parse(
-      localStorage.getItem(
-        STORAGE_KEY
-      )
+      localStorage.getItem(STORAGE_KEY)
     ) || {};
-
-  }
-
-  catch{
-
+  }catch{
     return {};
-
   }
-
 }
 
+/*
+  DAILY P&L AUTHORITY
+
+  1. Explicit brokerDailyNet stored in a WASPN record.
+  2. Historical broker tradingData.
+  3. Journal totalNet.
+*/
+function getDailyResult(date,day = null){
+  const record =
+    day || getJournal()[date] || {};
+
+  if(
+    typeof record.brokerDailyNet === "number" &&
+    Number.isFinite(record.brokerDailyNet)
+  ){
+    return {
+      value:record.brokerDailyNet,
+      source:"Broker reconciled"
+    };
+  }
+
+  if(
+    Object.prototype.hasOwnProperty.call(
+      tradingData,
+      date
+    )
+  ){
+    return {
+      value:tradingData[date],
+      source:"Broker history"
+    };
+  }
+
+  if(
+    typeof record.totalNet === "number" &&
+    Number.isFinite(record.totalNet)
+  ){
+    return {
+      value:record.totalNet,
+      source:"WASPN Journal"
+    };
+  }
+
+  return {
+    value:null,
+    source:"No P&L"
+  };
+}
 
 function combined(){
-
   const data = {
     ...tradingData
   };
 
+  const journal = getJournal();
 
-  const journal =
-    getJournal();
-
-
-  Object.entries(
-    journal
-  )
-  .forEach(
+  Object.entries(journal).forEach(
     ([date,day]) => {
+      const result =
+        getDailyResult(date,day);
 
-      if(
-        typeof day?.totalNet ===
-        "number"
-      ){
-
-        data[
-          date
-        ] =
-          day.totalNet;
-
+      if(typeof result.value === "number"){
+        data[date] = result.value;
       }
-
     }
   );
 
-
   return data;
-
 }
-
-
-
-/* ========================================
-   FX
-======================================== */
 
 function getFxRate(){
-
   const saved =
     Number(
-      localStorage.getItem(
-        FX_STORAGE_KEY
-      )
+      localStorage.getItem(FX_STORAGE_KEY)
     );
 
-
   if(
-    Number.isFinite(
-      saved
-    ) &&
+    Number.isFinite(saved) &&
     saved > 0
   ){
-
     return saved;
-
   }
 
-
   return DEFAULT_FX_RATE;
-
 }
 
-
 function saveFxRate(){
-
   const input =
-    document.getElementById(
-      "fxRate"
-    );
-
+    document.getElementById("fxRate");
 
   const rate =
-    Number(
-      input.value
-    );
-
+    Number(input.value);
 
   if(
-    !Number.isFinite(
-      rate
-    ) ||
+    !Number.isFinite(rate) ||
     rate <= 0
   ){
-
     alert(
       "Enter a valid USD → GBP conversion rate."
     );
 
     return;
-
   }
-
 
   localStorage.setItem(
     FX_STORAGE_KEY,
-    String(
-      rate
-    )
+    String(rate)
   );
 
-
   input.value =
-    rate.toFixed(
-      4
-    );
-
+    rate.toFixed(4);
 
   render();
-
 }
 
+function usdMoney(value){
+  const n = Number(value || 0);
 
-
-/* ========================================
-   MONEY
-======================================== */
-
-function usdMoney(
-  value
-){
-
-  const n =
-    Number(
-      value || 0
-    );
-
-
-  if(
-    n > 0
-  ){
-
-    return (
-      "+$" +
-      n.toFixed(
-        2
-      )
-    );
-
+  if(n > 0){
+    return "+$" + n.toFixed(2);
   }
 
-
-  if(
-    n < 0
-  ){
-
-    return (
-      "-$" +
-      Math.abs(
-        n
-      )
-      .toFixed(
-        2
-      )
-    );
-
+  if(n < 0){
+    return "-$" + Math.abs(n).toFixed(2);
   }
-
 
   return "$0.00";
-
 }
 
-
-function gbpMoney(
-  usdValue
-){
-
+function gbpMoney(usdValue){
   const gbp =
-    Number(
-      usdValue || 0
-    ) *
+    Number(usdValue || 0) *
     getFxRate();
 
-
-  if(
-    gbp > 0
-  ){
-
-    return (
-      "≈ +£" +
-      gbp.toFixed(
-        2
-      )
-    );
-
+  if(gbp > 0){
+    return "≈ +£" + gbp.toFixed(2);
   }
 
-
-  if(
-    gbp < 0
-  ){
-
-    return (
-      "≈ -£" +
-      Math.abs(
-        gbp
-      )
-      .toFixed(
-        2
-      )
-    );
-
+  if(gbp < 0){
+    return "≈ -£" + Math.abs(gbp).toFixed(2);
   }
-
 
   return "≈ £0.00";
-
 }
 
-
-
-/* ========================================
-   TIME / DURATION
-======================================== */
-
-function timeToSeconds(
-  value
-){
-
-  if(
-    !value
-  ){
-
+function timeToSeconds(value){
+  if(!value){
     return null;
-
   }
-
 
   const match =
-    String(
-      value
-    )
-    .trim()
-    .match(
-      /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/
-    );
+    String(value)
+      .trim()
+      .match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
 
-
-  if(
-    !match
-  ){
-
+  if(!match){
     return null;
-
   }
 
-
-  const hours =
-    Number(
-      match[1]
-    );
-
-
-  const minutes =
-    Number(
-      match[2]
-    );
-
-
-  const seconds =
-    Number(
-      match[3] || 0
-    );
-
+  const hours = Number(match[1]);
+  const minutes = Number(match[2]);
+  const seconds = Number(match[3] || 0);
 
   if(
     hours > 23 ||
     minutes > 59 ||
     seconds > 59
   ){
-
     return null;
-
   }
-
 
   return (
     hours * 3600 +
     minutes * 60 +
     seconds
   );
-
 }
 
-
-function durationLabel(
-  entry,
-  exit
-){
-
-  const start =
-    timeToSeconds(
-      entry
-    );
-
-
-  const finish =
-    timeToSeconds(
-      exit
-    );
-
+function durationLabel(entry,exit){
+  const start = timeToSeconds(entry);
+  const finish = timeToSeconds(exit);
 
   if(
     start === null ||
     finish === null
   ){
-
     return null;
-
   }
-
 
   let duration =
-    finish -
-    start;
+    finish - start;
 
-
-  if(
-    duration < 0
-  ){
-
-    duration +=
-      24 * 60 * 60;
-
+  if(duration < 0){
+    duration += 24 * 60 * 60;
   }
 
-
   const minutes =
-    Math.floor(
-      duration / 60
-    );
-
+    Math.floor(duration / 60);
 
   const seconds =
     duration % 60;
 
-
-  if(
-    minutes >= 60
-  ){
-
+  if(minutes >= 60){
     const hours =
-      Math.floor(
-        minutes / 60
-      );
-
+      Math.floor(minutes / 60);
 
     const remainingMinutes =
       minutes % 60;
-
 
     return (
       hours +
@@ -2017,85 +993,36 @@ function durationLabel(
       remainingMinutes +
       "m"
     );
-
   }
-
 
   return (
     minutes +
     "m " +
-    String(
-      seconds
-    )
-    .padStart(
-      2,
-      "0"
-    ) +
+    String(seconds).padStart(2,"0") +
     "s"
   );
-
 }
 
-
-
-/* ========================================
-   DATA HELPERS
-======================================== */
-
-function key(
-  month,
-  day
-){
-
+function key(month,day){
   return (
     "2026-" +
-    String(
-      month + 1
-    )
-    .padStart(
-      2,
-      "0"
-    ) +
+    String(month + 1).padStart(2,"0") +
     "-" +
-    String(
-      day
-    )
-    .padStart(
-      2,
-      "0"
-    )
+    String(day).padStart(2,"0")
   );
-
 }
 
-
-function monthEntries(
-  month
-){
-
+function monthEntries(month){
   const prefix =
     "2026-" +
-    String(
-      month + 1
-    )
-    .padStart(
-      2,
-      "0"
+    String(month + 1).padStart(2,"0");
+
+  return Object.entries(combined())
+    .filter(
+      ([date]) =>
+        date.startsWith(prefix)
     );
-
-
-  return Object.entries(
-    combined()
-  )
-  .filter(
-    ([date]) =>
-      date.startsWith(
-        prefix
-      )
-  );
-
 }
-
 
 function setMoneyStat(
   usdId,
@@ -2103,94 +1030,47 @@ function setMoneyStat(
   value,
   empty = false
 ){
-
   const usd =
-    document.getElementById(
-      usdId
-    );
-
+    document.getElementById(usdId);
 
   const gbp =
-    document.getElementById(
-      gbpId
-    );
+    document.getElementById(gbpId);
 
-
-  if(
-    empty
-  ){
-
-    usd.textContent =
-      "—";
-
-
-    gbp.textContent =
-      "—";
-
-
+  if(empty){
+    usd.textContent = "—";
+    gbp.textContent = "—";
     return;
-
   }
 
-
   usd.textContent =
-    usdMoney(
-      value
-    );
-
+    usdMoney(value);
 
   gbp.textContent =
-    gbpMoney(
-      value
-    );
-
+    gbpMoney(value);
 }
 
-
-
-/* ========================================
-   STATS
-======================================== */
-
 function renderStats(){
-
   const entries =
-    monthEntries(
-      currentMonth
-    );
-
+    monthEntries(currentMonth);
 
   const values =
-    entries.map(
-      item =>
-        item[1]
-    );
-
+    entries.map(item => item[1]);
 
   const total =
     values.reduce(
-      (a,b) =>
-        a + b,
+      (a,b) => a + b,
       0
     );
 
-
   const monthUsd =
-    document.getElementById(
-      "monthPnlUsd"
-    );
+    document.getElementById("monthPnlUsd");
 
-
-  if(
-    entries.length
-  ){
-
+  if(entries.length){
     setMoneyStat(
       "monthPnlUsd",
       "monthPnlGbp",
       total
     );
-
 
     monthUsd.className =
       "metric-value " +
@@ -2199,66 +1079,31 @@ function renderStats(){
           ? "green"
           : "red"
       );
-
   }
 
   else{
+    monthUsd.textContent = "No data";
 
-    monthUsd.textContent =
-      "No data";
-
-
-    document.getElementById(
-      "monthPnlGbp"
-    ).textContent =
-      "—";
-
+    document
+      .getElementById("monthPnlGbp")
+      .textContent = "—";
 
     monthUsd.className =
       "metric-value";
-
   }
 
-
-  document.getElementById(
-    "tradingDays"
-  ).textContent =
+  document.getElementById("tradingDays").textContent =
     entries.length;
 
+  document.getElementById("greenDays").textContent =
+    values.filter(value => value > 0).length;
 
-  document.getElementById(
-    "greenDays"
-  ).textContent =
-    values.filter(
-      value =>
-        value > 0
-    ).length;
+  document.getElementById("redDays").textContent =
+    values.filter(value => value < 0).length;
 
-
-  document.getElementById(
-    "redDays"
-  ).textContent =
-    values.filter(
-      value =>
-        value < 0
-    ).length;
-
-
-  if(
-    entries.length
-  ){
-
-    const best =
-      Math.max(
-        ...values
-      );
-
-
-    const worst =
-      Math.min(
-        ...values
-      );
-
+  if(entries.length){
+    const best = Math.max(...values);
+    const worst = Math.min(...values);
 
     setMoneyStat(
       "bestDayUsd",
@@ -2266,17 +1111,14 @@ function renderStats(){
       best
     );
 
-
     setMoneyStat(
       "worstDayUsd",
       "worstDayGbp",
       worst
     );
-
   }
 
   else{
-
     setMoneyStat(
       "bestDayUsd",
       "bestDayGbp",
@@ -2284,30 +1126,22 @@ function renderStats(){
       true
     );
 
-
     setMoneyStat(
       "worstDayUsd",
       "worstDayGbp",
       0,
       true
     );
-
   }
 
-
   const all =
-    Object.values(
-      combined()
-    );
-
+    Object.values(combined());
 
   const ytd =
     all.reduce(
-      (a,b) =>
-        a + b,
+      (a,b) => a + b,
       0
     );
-
 
   setMoneyStat(
     "yearPnlUsd",
@@ -2315,10 +1149,7 @@ function renderStats(){
     ytd
   );
 
-
-  document.getElementById(
-    "yearPnlUsd"
-  ).className =
+  document.getElementById("yearPnlUsd").className =
     "metric-value " +
     (
       ytd >= 0
@@ -2326,81 +1157,36 @@ function renderStats(){
         : "red"
     );
 
-
-  document.getElementById(
-    "yearDays"
-  ).textContent =
+  document.getElementById("yearDays").textContent =
     all.length;
 
+  document.getElementById("yearGreen").textContent =
+    all.filter(value => value > 0).length;
 
-  document.getElementById(
-    "yearGreen"
-  ).textContent =
-    all.filter(
-      value =>
-        value > 0
-    ).length;
-
-
-  document.getElementById(
-    "yearRed"
-  ).textContent =
-    all.filter(
-      value =>
-        value < 0
-    ).length;
-
+  document.getElementById("yearRed").textContent =
+    all.filter(value => value < 0).length;
 }
 
-
-
-/* ========================================
-   CALENDAR
-======================================== */
-
 function render(){
-
-  document.getElementById(
-    "monthTitle"
-  ).textContent =
-    months[
-      currentMonth
-    ] +
+  document.getElementById("monthTitle").textContent =
+    months[currentMonth] +
     " 2026";
 
-
   document
-    .querySelectorAll(
-      ".month-jump"
-    )
-    .forEach(
-      (
-        button,
-        index
-      ) => {
-
-        button.classList.toggle(
-          "active",
-          index ===
-            currentMonth
-        );
-
-      }
-    );
-
+    .querySelectorAll(".month-jump")
+    .forEach((button,index) => {
+      button.classList.toggle(
+        "active",
+        index === currentMonth
+      );
+    });
 
   renderStats();
 
-
   const container =
-    document.getElementById(
-      "calendarDays"
-    );
+    document.getElementById("calendarDays");
 
-
-  container.innerHTML =
-    "";
-
+  container.innerHTML = "";
 
   const first =
     new Date(
@@ -2409,77 +1195,42 @@ function render(){
       1
     );
 
-
   let dayIndex =
     first.getDay();
-
 
   dayIndex =
     dayIndex === 0
       ? 7
       : dayIndex;
 
-
   let offset =
     dayIndex - 1;
 
-
-  if(
-    offset > 4
-  ){
-
-    offset =
-      0;
-
+  if(offset > 4){
+    offset = 0;
   }
 
-
-  for(
-    let i = 0;
-    i < offset;
-    i++
-  ){
-
+  for(let i = 0; i < offset; i++){
     const empty =
-      document.createElement(
-        "div"
-      );
-
+      document.createElement("div");
 
     empty.className =
       "day empty";
 
-
-    container.appendChild(
-      empty
-    );
-
+    container.appendChild(empty);
   }
-
 
   const days =
     new Date(
       2026,
       currentMonth + 1,
       0
-    )
-    .getDate();
+    ).getDate();
 
+  const data = combined();
+  const journal = getJournal();
 
-  const data =
-    combined();
-
-
-  const journal =
-    getJournal();
-
-
-  for(
-    let day = 1;
-    day <= days;
-    day++
-  ){
-
+  for(let day = 1; day <= days; day++){
     const dateObj =
       new Date(
         2026,
@@ -2487,627 +1238,381 @@ function render(){
         day
       );
 
-
     if(
       dateObj.getDay() === 0 ||
       dateObj.getDay() === 6
     ){
-
       continue;
-
     }
 
-
     const date =
-      key(
-        currentMonth,
-        day
-      );
-
+      key(currentMonth,day);
 
     const value =
-      data[
-        date
-      ];
-
+      data[date];
 
     const cell =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
+    cell.className = "day";
 
-    cell.className =
-      "day";
-
-
-    if(
-      typeof value ===
-      "number"
-    ){
-
+    if(typeof value === "number"){
       cell.classList.add(
         value >= 0
           ? "green-day"
           : "red-day"
       );
-
     }
 
-
-    if(
-      journal[
-        date
-      ]
-    ){
-
+    if(journal[date]){
       cell.classList.add(
         "saved-day"
       );
-
     }
-
 
     if(
-      typeof value !==
-        "number" &&
-      date >
-        "2026-10-23"
+      typeof value !== "number" &&
+      date > "2026-10-23"
     ){
-
-      cell.classList.add(
-        "future"
-      );
-
+      cell.classList.add("future");
     }
 
-
     const dateEl =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
-
-    dateEl.className =
-      "date";
-
+    dateEl.className = "date";
 
     dateEl.textContent =
       day +
       " " +
-      months[
-        currentMonth
-      ]
-      .slice(
-        0,
-        3
-      );
-
+      months[currentMonth].slice(0,3);
 
     const pnl =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
-
-    pnl.className =
-      "pnl";
-
+    pnl.className = "pnl";
 
     const pnlUsd =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
-
-    pnlUsd.className =
-      "pnl-usd";
-
+    pnlUsd.className = "pnl-usd";
 
     const pnlGbp =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
+    pnlGbp.className = "pnl-gbp";
 
-    pnlGbp.className =
-      "pnl-gbp";
-
-
-    if(
-      typeof value ===
-      "number"
-    ){
-
+    if(typeof value === "number"){
       pnlUsd.textContent =
-        usdMoney(
-          value
-        );
-
+        usdMoney(value);
 
       pnlGbp.textContent =
-        gbpMoney(
-          value
-        );
-
+        gbpMoney(value);
 
       pnlUsd.classList.add(
         value >= 0
           ? "green"
           : "red"
       );
-
     }
 
     else{
-
-      pnlUsd.textContent =
-        "—";
-
-
-      pnlGbp.textContent =
-        "";
-
+      pnlUsd.textContent = "—";
+      pnlGbp.textContent = "";
     }
 
+    pnl.appendChild(pnlUsd);
+    pnl.appendChild(pnlGbp);
 
-    pnl.appendChild(
-      pnlUsd
-    );
-
-
-    pnl.appendChild(
-      pnlGbp
-    );
-
-
-    cell.appendChild(
-      dateEl
-    );
-
-
-    cell.appendChild(
-      pnl
-    );
-
+    cell.appendChild(dateEl);
+    cell.appendChild(pnl);
 
     if(
-      typeof value ===
-        "number" ||
-      journal[
-        date
-      ]
+      typeof value === "number" ||
+      journal[date]
     ){
-
       cell.addEventListener(
         "click",
-        () =>
-          showDetail(
-            date,
-            value
-          )
+        () => showDetail(date)
       );
-
     }
 
-
-    container.appendChild(
-      cell
-    );
-
+    container.appendChild(cell);
   }
-
 }
 
-
-
-/* ========================================
-   DAY DETAIL
-======================================== */
-
-function showDetail(
-  date,
-  value
-){
-
+function showDetail(date){
   const day =
-    getJournal()[
-      date
-    ] || {};
+    getJournal()[date] || {};
 
+  const result =
+    getDailyResult(date,day);
+
+  const value =
+    result.value;
 
   const pretty =
     new Date(
-      date +
-      "T12:00:00"
-    )
-    .toLocaleDateString(
+      date + "T12:00:00"
+    ).toLocaleDateString(
       "en-GB",
       {
-
-        weekday:
-          "long",
-
-        day:
-          "numeric",
-
-        month:
-          "long",
-
-        year:
-          "numeric"
-
+        weekday:"long",
+        day:"numeric",
+        month:"long",
+        year:"numeric"
       }
     );
 
-
   const trades =
-    Array.isArray(
-      day.trades
-    )
+    Array.isArray(day.trades)
       ? day.trades
       : [];
 
-
   const compliance =
     day.compliance &&
-    typeof day.compliance.score ===
-      "number"
-
-      ? day.compliance.score +
-        "/3"
-
+    typeof day.compliance.score === "number"
+      ? day.compliance.score + "/3"
       : "—";
-
 
   const score =
     day.sessionScore &&
-    typeof day.sessionScore.score ===
-      "number"
-
-      ? day.sessionScore.score +
-        "/5"
-
+    typeof day.sessionScore.score === "number"
+      ? day.sessionScore.score + "/5"
       : "—";
-
 
   const attempt =
     day.liveRisk
-
       ? (
           day.liveRisk.maxAttemptReached ??
           day.liveRisk.attempt ??
           0
         )
-
       : "—";
 
-
   const warning =
-    day.liveRisk?.warningReached
-      ? "Yes"
-      : "No";
-
+    day.liveRisk
+      ? (
+          day.liveRisk.warningReached
+            ? "Yes"
+            : "No"
+        )
+      : "—";
 
   const hardStop =
-    day.liveRisk?.hardStopReached
-      ? "Yes"
-      : "No";
-
+    day.liveRisk
+      ? (
+          day.liveRisk.hardStopReached
+            ? "Yes"
+            : "No"
+        )
+      : "—";
 
   const behavioural =
-    day.liveRisk?.tilt ||
-    day.liveRisk?.behaviouralLock?.active ||
-    day.liveRisk?.behaviouralLock?.resetGateRequired ||
-    trades.some(
-      trade =>
-        trade.tilt ===
-        "yes"
-    )
-
-      ? "Yes"
-      : "No";
-
+    day.liveRisk
+      ? (
+          day.liveRisk?.tilt ||
+          day.liveRisk?.behaviouralLock?.active ||
+          day.liveRisk?.behaviouralLock?.resetGateRequired ||
+          trades.some(trade => trade.tilt === "yes")
+            ? "Yes"
+            : "No"
+        )
+      : (
+          trades.some(trade => trade.tilt === "yes")
+            ? "Yes"
+            : "—"
+        );
 
   const timedTrades =
     trades.filter(
       trade =>
-        timeToSeconds(
-          trade?.entryTime
-        ) !== null &&
-        timeToSeconds(
-          trade?.exitTime
-        ) !== null
-    )
-    .length;
-
+        timeToSeconds(trade?.entryTime) !== null &&
+        timeToSeconds(trade?.exitTime) !== null
+    ).length;
 
   const timingStatus =
     trades.length > 0
-
-      ? timedTrades +
-        "/" +
-        trades.length
-
+      ? timedTrades + "/" + trades.length
       : "—";
 
-
   const tradeHtml =
-    trades.map(
-      (
-        trade,
-        index
-      ) => {
+    trades.map((trade,index) => {
+      const net =
+        Number(
+          trade.netPnl ??
+          trade.actualNet ??
+          trade.calculatedNet ??
+          0
+        );
 
-        const net =
-          Number(
-            trade.netPnl ??
-            trade.actualNet ??
-            trade.calculatedNet ??
-            0
-          );
+      const duration =
+        durationLabel(
+          trade.entryTime,
+          trade.exitTime
+        );
 
+      const hasTiming =
+        duration !== null;
 
-        const duration =
-          durationLabel(
-            trade.entryTime,
-            trade.exitTime
-          );
+      const entryPrice =
+        Number(trade.entryPrice || 0);
 
+      const exitPrice =
+        Number(trade.exitPrice || 0);
 
-        const hasTiming =
-          duration !==
-          null;
+      const shares =
+        Number(trade.shares || 0);
 
+      const fees =
+        Number(trade.fees || 0);
 
-        const entryPrice =
-          Number(
-            trade.entryPrice ||
-            0
-          );
+      const setupReason =
+        String(
+          trade.setupReason ??
+          trade.setup ??
+          ""
+        ).trim();
 
+      return `
+        <div class="trade">
 
-        const exitPrice =
-          Number(
-            trade.exitPrice ||
-            0
-          );
+          <strong>
+            Trade ${index + 1}
+            ${
+              trade.ticker
+                ? " • " + escapeHtml(trade.ticker)
+                : ""
+            }
+          </strong>
 
+          <br>
 
-        const shares =
-          Number(
-            trade.shares ||
-            0
-          );
+          ${escapeHtml(trade.side || "")}
 
+          ${
+            entryPrice
+              ? `
+                <div class="trade-row">
+                  <span>Entry</span>
+                  <strong>${entryPrice}</strong>
+                </div>
+              `
+              : ""
+          }
 
-        const fees =
-          Number(
-            trade.fees ||
-            0
-          );
+          ${
+            exitPrice
+              ? `
+                <div class="trade-row">
+                  <span>Exit</span>
+                  <strong>${exitPrice}</strong>
+                </div>
+              `
+              : ""
+          }
 
+          ${
+            shares
+              ? `
+                <div class="trade-row">
+                  <span>Shares</span>
+                  <strong>${shares}</strong>
+                </div>
+              `
+              : ""
+          }
 
-        /*
-          IMPORTANT:
-          Trading Journal saves this as setupReason.
+          ${
+            fees
+              ? `
+                <div class="trade-row">
+                  <span>Fees</span>
+                  <strong>-$${fees.toFixed(2)}</strong>
+                </div>
+              `
+              : ""
+          }
 
-          trade.setup is retained only as a fallback
-          for any older WASPN records that may have
-          used the previous field name.
-        */
-
-        const setupReason =
-          String(
-            trade.setupReason ??
-            trade.setup ??
-            ""
-          )
-          .trim();
-
-
-        return `
-
-          <div class="trade">
-
-            <strong>
-              Trade ${index + 1}
-              ${
-                trade.ticker
-                  ? " • " +
-                    escapeHtml(
-                      trade.ticker
-                    )
-                  : ""
-              }
+          <div class="trade-row">
+            <span>Trade Net</span>
+            <strong class="${net >= 0 ? "green" : "red"}">
+              ${usdMoney(net)}
             </strong>
-
-            <br>
-
-            ${
-              escapeHtml(
-                trade.side ||
-                ""
-              )
-            }
-
-
-            ${
-              entryPrice
-                ? `
-                  <div class="trade-row">
-                    <span>Entry</span>
-                    <strong>${entryPrice}</strong>
-                  </div>
-                `
-                : ""
-            }
-
-
-            ${
-              exitPrice
-                ? `
-                  <div class="trade-row">
-                    <span>Exit</span>
-                    <strong>${exitPrice}</strong>
-                  </div>
-                `
-                : ""
-            }
-
-
-            ${
-              shares
-                ? `
-                  <div class="trade-row">
-                    <span>Shares</span>
-                    <strong>${shares}</strong>
-                  </div>
-                `
-                : ""
-            }
-
-
-            ${
-              fees
-                ? `
-                  <div class="trade-row">
-                    <span>Fees</span>
-                    <strong>-$${fees.toFixed(2)}</strong>
-                  </div>
-                `
-                : ""
-            }
-
-
-            <div class="trade-row">
-
-              <span>Net</span>
-
-              <strong class="${net >= 0 ? "green" : "red"}">
-                ${usdMoney(net)}
-              </strong>
-
-            </div>
-
-
-            <div class="trade-gbp">
-              ${gbpMoney(net)}
-            </div>
-
-
-            ${
-              hasTiming
-                ? `
-
-                  <div class="reconciled">
-                    Broker timing reconciled
-                  </div>
-
-                  <div class="trade-row">
-
-                    <span>Entry Time</span>
-
-                    <strong>
-                      ${escapeHtml(
-                        trade.entryTime
-                      )}
-                    </strong>
-
-                  </div>
-
-                  <div class="trade-row">
-
-                    <span>Exit Time</span>
-
-                    <strong>
-                      ${escapeHtml(
-                        trade.exitTime
-                      )}
-                    </strong>
-
-                  </div>
-
-                  <div class="trade-row">
-
-                    <span>Duration</span>
-
-                    <strong>
-                      ${duration}
-                    </strong>
-
-                  </div>
-
-                `
-
-                : `
-
-                  <div class="timing-pending">
-                    Timing pending broker reconciliation
-                  </div>
-
-                `
-            }
-
-
-            ${
-              setupReason
-                ? `
-
-                  <div class="trade-setup">
-
-                    <div class="trade-setup-label">
-                      Setup Traded / Reason Trade Taken
-                    </div>
-
-                    <div class="trade-setup-text">
-                      ${escapeHtml(
-                        setupReason
-                      )}
-                    </div>
-
-                  </div>
-
-                `
-                : ""
-            }
-
           </div>
 
-        `;
+          <div class="trade-gbp">
+            ${gbpMoney(net)}
+          </div>
 
-      }
-    )
-    .join("");
+          ${
+            hasTiming
+              ? `
+                <div class="reconciled">
+                  Broker timing reconciled
+                </div>
 
+                <div class="trade-row">
+                  <span>Entry Time</span>
+                  <strong>${escapeHtml(trade.entryTime)}</strong>
+                </div>
+
+                <div class="trade-row">
+                  <span>Exit Time</span>
+                  <strong>${escapeHtml(trade.exitTime)}</strong>
+                </div>
+
+                <div class="trade-row">
+                  <span>Duration</span>
+                  <strong>${duration}</strong>
+                </div>
+              `
+              : `
+                <div class="timing-pending">
+                  Timing pending broker reconciliation
+                </div>
+              `
+          }
+
+          ${
+            setupReason
+              ? `
+                <div class="trade-setup">
+
+                  <div class="trade-setup-label">
+                    Setup Traded / Reason Trade Taken
+                  </div>
+
+                  <div class="trade-setup-text">
+                    ${escapeHtml(setupReason)}
+                  </div>
+
+                </div>
+              `
+              : ""
+          }
+
+        </div>
+      `;
+    }).join("");
 
   const resultClass =
-    typeof value ===
-      "number"
-
+    typeof value === "number"
       ? (
           value >= 0
             ? "green"
             : "red"
         )
-
       : "";
 
-
-  document.getElementById(
-    "detail"
-  ).innerHTML = `
-
+  document.getElementById("detail").innerHTML = `
     <div class="detail-date">
       ${pretty}
     </div>
 
     ${
-      typeof value ===
-      "number"
-
+      typeof value === "number"
         ? `
-
           <div class="detail-main ${resultClass}">
             ${usdMoney(value)}
           </div>
@@ -3116,371 +1621,183 @@ function showDetail(
             ${gbpMoney(value)}
           </div>
 
+          <div class="pnl-source">
+            P&amp;L source • ${escapeHtml(result.source)}
+          </div>
         `
-
         : `
-
           <div class="detail-main">
             No saved P&amp;L
           </div>
-
         `
     }
-
 
     <div class="detail-grid">
 
       <div class="detail-item">
-
-        <div class="label">
-          Trades
-        </div>
-
-        <div class="detail-value">
-          ${trades.length}
-        </div>
-
+        <div class="label">Trades</div>
+        <div class="detail-value">${trades.length}</div>
       </div>
 
-
       <div class="detail-item">
-
-        <div class="label">
-          Max Attempt
-        </div>
-
-        <div class="detail-value">
-          ${attempt}
-        </div>
-
+        <div class="label">Max Attempt</div>
+        <div class="detail-value">${attempt}</div>
       </div>
 
-
       <div class="detail-item">
-
-        <div class="label">
-          Compliance
-        </div>
-
-        <div class="detail-value">
-          ${compliance}
-        </div>
-
+        <div class="label">Compliance</div>
+        <div class="detail-value">${compliance}</div>
       </div>
 
-
       <div class="detail-item">
-
-        <div class="label">
-          Process Score
-        </div>
-
-        <div class="detail-value">
-          ${score}
-        </div>
-
+        <div class="label">Process Score</div>
+        <div class="detail-value">${score}</div>
       </div>
 
-
       <div class="detail-item">
-
-        <div class="label">
-          -$75 Warning
-        </div>
-
-        <div class="detail-value">
-          ${warning}
-        </div>
-
+        <div class="label">-$75 Warning</div>
+        <div class="detail-value">${warning}</div>
       </div>
 
-
       <div class="detail-item">
-
-        <div class="label">
-          -$100 Stop
-        </div>
-
-        <div class="detail-value">
-          ${hardStop}
-        </div>
-
+        <div class="label">-$100 Stop</div>
+        <div class="detail-value">${hardStop}</div>
       </div>
 
-
       <div class="detail-item">
-
-        <div class="label">
-          Behavioural Risk
-        </div>
-
-        <div class="detail-value">
-          ${behavioural}
-        </div>
-
+        <div class="label">Behavioural Risk</div>
+        <div class="detail-value">${behavioural}</div>
       </div>
 
-
       <div class="detail-item">
-
-        <div class="label">
-          Journal
-        </div>
-
+        <div class="label">Journal</div>
         <div class="detail-value">
           ${day.journalSavedAt ? "Saved" : "—"}
         </div>
-
       </div>
 
-
       <div class="detail-item">
-
-        <div class="label">
-          Broker Timing
-        </div>
-
-        <div class="detail-value">
-          ${timingStatus}
-        </div>
-
+        <div class="label">Broker Timing</div>
+        <div class="detail-value">${timingStatus}</div>
       </div>
 
     </div>
 
-
     ${
       trades.length
         ? `
-
           <div class="review-note">
-            Trade duration is a review metric only. Entry and exit times are expected to be enriched from the broker record rather than manually captured while trading.
+            Daily P&amp;L uses the broker-authoritative result when available. Journal trade details remain visible for process review and reconciliation.
           </div>
-
         `
         : ""
     }
 
-
     ${tradeHtml}
-
 
     ${
       day.notes
         ? `
-
           <div class="trade">
-
-            <strong>
-              Session Note
-            </strong>
-
+            <strong>Session Note</strong>
             <br>
-
-            ${
-              escapeHtml(
-                day.notes
-              )
-            }
-
+            ${escapeHtml(day.notes)}
           </div>
-
         `
-
         : ""
     }
-
   `;
-
 }
 
-
-
-/* ========================================
-   SECURITY
-======================================== */
-
-function escapeHtml(
-  value
-){
-
-  return String(
-    value ||
-    ""
-  )
-  .replaceAll(
-    "&",
-    "&amp;"
-  )
-  .replaceAll(
-    "<",
-    "&lt;"
-  )
-  .replaceAll(
-    ">",
-    "&gt;"
-  )
-  .replaceAll(
-    '"',
-    "&quot;"
-  )
-  .replaceAll(
-    "'",
-    "&#039;"
-  );
-
+function escapeHtml(value){
+  return String(value || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
-
-
-
-/* ========================================
-   MONTH BUTTONS
-======================================== */
 
 function buildButtons(){
-
   const holder =
-    document.getElementById(
-      "monthButtons"
+    document.getElementById("monthButtons");
+
+  months.forEach((month,index) => {
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "month-jump";
+
+    button.textContent =
+      month.slice(0,3);
+
+    button.addEventListener(
+      "click",
+      () => {
+        currentMonth = index;
+        render();
+      }
     );
 
+    holder.appendChild(button);
+  });
+}
 
-  months.forEach(
-    (
-      month,
-      index
-    ) => {
+document
+  .getElementById("prev")
+  .addEventListener(
+    "click",
+    () => {
+      currentMonth =
+        currentMonth === 0
+          ? 11
+          : currentMonth - 1;
 
-      const button =
-        document.createElement(
-          "button"
-        );
-
-
-      button.className =
-        "month-jump";
-
-
-      button.textContent =
-        month.slice(
-          0,
-          3
-        );
-
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          currentMonth =
-            index;
-
-
-          render();
-
-        }
-      );
-
-
-      holder.appendChild(
-        button
-      );
-
+      render();
     }
   );
 
-}
+document
+  .getElementById("next")
+  .addEventListener(
+    "click",
+    () => {
+      currentMonth =
+        currentMonth === 11
+          ? 0
+          : currentMonth + 1;
 
+      render();
+    }
+  );
 
+document
+  .getElementById("saveFxBtn")
+  .addEventListener(
+    "click",
+    saveFxRate
+  );
 
-/* ========================================
-   EVENTS
-======================================== */
+document
+  .getElementById("fxRate")
+  .addEventListener(
+    "change",
+    saveFxRate
+  );
 
-document.getElementById(
-  "prev"
-)
-.addEventListener(
-  "click",
-  () => {
+window.addEventListener("storage",render);
+window.addEventListener("focus",render);
+window.addEventListener("pageshow",render);
 
-    currentMonth =
-      currentMonth === 0
-        ? 11
-        : currentMonth - 1;
-
-
-    render();
-
-  }
-);
-
-
-document.getElementById(
-  "next"
-)
-.addEventListener(
-  "click",
-  () => {
-
-    currentMonth =
-      currentMonth === 11
-        ? 0
-        : currentMonth + 1;
-
-
-    render();
-
-  }
-);
-
-
-document.getElementById(
-  "saveFxBtn"
-)
-.addEventListener(
-  "click",
-  saveFxRate
-);
-
-
-document.getElementById(
-  "fxRate"
-)
-.addEventListener(
-  "change",
-  saveFxRate
-);
-
-
-window.addEventListener(
-  "storage",
-  render
-);
-
-
-
-/* ========================================
-   START
-======================================== */
-
-document.getElementById(
-  "fxRate"
-).value =
-  getFxRate()
-    .toFixed(
-      4
-    );
-
+document.getElementById("fxRate").value =
+  getFxRate().toFixed(4);
 
 buildButtons();
-
 render();
-
 </script>
 
 <script src="workflow-nav.js?v=3"></script>
 
 </body>
-
 </html>
