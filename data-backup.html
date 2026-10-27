@@ -1,791 +1,346 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#070b10">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="WASPN">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="color-scheme" content="dark">
 
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1.0,viewport-fit=cover"
->
-
-<meta
-  name="theme-color"
-  content="#070b10"
->
-
-<meta
-  name="apple-mobile-web-app-capable"
-  content="yes"
->
-
-<meta
-  name="apple-mobile-web-app-status-bar-style"
-  content="black-translucent"
->
-
-<meta
-  name="apple-mobile-web-app-title"
-  content="WASPN"
->
-
-<meta
-  name="mobile-web-app-capable"
-  content="yes"
->
-
-<meta
-  name="color-scheme"
-  content="dark"
->
-
-<link
-  rel="manifest"
-  href="manifest.webmanifest"
->
-
-<link
-  rel="apple-touch-icon"
-  href="apple-touch-icon.png"
->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 
 <title>WASPN • Data Backup</title>
 
-
 <style>
-
 :root{
-
   --bg:#070b10;
-
   --panel:#10171f;
   --panel2:#151e28;
-
   --border:#273442;
-
   --text:#edf4fb;
   --muted:#8797a7;
   --muted2:#657687;
-
   --green:#35d07f;
   --red:#ff5f6d;
   --blue:#22c7ff;
   --amber:#f3b84b;
-
 }
 
-
-*{
-  box-sizing:border-box;
-}
-
+*{box-sizing:border-box}
 
 html{
-
   min-height:100%;
-
   background:#070b10;
-
   -webkit-text-size-adjust:100%;
-
   scroll-behavior:smooth;
-
 }
-
 
 body{
-
   margin:0;
-
   min-height:100vh;
   min-height:100dvh;
-
   background:
-    radial-gradient(
-      circle at 50% -10%,
-      rgba(34,199,255,.07),
-      transparent 35%
-    ),
+    radial-gradient(circle at 50% -10%,rgba(34,199,255,.07),transparent 35%),
     #070b10;
-
   color:var(--text);
-
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Arial,
-    Helvetica,
-    sans-serif;
-
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,Helvetica,sans-serif;
 }
 
-
-button,
-input{
-  font:inherit;
-}
-
-
-button,
-a{
-  -webkit-tap-highlight-color:transparent;
-}
-
+button,input{font:inherit}
+button,a{-webkit-tap-highlight-color:transparent}
 
 .wrap{
-
   width:100%;
   max-width:760px;
-
   margin:0 auto;
-
-  padding:
-    max(
-      10px,
-      env(safe-area-inset-top)
-    )
-    10px
-    max(
-      24px,
-      env(safe-area-inset-bottom)
-    );
-
+  padding:max(10px,env(safe-area-inset-top)) 10px max(24px,env(safe-area-inset-bottom));
 }
-
-
-
-/* ========================================
-   HEADER
-======================================== */
 
 .topbar{
-
   display:grid;
-
-  grid-template-columns:
-    50px 1fr 50px;
-
+  grid-template-columns:50px 1fr 50px;
   align-items:center;
-
   gap:8px;
-
 }
-
 
 .icon-btn{
-
   width:50px;
   height:48px;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:13px;
-
   background:#111922;
-
   color:white;
-
   text-decoration:none;
-
   font-size:19px;
   font-weight:900;
-
 }
 
-
-.icon-btn:active{
-  transform:scale(.97);
-}
-
-
-.product{
-  text-align:center;
-}
-
+.icon-btn:active{transform:scale(.97)}
+.product{text-align:center}
 
 .wordmark{
-
   color:var(--blue);
-
   font-size:11px;
   font-weight:950;
-
   letter-spacing:2.4px;
-
 }
-
 
 .page-title{
-
   margin-top:1px;
-
   font-size:19px;
   font-weight:950;
-
 }
-
 
 .sub{
-
-  margin:
-    8px 0 10px;
-
+  margin:8px 0 10px;
   text-align:center;
-
   color:var(--muted);
-
   font-size:9px;
   font-weight:850;
-
   letter-spacing:1.2px;
-
   text-transform:uppercase;
-
 }
-
-
-
-/* ========================================
-   CARDS
-======================================== */
 
 .card{
-
   margin-top:8px;
-
   padding:14px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #111921,
-      #0d141a
-    );
-
-  border:
-    1px solid
-    var(--border);
-
+  background:linear-gradient(180deg,#111921,#0d141a);
+  border:1px solid var(--border);
   border-radius:16px;
-
 }
-
 
 .label{
-
   color:var(--muted);
-
   font-size:9px;
   font-weight:900;
-
   letter-spacing:.8px;
-
   text-transform:uppercase;
-
 }
-
 
 .card-title{
-
   font-size:15px;
   font-weight:950;
-
 }
-
 
 .card-copy{
-
   margin-top:4px;
-
   color:var(--muted);
-
   font-size:10px;
-
   line-height:1.45;
-
 }
-
-
-
-/* ========================================
-   DATABASE STATUS
-======================================== */
 
 .database-status{
-
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns:1fr 1fr;
   gap:7px;
-
   margin-top:10px;
-
 }
-
 
 .metric{
-
   min-height:82px;
-
   display:flex;
-
   flex-direction:column;
-
   justify-content:center;
-
   padding:10px;
-
   text-align:center;
-
   background:#090f14;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:11px;
-
 }
-
 
 .metric-value{
-
   margin-top:4px;
-
   font-size:24px;
   font-weight:950;
-
 }
 
-
-.green{
-  color:var(--green);
-}
-
-
-.red{
-  color:var(--red);
-}
-
-
-.blue{
-  color:var(--blue);
-}
-
-
-.amber{
-  color:var(--amber);
-}
-
-
-
-/* ========================================
-   EXPORT
-======================================== */
+.green{color:var(--green)}
+.red{color:var(--red)}
+.blue{color:var(--blue)}
+.amber{color:var(--amber)}
 
 .export-card{
-
-  border-color:
-    rgba(53,208,127,.32);
-
+  border-color:rgba(53,208,127,.32);
 }
-
 
 .export-btn{
-
   width:100%;
-
   min-height:64px;
-
   margin-top:12px;
-
   border:0;
-
   border-radius:14px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #1b8e55,
-      #11683d
-    );
-
+  background:linear-gradient(180deg,#1b8e55,#11683d);
   color:white;
-
   font-size:16px;
   font-weight:950;
-
   cursor:pointer;
-
-  box-shadow:
-    0 14px 30px
-    rgba(20,120,70,.18);
-
+  box-shadow:0 14px 30px rgba(20,120,70,.18);
 }
 
-
-.export-btn:active{
-  transform:scale(.99);
-}
-
+.export-btn:active{transform:scale(.99)}
 
 .status{
-
   margin-top:9px;
-
   padding:10px;
-
   text-align:center;
-
   background:#080e13;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:10px;
-
   color:var(--muted);
-
   font-size:10px;
-
   line-height:1.4;
-
 }
 
-
-
-/* ========================================
-   IMPORT
-======================================== */
-
-.import-card{
-  margin-top:8px;
-}
-
-
-.file-wrap{
-  margin-top:11px;
-}
-
+.import-card{margin-top:8px}
+.file-wrap{margin-top:11px}
 
 input[type="file"]{
-
   width:100%;
-
   padding:11px;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:10px;
-
   background:#080e13;
-
   color:white;
-
   font-size:11px;
-
 }
-
 
 .import-actions{
-
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns:1fr 1fr;
   gap:7px;
-
   margin-top:9px;
-
 }
-
 
 .secondary-btn{
-
   min-height:48px;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:11px;
-
   background:#151e27;
-
   color:white;
-
   font-size:11px;
   font-weight:900;
-
   cursor:pointer;
-
 }
-
 
 .secondary-btn:disabled{
-
   opacity:.3;
-
   cursor:not-allowed;
-
 }
-
 
 .replace-btn{
-
   border-color:#56323a;
-
   background:#1d1115;
-
   color:#ffadb5;
-
 }
-
-
-
-/* ========================================
-   SAFETY
-======================================== */
 
 .safety{
-
   margin-top:8px;
-
   padding:12px;
-
   background:#1b160d;
-
-  border:
-    1px solid
-    #5b4725;
-
+  border:1px solid #5b4725;
   border-radius:13px;
-
 }
-
 
 .safety-title{
-
   color:var(--amber);
-
   font-size:12px;
   font-weight:950;
-
 }
-
 
 .safety-copy{
-
   margin-top:5px;
-
   color:#c7b997;
-
   font-size:10px;
-
   line-height:1.5;
-
 }
-
 
 .action-definition{
-
   margin-top:8px;
-
   display:grid;
-
   gap:6px;
-
 }
-
 
 .definition{
-
   padding:9px;
-
   background:#100d08;
-
-  border:
-    1px solid
-    #3c3220;
-
+  border:1px solid #3c3220;
   border-radius:9px;
-
   font-size:9px;
-
   line-height:1.45;
-
 }
 
-
-.definition strong{
-  color:white;
-}
-
-
-
-/* ========================================
-   NAVIGATION
-======================================== */
+.definition strong{color:white}
 
 .nav{
-
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns:1fr 1fr;
   gap:7px;
-
   margin-top:10px;
-
 }
-
 
 .nav-link{
-
   min-height:50px;
-
   display:flex;
-
   align-items:center;
   justify-content:center;
-
   padding:8px;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:11px;
-
   background:#10171f;
-
   color:#c5d0da;
-
   text-decoration:none;
-
   text-align:center;
-
   font-size:10px;
   font-weight:900;
-
 }
 
-
-.nav-link:active{
-  transform:scale(.98);
-}
-
+.nav-link:active{transform:scale(.98)}
 
 .nav-link.review{
-
   color:#c8cdff;
-
-  border-color:
-    rgba(174,183,255,.3);
-
+  border-color:rgba(174,183,255,.3);
 }
-
-
-
-/* ========================================
-   UTILITY NOTE
-======================================== */
 
 .utility-note{
-
   margin-top:10px;
-
   padding:10px;
-
   text-align:center;
-
   color:var(--muted2);
-
   font-size:9px;
-
   line-height:1.45;
-
 }
 
-
-.utility-note strong{
-  color:#b8c4cf;
-}
-
-
-
-/* ========================================
-   DESKTOP
-======================================== */
+.utility-note strong{color:#b8c4cf}
 
 @media(min-width:700px){
-
-  .wrap{
-    padding:18px;
-  }
-
-
-  .database-status{
-
-    grid-template-columns:
-      repeat(4,1fr);
-
-  }
-
+  .wrap{padding:18px}
+  .database-status{grid-template-columns:repeat(4,1fr)}
 }
-
 </style>
-
 </head>
-
-
 
 <body>
 
-
 <div class="wrap">
-
 
 <header>
 
   <div class="topbar">
 
-    <a
-      href="index.html"
-      class="icon-btn"
-      aria-label="Home"
-    >
-      ←
-    </a>
-
+    <a href="index.html" class="icon-btn" aria-label="Home">←</a>
 
     <div class="product">
-
-      <div class="wordmark">
-        WASPN
-      </div>
-
-      <div class="page-title">
-        Data Backup
-      </div>
-
+      <div class="wordmark">WASPN</div>
+      <div class="page-title">Data Backup</div>
     </div>
-
 
     <a
       href="calendar-2026.html"
@@ -797,156 +352,81 @@ input[type="file"]{
 
   </div>
 
-
-  <div class="sub">
-    Local Database Protection
-  </div>
+  <div class="sub">Local Database Protection</div>
 
 </header>
 
-
-
 <section class="card">
 
-  <div class="card-title">
-    Database Status
-  </div>
+  <div class="card-title">Database Status</div>
 
   <div class="card-copy">
-    WASPN currently stores its trading records locally in this browser.
+    WASPN currently stores its connected trading records locally in this browser.
   </div>
-
 
   <div class="database-status">
 
     <div class="metric">
-
-      <div class="label">
-        Daily Records
-      </div>
-
-      <div
-        id="recordCount"
-        class="metric-value"
-      >
-        0
-      </div>
-
+      <div class="label">Daily Records</div>
+      <div id="recordCount" class="metric-value">0</div>
     </div>
 
-
     <div class="metric">
-
-      <div class="label">
-        Journal Days
-      </div>
-
-      <div
-        id="journalCount"
-        class="metric-value blue"
-      >
-        0
-      </div>
-
+      <div class="label">Journal Days</div>
+      <div id="journalCount" class="metric-value blue">0</div>
     </div>
 
-
     <div class="metric">
-
-      <div class="label">
-        Completed Reviews
-      </div>
-
-      <div
-        id="reviewCount"
-        class="metric-value green"
-      >
-        0
-      </div>
-
+      <div class="label">Completed Reviews</div>
+      <div id="reviewCount" class="metric-value green">0</div>
     </div>
 
-
     <div class="metric">
-
-      <div class="label">
-        Storage
-      </div>
-
-      <div
-        class="metric-value"
-        style="font-size:16px;"
-      >
-        Local
-      </div>
-
+      <div class="label">Storage</div>
+      <div class="metric-value" style="font-size:16px;">Local</div>
     </div>
 
   </div>
 
 </section>
 
-
-
 <section class="card export-card">
 
-  <div class="label">
-    Recommended Action
-  </div>
+  <div class="label">Recommended Action</div>
 
-  <div
-    class="card-title"
-    style="margin-top:4px;"
-  >
+  <div class="card-title" style="margin-top:4px;">
     Export WASPN Backup
   </div>
 
   <div class="card-copy">
-    Creates a portable JSON copy of the complete WASPN daily database on this device.
+    Creates a portable JSON copy of the complete connected WASPN database and Review display settings on this device.
   </div>
 
-
-  <button
-    id="exportBtn"
-    class="export-btn"
-    type="button"
-  >
+  <button id="exportBtn" class="export-btn" type="button">
     EXPORT COMPLETE BACKUP
   </button>
 
-
-  <div
-    id="exportStatus"
-    class="status"
-  >
+  <div id="exportStatus" class="status">
     No backup exported during this visit.
   </div>
 
 </section>
 
-
-
 <section class="card import-card">
 
-  <div class="card-title">
-    Restore Data
-  </div>
+  <div class="card-title">Restore Data</div>
 
   <div class="card-copy">
     Select a valid WASPN JSON backup. The file is validated before either restore option becomes available.
   </div>
 
-
   <div class="file-wrap">
-
     <input
       id="fileInput"
       type="file"
       accept=".json,application/json"
     >
-
   </div>
-
 
   <div class="import-actions">
 
@@ -959,7 +439,6 @@ input[type="file"]{
       IMPORT &amp; MERGE
     </button>
 
-
     <button
       id="replaceBtn"
       class="secondary-btn replace-btn"
@@ -971,660 +450,449 @@ input[type="file"]{
 
   </div>
 
-
-  <div
-    id="importStatus"
-    class="status"
-  >
+  <div id="importStatus" class="status">
     No backup file selected.
   </div>
 
 </section>
 
-
-
 <section class="safety">
 
-  <div class="safety-title">
-    Restore Safety
-  </div>
+  <div class="safety-title">Restore Safety</div>
 
   <div class="safety-copy">
     Export a fresh backup before replacing the local database.
   </div>
 
-
   <div class="action-definition">
 
     <div class="definition">
-
-      <strong>
-        Import &amp; Merge
-      </strong>
-
+      <strong>Import &amp; Merge</strong>
       keeps dates that exist only on this device and imports dates from the backup. If the same date exists in both places, the backup version wins.
-
     </div>
 
-
     <div class="definition">
-
-      <strong>
-        Replace All
-      </strong>
-
-      removes the current local WASPN database and replaces it entirely with the selected backup.
-
+      <strong>Replace All</strong>
+      removes the current local WASPN daily database and replaces it entirely with the selected backup.
     </div>
 
   </div>
 
 </section>
 
-
-
 <div class="nav">
 
-  <a
-    href="index.html"
-    class="nav-link"
-  >
+  <a href="index.html" class="nav-link">
     ← HOME
   </a>
 
-
-  <a
-    href="calendar-2026.html"
-    class="nav-link review"
-  >
+  <a href="calendar-2026.html" class="nav-link review">
     PERFORMANCE REVIEW →
   </a>
 
 </div>
 
-
-
 <div class="utility-note">
-
-  <strong>
-    Data Backup is a utility.
-  </strong>
-
-  It sits outside the live WASPN workflow:
-  Risk → Journal → End → Review.
-
+  <strong>Data Backup is a utility.</strong>
+  It protects the shared database used by Risk, Journal, End and Review.
 </div>
 
-
 </div>
-
-
 
 <script>
+const STORAGE_KEY = "waspnJournalV2";
+const FX_STORAGE_KEY = "waspnUsdGbpRateV1";
+const BACKUP_VERSION = 2;
 
-const STORAGE_KEY =
-  "waspnJournalV2";
-
-
-let pendingData =
-  null;
-
-
-
-/* ========================================
-   STORAGE
-======================================== */
+let pendingData = null;
+let pendingSettings = null;
 
 function getJournal(){
-
   try{
-
     return JSON.parse(
-      localStorage.getItem(
-        STORAGE_KEY
-      )
+      localStorage.getItem(STORAGE_KEY)
     ) || {};
-
-  }
-
-  catch{
-
+  }catch{
     return {};
-
   }
-
 }
 
-
-function saveJournal(
-  data
-){
-
+function saveJournal(data){
   localStorage.setItem(
     STORAGE_KEY,
-    JSON.stringify(
-      data
-    )
+    JSON.stringify(data)
   );
-
 }
 
+function isDateKey(value){
+  return /^\d{4}-\d{2}-\d{2}$/.test(value);
+}
 
+function isPlainObject(value){
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    !Array.isArray(value)
+  );
+}
 
-/* ========================================
-   DATABASE COUNTS
-======================================== */
+function validateJournalObject(data){
+  if(!isPlainObject(data)){
+    throw new Error(
+      "The WASPN database in this backup is invalid."
+    );
+  }
+
+  const keys = Object.keys(data);
+
+  if(
+    !keys.every(isDateKey)
+  ){
+    throw new Error(
+      "The backup contains invalid daily record keys."
+    );
+  }
+
+  for(const date of keys){
+    const day = data[date];
+
+    if(!isPlainObject(day)){
+      throw new Error(
+        "Invalid daily record: " + date
+      );
+    }
+
+    if(
+      day.trades !== undefined &&
+      !Array.isArray(day.trades)
+    ){
+      throw new Error(
+        "Invalid trades record: " + date
+      );
+    }
+  }
+
+  return data;
+}
 
 function updateCounts(){
+  const journal = getJournal();
+  const days = Object.values(journal);
 
-  const journal =
-    getJournal();
-
-
-  const days =
-    Object.values(
-      journal
-    );
-
-
-  document.getElementById(
-    "recordCount"
-  ).textContent =
+  document.getElementById("recordCount").textContent =
     days.length;
 
-
-  document.getElementById(
-    "journalCount"
-  ).textContent =
-
+  document.getElementById("journalCount").textContent =
     days.filter(
-      day =>
-        !!day?.journalSavedAt
+      day => !!day?.journalSavedAt
     ).length;
 
-
-  document.getElementById(
-    "reviewCount"
-  ).textContent =
-
+  document.getElementById("reviewCount").textContent =
     days.filter(
       day =>
         !!day?.sessionScore?.savedAt ||
         !!day?.sessionCompletedAt
     ).length;
-
 }
 
-
-
-/* ========================================
-   EXPORT
-======================================== */
-
 function exportData(){
+  const journal = getJournal();
 
-  const journal =
-    getJournal();
-
+  const fxRate = Number(
+    localStorage.getItem(FX_STORAGE_KEY)
+  );
 
   const payload = {
+    application:"WASPN",
+    backupVersion:BACKUP_VERSION,
+    storageKey:STORAGE_KEY,
+    exportedAt:new Date().toISOString(),
+    recordCount:Object.keys(journal).length,
 
-    application:
-      "WASPN",
+    settings:{
+      usdGbpRate:
+        Number.isFinite(fxRate) && fxRate > 0
+          ? fxRate
+          : null
+    },
 
-    storageKey:
-      STORAGE_KEY,
-
-    exportedAt:
-      new Date()
-        .toISOString(),
-
-    recordCount:
-      Object.keys(
-        journal
-      ).length,
-
-    data:
-      journal
-
+    data:journal
   };
 
+  const blob = new Blob(
+    [
+      JSON.stringify(
+        payload,
+        null,
+        2
+      )
+    ],
+    {
+      type:"application/json"
+    }
+  );
 
-  const blob =
-    new Blob(
-      [
-        JSON.stringify(
-          payload,
-          null,
-          2
-        )
-      ],
-      {
-        type:
-          "application/json"
-      }
-    );
-
-
-  const url =
-    URL.createObjectURL(
-      blob
-    );
-
-
-  const link =
-    document.createElement(
-      "a"
-    );
-
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
 
   const stamp =
     new Date()
       .toISOString()
-      .slice(
-        0,
-        10
-      );
+      .slice(0,10);
 
-
-  link.href =
-    url;
-
-
+  link.href = url;
   link.download =
     "WASPN-backup-" +
     stamp +
     ".json";
 
-
-  document.body.appendChild(
-    link
-  );
-
+  document.body.appendChild(link);
 
   link.click();
-
-
   link.remove();
 
-
   setTimeout(
-    () =>
-      URL.revokeObjectURL(
-        url
-      ),
+    () => URL.revokeObjectURL(url),
     1000
   );
 
-
   const status =
-    document.getElementById(
-      "exportStatus"
-    );
-
+    document.getElementById("exportStatus");
 
   status.textContent =
-    "Backup exported • " +
-    Object.keys(
-      journal
-    ).length +
+    "Complete backup exported • " +
+    Object.keys(journal).length +
     " record(s).";
-
 
   status.style.color =
     "var(--green)";
-
 }
 
-
-
-/* ========================================
-   VALIDATION
-======================================== */
-
-function validatePayload(
-  parsed
-){
-
+function validatePayload(parsed){
+  /*
+    Current structured backup.
+  */
   if(
-    parsed &&
-    parsed.application ===
-      "WASPN" &&
-    parsed.data &&
-    typeof parsed.data ===
-      "object" &&
-    !Array.isArray(
-      parsed.data
-    )
+    isPlainObject(parsed) &&
+    parsed.application === "WASPN" &&
+    isPlainObject(parsed.data)
   ){
+    const data =
+      validateJournalObject(parsed.data);
 
-    return parsed.data;
+    const settings =
+      isPlainObject(parsed.settings)
+        ? parsed.settings
+        : {};
 
+    return {
+      data,
+      settings
+    };
   }
-
 
   /*
-    Also accepts a raw date-keyed WASPN
-    journal object for manual recovery.
+    Legacy raw date-keyed WASPN journal.
   */
+  if(isPlainObject(parsed)){
+    const data =
+      validateJournalObject(parsed);
 
-  if(
-    parsed &&
-    typeof parsed ===
-      "object" &&
-    !Array.isArray(
-      parsed
-    )
-  ){
-
-    const keys =
-      Object.keys(
-        parsed
-      );
-
-
-    if(
-      keys.length === 0 ||
-      keys.every(
-        key =>
-          /^\d{4}-\d{2}-\d{2}$/
-            .test(
-              key
-            )
-      )
-    ){
-
-      return parsed;
-
-    }
-
+    return {
+      data,
+      settings:{}
+    };
   }
-
 
   throw new Error(
     "This is not a valid WASPN backup."
   );
-
 }
 
-
-function setImportReady(
-  ready
-){
-
-  document.getElementById(
-    "mergeBtn"
-  ).disabled =
+function setImportReady(ready){
+  document.getElementById("mergeBtn").disabled =
     !ready;
 
-
-  document.getElementById(
-    "replaceBtn"
-  ).disabled =
+  document.getElementById("replaceBtn").disabled =
     !ready;
-
 }
 
+function restoreSettings(settings){
+  if(!isPlainObject(settings)){
+    return;
+  }
 
+  const fxRate =
+    Number(settings.usdGbpRate);
 
-/* ========================================
-   FILE SELECTION
-======================================== */
-
-document.getElementById(
-  "fileInput"
-)
-.addEventListener(
-  "change",
-  async event => {
-
-    pendingData =
-      null;
-
-
-    setImportReady(
-      false
+  if(
+    Number.isFinite(fxRate) &&
+    fxRate > 0
+  ){
+    localStorage.setItem(
+      FX_STORAGE_KEY,
+      String(fxRate)
     );
+  }
+}
 
+document
+  .getElementById("fileInput")
+  .addEventListener(
+    "change",
+    async event => {
+      pendingData = null;
+      pendingSettings = null;
 
-    const file =
-      event.target.files[
-        0
-      ];
+      setImportReady(false);
 
+      const file =
+        event.target.files[0];
 
-    const status =
-      document.getElementById(
-        "importStatus"
-      );
+      const status =
+        document.getElementById("importStatus");
 
+      if(!file){
+        status.textContent =
+          "No backup file selected.";
 
-    if(
-      !file
-    ){
+        status.style.color =
+          "var(--muted)";
 
-      status.textContent =
-        "No backup file selected.";
+        return;
+      }
 
+      try{
+        const text = await file.text();
+        const parsed = JSON.parse(text);
 
-      status.style.color =
-        "var(--muted)";
+        const validated =
+          validatePayload(parsed);
 
+        pendingData =
+          validated.data;
 
-      return;
+        pendingSettings =
+          validated.settings;
 
+        status.textContent =
+          "Validated • " +
+          Object.keys(pendingData).length +
+          " record(s) ready to restore.";
+
+        status.style.color =
+          "var(--green)";
+
+        setImportReady(true);
+      }
+
+      catch(error){
+        pendingData = null;
+        pendingSettings = null;
+
+        setImportReady(false);
+
+        status.textContent =
+          error.message;
+
+        status.style.color =
+          "var(--red)";
+      }
     }
+  );
 
+document
+  .getElementById("mergeBtn")
+  .addEventListener(
+    "click",
+    () => {
+      if(!pendingData){
+        return;
+      }
 
-    try{
+      const existing =
+        getJournal();
 
-      const text =
-        await file.text();
+      const merged = {
+        ...existing,
+        ...pendingData
+      };
 
+      saveJournal(merged);
+      restoreSettings(pendingSettings);
+      updateCounts();
 
-      const parsed =
-        JSON.parse(
-          text
-        );
-
-
-      pendingData =
-        validatePayload(
-          parsed
-        );
-
+      const status =
+        document.getElementById("importStatus");
 
       status.textContent =
-        "Validated • " +
-        Object.keys(
-          pendingData
-        ).length +
-        " record(s) ready to restore.";
-
+        "Merge complete • " +
+        Object.keys(merged).length +
+        " total record(s).";
 
       status.style.color =
         "var(--green)";
-
-
-      setImportReady(
-        true
-      );
-
     }
+  );
 
-    catch(
-      error
-    ){
+document
+  .getElementById("replaceBtn")
+  .addEventListener(
+    "click",
+    () => {
+      if(!pendingData){
+        return;
+      }
 
-      pendingData =
-        null;
+      if(
+        !confirm(
+          "Replace ALL current local WASPN data with this backup? This cannot be undone unless you already exported a separate backup."
+        )
+      ){
+        return;
+      }
 
+      saveJournal(pendingData);
+      restoreSettings(pendingSettings);
+      updateCounts();
 
-      setImportReady(
-        false
-      );
-
+      const status =
+        document.getElementById("importStatus");
 
       status.textContent =
-        error.message;
-
+        "Local database replaced • " +
+        Object.keys(pendingData).length +
+        " record(s).";
 
       status.style.color =
-        "var(--red)";
-
+        "var(--green)";
     }
+  );
 
-  }
+document
+  .getElementById("exportBtn")
+  .addEventListener(
+    "click",
+    exportData
+  );
+
+window.addEventListener(
+  "focus",
+  updateCounts
 );
 
-
-
-/* ========================================
-   MERGE
-======================================== */
-
-document.getElementById(
-  "mergeBtn"
-)
-.addEventListener(
-  "click",
-  () => {
-
-    if(
-      !pendingData
-    ){
-
-      return;
-
-    }
-
-
-    const existing =
-      getJournal();
-
-
-    const merged = {
-
-      ...existing,
-
-      ...pendingData
-
-    };
-
-
-    saveJournal(
-      merged
-    );
-
-
-    updateCounts();
-
-
-    const status =
-      document.getElementById(
-        "importStatus"
-      );
-
-
-    status.textContent =
-      "Merge complete • " +
-      Object.keys(
-        merged
-      ).length +
-      " total record(s).";
-
-
-    status.style.color =
-      "var(--green)";
-
-  }
+window.addEventListener(
+  "pageshow",
+  updateCounts
 );
 
-
-
-/* ========================================
-   REPLACE ALL
-======================================== */
-
-document.getElementById(
-  "replaceBtn"
-)
-.addEventListener(
-  "click",
-  () => {
-
-    if(
-      !pendingData
-    ){
-
-      return;
-
-    }
-
-
-    if(
-      !confirm(
-        "Replace ALL current local WASPN data with this backup? This cannot be undone unless you already exported a separate backup."
-      )
-    ){
-
-      return;
-
-    }
-
-
-    saveJournal(
-      pendingData
-    );
-
-
-    updateCounts();
-
-
-    const status =
-      document.getElementById(
-        "importStatus"
-      );
-
-
-    status.textContent =
-      "Local database replaced • " +
-      Object.keys(
-        pendingData
-      ).length +
-      " record(s).";
-
-
-    status.style.color =
-      "var(--green)";
-
-  }
+window.addEventListener(
+  "storage",
+  updateCounts
 );
-
-
-
-/* ========================================
-   EVENTS
-======================================== */
-
-document.getElementById(
-  "exportBtn"
-)
-.addEventListener(
-  "click",
-  exportData
-);
-
-
-
-/* ========================================
-   START
-======================================== */
 
 updateCounts();
-
 </script>
 
 </body>
-
 </html>
