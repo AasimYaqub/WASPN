@@ -487,8 +487,8 @@ button,a{-webkit-tap-highlight-color:transparent}
 
 @media(min-width:700px){
   .wrap{padding:18px}
-  .year-grid{grid-template-columns:repeat(5,1fr)}
-  .month-stats{grid-template-columns:repeat(6,1fr)}
+  .year-grid{grid-template-columns:repeat(6,1fr)}
+  .month-stats{grid-template-columns:repeat(5,1fr)}
   .month-buttons{grid-template-columns:repeat(12,1fr)}
   .day{min-height:108px;padding:9px}
   .detail-grid{grid-template-columns:repeat(4,1fr)}
@@ -534,13 +534,6 @@ button,a{-webkit-tap-highlight-color:transparent}
     </div>
 
     <div class="metric">
-      <div class="label">Current Week P&amp;L</div>
-      <div id="weekPnlUsd" class="metric-value">—</div>
-      <div id="weekPnlGbp" class="metric-sub">—</div>
-      <div id="weekRange" class="week-range">—</div>
-    </div>
-
-    <div class="metric">
       <div class="label">Trading Days</div>
       <div id="yearDays" class="metric-value">0</div>
     </div>
@@ -553,6 +546,18 @@ button,a{-webkit-tap-highlight-color:transparent}
     <div class="metric">
       <div class="label">Red Days</div>
       <div id="yearRed" class="metric-value red">0</div>
+    </div>
+
+    <div class="metric">
+      <div class="label">Best Day</div>
+      <div id="yearBestDayUsd" class="metric-value green">—</div>
+      <div id="yearBestDayGbp" class="metric-sub">—</div>
+    </div>
+
+    <div class="metric">
+      <div class="label">Worst Day</div>
+      <div id="yearWorstDayUsd" class="metric-value red">—</div>
+      <div id="yearWorstDayGbp" class="metric-sub">—</div>
     </div>
 
   </div>
@@ -582,6 +587,13 @@ button,a{-webkit-tap-highlight-color:transparent}
     </div>
 
     <div class="metric">
+      <div class="label">Current Week P&amp;L</div>
+      <div id="weekPnlUsd" class="metric-value">—</div>
+      <div id="weekPnlGbp" class="metric-sub">—</div>
+      <div id="weekRange" class="week-range">—</div>
+    </div>
+
+    <div class="metric">
       <div class="label">Trading Days</div>
       <div id="tradingDays" class="metric-value">0</div>
     </div>
@@ -594,18 +606,6 @@ button,a{-webkit-tap-highlight-color:transparent}
     <div class="metric">
       <div class="label">Red</div>
       <div id="redDays" class="metric-value red">0</div>
-    </div>
-
-    <div class="metric">
-      <div class="label">Best Day</div>
-      <div id="bestDayUsd" class="metric-value green">—</div>
-      <div id="bestDayGbp" class="metric-sub">—</div>
-    </div>
-
-    <div class="metric">
-      <div class="label">Worst Day</div>
-      <div id="worstDayUsd" class="metric-value red">—</div>
-      <div id="worstDayGbp" class="metric-sub">—</div>
     </div>
 
   </div>
@@ -684,12 +684,6 @@ const STORAGE_KEY = "waspnJournalV2";
 const FX_STORAGE_KEY = "waspnUsdGbpRateV1";
 const DEFAULT_FX_RATE = 0.7500;
 
-/*
-  BROKER-AUTHORITATIVE HISTORICAL DAILY P&L.
-
-  If a date exists here, this result wins over
-  Journal totalNet in Performance Review.
-*/
 const tradingData = {
   "2026-06-30":50.30,
 
@@ -786,24 +780,14 @@ let currentMonth = 9;
 
 function getJournal(){
   try{
-    return JSON.parse(
-      localStorage.getItem(STORAGE_KEY)
-    ) || {};
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
   }catch{
     return {};
   }
 }
 
-/*
-  DAILY P&L AUTHORITY
-
-  1. Explicit brokerDailyNet stored in a WASPN record.
-  2. Historical broker tradingData.
-  3. Journal totalNet.
-*/
 function getDailyResult(date,day = null){
-  const record =
-    day || getJournal()[date] || {};
+  const record = day || getJournal()[date] || {};
 
   if(
     typeof record.brokerDailyNet === "number" &&
@@ -816,10 +800,7 @@ function getDailyResult(date,day = null){
   }
 
   if(
-    Object.prototype.hasOwnProperty.call(
-      tradingData,
-      date
-    )
+    Object.prototype.hasOwnProperty.call(tradingData,date)
   ){
     return {
       value:tradingData[date],
@@ -844,36 +825,24 @@ function getDailyResult(date,day = null){
 }
 
 function combined(){
-  const data = {
-    ...tradingData
-  };
-
+  const data = {...tradingData};
   const journal = getJournal();
 
-  Object.entries(journal).forEach(
-    ([date,day]) => {
-      const result =
-        getDailyResult(date,day);
+  Object.entries(journal).forEach(([date,day]) => {
+    const result = getDailyResult(date,day);
 
-      if(typeof result.value === "number"){
-        data[date] = result.value;
-      }
+    if(typeof result.value === "number"){
+      data[date] = result.value;
     }
-  );
+  });
 
   return data;
 }
 
 function getFxRate(){
-  const saved =
-    Number(
-      localStorage.getItem(FX_STORAGE_KEY)
-    );
+  const saved = Number(localStorage.getItem(FX_STORAGE_KEY));
 
-  if(
-    Number.isFinite(saved) &&
-    saved > 0
-  ){
+  if(Number.isFinite(saved) && saved > 0){
     return saved;
   }
 
@@ -881,31 +850,16 @@ function getFxRate(){
 }
 
 function saveFxRate(){
-  const input =
-    document.getElementById("fxRate");
+  const input = document.getElementById("fxRate");
+  const rate = Number(input.value);
 
-  const rate =
-    Number(input.value);
-
-  if(
-    !Number.isFinite(rate) ||
-    rate <= 0
-  ){
-    alert(
-      "Enter a valid USD → GBP conversion rate."
-    );
-
+  if(!Number.isFinite(rate) || rate <= 0){
+    alert("Enter a valid USD → GBP conversion rate.");
     return;
   }
 
-  localStorage.setItem(
-    FX_STORAGE_KEY,
-    String(rate)
-  );
-
-  input.value =
-    rate.toFixed(4);
-
+  localStorage.setItem(FX_STORAGE_KEY,String(rate));
+  input.value = rate.toFixed(4);
   render();
 }
 
@@ -924,9 +878,7 @@ function usdMoney(value){
 }
 
 function gbpMoney(usdValue){
-  const gbp =
-    Number(usdValue || 0) *
-    getFxRate();
+  const gbp = Number(usdValue || 0) * getFxRate();
 
   if(gbp > 0){
     return "≈ +£" + gbp.toFixed(2);
@@ -939,25 +891,16 @@ function gbpMoney(usdValue){
   return "≈ £0.00";
 }
 
-/*
-  CURRENT NEW YORK TRADING WEEK
-
-  Performance Review follows the trading session,
-  so the current week is based on America/New_York.
-
-  Monday through Friday are included.
-*/
 function getNewYorkDateParts(){
-  const parts =
-    new Intl.DateTimeFormat(
-      "en-CA",
-      {
-        timeZone:"America/New_York",
-        year:"numeric",
-        month:"2-digit",
-        day:"2-digit"
-      }
-    ).formatToParts(new Date());
+  const parts = new Intl.DateTimeFormat(
+    "en-CA",
+    {
+      timeZone:"America/New_York",
+      year:"numeric",
+      month:"2-digit",
+      day:"2-digit"
+    }
+  ).formatToParts(new Date());
 
   const values = {};
 
@@ -985,40 +928,30 @@ function isoFromUtcDate(date){
 }
 
 function getCurrentTradingWeek(){
-  const ny =
-    getNewYorkDateParts();
+  const ny = getNewYorkDateParts();
 
-  const today =
-    new Date(
-      Date.UTC(
-        ny.year,
-        ny.month - 1,
-        ny.day
-      )
-    );
-
-  const weekday =
-    today.getUTCDay();
-
-  let daysFromMonday;
-
-  if(weekday === 0){
-    daysFromMonday = 6;
-  }
-  else{
-    daysFromMonday = weekday - 1;
-  }
-
-  const monday =
-    new Date(today);
-
-  monday.setUTCDate(
-    today.getUTCDate() -
-    daysFromMonday
+  const today = new Date(
+    Date.UTC(
+      ny.year,
+      ny.month - 1,
+      ny.day
+    )
   );
 
-  const friday =
-    new Date(monday);
+  const weekday = today.getUTCDay();
+
+  const daysFromMonday =
+    weekday === 0
+      ? 6
+      : weekday - 1;
+
+  const monday = new Date(today);
+
+  monday.setUTCDate(
+    today.getUTCDate() - daysFromMonday
+  );
+
+  const friday = new Date(monday);
 
   friday.setUTCDate(
     monday.getUTCDate() + 4
@@ -1044,37 +977,27 @@ function shortDateLabel(date){
 }
 
 function renderWeeklyPnl(){
-  const week =
-    getCurrentTradingWeek();
-
-  const data =
-    combined();
+  const week = getCurrentTradingWeek();
+  const data = combined();
 
   let total = 0;
   let days = 0;
 
-  Object.entries(data).forEach(
-    ([date,value]) => {
-      if(
-        date >= week.mondayKey &&
-        date <= week.fridayKey &&
-        typeof value === "number" &&
-        Number.isFinite(value)
-      ){
-        total += value;
-        days++;
-      }
+  Object.entries(data).forEach(([date,value]) => {
+    if(
+      date >= week.mondayKey &&
+      date <= week.fridayKey &&
+      typeof value === "number" &&
+      Number.isFinite(value)
+    ){
+      total += value;
+      days++;
     }
-  );
+  });
 
-  const usd =
-    document.getElementById("weekPnlUsd");
-
-  const gbp =
-    document.getElementById("weekPnlGbp");
-
-  const range =
-    document.getElementById("weekRange");
+  const usd = document.getElementById("weekPnlUsd");
+  const gbp = document.getElementById("weekPnlGbp");
+  const range = document.getElementById("weekRange");
 
   range.textContent =
     shortDateLabel(week.monday) +
@@ -1088,19 +1011,12 @@ function renderWeeklyPnl(){
     return;
   }
 
-  usd.textContent =
-    usdMoney(total);
-
-  gbp.textContent =
-    gbpMoney(total);
+  usd.textContent = usdMoney(total);
+  gbp.textContent = gbpMoney(total);
 
   usd.className =
     "metric-value " +
-    (
-      total >= 0
-        ? "green"
-        : "red"
-    );
+    (total >= 0 ? "green" : "red");
 }
 
 function timeToSeconds(value){
@@ -1108,10 +1024,9 @@ function timeToSeconds(value){
     return null;
   }
 
-  const match =
-    String(value)
-      .trim()
-      .match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
+  const match = String(value)
+    .trim()
+    .match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
 
   if(!match){
     return null;
@@ -1121,66 +1036,38 @@ function timeToSeconds(value){
   const minutes = Number(match[2]);
   const seconds = Number(match[3] || 0);
 
-  if(
-    hours > 23 ||
-    minutes > 59 ||
-    seconds > 59
-  ){
+  if(hours > 23 || minutes > 59 || seconds > 59){
     return null;
   }
 
-  return (
-    hours * 3600 +
-    minutes * 60 +
-    seconds
-  );
+  return hours * 3600 + minutes * 60 + seconds;
 }
 
 function durationLabel(entry,exit){
   const start = timeToSeconds(entry);
   const finish = timeToSeconds(exit);
 
-  if(
-    start === null ||
-    finish === null
-  ){
+  if(start === null || finish === null){
     return null;
   }
 
-  let duration =
-    finish - start;
+  let duration = finish - start;
 
   if(duration < 0){
     duration += 24 * 60 * 60;
   }
 
-  const minutes =
-    Math.floor(duration / 60);
-
-  const seconds =
-    duration % 60;
+  const minutes = Math.floor(duration / 60);
+  const seconds = duration % 60;
 
   if(minutes >= 60){
-    const hours =
-      Math.floor(minutes / 60);
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
 
-    const remainingMinutes =
-      minutes % 60;
-
-    return (
-      hours +
-      "h " +
-      remainingMinutes +
-      "m"
-    );
+    return hours + "h " + remainingMinutes + "m";
   }
 
-  return (
-    minutes +
-    "m " +
-    String(seconds).padStart(2,"0") +
-    "s"
-  );
+  return minutes + "m " + String(seconds).padStart(2,"0") + "s";
 }
 
 function key(month,day){
@@ -1198,10 +1085,7 @@ function monthEntries(month){
     String(month + 1).padStart(2,"0");
 
   return Object.entries(combined())
-    .filter(
-      ([date]) =>
-        date.startsWith(prefix)
-    );
+    .filter(([date]) => date.startsWith(prefix));
 }
 
 function setMoneyStat(
@@ -1210,11 +1094,8 @@ function setMoneyStat(
   value,
   empty = false
 ){
-  const usd =
-    document.getElementById(usdId);
-
-  const gbp =
-    document.getElementById(gbpId);
+  const usd = document.getElementById(usdId);
+  const gbp = document.getElementById(gbpId);
 
   if(empty){
     usd.textContent = "—";
@@ -1222,25 +1103,18 @@ function setMoneyStat(
     return;
   }
 
-  usd.textContent =
-    usdMoney(value);
-
-  gbp.textContent =
-    gbpMoney(value);
+  usd.textContent = usdMoney(value);
+  gbp.textContent = gbpMoney(value);
 }
 
 function renderStats(){
-  const entries =
-    monthEntries(currentMonth);
+  const entries = monthEntries(currentMonth);
+  const values = entries.map(item => item[1]);
 
-  const values =
-    entries.map(item => item[1]);
-
-  const total =
-    values.reduce(
-      (a,b) => a + b,
-      0
-    );
+  const total = values.reduce(
+    (a,b) => a + b,
+    0
+  );
 
   const monthUsd =
     document.getElementById("monthPnlUsd");
@@ -1254,13 +1128,8 @@ function renderStats(){
 
     monthUsd.className =
       "metric-value " +
-      (
-        total >= 0
-          ? "green"
-          : "red"
-      );
+      (total >= 0 ? "green" : "red");
   }
-
   else{
     monthUsd.textContent = "No data";
 
@@ -1268,8 +1137,7 @@ function renderStats(){
       .getElementById("monthPnlGbp")
       .textContent = "—";
 
-    monthUsd.className =
-      "metric-value";
+    monthUsd.className = "metric-value";
   }
 
   document.getElementById("tradingDays").textContent =
@@ -1281,47 +1149,12 @@ function renderStats(){
   document.getElementById("redDays").textContent =
     values.filter(value => value < 0).length;
 
-  if(entries.length){
-    const best = Math.max(...values);
-    const worst = Math.min(...values);
+  const all = Object.values(combined());
 
-    setMoneyStat(
-      "bestDayUsd",
-      "bestDayGbp",
-      best
-    );
-
-    setMoneyStat(
-      "worstDayUsd",
-      "worstDayGbp",
-      worst
-    );
-  }
-
-  else{
-    setMoneyStat(
-      "bestDayUsd",
-      "bestDayGbp",
-      0,
-      true
-    );
-
-    setMoneyStat(
-      "worstDayUsd",
-      "worstDayGbp",
-      0,
-      true
-    );
-  }
-
-  const all =
-    Object.values(combined());
-
-  const ytd =
-    all.reduce(
-      (a,b) => a + b,
-      0
-    );
+  const ytd = all.reduce(
+    (a,b) => a + b,
+    0
+  );
 
   setMoneyStat(
     "yearPnlUsd",
@@ -1331,11 +1164,7 @@ function renderStats(){
 
   document.getElementById("yearPnlUsd").className =
     "metric-value " +
-    (
-      ytd >= 0
-        ? "green"
-        : "red"
-    );
+    (ytd >= 0 ? "green" : "red");
 
   document.getElementById("yearDays").textContent =
     all.length;
@@ -1346,13 +1175,44 @@ function renderStats(){
   document.getElementById("yearRed").textContent =
     all.filter(value => value < 0).length;
 
+  if(all.length){
+    const yearBest = Math.max(...all);
+    const yearWorst = Math.min(...all);
+
+    setMoneyStat(
+      "yearBestDayUsd",
+      "yearBestDayGbp",
+      yearBest
+    );
+
+    setMoneyStat(
+      "yearWorstDayUsd",
+      "yearWorstDayGbp",
+      yearWorst
+    );
+  }
+  else{
+    setMoneyStat(
+      "yearBestDayUsd",
+      "yearBestDayGbp",
+      0,
+      true
+    );
+
+    setMoneyStat(
+      "yearWorstDayUsd",
+      "yearWorstDayGbp",
+      0,
+      true
+    );
+  }
+
   renderWeeklyPnl();
 }
 
 function render(){
   document.getElementById("monthTitle").textContent =
-    months[currentMonth] +
-    " 2026";
+    months[currentMonth] + " 2026";
 
   document
     .querySelectorAll(".month-jump")
@@ -1377,16 +1237,14 @@ function render(){
       1
     );
 
-  let dayIndex =
-    first.getDay();
+  let dayIndex = first.getDay();
 
   dayIndex =
     dayIndex === 0
       ? 7
       : dayIndex;
 
-  let offset =
-    dayIndex - 1;
+  let offset = dayIndex - 1;
 
   if(offset > 4){
     offset = 0;
@@ -1396,9 +1254,7 @@ function render(){
     const empty =
       document.createElement("div");
 
-    empty.className =
-      "day empty";
-
+    empty.className = "day empty";
     container.appendChild(empty);
   }
 
@@ -1427,11 +1283,8 @@ function render(){
       continue;
     }
 
-    const date =
-      key(currentMonth,day);
-
-    const value =
-      data[date];
+    const date = key(currentMonth,day);
+    const value = data[date];
 
     const cell =
       document.createElement("div");
@@ -1447,9 +1300,7 @@ function render(){
     }
 
     if(journal[date]){
-      cell.classList.add(
-        "saved-day"
-      );
+      cell.classList.add("saved-day");
     }
 
     if(
@@ -1485,11 +1336,8 @@ function render(){
     pnlGbp.className = "pnl-gbp";
 
     if(typeof value === "number"){
-      pnlUsd.textContent =
-        usdMoney(value);
-
-      pnlGbp.textContent =
-        gbpMoney(value);
+      pnlUsd.textContent = usdMoney(value);
+      pnlGbp.textContent = gbpMoney(value);
 
       pnlUsd.classList.add(
         value >= 0
@@ -1497,7 +1345,6 @@ function render(){
           : "red"
       );
     }
-
     else{
       pnlUsd.textContent = "—";
       pnlGbp.textContent = "";
@@ -1524,14 +1371,9 @@ function render(){
 }
 
 function showDetail(date){
-  const day =
-    getJournal()[date] || {};
-
-  const result =
-    getDailyResult(date,day);
-
-  const value =
-    result.value;
+  const day = getJournal()[date] || {};
+  const result = getDailyResult(date,day);
+  const value = result.value;
 
   const pretty =
     new Date(
@@ -1908,11 +1750,8 @@ function buildButtons(){
     const button =
       document.createElement("button");
 
-    button.className =
-      "month-jump";
-
-    button.textContent =
-      month.slice(0,3);
+    button.className = "month-jump";
+    button.textContent = month.slice(0,3);
 
     button.addEventListener(
       "click",
