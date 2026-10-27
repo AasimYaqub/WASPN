@@ -164,6 +164,15 @@ button,a{-webkit-tap-highlight-color:transparent}
   overflow:hidden;
 }
 
+.week-range{
+  margin-top:4px;
+  color:var(--muted2);
+  font-size:8px;
+  font-weight:800;
+  white-space:nowrap;
+  overflow:hidden;
+}
+
 .month-head{
   display:grid;
   grid-template-columns:46px 1fr 46px;
@@ -478,7 +487,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 
 @media(min-width:700px){
   .wrap{padding:18px}
-  .year-grid{grid-template-columns:repeat(4,1fr)}
+  .year-grid{grid-template-columns:repeat(5,1fr)}
   .month-stats{grid-template-columns:repeat(6,1fr)}
   .month-buttons{grid-template-columns:repeat(12,1fr)}
   .day{min-height:108px;padding:9px}
@@ -522,6 +531,13 @@ button,a{-webkit-tap-highlight-color:transparent}
       <div class="label">Net P&amp;L</div>
       <div id="yearPnlUsd" class="metric-value">—</div>
       <div id="yearPnlGbp" class="metric-sub">—</div>
+    </div>
+
+    <div class="metric">
+      <div class="label">Current Week P&amp;L</div>
+      <div id="weekPnlUsd" class="metric-value">—</div>
+      <div id="weekPnlGbp" class="metric-sub">—</div>
+      <div id="weekRange" class="week-range">—</div>
     </div>
 
     <div class="metric">
@@ -923,6 +939,170 @@ function gbpMoney(usdValue){
   return "≈ £0.00";
 }
 
+/*
+  CURRENT NEW YORK TRADING WEEK
+
+  Performance Review follows the trading session,
+  so the current week is based on America/New_York.
+
+  Monday through Friday are included.
+*/
+function getNewYorkDateParts(){
+  const parts =
+    new Intl.DateTimeFormat(
+      "en-CA",
+      {
+        timeZone:"America/New_York",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit"
+      }
+    ).formatToParts(new Date());
+
+  const values = {};
+
+  parts.forEach(part => {
+    if(part.type !== "literal"){
+      values[part.type] = part.value;
+    }
+  });
+
+  return {
+    year:Number(values.year),
+    month:Number(values.month),
+    day:Number(values.day)
+  };
+}
+
+function isoFromUtcDate(date){
+  return (
+    date.getUTCFullYear() +
+    "-" +
+    String(date.getUTCMonth() + 1).padStart(2,"0") +
+    "-" +
+    String(date.getUTCDate()).padStart(2,"0")
+  );
+}
+
+function getCurrentTradingWeek(){
+  const ny =
+    getNewYorkDateParts();
+
+  const today =
+    new Date(
+      Date.UTC(
+        ny.year,
+        ny.month - 1,
+        ny.day
+      )
+    );
+
+  const weekday =
+    today.getUTCDay();
+
+  let daysFromMonday;
+
+  if(weekday === 0){
+    daysFromMonday = 6;
+  }
+  else{
+    daysFromMonday = weekday - 1;
+  }
+
+  const monday =
+    new Date(today);
+
+  monday.setUTCDate(
+    today.getUTCDate() -
+    daysFromMonday
+  );
+
+  const friday =
+    new Date(monday);
+
+  friday.setUTCDate(
+    monday.getUTCDate() + 4
+  );
+
+  return {
+    monday,
+    friday,
+    mondayKey:isoFromUtcDate(monday),
+    fridayKey:isoFromUtcDate(friday)
+  };
+}
+
+function shortDateLabel(date){
+  return date.toLocaleDateString(
+    "en-GB",
+    {
+      timeZone:"UTC",
+      day:"numeric",
+      month:"short"
+    }
+  );
+}
+
+function renderWeeklyPnl(){
+  const week =
+    getCurrentTradingWeek();
+
+  const data =
+    combined();
+
+  let total = 0;
+  let days = 0;
+
+  Object.entries(data).forEach(
+    ([date,value]) => {
+      if(
+        date >= week.mondayKey &&
+        date <= week.fridayKey &&
+        typeof value === "number" &&
+        Number.isFinite(value)
+      ){
+        total += value;
+        days++;
+      }
+    }
+  );
+
+  const usd =
+    document.getElementById("weekPnlUsd");
+
+  const gbp =
+    document.getElementById("weekPnlGbp");
+
+  const range =
+    document.getElementById("weekRange");
+
+  range.textContent =
+    shortDateLabel(week.monday) +
+    " – " +
+    shortDateLabel(week.friday);
+
+  if(days === 0){
+    usd.textContent = "No data";
+    gbp.textContent = "—";
+    usd.className = "metric-value";
+    return;
+  }
+
+  usd.textContent =
+    usdMoney(total);
+
+  gbp.textContent =
+    gbpMoney(total);
+
+  usd.className =
+    "metric-value " +
+    (
+      total >= 0
+        ? "green"
+        : "red"
+    );
+}
+
 function timeToSeconds(value){
   if(!value){
     return null;
@@ -1165,6 +1345,8 @@ function renderStats(){
 
   document.getElementById("yearRed").textContent =
     all.filter(value => value < 0).length;
+
+  renderWeeklyPnl();
 }
 
 function render(){
