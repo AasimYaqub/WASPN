@@ -819,6 +819,22 @@ a{
 }
 
 
+.switch input:disabled + .slider{
+
+  opacity:.35;
+
+  cursor:not-allowed;
+
+}
+
+
+.switch input:disabled:not(:checked) + .slider{
+
+  background:#202831;
+
+}
+
+
 .behaviour-lock-panel{
 
   display:none;
@@ -1585,7 +1601,10 @@ a{
         Behavioural Risk Lock
       </div>
 
-      <div class="behaviour-note">
+      <div
+        id="behaviourNote"
+        class="behaviour-note"
+      >
         Activate when recovery thinking, rushed execution, anger,
         repeated re-entry or “one more” appears.
       </div>
@@ -2948,6 +2967,28 @@ function updateLossCooldown(
 
 
 /* ========================================
+   PERMANENT SESSION CLOSURE
+======================================== */
+
+function isSessionPermanentlyClosed(
+  live,
+  clock = getSessionClockState()
+){
+
+  return (
+    clock.key === "closed" ||
+    clock.key === "weekend" ||
+    live.hardStopReached ||
+    live.realisedPnl <= HARD_STOP ||
+    live.attempt >= MAX_ATTEMPTS ||
+    live.sessionEnded
+  );
+
+}
+
+
+
+/* ========================================
    BEHAVIOURAL LOCK
 ======================================== */
 
@@ -2955,6 +2996,26 @@ function activateBehaviouralLock(){
 
   const live =
     getLiveState();
+
+
+  const clock =
+    getSessionClockState();
+
+
+  /*
+    Behavioural lock cannot be newly activated
+    after the session has permanently finished.
+  */
+  if(
+    isSessionPermanentlyClosed(
+      live,
+      clock
+    )
+  ){
+
+    return;
+
+  }
 
 
   live.behaviouralLock = {
@@ -3594,6 +3655,13 @@ function render(){
     );
 
 
+  const permanentlyClosed =
+    isSessionPermanentlyClosed(
+      live,
+      clock
+    );
+
+
   const status =
     document.getElementById(
       "status"
@@ -3655,6 +3723,24 @@ function render(){
   behaviourToggle.checked =
     !!live.behaviouralLock?.active ||
     !!live.behaviouralLock?.resetGateRequired;
+
+
+  /*
+    Once the session has permanently closed,
+    the behavioural lock cannot be newly activated.
+    An existing active/reset state remains visible
+    as historical session state.
+  */
+  behaviourToggle.disabled =
+    permanentlyClosed;
+
+
+  document.getElementById(
+    "behaviourNote"
+  ).textContent =
+    permanentlyClosed
+      ? "Unavailable • today's WASPN session is closed."
+      : "Activate when recovery thinking, rushed execution, anger, repeated re-entry or “one more” appears.";
 
 
   const behaviourPanel =
@@ -3899,6 +3985,29 @@ document.getElementById(
     if(
       event.target.checked
     ){
+
+      const live =
+        getLiveState();
+
+
+      const clock =
+        getSessionClockState();
+
+
+      if(
+        isSessionPermanentlyClosed(
+          live,
+          clock
+        )
+      ){
+
+        event.target.checked =
+          false;
+
+        return;
+
+      }
+
 
       activateBehaviouralLock();
 
