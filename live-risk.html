@@ -1917,8 +1917,7 @@ a{
 
 </div>
 
-<!-- TradeZero adapter only. No Live Risk logic changed. -->
-<script src="tradezero-live.js?v=1"></script>
+<script src="tradezero-live.js?v=2"></script>
 
 <script>
 
@@ -2294,6 +2293,261 @@ function money(
   }
 
   return "$0.00";
+
+}
+
+/* ========================================
+   TRADEZERO
+======================================== */
+
+function getTradeZeroState(){
+
+  try{
+
+    if(
+      !window.WASPNTradeZero ||
+      typeof window.WASPNTradeZero.getState !==
+        "function"
+    ){
+
+      return null;
+
+    }
+
+    const state =
+      window.WASPNTradeZero.getState();
+
+    if(
+      !state ||
+      state.usable !==
+        true
+    ){
+
+      return null;
+
+    }
+
+    if(
+      state.tradeDate !==
+      getNyDate()
+    ){
+
+      return null;
+
+    }
+
+    if(
+      !Number.isFinite(
+        Number(
+          state.attempts
+        )
+      ) ||
+      !Number.isFinite(
+        Number(
+          state.dayRealized
+        )
+      )
+    ){
+
+      return null;
+
+    }
+
+    return state;
+
+  }
+
+  catch{
+
+    return null;
+
+  }
+
+}
+
+function applyTradeZeroStickyRules(
+  localLive,
+  broker
+){
+
+  if(
+    !broker
+  ){
+
+    return localLive;
+
+  }
+
+  const brokerAttempt =
+    Math.max(
+      0,
+      Math.min(
+        MAX_ATTEMPTS,
+        Number(
+          broker.attempts
+        )
+      )
+    );
+
+  const brokerPnl =
+    Number(
+      broker.dayRealized
+    );
+
+  if(
+    broker.warningReached ||
+    brokerPnl <=
+      WARNING_LEVEL
+  ){
+
+    localLive.warningReached =
+      true;
+
+    if(
+      !localLive.lossWarning?.triggered
+    ){
+
+      localLive.lossWarning = {
+
+        triggered:
+          true,
+
+        active:
+          true,
+
+        startedAt:
+          Date.now(),
+
+        until:
+          Date.now() +
+          COOLDOWN_MS
+
+      };
+
+    }
+
+  }
+
+  if(
+    broker.hardStopReached ||
+    brokerPnl <=
+      HARD_STOP
+  ){
+
+    localLive.hardStopReached =
+      true;
+
+    localLive.sessionEnded =
+      true;
+
+  }
+
+  if(
+    broker.maxAttemptReached ||
+    brokerAttempt >=
+      MAX_ATTEMPTS
+  ){
+
+    localLive.sessionEnded =
+      true;
+
+  }
+
+  if(
+    broker.sessionClosed
+  ){
+
+    localLive.sessionEnded =
+      true;
+
+  }
+
+  localLive.maxAttemptReached =
+    Math.max(
+      Number(
+        localLive.maxAttemptReached ||
+        0
+      ),
+      brokerAttempt
+    );
+
+  return localLive;
+
+}
+
+function buildDisplayLive(
+  localLive,
+  broker
+){
+
+  if(
+    !broker
+  ){
+
+    return {
+      ...localLive
+    };
+
+  }
+
+  const brokerAttempt =
+    Math.max(
+      0,
+      Math.min(
+        MAX_ATTEMPTS,
+        Number(
+          broker.attempts
+        )
+      )
+    );
+
+  const brokerPnl =
+    Number(
+      broker.dayRealized
+    );
+
+  return {
+
+    ...localLive,
+
+    attempt:
+      brokerAttempt,
+
+    realisedPnl:
+      brokerPnl,
+
+    warningReached:
+      !!localLive.warningReached ||
+      !!broker.warningReached ||
+      brokerPnl <=
+        WARNING_LEVEL,
+
+    hardStopReached:
+      !!localLive.hardStopReached ||
+      !!broker.hardStopReached ||
+      brokerPnl <=
+        HARD_STOP,
+
+    sessionEnded:
+      !!localLive.sessionEnded ||
+      !!broker.sessionClosed ||
+      !!broker.hardStopReached ||
+      brokerPnl <=
+        HARD_STOP ||
+      !!broker.maxAttemptReached ||
+      brokerAttempt >=
+        MAX_ATTEMPTS,
+
+    maxAttemptReached:
+      Math.max(
+        Number(
+          localLive.maxAttemptReached ||
+          0
+        ),
+        brokerAttempt
+      )
+
+  };
 
 }
 
@@ -2761,16 +3015,21 @@ function isSessionPermanentlyClosed(
 
 function activateBehaviouralLock(){
 
-  const live =
+  let localLive =
     getLiveState();
+
+  const broker =
+    getTradeZeroState();
+
+  const live =
+    buildDisplayLive(
+      localLive,
+      broker
+    );
 
   const clock =
     getSessionClockState();
 
-  /*
-    Behavioural lock cannot be newly activated
-    after the session has permanently finished.
-  */
   if(
     isSessionPermanentlyClosed(
       live,
@@ -2782,7 +3041,7 @@ function activateBehaviouralLock(){
 
   }
 
-  live.behaviouralLock = {
+  localLive.behaviouralLock = {
 
     active:
       true,
@@ -2800,7 +3059,7 @@ function activateBehaviouralLock(){
   };
 
   saveLiveState(
-    live
+    localLive
   );
 
   render();
@@ -3227,7 +3486,9 @@ function renderClocks(){
    CONNECTED RECORD
 ======================================== */
 
-function renderConnectedRecord(){
+function renderConnectedRecord(
+  broker
+){
 
   const day =
     getTodayRecord();
@@ -3307,11 +3568,25 @@ function renderConnectedRecord(){
   document.getElementById(
     "recordState"
   ).textContent =
-    day.journalSavedAt
-      ? "SYNCED"
-      : day.liveRisk
-        ? "LOCAL"
-        : "NO JOURNAL";
+    broker
+      ? "TRADEZERO"
+      : day.journalSavedAt
+        ? "SYNCED"
+        : day.liveRisk
+          ? "LOCAL"
+          : "NO JOURNAL";
+
+  document.getElementById(
+    "saveState"
+  ).textContent =
+    broker
+      ? "Broker live P&L • " +
+        (
+          broker.attemptSource ||
+          "LIVE"
+        ) +
+        " attempts"
+      : "Live session record";
 
 }
 
@@ -3323,26 +3598,48 @@ function render(){
 
   syncFromJournal();
 
-  let live =
+  let localLive =
     getLiveState();
 
-  live =
-    updateLossCooldown(
-      live
+  const broker =
+    getTradeZeroState();
+
+  localLive =
+    applyTradeZeroStickyRules(
+      localLive,
+      broker
     );
 
-  live =
+  localLive =
+    updateLossCooldown(
+      localLive
+    );
+
+  localLive =
     updateBehaviouralLock(
-      live
+      localLive
     );
 
   evaluateStickyRules(
-    live
+    localLive
   );
 
+  /*
+    IMPORTANT:
+    Save only the local Journal-backed values.
+
+    TradeZero attempts / P&L are NOT written into
+    Journal totalNet or the local realisedPnl field.
+  */
   saveLiveState(
-    live
+    localLive
   );
+
+  const live =
+    buildDisplayLive(
+      localLive,
+      broker
+    );
 
   const clock =
     getSessionClockState();
@@ -3409,15 +3706,9 @@ function render(){
     );
 
   behaviourToggle.checked =
-    !!live.behaviouralLock?.active ||
-    !!live.behaviouralLock?.resetGateRequired;
+    !!localLive.behaviouralLock?.active ||
+    !!localLive.behaviouralLock?.resetGateRequired;
 
-  /*
-    Once the session has permanently closed,
-    the behavioural lock cannot be newly activated.
-    An existing active/reset state remains visible
-    as historical session state.
-  */
   behaviourToggle.disabled =
     permanentlyClosed;
 
@@ -3440,23 +3731,23 @@ function render(){
 
   behaviourPanel.classList.toggle(
     "active",
-    !!live.behaviouralLock?.active
+    !!localLive.behaviouralLock?.active
   );
 
   resetGate.classList.toggle(
     "active",
-    !!live.behaviouralLock?.resetGateRequired
+    !!localLive.behaviouralLock?.resetGateRequired
   );
 
   if(
-    live.behaviouralLock?.active
+    localLive.behaviouralLock?.active
   ){
 
     const remaining =
       Math.max(
         0,
         Number(
-          live.behaviouralLock.until ||
+          localLive.behaviouralLock.until ||
           0
         ) -
         Date.now()
@@ -3502,7 +3793,9 @@ function render(){
 
   renderClocks();
 
-  renderConnectedRecord();
+  renderConnectedRecord(
+    broker
+  );
 
 }
 
@@ -3647,8 +3940,17 @@ document.getElementById(
       event.target.checked
     ){
 
-      const live =
+      let localLive =
         getLiveState();
+
+      const broker =
+        getTradeZeroState();
+
+      const live =
+        buildDisplayLive(
+          localLive,
+          broker
+        );
 
       const clock =
         getSessionClockState();
@@ -3717,6 +4019,11 @@ window.addEventListener(
 
 window.addEventListener(
   "pageshow",
+  render
+);
+
+window.addEventListener(
+  "waspn:tradezero-update",
   render
 );
 
