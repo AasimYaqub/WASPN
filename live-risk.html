@@ -1235,20 +1235,6 @@ const MAX_ATTEMPTS =
   5;
 const COOLDOWN_MS =
   5 * 60 * 1000;
-const WASPN_BACKEND_URL =
-  "https://wasp-backend-api.replit.app/api/waspn/live-status";
-const BACKEND_POLL_MS =
-  5000;
-const BACKEND_TIMEOUT_MS =
-  4000;
-const BACKEND_MAX_AGE_MS =
-  15000;
-let backendStatus =
-  null;
-let backendLastSuccessAt =
-  0;
-let backendRequestInFlight =
-  false;
 /* ========================================
    STORAGE
 ======================================== */
@@ -1495,188 +1481,6 @@ function money(
     );
   }
   return "$0.00";
-}
-/* ========================================
-   WASPN 2.0 BACKEND
-======================================== */
-function isBackendStatusUsable(){
-  if(
-    !backendStatus ||
-    typeof backendStatus !==
-      "object"
-  ){
-    return false;
-  }
-  const attempts =
-    Number(
-      backendStatus.attempts
-    );
-  const pnl =
-    Number(
-      backendStatus.dayRealized
-    );
-  const recentFetch =
-    backendLastSuccessAt > 0 &&
-    (
-      Date.now() -
-      backendLastSuccessAt
-    ) <=
-      BACKEND_MAX_AGE_MS;
-  return (
-    recentFetch &&
-    backendStatus.tradeDate ===
-      getNyDate() &&
-    backendStatus.tradeZeroConnected ===
-      true &&
-    backendStatus.dataFresh ===
-      true &&
-    Number.isFinite(
-      attempts
-    ) &&
-    Number.isFinite(
-      pnl
-    )
-  );
-}
-async function refreshBackendStatus(){
-  if(
-    backendRequestInFlight
-  ){
-    return;
-  }
-  backendRequestInFlight =
-    true;
-  const controller =
-    new AbortController();
-  const timeoutId =
-    setTimeout(
-      () => {
-        controller.abort();
-      },
-      BACKEND_TIMEOUT_MS
-    );
-  try{
-    const response =
-      await fetch(
-        WASPN_BACKEND_URL,
-        {
-          method:
-            "GET",
-          cache:
-            "no-store",
-          signal:
-            controller.signal,
-          headers:{
-            "Accept":
-              "application/json"
-          }
-        }
-      );
-    if(
-      !response.ok
-    ){
-      return;
-    }
-    const data =
-      await response.json();
-    if(
-      !data ||
-      typeof data !==
-        "object"
-    ){
-      return;
-    }
-    backendStatus =
-      data;
-    backendLastSuccessAt =
-      Date.now();
-  }
-  catch{
-    /*
-      Deliberately silent.
-      WASPN continues using its existing
-      local Journal/session state.
-    */
-  }
-  finally{
-    clearTimeout(
-      timeoutId
-    );
-    backendRequestInFlight =
-      false;
-  }
-}
-function applyBackendState(
-  live
-){
-  if(
-    !isBackendStatusUsable()
-  ){
-    return live;
-  }
-  const brokerAttempt =
-    Math.max(
-      0,
-      Math.min(
-        MAX_ATTEMPTS,
-        Number(
-          backendStatus.attempts
-        )
-      )
-    );
-  const brokerPnl =
-    Number(
-      backendStatus.dayRealized
-    );
-  live.attempt =
-    brokerAttempt;
-  live.realisedPnl =
-    brokerPnl;
-  if(
-    backendStatus.warningReached ===
-      true ||
-    brokerPnl <=
-      WARNING_LEVEL
-  ){
-    live.warningReached =
-      true;
-  }
-  if(
-    backendStatus.hardStopReached ===
-      true ||
-    brokerPnl <=
-      HARD_STOP
-  ){
-    live.hardStopReached =
-      true;
-    live.sessionEnded =
-      true;
-  }
-  live.maxAttemptReached =
-    Math.max(
-      Number(
-        live.maxAttemptReached ||
-        0
-      ),
-      brokerAttempt
-    );
-  if(
-    backendStatus.maxAttemptReached ===
-      true ||
-    brokerAttempt >=
-      MAX_ATTEMPTS
-  ){
-    live.sessionEnded =
-      true;
-  }
-  if(
-    backendStatus.sessionClosed ===
-      true
-  ){
-    live.sessionEnded =
-      true;
-  }
-  return live;
 }
 /* ========================================
    DAILY RECORD
@@ -2392,27 +2196,6 @@ function renderConnectedRecord(){
       ? day.sessionScore.score +
         "/5"
       : "—";
-  if(
-    isBackendStatusUsable()
-  ){
-    document.getElementById(
-      "recordState"
-    ).textContent =
-      "TRADEZERO";
-    const source =
-      backendStatus.attemptSource ||
-      "LIVE";
-    document.getElementById(
-      "saveState"
-    ).textContent =
-      "TradeZero live risk • " +
-      source +
-      " attempts • " +
-      money(
-        backendStatus.dayRealized
-      );
-    return;
-  }
   document.getElementById(
     "recordState"
   ).textContent =
@@ -2421,12 +2204,6 @@ function renderConnectedRecord(){
       : day.liveRisk
         ? "LOCAL"
         : "NO JOURNAL";
-  document.getElementById(
-    "saveState"
-  ).textContent =
-    backendLastSuccessAt
-      ? "TradeZero feed unavailable • local WASPN fallback active"
-      : "Live session record";
 }
 /* ========================================
    RENDER
@@ -2435,17 +2212,6 @@ function render(){
   syncFromJournal();
   let live =
     getLiveState();
-  live =
-    applyBackendState(
-      live
-    );
-  if(
-    isBackendStatusUsable()
-  ){
-    triggerLossCooldown(
-      live
-    );
-  }
   live =
     updateLossCooldown(
       live
@@ -2689,12 +2455,8 @@ document.getElementById(
     if(
       event.target.checked
     ){
-      let live =
+      const live =
         getLiveState();
-      live =
-        applyBackendState(
-          live
-        );
       const clock =
         getSessionClockState();
       if(
@@ -2743,37 +2505,19 @@ window.addEventListener(
 );
 window.addEventListener(
   "focus",
-  () => {
-    refreshBackendStatus()
-      .then(
-        render
-      );
-  }
+  render
 );
 window.addEventListener(
   "pageshow",
-  () => {
-    refreshBackendStatus()
-      .then(
-        render
-      );
-  }
+  render
 );
 /* ========================================
    START
 ======================================== */
 render();
-refreshBackendStatus()
-  .then(
-    render
-  );
 setInterval(
   render,
   1000
-);
-setInterval(
-  refreshBackendStatus,
-  BACKEND_POLL_MS
 );
 </script>
 <script src="workflow-nav.js?v=3"></script>
