@@ -181,7 +181,7 @@
       only attach the broker cycle when the ticker
       agrees.
 
-      This prevents an incomplete TradeZero history
+      This prevents incomplete TradeZero history
       from silently attaching a cycle to the wrong
       manual attempt.
     */
@@ -459,7 +459,7 @@
 
 
     /*
-      Current backend realizedPnl is explicitly
+      TradeZero realizedPnl is currently
       GROSS BEFORE FEES.
 
       Do NOT map this to actualNet.
@@ -484,11 +484,10 @@
 
 
     /*
-      Only populate the Journal Total Trade Fees
-      field when BOTH fee components are actually
-      known.
+      Only populate Journal Total Trade Fees when
+      BOTH broker fee components are actually known.
 
-      Null does not mean zero.
+      null does not mean zero.
     */
 
     if(
@@ -584,8 +583,8 @@
       netPnl
       calculatedNet
 
-      because TradeZero currently gives gross cycle
-      P&L but not documented fees/commission.
+      because the current TradeZero feed gives gross
+      cycle P&L but not documented fees/commission.
 
       Existing Journal accounting remains intact.
     */
@@ -861,6 +860,130 @@
   }
 
 
+  function renderBrokerSyncStatus(
+    feed
+  ){
+
+    let strip =
+      document.getElementById(
+        "tradezeroJournalStatus"
+      );
+
+
+    if(
+      !strip
+    ){
+
+      strip =
+        document.createElement(
+          "div"
+        );
+
+      strip.id =
+        "tradezeroJournalStatus";
+
+      strip.style.marginTop =
+        "8px";
+
+      strip.style.padding =
+        "9px 10px";
+
+      strip.style.border =
+        "1px solid rgba(34,199,255,.24)";
+
+      strip.style.borderRadius =
+        "10px";
+
+      strip.style.background =
+        "#0c1720";
+
+      strip.style.color =
+        "#9eb4c4";
+
+      strip.style.fontSize =
+        "9px";
+
+      strip.style.fontWeight =
+        "800";
+
+      strip.style.textAlign =
+        "center";
+
+      strip.style.letterSpacing =
+        ".3px";
+
+
+      const note =
+        document.querySelector(
+          ".intraday-note"
+        );
+
+
+      if(
+        note
+      ){
+
+        note.insertAdjacentElement(
+          "afterend",
+          strip
+        );
+
+      }
+
+    }
+
+
+    if(
+      !strip
+    ){
+
+      return;
+
+    }
+
+
+    if(
+      !feed ||
+      feed.dataFresh !==
+        true
+    ){
+
+      strip.textContent =
+        "TRADEZERO • CONNECTION UNAVAILABLE";
+
+      return;
+
+    }
+
+
+    const count =
+      Array.isArray(
+        feed.entries
+      )
+        ? feed.entries.length
+        : 0;
+
+
+    strip.textContent =
+      "TRADEZERO SYNCED • " +
+      count +
+      " BROKER TRADE" +
+      (
+        count === 1
+          ? ""
+          : "S"
+      ) +
+      " MATCHED" +
+      (
+        feed.complete ===
+          true
+          ? ""
+          : " • PARTIAL HISTORY"
+      );
+
+  }
+
+
   function refreshJournalScreen(){
 
     /*
@@ -973,6 +1096,10 @@
         !response.ok
       ){
 
+        renderBrokerSyncStatus(
+          null
+        );
+
         return;
 
       }
@@ -988,6 +1115,10 @@
           "object"
       ){
 
+        renderBrokerSyncStatus(
+          null
+        );
+
         return;
 
       }
@@ -995,6 +1126,11 @@
 
       latest =
         feed;
+
+
+      renderBrokerSyncStatus(
+        feed
+      );
 
 
       const result =
@@ -1027,8 +1163,12 @@
 
     catch{
 
+      renderBrokerSyncStatus(
+        null
+      );
+
       /*
-        Silent failure.
+        Silent fallback.
 
         The existing Journal remains fully usable
         manually if TradeZero is unavailable.
