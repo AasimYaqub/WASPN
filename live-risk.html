@@ -1224,6 +1224,7 @@ No reopening later.
 
 </div>
 </div>
+<script src="tradezero-live.js?v=1"></script>
 <script>
 const STORAGE_KEY =
   "waspnJournalV2";
@@ -1481,6 +1482,118 @@ function money(
     );
   }
   return "$0.00";
+}
+/* ========================================
+   TRADEZERO ADAPTER
+======================================== */
+function getTradeZeroState(){
+  try{
+    if(
+      !window.WASPNTradeZero ||
+      typeof window.WASPNTradeZero.getState !==
+        "function"
+    ){
+      return null;
+    }
+    const state =
+      window.WASPNTradeZero.getState();
+    if(
+      !state ||
+      state.usable !==
+        true
+    ){
+      return null;
+    }
+    if(
+      state.tradeDate &&
+      state.tradeDate !==
+        getNyDate()
+    ){
+      return null;
+    }
+    return state;
+  }
+  catch{
+    return null;
+  }
+}
+function applyTradeZeroState(
+  live
+){
+  const broker =
+    getTradeZeroState();
+  if(
+    !broker
+  ){
+    return live;
+  }
+  const attempts =
+    Math.max(
+      0,
+      Math.min(
+        MAX_ATTEMPTS,
+        Number(
+          broker.attempts ||
+          0
+        )
+      )
+    );
+  const pnl =
+    Number(
+      broker.dayRealized
+    );
+  if(
+    !Number.isFinite(
+      pnl
+    )
+  ){
+    return live;
+  }
+  live.attempt =
+    attempts;
+  live.realisedPnl =
+    pnl;
+  if(
+    broker.warningReached ||
+    pnl <=
+      WARNING_LEVEL
+  ){
+    live.warningReached =
+      true;
+  }
+  if(
+    broker.hardStopReached ||
+    pnl <=
+      HARD_STOP
+  ){
+    live.hardStopReached =
+      true;
+    live.sessionEnded =
+      true;
+  }
+  live.maxAttemptReached =
+    Math.max(
+      Number(
+        live.maxAttemptReached ||
+        0
+      ),
+      attempts
+    );
+  if(
+    broker.maxAttemptReached ||
+    attempts >=
+      MAX_ATTEMPTS
+  ){
+    live.sessionEnded =
+      true;
+  }
+  if(
+    broker.sessionClosed
+  ){
+    live.sessionEnded =
+      true;
+  }
+  return live;
 }
 /* ========================================
    DAILY RECORD
@@ -1812,8 +1925,12 @@ function isSessionPermanentlyClosed(
    BEHAVIOURAL LOCK
 ======================================== */
 function activateBehaviouralLock(){
-  const live =
+  let live =
     getLiveState();
+  live =
+    applyTradeZeroState(
+      live
+    );
   const clock =
     getSessionClockState();
   if(
@@ -2196,14 +2313,32 @@ function renderConnectedRecord(){
       ? day.sessionScore.score +
         "/5"
       : "—";
+  const broker =
+    getTradeZeroState();
   document.getElementById(
     "recordState"
   ).textContent =
-    day.journalSavedAt
-      ? "SYNCED"
-      : day.liveRisk
-        ? "LOCAL"
-        : "NO JOURNAL";
+    broker
+      ? "TRADEZERO"
+      : day.journalSavedAt
+        ? "SYNCED"
+        : day.liveRisk
+          ? "LOCAL"
+          : "NO JOURNAL";
+  document.getElementById(
+    "saveState"
+  ).textContent =
+    broker
+      ? "TradeZero live risk • " +
+        (
+          broker.attemptSource ||
+          "LIVE"
+        ) +
+        " attempts • " +
+        money(
+          broker.dayRealized
+        )
+      : "Live session record";
 }
 /* ========================================
    RENDER
@@ -2212,6 +2347,17 @@ function render(){
   syncFromJournal();
   let live =
     getLiveState();
+  live =
+    applyTradeZeroState(
+      live
+    );
+  if(
+    getTradeZeroState()
+  ){
+    triggerLossCooldown(
+      live
+    );
+  }
   live =
     updateLossCooldown(
       live
@@ -2455,8 +2601,12 @@ document.getElementById(
     if(
       event.target.checked
     ){
-      const live =
+      let live =
         getLiveState();
+      live =
+        applyTradeZeroState(
+          live
+        );
       const clock =
         getSessionClockState();
       if(
@@ -2509,6 +2659,10 @@ window.addEventListener(
 );
 window.addEventListener(
   "pageshow",
+  render
+);
+window.addEventListener(
+  "waspn:tradezero-update",
   render
 );
 /* ========================================
