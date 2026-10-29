@@ -15,7 +15,7 @@ test('shared policy does not use Journal P&L as a loss-threshold source', () => 
 
 test('daily broker P&L is persisted with provenance', () => {
   const source = read('session-rules.js');
-  assert.match(source,/brokerDailyNet\s*=\s*value/);
+  assert.match(source,/brokerDailyNet\s*=\s*Number\(evaluatedBroker\.dayRealized\)/);
   assert.match(source,/brokerDailyNetSource\s*=\s*["']TRADEZERO_LIVE["']/);
   assert.match(source,/brokerDailyObservedAt/);
 });
@@ -69,27 +69,40 @@ test('cross-page hardening removes local P&L from Journal risk badge logic', () 
   assert.match(body,/live\.warningReached/);
 });
 
-test('compliance auto-pass requires complete fresh broker history', () => {
+test('Journal risk guard does not observe its own rendered badge', () => {
+  const source = read('workflow-nav.js');
+  const start = source.indexOf('function applyJournalRiskGuard');
+  const end = source.indexOf('function applyAttemptBreachDisplay');
+  const body = source.slice(start,end);
+  assert.doesNotMatch(body,/MutationObserver/);
+});
+
+test('compliance auto-pass requires complete fresh broker history and timing provenance', () => {
   const source = read('workflow-nav.js');
   assert.match(source,/completeFresh/);
   assert.match(source,/brokerJournal\.complete === true/);
   assert.match(source,/brokerJournal\.dataFresh === true/);
-  assert.match(source,/brokerSourceId/);
-});
-
-test('Review strips broker timing claims without broker provenance', () => {
-  const source = read('workflow-nav.js');
-  assert.match(source,/Timing not broker-proven/);
   assert.match(source,/brokerTimingReconciled === true/);
 });
 
-test('backup validation checks real calendar dates and nested records', () => {
+test('Review strips broker timing claims and aggregate count without provenance', () => {
   const source = read('workflow-nav.js');
-  assert.match(source,/validDateKey/);
-  assert.match(source,/Date\.UTC/);
-  assert.match(source,/validateTrade/);
-  assert.match(source,/Compliance score out of range/);
-  assert.match(source,/Process score out of range/);
+  assert.match(source,/Timing not broker-proven/);
+  assert.match(source,/brokerTimingReconciled === true/);
+  assert.match(source,/provenTimingCount/);
+  assert.match(source,/label === ["']Broker Timing["']/);
+});
+
+test('Backup hardening is installed through session-rules, which Data Backup actually loads', () => {
+  const rules = read('session-rules.js');
+  const backup = read('data-backup.html');
+  assert.match(backup,/session-rules\.js\?v=2/);
+  assert.match(rules,/function validateBackupJournal/);
+  assert.match(rules,/function isRealDateKey/);
+  assert.match(rules,/Date\.UTC/);
+  assert.match(rules,/Compliance score out of range/);
+  assert.match(rules,/Process score out of range/);
+  assert.match(rules,/root\.validateJournalObject = validateBackupJournal/);
 });
 
 test('hardening release bumps PWA cache', () => {
