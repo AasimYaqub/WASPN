@@ -68,10 +68,14 @@ with sync_playwright() as p:
     payload.update(dayRealized=0, outOfWindowEntryDetected=True)
     page.evaluate('WASPNTradeZero.refresh()')
     assert 'WINDOW BREACH' in page.locator('#statusTitle').inner_text()
+    assert page.locator('#waspnWindowBreachNote').count() == 0
+    assert page.get_by_text('WINDOW BREACH', exact=False).count() == 1
     payload['outOfWindowEntryDetected'] = False
     page.reload()
     page.evaluate('WASPNTradeZero.refresh()')
     assert 'WINDOW BREACH' in page.locator('#statusTitle').inner_text()
+    assert page.locator('#waspnWindowBreachNote').count() == 0
+    assert page.get_by_text('WINDOW BREACH', exact=False).count() == 1
     page.goto(BASE+'index.html')
     assert 'WINDOW BREACH' in page.locator('#marketMain').inner_text()
     print('PASS: confirmed breach survives false broker poll, reload and navigation')
