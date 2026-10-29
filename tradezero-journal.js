@@ -20,6 +20,9 @@
   let latest =
     null;
 
+  let lastFeedFingerprint =
+    null;
+
 
   function getJournal(){
 
@@ -119,28 +122,21 @@
     }
 
     return Boolean(
-
       trade.ticker ||
-
       Number(
         trade.entryPrice ||
         0
       ) !== 0 ||
-
       Number(
         trade.exitPrice ||
         0
       ) !== 0 ||
-
       Number(
         trade.shares ||
         0
       ) !== 0 ||
-
       trade.setupReason ||
-
       trade.setup
-
     );
 
   }
@@ -151,14 +147,6 @@
     entry
   ){
 
-    /*
-      FIRST AUTHORITY:
-      stable TradeZero sourceId.
-
-      Never use attemptNumber to identify an already
-      merged broker trade.
-    */
-
     const existingSourceIndex =
       trades.findIndex(
         trade =>
@@ -168,23 +156,14 @@
       );
 
     if(
-      existingSourceIndex >= 0
+      existingSourceIndex >=
+      0
     ){
 
       return existingSourceIndex;
 
     }
 
-
-    /*
-      For an unlinked manual Journal trade we will
-      only attach the broker cycle when the ticker
-      agrees.
-
-      This prevents incomplete TradeZero history
-      from silently attaching a cycle to the wrong
-      manual attempt.
-    */
 
     const symbol =
       String(
@@ -193,6 +172,7 @@
       )
       .trim()
       .toUpperCase();
+
 
     if(
       symbol
@@ -227,8 +207,10 @@
           }
         );
 
+
       if(
-        matchingManualIndex >= 0
+        matchingManualIndex >=
+        0
       ){
 
         return matchingManualIndex;
@@ -238,19 +220,12 @@
     }
 
 
-    /*
-      For a new broker-only trade, the currently
-      proven attempt number can choose an EMPTY slot.
-
-      Once linked, sourceId becomes the permanent
-      identity even if TradeZero later discovers an
-      earlier historical cycle.
-    */
-
     const preferredIndex =
       Number(
         entry.attemptNumber
-      ) - 1;
+      ) -
+      1;
+
 
     if(
       preferredIndex >= 0 &&
@@ -261,6 +236,7 @@
         trades[
           preferredIndex
         ];
+
 
       if(
         !preferredTrade ||
@@ -278,11 +254,6 @@
 
     }
 
-
-    /*
-      Last safe option:
-      first completely unused slot.
-    */
 
     for(
       let i = 0;
@@ -312,11 +283,6 @@
     }
 
 
-    /*
-      No confident slot.
-      Do not guess.
-    */
-
     return -1;
 
   }
@@ -328,15 +294,9 @@
   ){
 
     const trade = {
-
       ...(existingTrade || {})
-
     };
 
-
-    /*
-      Broker identity / provenance.
-    */
 
     trade.brokerSourceId =
       entry.sourceId;
@@ -365,12 +325,6 @@
           )
         : null;
 
-
-    /*
-      FILL EMPTY ONLY.
-
-      Existing manual Journal values always win.
-    */
 
     if(
       isEmptyText(
@@ -458,13 +412,6 @@
     }
 
 
-    /*
-      TradeZero realizedPnl is currently
-      GROSS BEFORE FEES.
-
-      Do NOT map this to actualNet.
-    */
-
     if(
       isFiniteNumber(
         entry.realizedPnl
@@ -482,13 +429,6 @@
 
     }
 
-
-    /*
-      Only populate Journal Total Trade Fees when
-      BOTH broker fee components are actually known.
-
-      null does not mean zero.
-    */
 
     if(
       isEmptyNumber(
@@ -515,10 +455,6 @@
 
     }
 
-
-    /*
-      Preserve broker timing separately.
-    */
 
     if(
       !trade.entryTime &&
@@ -575,20 +511,6 @@
         .toISOString();
 
 
-    /*
-      IMPORTANT:
-      We deliberately do NOT set:
-
-      actualNet
-      netPnl
-      calculatedNet
-
-      because the current TradeZero feed gives gross
-      cycle P&L but not documented fees/commission.
-
-      Existing Journal accounting remains intact.
-    */
-
     return trade;
 
   }
@@ -605,10 +527,8 @@
     ){
 
       return {
-        changed:
-          false,
-        merged:
-          0
+        changed:false,
+        merged:0
       };
 
     }
@@ -620,15 +540,14 @@
         ""
       );
 
+
     if(
       !tradeDate
     ){
 
       return {
-        changed:
-          false,
-        merged:
-          0
+        changed:false,
+        merged:0
       };
 
     }
@@ -641,10 +560,8 @@
     ){
 
       return {
-        changed:
-          false,
-        merged:
-          0
+        changed:false,
+        merged:0
       };
 
     }
@@ -652,6 +569,7 @@
 
     const journal =
       getJournal();
+
 
     const existingDay =
       journal[
@@ -717,7 +635,8 @@
           JSON.stringify(
             trades[
               index
-            ] || {}
+            ] ||
+            {}
           );
 
 
@@ -725,7 +644,8 @@
           mergeEntryIntoTrade(
             trades[
               index
-            ] || {},
+            ] ||
+            {},
             entry
           );
 
@@ -757,18 +677,6 @@
       }
     );
 
-
-    /*
-      Preserve every other WASPN subsystem.
-
-      Do NOT alter:
-      - Live Risk
-      - Compliance
-      - Process score
-      - Session notes
-      - totalNet
-      - journalSavedAt
-    */
 
     const updatedDay = {
 
@@ -986,14 +894,6 @@
 
   function refreshJournalScreen(){
 
-    /*
-      Do not destroy unsaved typing.
-
-      If the form is clean, use the Journal's
-      existing loader so broker-filled values appear
-      immediately.
-    */
-
     if(
       journalIsDirty()
     ){
@@ -1031,6 +931,114 @@
       window.renderConnectedState();
 
     }
+
+  }
+
+
+  function getFeedFingerprint(
+    feed
+  ){
+
+    if(
+      !feed ||
+      typeof feed !==
+        "object"
+    ){
+
+      return "";
+
+    }
+
+
+    return JSON.stringify({
+
+      tradeDate:
+        feed.tradeDate ||
+        null,
+
+      currency:
+        feed.currency ||
+        null,
+
+      complete:
+        feed.complete ===
+          true,
+
+      dataFresh:
+        feed.dataFresh ===
+          true,
+
+      diagnostics:
+        Array.isArray(
+          feed.diagnostics
+        )
+          ? feed.diagnostics
+          : [],
+
+      entries:
+        Array.isArray(
+          feed.entries
+        )
+          ? feed.entries.map(
+              entry => ({
+
+                sourceId:
+                  entry.sourceId ||
+                  null,
+
+                attemptNumber:
+                  entry.attemptNumber ??
+                  null,
+
+                symbol:
+                  entry.symbol ||
+                  null,
+
+                side:
+                  entry.side ||
+                  null,
+
+                totalShares:
+                  entry.totalShares ??
+                  null,
+
+                entryPrice:
+                  entry.entryPrice ??
+                  null,
+
+                exitPrice:
+                  entry.exitPrice ??
+                  null,
+
+                realizedPnl:
+                  entry.realizedPnl ??
+                  null,
+
+                fees:
+                  entry.fees ??
+                  null,
+
+                commission:
+                  entry.commission ??
+                  null,
+
+                entryTime:
+                  entry.entryTime ||
+                  null,
+
+                exitTime:
+                  entry.exitTime ||
+                  null,
+
+                confidence:
+                  entry.confidence ||
+                  null
+
+              })
+            )
+          : []
+
+    });
 
   }
 
@@ -1082,10 +1090,8 @@
               controller.signal,
 
             headers:{
-
               "Accept":
                 "application/json"
-
             }
 
           }
@@ -1133,13 +1139,43 @@
       );
 
 
-      const result =
-        mergeFeed(
+      const fingerprint =
+        getFeedFingerprint(
           feed
         );
 
 
-      refreshJournalScreen();
+      let result = {
+
+        changed:false,
+
+        merged:0,
+
+        tradeDate:
+          feed.tradeDate ||
+          null
+
+      };
+
+
+      if(
+        fingerprint !==
+        lastFeedFingerprint
+      ){
+
+        lastFeedFingerprint =
+          fingerprint;
+
+
+        result =
+          mergeFeed(
+            feed
+          );
+
+
+        refreshJournalScreen();
+
+      }
 
 
       window.dispatchEvent(
@@ -1148,11 +1184,8 @@
           {
 
             detail:{
-
               ...result,
-
               feed
-
             }
 
           }
@@ -1166,13 +1199,6 @@
       renderBrokerSyncStatus(
         null
       );
-
-      /*
-        Silent fallback.
-
-        The existing Journal remains fully usable
-        manually if TradeZero is unavailable.
-      */
 
     }
 
@@ -1198,10 +1224,8 @@
 
 
   window.WASPNTradeZeroJournal = {
-
     refresh,
     getState
-
   };
 
 
