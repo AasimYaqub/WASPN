@@ -1,5 +1,8 @@
+const CACHE_PREFIX =
+  "waspn-pwa-";
+
 const CACHE_NAME =
-  "waspn-pwa-v4";
+  "waspn-pwa-v5";
 
 const APP_SHELL = [
   "./",
@@ -13,7 +16,9 @@ const APP_SHELL = [
   "./tradezero-live.js?v=2",
   "./tradezero-journal.js?v=3",
   "./manifest.webmanifest",
-  "./apple-touch-icon.png"
+  "./apple-touch-icon.png",
+  "./icon-192.png",
+  "./icon-512.png"
 ];
 
 
@@ -63,9 +68,21 @@ self.addEventListener(
               keys.map(
                 key => {
 
+                  /*
+                    Only delete old WASPN caches.
+
+                    CacheStorage is origin-wide on
+                    GitHub Pages. Never delete caches
+                    belonging to another app/repo on
+                    the same origin.
+                  */
+
                   if(
+                    key.startsWith(
+                      CACHE_PREFIX
+                    ) &&
                     key !==
-                    CACHE_NAME
+                      CACHE_NAME
                   ){
 
                     return caches.delete(
@@ -198,7 +215,7 @@ async function networkFirst(
         );
 
 
-      cache.put(
+      await cache.put(
         request,
         response.clone()
       );
@@ -286,7 +303,7 @@ async function cacheFirst(
             );
 
 
-          cache.put(
+          await cache.put(
             request,
             response.clone()
           );
@@ -322,7 +339,7 @@ async function cacheFirst(
       );
 
 
-    cache.put(
+    await cache.put(
       request,
       response.clone()
     );
@@ -358,12 +375,10 @@ self.addEventListener(
 
 
     /*
-      IMPORTANT:
       External requests — including the Replit
       TradeZero backend — pass straight through.
 
-      The service worker must never cache broker
-      API responses.
+      Broker API responses are never cached.
     */
 
     if(
