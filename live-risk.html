@@ -326,12 +326,12 @@ a{
 
 .metric{
   min-width:0;
-  min-height:132px;
+  min-height:150px;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  padding:12px 8px;
+  padding:12px 10px;
   background:linear-gradient(180deg,#121b24,#0c1218);
   border:1px solid var(--border);
   border-radius:16px;
@@ -347,19 +347,40 @@ a{
   font-variant-numeric:tabular-nums;
 }
 
-.metric-sub{
+.pnl-main{
+  width:100%;
   margin-top:8px;
-  min-height:30px;
-  color:var(--muted);
-  font-size:9px;
-  font-weight:800;
-  line-height:1.35;
+  font-size:clamp(30px,8vw,43px);
+  font-weight:950;
+  letter-spacing:-1.3px;
+  line-height:1;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
 }
 
-.metric-sub-value{
+.pnl-estimate{
+  width:100%;
+  margin-top:11px;
+  padding-top:9px;
+  border-top:1px solid rgba(135,151,167,.16);
+}
+
+.pnl-estimate-label{
+  color:var(--muted);
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.7px;
+  line-height:1.3;
+  text-transform:uppercase;
+}
+
+.pnl-estimate-value{
+  margin-top:3px;
   color:#a9c9d6;
-  font-size:12px;
+  font-size:15px;
   font-weight:950;
+  line-height:1.1;
+  white-space:nowrap;
   font-variant-numeric:tabular-nums;
 }
 
@@ -656,10 +677,21 @@ a{
   font-weight:950;
 }
 
-.blue{color:var(--blue)}
-.green{color:var(--green)}
-.amber{color:var(--amber)}
-.red{color:var(--red)}
+.blue{
+  color:var(--blue);
+}
+
+.green{
+  color:var(--green);
+}
+
+.amber{
+  color:var(--amber);
+}
+
+.red{
+  color:var(--red);
+}
 
 .section{
   margin-top:10px;
@@ -750,13 +782,20 @@ a{
 
 <body>
 
-<div class="wrap" id="top">
+<div
+  class="wrap"
+  id="top"
+>
 
 <header>
 
   <div class="topbar">
 
-    <a href="index.html" class="icon-btn" aria-label="Home">
+    <a
+      href="index.html"
+      class="icon-btn"
+      aria-label="Home"
+    >
       ←
     </a>
 
@@ -784,23 +823,38 @@ a{
   </div>
 
   <div class="prototype-strip">
+
     <span class="prototype-dot"></span>
+
     Evidence-led intraday risk engine
+
   </div>
 
 </header>
 
-<section id="status" class="status warn">
+<section
+  id="status"
+  class="status warn"
+>
 
-  <div id="statusMode" class="status-mode">
+  <div
+    id="statusMode"
+    class="status-mode"
+  >
     SESSION ENGINE
   </div>
 
-  <div id="statusTitle" class="status-title">
+  <div
+    id="statusTitle"
+    class="status-title"
+  >
     CHECKING SESSION
   </div>
 
-  <div id="statusDetail" class="status-detail">
+  <div
+    id="statusDetail"
+    class="status-detail"
+  >
     Loading New York trading state…
   </div>
 
@@ -814,11 +868,17 @@ a{
       Local Time
     </div>
 
-    <div id="localTime" class="clock-time">
+    <div
+      id="localTime"
+      class="clock-time"
+    >
       --:--
     </div>
 
-    <div id="localZone" class="clock-detail">
+    <div
+      id="localZone"
+      class="clock-detail"
+    >
       Local
     </div>
 
@@ -830,11 +890,17 @@ a{
       New York
     </div>
 
-    <div id="etTime" class="clock-time">
+    <div
+      id="etTime"
+      class="clock-time"
+    >
       --:--
     </div>
 
-    <div id="nyDay" class="clock-detail">
+    <div
+      id="nyDay"
+      class="clock-detail"
+    >
       —
     </div>
 
@@ -851,8 +917,15 @@ a{
     </div>
 
     <div class="metric-value">
-      <span id="attempt">0</span>
-      <span class="attempt-max">/5</span>
+
+      <span id="attempt">
+        0
+      </span>
+
+      <span class="attempt-max">
+        /5
+      </span>
+
     </div>
 
   </section>
@@ -865,22 +938,27 @@ a{
 
     <div
       id="pnlDisplay"
-      class="metric-value"
+      class="pnl-main"
     >
       $0.00
     </div>
 
     <div
       id="pnlEstimate"
-      class="metric-sub"
+      class="pnl-estimate"
     >
-      Estimated after manual fees:
-      <span
+
+      <div class="pnl-estimate-label">
+        Estimated after manual fees
+      </div>
+
+      <div
         id="pnlEstimateValue"
-        class="metric-sub-value"
+        class="pnl-estimate-value"
       >
         —
-      </span>
+      </div>
+
     </div>
 
   </section>
@@ -978,93 +1056,203 @@ a{
   </div>
 
   <div class="gate-question">
+
     <div class="gate-question-text">
       1. Am I trying to make back a previous loss?
     </div>
 
     <div class="gate-options">
+
       <label class="gate-option">
-        <input type="radio" name="gate1" value="risk">
-        <span>Yes</span>
+
+        <input
+          type="radio"
+          name="gate1"
+          value="risk"
+        >
+
+        <span>
+          Yes
+        </span>
+
       </label>
 
       <label class="gate-option">
-        <input type="radio" name="gate1" value="safe">
-        <span>No</span>
+
+        <input
+          type="radio"
+          name="gate1"
+          value="safe"
+        >
+
+        <span>
+          No
+        </span>
+
       </label>
+
     </div>
+
   </div>
 
   <div class="gate-question">
+
     <div class="gate-question-text">
       2. Am I increasing size because I am red?
     </div>
 
     <div class="gate-options">
+
       <label class="gate-option">
-        <input type="radio" name="gate2" value="risk">
-        <span>Yes</span>
+
+        <input
+          type="radio"
+          name="gate2"
+          value="risk"
+        >
+
+        <span>
+          Yes
+        </span>
+
       </label>
 
       <label class="gate-option">
-        <input type="radio" name="gate2" value="safe">
-        <span>No</span>
+
+        <input
+          type="radio"
+          name="gate2"
+          value="safe"
+        >
+
+        <span>
+          No
+        </span>
+
       </label>
+
     </div>
+
   </div>
 
   <div class="gate-question">
+
     <div class="gate-question-text">
       3. Am I re-entering because I need to be right?
     </div>
 
     <div class="gate-options">
+
       <label class="gate-option">
-        <input type="radio" name="gate3" value="risk">
-        <span>Yes</span>
+
+        <input
+          type="radio"
+          name="gate3"
+          value="risk"
+        >
+
+        <span>
+          Yes
+        </span>
+
       </label>
 
       <label class="gate-option">
-        <input type="radio" name="gate3" value="safe">
-        <span>No</span>
+
+        <input
+          type="radio"
+          name="gate3"
+          value="safe"
+        >
+
+        <span>
+          No
+        </span>
+
       </label>
+
     </div>
+
   </div>
 
   <div class="gate-question">
+
     <div class="gate-question-text">
       4. Am I calmer and prepared to wait for a valid setup?
     </div>
 
     <div class="gate-options">
+
       <label class="gate-option">
-        <input type="radio" name="gate4" value="safe">
-        <span>Yes</span>
+
+        <input
+          type="radio"
+          name="gate4"
+          value="safe"
+        >
+
+        <span>
+          Yes
+        </span>
+
       </label>
 
       <label class="gate-option">
-        <input type="radio" name="gate4" value="risk">
-        <span>No</span>
+
+        <input
+          type="radio"
+          name="gate4"
+          value="risk"
+        >
+
+        <span>
+          No
+        </span>
+
       </label>
+
     </div>
+
   </div>
 
   <div class="gate-question">
+
     <div class="gate-question-text">
       5. Is the next trade genuinely inside WASPN rather than a recovery trade?
     </div>
 
     <div class="gate-options">
+
       <label class="gate-option">
-        <input type="radio" name="gate5" value="safe">
-        <span>Yes</span>
+
+        <input
+          type="radio"
+          name="gate5"
+          value="safe"
+        >
+
+        <span>
+          Yes
+        </span>
+
       </label>
 
       <label class="gate-option">
-        <input type="radio" name="gate5" value="risk">
-        <span>No</span>
+
+        <input
+          type="radio"
+          name="gate5"
+          value="risk"
+        >
+
+        <span>
+          No
+        </span>
+
       </label>
+
     </div>
+
   </div>
 
   <div
@@ -1088,23 +1276,51 @@ a{
 <div class="guardrails">
 
   <div class="guardrail">
-    <div class="label">Window</div>
-    <div class="guardrail-value blue">9–11 ET</div>
+
+    <div class="label">
+      Window
+    </div>
+
+    <div class="guardrail-value blue">
+      9–11 ET
+    </div>
+
   </div>
 
   <div class="guardrail">
-    <div class="label">Attempts</div>
-    <div class="guardrail-value">5 Max</div>
+
+    <div class="label">
+      Attempts
+    </div>
+
+    <div class="guardrail-value">
+      5 Max
+    </div>
+
   </div>
 
   <div class="guardrail">
-    <div class="label">Warning</div>
-    <div class="guardrail-value amber">-$75</div>
+
+    <div class="label">
+      Warning
+    </div>
+
+    <div class="guardrail-value amber">
+      -$75
+    </div>
+
   </div>
 
   <div class="guardrail">
-    <div class="label">Hard Stop</div>
-    <div class="guardrail-value red">-$100</div>
+
+    <div class="label">
+      Hard Stop
+    </div>
+
+    <div class="guardrail-value red">
+      -$100
+    </div>
+
   </div>
 
 </div>
@@ -1129,23 +1345,63 @@ a{
   <div class="summary">
 
     <div class="summary-item">
-      <div class="label">Journal Trades</div>
-      <div id="journalTrades" class="summary-value">—</div>
+
+      <div class="label">
+        Journal Trades
+      </div>
+
+      <div
+        id="journalTrades"
+        class="summary-value"
+      >
+        —
+      </div>
+
     </div>
 
     <div class="summary-item">
-      <div class="label">Journal Net</div>
-      <div id="journalNet" class="summary-value">—</div>
+
+      <div class="label">
+        Journal Net
+      </div>
+
+      <div
+        id="journalNet"
+        class="summary-value"
+      >
+        —
+      </div>
+
     </div>
 
     <div class="summary-item">
-      <div class="label">Compliance</div>
-      <div id="complianceSummary" class="summary-value">—</div>
+
+      <div class="label">
+        Compliance
+      </div>
+
+      <div
+        id="complianceSummary"
+        class="summary-value"
+      >
+        —
+      </div>
+
     </div>
 
     <div class="summary-item">
-      <div class="label">Process</div>
-      <div id="processSummary" class="summary-value">—</div>
+
+      <div class="label">
+        Process
+      </div>
+
+      <div
+        id="processSummary"
+        class="summary-value"
+      >
+        —
+      </div>
+
     </div>
 
   </div>
@@ -1160,10 +1416,17 @@ a{
 </section>
 
 <div class="rule-reminder">
-  <strong>HARD FINISH:</strong>
+
+  <strong>
+    HARD FINISH:
+  </strong>
+
   Attempt 5 • -$100 realised • 11:00 AM ET
+
   <br>
+
   No reopening later.
+
 </div>
 
 </div>
@@ -1190,6 +1453,10 @@ const MAX_ATTEMPTS =
 const COOLDOWN_MS =
   5 * 60 * 1000;
 
+
+/* ========================================
+   STORAGE
+======================================== */
 
 function getJournal(){
 
@@ -1317,21 +1584,44 @@ function getEstimatedFeesForDate(
 }
 
 
+/* ========================================
+   DATE / TIME
+======================================== */
+
 function getNyParts(){
 
   const formatted =
     new Intl.DateTimeFormat(
       "en-GB",
       {
-        timeZone:"America/New_York",
-        weekday:"long",
-        year:"numeric",
-        month:"2-digit",
-        day:"2-digit",
-        hour:"2-digit",
-        minute:"2-digit",
-        second:"2-digit",
-        hourCycle:"h23"
+
+        timeZone:
+          "America/New_York",
+
+        weekday:
+          "long",
+
+        year:
+          "numeric",
+
+        month:
+          "2-digit",
+
+        day:
+          "2-digit",
+
+        hour:
+          "2-digit",
+
+        minute:
+          "2-digit",
+
+        second:
+          "2-digit",
+
+        hourCycle:
+          "h23"
+
       }
     )
     .formatToParts(
@@ -1360,13 +1650,34 @@ function getNyParts(){
   );
 
   return {
-    weekday:data.weekday,
-    year:data.year,
-    month:data.month,
-    day:data.day,
-    hour:Number(data.hour),
-    minute:Number(data.minute),
-    second:Number(data.second)
+
+    weekday:
+      data.weekday,
+
+    year:
+      data.year,
+
+    month:
+      data.month,
+
+    day:
+      data.day,
+
+    hour:
+      Number(
+        data.hour
+      ),
+
+    minute:
+      Number(
+        data.minute
+      ),
+
+    second:
+      Number(
+        data.second
+      )
+
   };
 
 }
@@ -1398,19 +1709,32 @@ function getSessionClockState(){
     ny.minute;
 
   const weekend =
-    ny.weekday === "Saturday" ||
-    ny.weekday === "Sunday";
+    ny.weekday ===
+      "Saturday" ||
+    ny.weekday ===
+      "Sunday";
 
   if(
     weekend
   ){
 
     return {
-      key:"weekend",
-      canStart:false,
-      title:"MARKET CLOSED — WEEKEND",
-      detail:"No WASPN trading session today.",
-      className:"closed"
+
+      key:
+        "weekend",
+
+      canStart:
+        false,
+
+      title:
+        "MARKET CLOSED — WEEKEND",
+
+      detail:
+        "No WASPN trading session today.",
+
+      className:
+        "closed"
+
     };
 
   }
@@ -1421,11 +1745,22 @@ function getSessionClockState(){
   ){
 
     return {
-      key:"preliminary",
-      canStart:true,
-      title:"PRELIMINARY WINDOW",
-      detail:"6:30–7:00 AM ET • Exceptional setup / monitoring window.",
-      className:"ok"
+
+      key:
+        "preliminary",
+
+      canStart:
+        true,
+
+      title:
+        "PRELIMINARY WINDOW",
+
+      detail:
+        "6:30–7:00 AM ET • Exceptional setup / monitoring window.",
+
+      className:
+        "ok"
+
     };
 
   }
@@ -1436,11 +1771,22 @@ function getSessionClockState(){
   ){
 
     return {
-      key:"main",
-      canStart:true,
-      title:"WITHIN WASPN",
-      detail:"Primary trading window • 9:00–11:00 AM ET.",
-      className:"ok"
+
+      key:
+        "main",
+
+      canStart:
+        true,
+
+      title:
+        "WITHIN WASPN",
+
+      detail:
+        "Primary trading window • 9:00–11:00 AM ET.",
+
+      className:
+        "ok"
+
     };
 
   }
@@ -1451,11 +1797,22 @@ function getSessionClockState(){
   ){
 
     return {
-      key:"wait",
-      canStart:false,
-      title:"WAIT — MAIN WINDOW NOT OPEN",
-      detail:"Main WASPN window begins at 9:00 AM ET.",
-      className:"warn"
+
+      key:
+        "wait",
+
+      canStart:
+        false,
+
+      title:
+        "WAIT — MAIN WINDOW NOT OPEN",
+
+      detail:
+        "Main WASPN window begins at 9:00 AM ET.",
+
+      className:
+        "warn"
+
     };
 
   }
@@ -1465,25 +1822,51 @@ function getSessionClockState(){
   ){
 
     return {
-      key:"closed",
-      canStart:false,
-      title:"SESSION CLOSED",
-      detail:"11:00 AM ET reached • No reopening later.",
-      className:"closed"
+
+      key:
+        "closed",
+
+      canStart:
+        false,
+
+      title:
+        "SESSION CLOSED",
+
+      detail:
+        "11:00 AM ET reached • No reopening later.",
+
+      className:
+        "closed"
+
     };
 
   }
 
   return {
-    key:"before",
-    canStart:false,
-    title:"WAIT — SESSION NOT OPEN",
-    detail:"Preliminary monitoring begins at 6:30 AM ET.",
-    className:"warn"
+
+    key:
+      "before",
+
+    canStart:
+      false,
+
+    title:
+      "WAIT — SESSION NOT OPEN",
+
+    detail:
+      "Preliminary monitoring begins at 6:30 AM ET.",
+
+    className:
+      "warn"
+
   };
 
 }
 
+
+/* ========================================
+   MONEY
+======================================== */
 
 function money(
   value
@@ -1491,8 +1874,7 @@ function money(
 
   const n =
     Number(
-      value ||
-      0
+      value || 0
     );
 
   if(
@@ -1501,7 +1883,9 @@ function money(
 
     return (
       "+$" +
-      n.toFixed(2)
+      n.toFixed(
+        2
+      )
     );
 
   }
@@ -1512,7 +1896,12 @@ function money(
 
     return (
       "-$" +
-      Math.abs(n).toFixed(2)
+      Math.abs(
+        n
+      )
+      .toFixed(
+        2
+      )
     );
 
   }
@@ -1521,6 +1910,10 @@ function money(
 
 }
 
+
+/* ========================================
+   TRADEZERO
+======================================== */
 
 function getTradeZeroState(){
 
@@ -1541,7 +1934,8 @@ function getTradeZeroState(){
 
     if(
       !state ||
-      state.usable !== true
+      state.usable !==
+        true
     ){
 
       return null;
@@ -1631,7 +2025,8 @@ function applyTradeZeroStickyRules(
 
   if(
     broker.warningReached ||
-    brokerPnl <= WARNING_LEVEL
+    brokerPnl <=
+      WARNING_LEVEL
   ){
 
     localLive.warningReached =
@@ -1645,13 +2040,29 @@ function applyTradeZeroStickyRules(
         Date.now();
 
       localLive.lossWarning = {
-        triggered:true,
-        active:true,
-        resetGateRequired:false,
-        startedAt:now,
-        until:now + COOLDOWN_MS,
-        source:"TRADEZERO",
-        triggerPnl:brokerPnl
+
+        triggered:
+          true,
+
+        active:
+          true,
+
+        resetGateRequired:
+          false,
+
+        startedAt:
+          now,
+
+        until:
+          now +
+          COOLDOWN_MS,
+
+        source:
+          "TRADEZERO",
+
+        triggerPnl:
+          brokerPnl
+
       };
 
     }
@@ -1660,7 +2071,8 @@ function applyTradeZeroStickyRules(
 
   if(
     broker.hardStopReached ||
-    brokerPnl <= HARD_STOP
+    brokerPnl <=
+      HARD_STOP
   ){
 
     localLive.hardStopReached =
@@ -1718,7 +2130,11 @@ function buildDisplayLive(
   ){
 
     return {
+
       ...localLive,
+
+      brokerAuthoritative:
+        false,
 
       attempt:
         Math.min(
@@ -1731,6 +2147,7 @@ function buildDisplayLive(
           MAX_ATTEMPTS,
           localKnownAttempt
         )
+
     };
 
   }
@@ -1761,7 +2178,11 @@ function buildDisplayLive(
     );
 
   return {
+
     ...localLive,
+
+    brokerAuthoritative:
+      true,
 
     attempt:
       displayAttempt,
@@ -1772,20 +2193,24 @@ function buildDisplayLive(
     warningReached:
       !!localLive.warningReached ||
       !!broker.warningReached ||
-      brokerPnl <= WARNING_LEVEL,
+      brokerPnl <=
+        WARNING_LEVEL,
 
     hardStopReached:
       !!localLive.hardStopReached ||
       !!broker.hardStopReached ||
-      brokerPnl <= HARD_STOP,
+      brokerPnl <=
+        HARD_STOP,
 
     sessionEnded:
       !!localLive.sessionEnded ||
       !!broker.sessionClosed ||
       !!broker.hardStopReached ||
-      brokerPnl <= HARD_STOP ||
+      brokerPnl <=
+        HARD_STOP ||
       !!broker.maxAttemptReached ||
-      displayAttempt >= MAX_ATTEMPTS,
+      displayAttempt >=
+        MAX_ATTEMPTS,
 
     maxAttemptReached:
       displayAttempt
@@ -1794,6 +2219,10 @@ function buildDisplayLive(
 
 }
 
+
+/* ========================================
+   DAILY RECORD
+======================================== */
 
 function getTodayRecord(){
 
@@ -1818,10 +2247,11 @@ function getJournalTrades(
 
   }
 
-  return day.trades.slice(
-    0,
-    MAX_ATTEMPTS
-  );
+  return day.trades
+    .slice(
+      0,
+      MAX_ATTEMPTS
+    );
 
 }
 
@@ -1936,9 +2366,16 @@ function getLiveState(){
     behaviouralLock:
       stored.behaviouralLock ||
       {
-        active:false,
-        until:null,
-        resetGateRequired:false
+
+        active:
+          false,
+
+        until:
+          null,
+
+        resetGateRequired:
+          false
+
       },
 
     timer:
@@ -2024,6 +2461,10 @@ function saveLiveState(
 }
 
 
+/* ========================================
+   JOURNAL SYNC
+======================================== */
+
 function syncFromJournal(){
 
   const day =
@@ -2065,11 +2506,7 @@ function syncFromJournal(){
       attempt
     );
 
-  triggerLossCooldown(
-    live
-  );
-
-  evaluateStickyRules(
+  evaluateStructuralRules(
     live
   );
 
@@ -2080,32 +2517,13 @@ function syncFromJournal(){
 }
 
 
-function evaluateStickyRules(
+/* ========================================
+   STRUCTURAL STICKY RULES
+======================================== */
+
+function evaluateStructuralRules(
   live
 ){
-
-  if(
-    live.realisedPnl <=
-    WARNING_LEVEL
-  ){
-
-    live.warningReached =
-      true;
-
-  }
-
-  if(
-    live.realisedPnl <=
-    HARD_STOP
-  ){
-
-    live.hardStopReached =
-      true;
-
-    live.sessionEnded =
-      true;
-
-  }
 
   const maxKnownAttempt =
     Math.max(
@@ -2137,52 +2555,9 @@ function evaluateStickyRules(
 }
 
 
-function triggerLossCooldown(
-  live
-){
-
-  const warning =
-    live.lossWarning;
-
-  if(
-    live.realisedPnl >
-    WARNING_LEVEL
-  ){
-
-    return live;
-
-  }
-
-  if(
-    warning?.triggered
-  ){
-
-    return live;
-
-  }
-
-  const now =
-    Date.now();
-
-  live.lossWarning = {
-    triggered:true,
-    active:true,
-    resetGateRequired:false,
-    startedAt:now,
-    until:now + COOLDOWN_MS,
-    source:"JOURNAL",
-    triggerPnl:Number(
-      live.realisedPnl
-    )
-  };
-
-  live.warningReached =
-    true;
-
-  return live;
-
-}
-
+/* ========================================
+   LOSS WARNING
+======================================== */
 
 function updateLossCooldown(
   live
@@ -2208,9 +2583,11 @@ function updateLossCooldown(
 
       ...live.lossWarning,
 
-      active:false,
+      active:
+        false,
 
-      resetGateRequired:true,
+      resetGateRequired:
+        true,
 
       completedAt:
         Date.now()
@@ -2283,6 +2660,10 @@ function getLossCooldownCountdown(
 }
 
 
+/* ========================================
+   PERMANENT SESSION CLOSURE
+======================================== */
+
 function isSessionPermanentlyClosed(
   live,
   clock = getSessionClockState()
@@ -2304,13 +2685,22 @@ function isSessionPermanentlyClosed(
     clock.key === "closed" ||
     clock.key === "weekend" ||
     live.hardStopReached ||
-    live.realisedPnl <= HARD_STOP ||
-    maxKnownAttempt >= MAX_ATTEMPTS ||
+    (
+      live.brokerAuthoritative &&
+      live.realisedPnl <=
+        HARD_STOP
+    ) ||
+    maxKnownAttempt >=
+      MAX_ATTEMPTS ||
     live.sessionEnded
   );
 
 }
 
+
+/* ========================================
+   BEHAVIOURAL LOCK
+======================================== */
 
 function activateBehaviouralLock(){
 
@@ -2343,10 +2733,20 @@ function activateBehaviouralLock(){
   }
 
   localLive.behaviouralLock = {
-    active:true,
-    startedAt:Date.now(),
-    until:Date.now() + COOLDOWN_MS,
-    resetGateRequired:false
+
+    active:
+      true,
+
+    startedAt:
+      Date.now(),
+
+    until:
+      Date.now() +
+      COOLDOWN_MS,
+
+    resetGateRequired:
+      false
+
   };
 
   saveLiveState(
@@ -2375,9 +2775,11 @@ function updateBehaviouralLock(
 
       ...live.behaviouralLock,
 
-      active:false,
+      active:
+        false,
 
-      resetGateRequired:true
+      resetGateRequired:
+        true
 
     };
 
@@ -2401,11 +2803,14 @@ function clearBehaviouralLock(){
 
     ...live.behaviouralLock,
 
-    active:false,
+    active:
+      false,
 
-    until:null,
+    until:
+      null,
 
-    resetGateRequired:false,
+    resetGateRequired:
+      false,
 
     clearedAt:
       Date.now()
@@ -2420,9 +2825,11 @@ function clearBehaviouralLock(){
 
       ...live.lossWarning,
 
-      active:false,
+      active:
+        false,
 
-      resetGateRequired:false,
+      resetGateRequired:
+        false,
 
       gateClearedAt:
         Date.now()
@@ -2458,14 +2865,20 @@ function clearBehaviouralLock(){
 }
 
 
+/* ========================================
+   RESET GATE
+======================================== */
+
 function evaluateGate(){
 
   const names = [
+
     "gate1",
     "gate2",
     "gate3",
     "gate4",
     "gate5"
+
   ];
 
   const answers =
@@ -2510,7 +2923,8 @@ function evaluateGate(){
   if(
     answers.some(
       answer =>
-        answer === "risk"
+        answer ===
+        "risk"
     )
   ){
 
@@ -2539,6 +2953,10 @@ function evaluateGate(){
 }
 
 
+/* ========================================
+   STATUS LOGIC
+======================================== */
+
 function getOperationalStatus(
   live,
   clock
@@ -2546,14 +2964,24 @@ function getOperationalStatus(
 
   if(
     live.hardStopReached ||
-    live.realisedPnl <=
-      HARD_STOP
+    (
+      live.brokerAuthoritative &&
+      live.realisedPnl <=
+        HARD_STOP
+    )
   ){
 
     return {
-      title:"HARD STOP — SESSION OVER",
-      detail:"-$100 realised reached • No further trading today.",
-      className:"stop"
+
+      title:
+        "HARD STOP — SESSION OVER",
+
+      detail:
+        "-$100 realised reached • No further trading today.",
+
+      className:
+        "stop"
+
     };
 
   }
@@ -2573,9 +3001,16 @@ function getOperationalStatus(
   ){
 
     return {
-      title:"ATTEMPT 5 — SESSION OVER",
-      detail:"Maximum completed attempts reached • No reopening later.",
-      className:"stop"
+
+      title:
+        "ATTEMPT 5 — SESSION OVER",
+
+      detail:
+        "Maximum completed attempts reached • No reopening later.",
+
+      className:
+        "stop"
+
     };
 
   }
@@ -2586,9 +3021,16 @@ function getOperationalStatus(
   ){
 
     return {
-      title:"SESSION CLOSED",
-      detail:"11:00 AM ET reached • No reopening later.",
-      className:"closed"
+
+      title:
+        "SESSION CLOSED",
+
+      detail:
+        "11:00 AM ET reached • No reopening later.",
+
+      className:
+        "closed"
+
     };
 
   }
@@ -2599,9 +3041,16 @@ function getOperationalStatus(
   ){
 
     return {
-      title:"MARKET CLOSED — WEEKEND",
-      detail:"No WASPN trading session today.",
-      className:"closed"
+
+      title:
+        "MARKET CLOSED — WEEKEND",
+
+      detail:
+        "No WASPN trading session today.",
+
+      className:
+        "closed"
+
     };
 
   }
@@ -2611,9 +3060,16 @@ function getOperationalStatus(
   ){
 
     return {
-      title:"BEHAVIOURAL LOCK ACTIVE",
-      detail:"New trade starts are blocked during the five-minute circuit breaker.",
-      className:"stop"
+
+      title:
+        "BEHAVIOURAL LOCK ACTIVE",
+
+      detail:
+        "New trade starts are blocked during the five-minute circuit breaker.",
+
+      className:
+        "stop"
+
     };
 
   }
@@ -2629,6 +3085,7 @@ function getOperationalStatus(
       "00:00";
 
     return {
+
       title:
         "-$75 WARNING — COOLDOWN " +
         countdown,
@@ -2636,7 +3093,9 @@ function getOperationalStatus(
       detail:
         "Mandatory five-minute lockout • No new WASPN trade until the timer reaches 00:00.",
 
-      className:"warn"
+      className:
+        "warn"
+
     };
 
   }
@@ -2647,22 +3106,37 @@ function getOperationalStatus(
   ){
 
     return {
-      title:"RESET GATE REQUIRED",
-      detail:"Complete all five reset checks before another WASPN trade.",
-      className:"warn"
+
+      title:
+        "RESET GATE REQUIRED",
+
+      detail:
+        "Complete all five reset checks before another WASPN trade.",
+
+      className:
+        "warn"
+
     };
 
   }
 
   if(
+    live.brokerAuthoritative &&
     live.realisedPnl <=
-    WARNING_LEVEL
+      WARNING_LEVEL
   ){
 
     return {
-      title:"-$75 WARNING ACTIVE",
-      detail:"Cooldown and reset completed • remain selective before another trade.",
-      className:"warn"
+
+      title:
+        "-$75 WARNING ACTIVE",
+
+      detail:
+        "Cooldown and reset completed • remain selective before another trade.",
+
+      className:
+        "warn"
+
     };
 
   }
@@ -2671,6 +3145,10 @@ function getOperationalStatus(
 
 }
 
+
+/* ========================================
+   CLOCK DISPLAY
+======================================== */
 
 function renderClocks(){
 
@@ -2683,9 +3161,16 @@ function renderClocks(){
     now.toLocaleTimeString(
       [],
       {
-        hour:"2-digit",
-        minute:"2-digit",
-        second:"2-digit"
+
+        hour:
+          "2-digit",
+
+        minute:
+          "2-digit",
+
+        second:
+          "2-digit"
+
       }
     );
 
@@ -2703,11 +3188,30 @@ function renderClocks(){
   document.getElementById(
     "etTime"
   ).textContent =
-    String(ny.hour).padStart(2,"0") +
+
+    String(
+      ny.hour
+    )
+    .padStart(
+      2,
+      "0"
+    ) +
     ":" +
-    String(ny.minute).padStart(2,"0") +
+    String(
+      ny.minute
+    )
+    .padStart(
+      2,
+      "0"
+    ) +
     ":" +
-    String(ny.second).padStart(2,"0");
+    String(
+      ny.second
+    )
+    .padStart(
+      2,
+      "0"
+    );
 
   document.getElementById(
     "nyDay"
@@ -2718,6 +3222,10 @@ function renderClocks(){
 
 }
 
+
+/* ========================================
+   CONNECTED RECORD
+======================================== */
 
 function renderConnectedRecord(
   broker
@@ -2733,9 +3241,12 @@ function renderConnectedRecord(
       ? day.trades.length
       : null;
 
-  document.getElementById(
-    "journalTrades"
-  ).textContent =
+  const journalTrades =
+    document.getElementById(
+      "journalTrades"
+    );
+
+  journalTrades.textContent =
     trades !== null
       ? trades
       : "—";
@@ -2821,6 +3332,10 @@ function renderConnectedRecord(
 }
 
 
+/* ========================================
+   RENDER
+======================================== */
+
 function render(){
 
   syncFromJournal();
@@ -2847,7 +3362,7 @@ function render(){
       localLive
     );
 
-  evaluateStickyRules(
+  evaluateStructuralRules(
     localLive
   );
 
@@ -2911,7 +3426,7 @@ function render(){
     );
 
   pnlDisplay.className =
-    "metric-value " +
+    "pnl-main " +
     (
       live.realisedPnl > 0
         ? "green"
@@ -2947,7 +3462,7 @@ function render(){
       );
 
     estimateValue.className =
-      "metric-sub-value " +
+      "pnl-estimate-value " +
       (
         estimatedAfterFees > 0
           ? "green"
@@ -2960,7 +3475,9 @@ function render(){
       "pnlEstimate"
     ).title =
       "Manual estimated fees: $" +
-      estimatedFees.toFixed(2) +
+      estimatedFees.toFixed(
+        2
+      ) +
       ". Risk rules still use TradeZero realised P&L.";
 
   }
@@ -2971,7 +3488,7 @@ function render(){
       "—";
 
     estimateValue.className =
-      "metric-sub-value";
+      "pnl-estimate-value";
 
   }
 
@@ -3055,9 +3572,21 @@ function render(){
     document.getElementById(
       "behaviourCountdown"
     ).textContent =
-      String(mins).padStart(2,"0") +
+      String(
+        mins
+      )
+      .padStart(
+        2,
+        "0"
+      ) +
       ":" +
-      String(secs).padStart(2,"0");
+      String(
+        secs
+      )
+      .padStart(
+        2,
+        "0"
+      );
 
   }
 
@@ -3070,11 +3599,15 @@ function render(){
 }
 
 
+/* ========================================
+   RESET BEHAVIOURAL CONTROLS ONLY
+======================================== */
+
 function resetBehaviouralControls(){
 
   if(
     !confirm(
-      "Reset today's behavioural lock and cooldown state? Journal trades and realised P&L will NOT be changed."
+      "Reset today's behavioural lock? TradeZero risk warnings, hard stops, attempts, Journal data and P&L will NOT be changed."
     )
   ){
 
@@ -3082,91 +3615,27 @@ function resetBehaviouralControls(){
 
   }
 
-  const journal =
-    getJournal();
+  const live =
+    getLiveState();
 
-  const date =
-    getNyDate();
+  live.behaviouralLock = {
 
-  const existing =
-    journal[
-      date
-    ] || {
-      date
-    };
+    active:
+      false,
 
-  const attempt =
-    getJournalAttemptCount(
-      existing
-    );
-
-  const pnl =
-    getJournalRealisedPnl(
-      existing
-    );
-
-  existing.liveRisk = {
-
-    ...existing.liveRisk,
-
-    attempt,
-
-    realisedPnl:
-      pnl,
-
-    maxAttemptReached:
-      Math.max(
-        Number(
-          existing.liveRisk?.maxAttemptReached ||
-          0
-        ),
-        attempt
-      ),
-
-    warningReached:
-      pnl <= WARNING_LEVEL,
-
-    hardStopReached:
-      pnl <= HARD_STOP,
-
-    sessionEnded:
-      Math.max(
-        attempt,
-        Number(
-          existing.liveRisk?.maxAttemptReached ||
-          0
-        )
-      ) >= MAX_ATTEMPTS ||
-      pnl <= HARD_STOP,
-
-    lossWarning:
+    until:
       null,
 
-    behaviouralLock:{
-      active:false,
-      until:null,
-      resetGateRequired:false
-    },
+    resetGateRequired:
+      false,
 
-    timer:null,
-
-    updatedAt:
-      new Date()
-        .toISOString()
+    manuallyResetAt:
+      Date.now()
 
   };
 
-  existing.lastUpdated =
-    new Date()
-      .toISOString();
-
-  journal[
-    date
-  ] =
-    existing;
-
-  saveJournal(
-    journal
+  saveLiveState(
+    live
   );
 
   document
@@ -3186,6 +3655,10 @@ function resetBehaviouralControls(){
 
 }
 
+
+/* ========================================
+   EVENTS
+======================================== */
 
 document.getElementById(
   "behaviourToggle"
