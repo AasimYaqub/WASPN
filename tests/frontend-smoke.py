@@ -62,6 +62,16 @@ with sync_playwright() as p:
     page.on('pageerror', lambda e: errors.append(str(e)))
     page.on('dialog', lambda d: d.accept())
 
+    def go(name, target=None):
+        target_page = target or page
+        response = target_page.goto(
+            BASE + name,
+            wait_until='domcontentloaded',
+            timeout=15000,
+        )
+        assert response is not None and response.status == 200, (name, response.status if response else None)
+        return response
+
     for name in [
         'index.html',
         'live-risk.html',
@@ -70,13 +80,13 @@ with sync_playwright() as p:
         'calendar-2026.html',
         'data-backup.html',
     ]:
-        assert page.goto(BASE + name).status == 200
+        go(name)
 
     assert not errors, errors
-    print('PASS: six pages load without JavaScript exceptions')
+    print('PASS: six pages reach DOM readiness without JavaScript exceptions')
 
     # Main window and informational objective.
-    page.goto(BASE + 'live-risk.html')
+    go('live-risk.html')
     page.evaluate('WASPNTradeZero.refresh()')
     assert page.locator('#statusTitle').inner_text() == 'WITHIN WASPN'
 
@@ -120,7 +130,7 @@ with sync_playwright() as p:
     page.on('dialog', lambda d: d.accept())
     payload.update(attempts=0, maxAttemptReached=False, dayRealized=-75)
 
-    page.goto(BASE + 'live-risk.html')
+    go('live-risk.html')
     page.evaluate('WASPNTradeZero.refresh()')
     page.wait_for_function('getLiveState().lossWarning?.active === true')
     expect(page.locator('#statusTitle')).to_contain_text('COOLDOWN')
@@ -139,16 +149,16 @@ with sync_playwright() as p:
     page.evaluate('WASPNTradeZero.refresh()')
     assert 'WINDOW BREACH' in page.locator('#statusTitle').inner_text()
     payload['outOfWindowEntryDetected'] = False
-    page.reload()
+    page.reload(wait_until='domcontentloaded')
     page.evaluate('WASPNTradeZero.refresh()')
     assert 'WINDOW BREACH' in page.locator('#statusTitle').inner_text()
-    page.goto(BASE + 'index.html')
+    go('index.html')
     assert 'WINDOW BREACH' in page.locator('#marketMain').inner_text()
     print('PASS: confirmed window breach survives false later poll, reload and navigation')
 
     # Repeated ticker mapping follows broker attempt number before ticker fallback.
     payload.update(outOfWindowEntryDetected=False)
-    page.goto(BASE + 'journal.html')
+    go('journal.html')
     repeated_index = page.evaluate('''() => WASPNTradeZeroJournal.findTradeIndex(
       [{ticker:'CHSN'},{ticker:'CHSN'}],
       {sourceId:'cycle-2',symbol:'CHSN',attemptNumber:2}
@@ -169,7 +179,7 @@ with sync_playwright() as p:
       };
       localStorage.setItem('waspnJournalV2',JSON.stringify(store));
     }''')
-    page.goto(BASE + 'compliance.html')
+    go('compliance.html')
     page.wait_for_timeout(50)
     assert not page.locator('#auto1').evaluate('(el) => el.classList.contains("show")')
     print('PASS: partial broker history does not auto-certify trading-window compliance')
@@ -180,7 +190,7 @@ with sync_playwright() as p:
       localStorage.setItem('waspnJournalV2',JSON.stringify(store));
       WASPNSession.sync();
     }''')
-    page.reload()
+    page.reload(wait_until='domcontentloaded')
     assert not page.locator('#q1').is_checked()
     assert not page.locator('#q2').is_checked()
     saved_scores = page.evaluate('''() => {
@@ -190,22 +200,24 @@ with sync_playwright() as p:
     assert saved_scores == [1,3,False,False], saved_scores
     print('PASS: later broker evidence invalidates conflicting saved structural compliance')
 
-    # Review timing claims require broker provenance.
+    # Review timing claims and aggregate counts require broker provenance.
     page.evaluate('''() => {
       const store = JSON.parse(localStorage.getItem('waspnJournalV2'));
       store['2026-10-29'].trades = [{ticker:'LEGACY',entryTime:'07:15',exitTime:'07:16',netPnl:1}];
       localStorage.setItem('waspnJournalV2',JSON.stringify(store));
     }''')
-    page.goto(BASE + 'calendar-2026.html')
+    go('calendar-2026.html')
     page.evaluate("showDetail('2026-10-29')")
     page.wait_for_timeout(50)
     detail_text = page.locator('#detail').inner_text()
     assert 'Broker timing reconciled' not in detail_text
     assert 'Timing not broker-proven' in detail_text
-    print('PASS: Review does not label legacy/manual timing as broker reconciled')
+    broker_timing_value = page.locator('.detail-item').filter(has_text='Broker Timing').locator('.detail-value').inner_text()
+    assert broker_timing_value == '0/1', broker_timing_value
+    print('PASS: Review timing labels and aggregate count require broker provenance')
 
     # Hardened backup validator rejects impossible dates and malformed nested data.
-    page.goto(BASE + 'data-backup.html')
+    go('data-backup.html')
     bad_date = page.evaluate('''() => {
       try { validateJournalObject({'2026-02-31':{date:'2026-02-31'}}); return false; }
       catch { return true; }
@@ -226,10 +238,10 @@ with sync_playwright() as p:
     q.clock.install(time=datetime.datetime.fromisoformat(DATE + 'T12:00:00+00:00'))
     c.route('https://wasp-backend-api.replit.app/**', lambda route: route.fulfill(status=401, body='Unauthorized'))
     q.on('dialog', lambda d: d.dismiss())
-    q.goto(BASE + 'live-risk.html')
+    go('live-risk.html', q)
     q.evaluate('void WASPNTradeZero.refresh()')
     assert q.locator('#statusTitle').inner_text() == 'BACKEND VERIFICATION REQUIRED'
-    q.goto(BASE + 'index.html')
+    go('index.html', q)
     assert q.locator('#marketMain').inner_text() == 'BACKEND VERIFICATION REQUIRED'
     c.close()
     print('PASS: missing auth never shows an open session')
@@ -237,10 +249,10 @@ with sync_playwright() as p:
     # Real service worker token protocol and offline shell.
     context = browser.new_context()
     page = context.new_page()
-    page.goto(BASE)
+    go('index.html')
     page.evaluate('navigator.serviceWorker.ready')
     page.wait_for_function('navigator.serviceWorker.controller?.state === "activated"')
-    page.reload()
+    page.reload(wait_until='domcontentloaded')
     page.wait_for_function('navigator.serviceWorker.controller !== null')
 
     result = page.evaluate('''async () => {
@@ -264,7 +276,8 @@ with sync_playwright() as p:
 
     context.set_offline(True)
     for name in ['index.html','live-risk.html','journal.html','compliance.html','calendar-2026.html','data-backup.html']:
-        assert page.goto(BASE + name).status == 200
+        response = page.goto(BASE + name, wait_until='domcontentloaded', timeout=15000)
+        assert response is not None and response.status == 200
     assert page.evaluate('typeof WASPNSession.clock') == 'function'
     print('PASS: all six pages and shared rules available offline through PWA cache')
 
