@@ -1,19 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1.0,viewport-fit=cover"
+>
+
 <meta name="theme-color" content="#070b10">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="WASPN">
-<meta name="mobile-web-app-capable" content="yes">
+
+<meta
+  name="apple-mobile-web-app-capable"
+  content="yes"
+>
+
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="black-translucent"
+>
+
+<meta
+  name="apple-mobile-web-app-title"
+  content="WASPN"
+>
+
+<meta
+  name="mobile-web-app-capable"
+  content="yes"
+>
+
 <meta name="color-scheme" content="dark">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<link
+  rel="manifest"
+  href="manifest.webmanifest"
+>
+
+<link
+  rel="apple-touch-icon"
+  href="apple-touch-icon.png"
+>
+
 <title>WASPN • Trading Journal</title>
 
 <style>
+
 :root{
   --bg:#070b10;
   --panel:#10171f;
@@ -31,7 +64,9 @@
   --shadow:0 18px 48px rgba(0,0,0,.24);
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 html{
   min-height:100%;
@@ -45,21 +80,50 @@ body{
   min-height:100vh;
   min-height:100dvh;
   background:
-    radial-gradient(circle at 50% -10%,rgba(34,199,255,.07),transparent 34%),
-    linear-gradient(180deg,#080d12,#070b10);
+    radial-gradient(
+      circle at 50% -10%,
+      rgba(34,199,255,.07),
+      transparent 34%
+    ),
+    linear-gradient(
+      180deg,
+      #080d12,
+      #070b10
+    );
   color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,Helvetica,sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    Helvetica,
+    sans-serif;
 }
 
-button,input,select,textarea{font:inherit}
-button{touch-action:manipulation}
-button,a{-webkit-tap-highlight-color:transparent}
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  touch-action:manipulation;
+}
+
+button,
+a{
+  -webkit-tap-highlight-color:transparent;
+}
 
 .wrap{
   width:100%;
   max-width:900px;
   margin:0 auto;
-  padding:max(10px,env(safe-area-inset-top)) 10px max(24px,env(safe-area-inset-bottom));
+  padding:
+    max(10px,env(safe-area-inset-top))
+    10px
+    max(24px,env(safe-area-inset-bottom));
 }
 
 .topbar{
@@ -86,9 +150,13 @@ button,a{-webkit-tap-highlight-color:transparent}
   cursor:pointer;
 }
 
-.icon-btn:active{transform:scale(.97)}
+.icon-btn:active{
+  transform:scale(.97);
+}
 
-.product-title{text-align:center}
+.product-title{
+  text-align:center;
+}
 
 .wordmark{
   color:var(--blue);
@@ -149,7 +217,9 @@ button,a{-webkit-tap-highlight-color:transparent}
   text-transform:uppercase;
 }
 
-input,select,textarea{
+input,
+select,
+textarea{
   width:100%;
   border:1px solid var(--border);
   border-radius:10px;
@@ -158,7 +228,8 @@ input,select,textarea{
   color:white;
 }
 
-input,select{
+input,
+select{
   min-height:48px;
   padding:9px 10px;
   font-size:16px;
@@ -172,7 +243,9 @@ textarea{
   line-height:1.45;
 }
 
-input:focus,select:focus,textarea:focus{
+input:focus,
+select:focus,
+textarea:focus{
   border-color:var(--blue);
   box-shadow:0 0 0 2px rgba(34,199,255,.08);
 }
@@ -200,7 +273,9 @@ input:focus,select:focus,textarea:focus{
   line-height:1.5;
 }
 
-.intraday-note strong{color:var(--blue)}
+.intraday-note strong{
+  color:var(--blue);
+}
 
 .daily-summary{
   display:grid;
@@ -233,10 +308,21 @@ input:focus,select:focus,textarea:focus{
   font-variant-numeric:tabular-nums;
 }
 
-.green{color:var(--green)}
-.red{color:var(--red)}
-.blue{color:var(--blue)}
-.amber{color:var(--amber)}
+.green{
+  color:var(--green);
+}
+
+.red{
+  color:var(--red);
+}
+
+.blue{
+  color:var(--blue);
+}
+
+.amber{
+  color:var(--amber);
+}
 
 .trade{
   margin-top:9px;
@@ -256,7 +342,9 @@ input:focus,select:focus,textarea:focus{
   border-bottom:1px solid var(--border);
 }
 
-.trade-title-wrap{min-width:0}
+.trade-title-wrap{
+  min-width:0;
+}
 
 .trade-kicker{
   color:var(--muted);
@@ -279,7 +367,9 @@ input:focus,select:focus,textarea:focus{
   font-variant-numeric:tabular-nums;
 }
 
-.trade-body{padding:12px}
+.trade-body{
+  padding:12px;
+}
 
 .grid{
   display:grid;
@@ -312,8 +402,13 @@ input:focus,select:focus,textarea:focus{
   border-radius:12px;
 }
 
-.setup-field label{color:#a9c9d6}
-.setup-input{min-height:48px}
+.setup-field label{
+  color:#a9c9d6;
+}
+
+.setup-input{
+  min-height:48px;
+}
 
 .setup-help{
   margin-top:6px;
@@ -382,7 +477,9 @@ input:focus,select:focus,textarea:focus{
   box-shadow:0 12px 28px rgba(20,120,70,.18);
 }
 
-.save-btn:active{transform:scale(.99)}
+.save-btn:active{
+  transform:scale(.99);
+}
 
 .secondary-actions{
   display:grid;
@@ -420,14 +517,28 @@ input:focus,select:focus,textarea:focus{
   line-height:1.4;
 }
 
-.dirty{color:var(--amber)}
+.dirty{
+  color:var(--amber);
+}
 
 @media(min-width:700px){
-  .wrap{padding:20px 18px 30px}
-  .daily-summary{grid-template-columns:repeat(4,1fr)}
-  .trade-body{padding:16px}
+
+  .wrap{
+    padding:20px 18px 30px;
+  }
+
+  .daily-summary{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+  .trade-body{
+    padding:16px;
+  }
+
 }
+
 </style>
+
 </head>
 
 <body>
@@ -438,14 +549,33 @@ input:focus,select:focus,textarea:focus{
 
   <div class="topbar">
 
-    <a href="index.html" class="icon-btn" aria-label="Home">←</a>
+    <a
+      href="index.html"
+      class="icon-btn"
+      aria-label="Home"
+    >
+      ←
+    </a>
 
     <div class="product-title">
-      <div class="wordmark">WASPN</div>
-      <div class="module-name">Trading Journal</div>
+
+      <div class="wordmark">
+        WASPN
+      </div>
+
+      <div class="module-name">
+        Trading Journal
+      </div>
+
     </div>
 
-    <a href="live-risk.html" class="icon-btn" aria-label="Live Risk">R</a>
+    <a
+      href="live-risk.html"
+      class="icon-btn"
+      aria-label="Live Risk"
+    >
+      R
+    </a>
 
   </div>
 
@@ -461,12 +591,24 @@ input:focus,select:focus,textarea:focus{
   <div class="session-grid">
 
     <div class="field">
-      <label>Trading Date • New York</label>
-      <input id="tradeDate" type="date">
+
+      <label>
+        Trading Date • New York
+      </label>
+
+      <input
+        id="tradeDate"
+        type="date"
+      >
+
     </div>
 
     <div class="field">
-      <label>Starting Account Value</label>
+
+      <label>
+        Starting Account Value
+      </label>
+
       <input
         id="startValue"
         type="number"
@@ -474,40 +616,91 @@ input:focus,select:focus,textarea:focus{
         step="0.01"
         placeholder="Optional"
       >
+
     </div>
 
   </div>
 
-  <div id="existing" class="existing"></div>
+  <div
+    id="existing"
+    class="existing"
+  ></div>
 
 </section>
 
 <div class="intraday-note">
-  <strong>TradeZero supplies the mechanical trade data when available.</strong>
-  Use the Journal to review the broker-populated trade and add the setup/reason,
-  notes, fees or corrections that TradeZero cannot safely infer.
+
+  <strong>
+    TradeZero supplies the mechanical trade data when available.
+  </strong>
+
+  Estimated fees are saved immediately as you type and can be shown on
+  Live Risk without saving the Journal. TradeZero realised P&amp;L remains
+  the risk-control figure.
+
 </div>
 
 <div class="daily-summary">
 
   <div class="summary-box">
-    <div class="label">Trades Recorded</div>
-    <div id="tradeCount" class="summary-value">0</div>
+
+    <div class="label">
+      Trades Recorded
+    </div>
+
+    <div
+      id="tradeCount"
+      class="summary-value"
+    >
+      0
+    </div>
+
   </div>
 
   <div class="summary-box">
-    <div class="label">Journal Net</div>
-    <div id="topDailyTotal" class="summary-value">$0.00</div>
+
+    <div class="label">
+      Journal Net
+    </div>
+
+    <div
+      id="topDailyTotal"
+      class="summary-value"
+    >
+      $0.00
+    </div>
+
   </div>
 
   <div class="summary-box">
-    <div class="label">Live Attempts</div>
-    <div id="liveAttempt" class="summary-value">—</div>
+
+    <div class="label">
+      Live Attempts
+    </div>
+
+    <div
+      id="liveAttempt"
+      class="summary-value"
+    >
+      —
+    </div>
+
   </div>
 
   <div class="summary-box">
-    <div class="label">Risk State</div>
-    <div id="riskState" class="summary-value" style="font-size:16px;">—</div>
+
+    <div class="label">
+      Risk State
+    </div>
+
+    <div
+      id="riskState"
+      class="summary-value"
+      style="font-size:16px;"
+    >
+      —
+    </div>
+
   </div>
 
 </div>
@@ -589,6 +782,9 @@ input:focus,select:focus,textarea:focus{
 const STORAGE_KEY =
   "waspnJournalV2";
 
+const ESTIMATED_FEES_KEY =
+  "waspnEstimatedFeesV1";
+
 const tradeContainer =
   document.getElementById(
     "trades"
@@ -596,6 +792,7 @@ const tradeContainer =
 
 let dirty =
   false;
+
 
 function money(
   value
@@ -633,6 +830,7 @@ function money(
 
 }
 
+
 function getJournal(){
 
   try{
@@ -653,6 +851,7 @@ function getJournal(){
 
 }
 
+
 function saveJournal(
   journal
 ){
@@ -665,6 +864,223 @@ function saveJournal(
   );
 
 }
+
+
+function getEstimatedFeesStore(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        ESTIMATED_FEES_KEY
+      )
+    ) || {};
+
+  }
+
+  catch{
+
+    return {};
+
+  }
+
+}
+
+
+function saveEstimatedFeesStore(
+  store
+){
+
+  localStorage.setItem(
+    ESTIMATED_FEES_KEY,
+    JSON.stringify(
+      store
+    )
+  );
+
+}
+
+
+function getEstimatedFeeRecord(
+  date
+){
+
+  const store =
+    getEstimatedFeesStore();
+
+  const record =
+    store[
+      date
+    ];
+
+  if(
+    !record ||
+    typeof record !==
+      "object"
+  ){
+
+    return {
+      trades:[
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      total:0
+    };
+
+  }
+
+  return {
+
+    ...record,
+
+    trades:
+      Array.isArray(
+        record.trades
+      )
+        ? record.trades
+            .slice(
+              0,
+              5
+            )
+        : [
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+
+  };
+
+}
+
+
+function syncEstimatedFees(){
+
+  const date =
+    document.getElementById(
+      "tradeDate"
+    ).value;
+
+  if(
+    !date
+  ){
+
+    return;
+
+  }
+
+  const fees =
+    [];
+
+  for(
+    let i = 1;
+    i <= 5;
+    i++
+  ){
+
+    const raw =
+      String(
+        document.getElementById(
+          "fees" +
+          i
+        ).value ||
+        ""
+      )
+      .trim();
+
+    if(
+      raw ===
+      ""
+    ){
+
+      fees.push(
+        null
+      );
+
+      continue;
+
+    }
+
+    const value =
+      Number(
+        raw
+      );
+
+    fees.push(
+      Number.isFinite(
+        value
+      )
+        ? Math.max(
+            0,
+            value
+          )
+        : null
+    );
+
+  }
+
+  const total =
+    fees.reduce(
+      (
+        sum,
+        value
+      ) =>
+        sum +
+        (
+          Number.isFinite(
+            Number(
+              value
+            )
+          )
+            ? Number(
+                value
+              )
+            : 0
+        ),
+      0
+    );
+
+  const store =
+    getEstimatedFeesStore();
+
+  store[
+    date
+  ] = {
+    trades:fees,
+    total,
+    updatedAt:
+      new Date()
+        .toISOString()
+  };
+
+  saveEstimatedFeesStore(
+    store
+  );
+
+}
+
+
+function clearEstimatedFeesForDate(
+  date
+){
+
+  const store =
+    getEstimatedFeesStore();
+
+  delete store[
+    date
+  ];
+
+  saveEstimatedFeesStore(
+    store
+  );
+
+}
+
 
 function getNyDate(){
 
@@ -713,6 +1129,7 @@ function getNyDate(){
 
 }
 
+
 function setDirty(){
 
   dirty =
@@ -733,6 +1150,7 @@ function setDirty(){
     "status dirty";
 
 }
+
 
 function clearDirty(
   message
@@ -756,6 +1174,7 @@ function clearDirty(
     "status";
 
 }
+
 
 function parseNullableNumber(
   value
@@ -789,6 +1208,7 @@ function parseNullableNumber(
 
 }
 
+
 function hasBrokerActual(
   trade
 ){
@@ -803,6 +1223,7 @@ function hasBrokerActual(
   );
 
 }
+
 
 function authoritativeTradeNet(
   trade,
@@ -866,6 +1287,7 @@ function authoritativeTradeNet(
   return 0;
 
 }
+
 
 function createTrade(
   i
@@ -957,15 +1379,20 @@ function createTrade(
         </div>
 
         <div class="field">
-          <label>Total Trade Fees</label>
+
+          <label>
+            Estimated Fees / Commission
+          </label>
+
           <input
             id="fees${i}"
             type="number"
             inputmode="decimal"
             min="0"
             step="0.01"
-            placeholder="Reconcile later"
+            placeholder="Estimate"
           >
+
         </div>
 
       </div>
@@ -1045,20 +1472,32 @@ function createTrade(
           i
         );
 
-      el.addEventListener(
-        "input",
-        () =>
+      const update =
+        () => {
+
           calculateTrade(
             i
-          )
+          );
+
+          if(
+            field ===
+            "fees"
+          ){
+
+            syncEstimatedFees();
+
+          }
+
+        };
+
+      el.addEventListener(
+        "input",
+        update
       );
 
       el.addEventListener(
         "change",
-        () =>
-          calculateTrade(
-            i
-          )
+        update
       );
 
     }
@@ -1086,6 +1525,7 @@ function createTrade(
 
 }
 
+
 for(
   let i = 1;
   i <= 5;
@@ -1097,6 +1537,7 @@ for(
   );
 
 }
+
 
 function hasTradeEconomics(
   i
@@ -1134,6 +1575,7 @@ function hasTradeEconomics(
   );
 
 }
+
 
 function grossPnl(
   i
@@ -1194,6 +1636,7 @@ function grossPnl(
 
 }
 
+
 function tradeFees(
   i
 ){
@@ -1222,6 +1665,7 @@ function tradeFees(
 
 }
 
+
 function calculatedNet(
   i
 ){
@@ -1248,6 +1692,7 @@ function calculatedNet(
   );
 
 }
+
 
 function calculateTrade(
   i
@@ -1340,7 +1785,10 @@ function calculateTrade(
       money(
         existingTrade.brokerGrossPnl
       ) +
-      " • Fees not yet broker-confirmed" +
+      " • Estimated fees: " +
+      money(
+        -fees
+      ) +
       (
         calc !== null
           ? " • Journal estimate: " +
@@ -1414,6 +1862,7 @@ function calculateTrade(
 
 }
 
+
 function calculateDailyTotal(){
 
   let total =
@@ -1484,6 +1933,7 @@ function calculateDailyTotal(){
 
 }
 
+
 function getExistingTrade(
   date,
   i
@@ -1512,6 +1962,7 @@ function getExistingTrade(
   );
 
 }
+
 
 function tradeData(
   i,
@@ -1627,6 +2078,7 @@ function tradeData(
 
 }
 
+
 function isTradeUsed(
   trade
 ){
@@ -1640,6 +2092,7 @@ function isTradeUsed(
   );
 
 }
+
 
 function updateTradeCount(){
 
@@ -1681,6 +2134,7 @@ function updateTradeCount(){
     count;
 
 }
+
 
 function saveDay(){
 
@@ -1805,6 +2259,8 @@ function saveDay(){
     journal
   );
 
+  syncEstimatedFees();
+
   clearDirty(
     "Saved " +
     date +
@@ -1819,6 +2275,7 @@ function saveDay(){
   loadDay();
 
 }
+
 
 function clearForm(){
 
@@ -1897,6 +2354,7 @@ function clearForm(){
 
 }
 
+
 function loadDay(){
 
   const date =
@@ -1919,9 +2377,47 @@ function loadDay(){
       date
     ];
 
+  const estimatedFeeRecord =
+    getEstimatedFeeRecord(
+      date
+    );
+
   if(
     !day
   ){
+
+    estimatedFeeRecord.trades
+      .forEach(
+        (
+          value,
+          index
+        ) => {
+
+          if(
+            value === null ||
+            value === undefined
+          ){
+
+            return;
+
+          }
+
+          document.getElementById(
+            "fees" +
+            (
+              index +
+              1
+            )
+          ).value =
+            value;
+
+          calculateTrade(
+            index +
+            1
+          );
+
+        }
+      );
 
     clearDirty(
       "No saved Journal entry for " +
@@ -2000,14 +2496,38 @@ function loadDay(){
         trade.shares ||
         "";
 
-      document.getElementById(
-        "fees" +
-        i
-      ).value =
-        trade.fees !== undefined &&
-        trade.fees !== null
-          ? trade.fees
-          : "";
+      const storedEstimatedFee =
+        estimatedFeeRecord.trades[
+          index
+        ];
+
+      if(
+        storedEstimatedFee !==
+          null &&
+        storedEstimatedFee !==
+          undefined
+      ){
+
+        document.getElementById(
+          "fees" +
+          i
+        ).value =
+          storedEstimatedFee;
+
+      }
+
+      else{
+
+        document.getElementById(
+          "fees" +
+          i
+        ).value =
+          trade.fees !== undefined &&
+          trade.fees !== null
+            ? trade.fees
+            : "";
+
+      }
 
       document.getElementById(
         "setupReason" +
@@ -2024,7 +2544,49 @@ function loadDay(){
     }
   );
 
+
+  for(
+    let i =
+      (
+        day.trades ||
+        []
+      ).length +
+      1;
+    i <= 5;
+    i++
+  ){
+
+    const storedEstimatedFee =
+      estimatedFeeRecord.trades[
+        i -
+        1
+      ];
+
+    if(
+      storedEstimatedFee !==
+        null &&
+      storedEstimatedFee !==
+        undefined
+    ){
+
+      document.getElementById(
+        "fees" +
+        i
+      ).value =
+        storedEstimatedFee;
+
+      calculateTrade(
+        i
+      );
+
+    }
+
+  }
+
+
   calculateDailyTotal();
+
+  syncEstimatedFees();
 
   clearDirty(
     "Loaded " +
@@ -2036,6 +2598,7 @@ function loadDay(){
   renderConnectedState();
 
 }
+
 
 function showExisting(){
 
@@ -2151,6 +2714,7 @@ function showExisting(){
     "block";
 
 }
+
 
 function renderConnectedState(){
 
@@ -2272,6 +2836,7 @@ function renderConnectedState(){
 
 }
 
+
 function deleteDay(){
 
   const date =
@@ -2308,7 +2873,7 @@ function deleteDay(){
     !confirm(
       "Delete the ENTIRE WASPN record for " +
       date +
-      "? This removes Journal, Live Risk, Compliance and Process Score."
+      "? This removes Journal, Live Risk, Compliance, Process Score and estimated fees."
     )
   ){
 
@@ -2322,6 +2887,10 @@ function deleteDay(){
 
   saveJournal(
     journal
+  );
+
+  clearEstimatedFeesForDate(
+    date
   );
 
   clearForm();
@@ -2341,6 +2910,7 @@ function deleteDay(){
 
 }
 
+
 function setToday(){
 
   document.getElementById(
@@ -2350,6 +2920,7 @@ function setToday(){
 
 }
 
+
 document.getElementById(
   "saveBtn"
 )
@@ -2357,6 +2928,7 @@ document.getElementById(
   "click",
   saveDay
 );
+
 
 document.getElementById(
   "loadBtn"
@@ -2366,6 +2938,7 @@ document.getElementById(
   loadDay
 );
 
+
 document.getElementById(
   "deleteBtn"
 )
@@ -2373,6 +2946,7 @@ document.getElementById(
   "click",
   deleteDay
 );
+
 
 document.getElementById(
   "tradeDate"
@@ -2382,6 +2956,7 @@ document.getElementById(
   loadDay
 );
 
+
 document.getElementById(
   "startValue"
 )
@@ -2389,6 +2964,7 @@ document.getElementById(
   "input",
   setDirty
 );
+
 
 document.getElementById(
   "dailyNotes"
@@ -2398,28 +2974,40 @@ document.getElementById(
   setDirty
 );
 
+
 window.addEventListener(
   "storage",
   () => {
+
     loadDay();
+
   }
 );
+
 
 window.addEventListener(
   "focus",
   () => {
+
     showExisting();
+
     renderConnectedState();
+
   }
 );
+
 
 window.addEventListener(
   "pageshow",
   () => {
+
     showExisting();
+
     renderConnectedState();
+
   }
 );
+
 
 window.addEventListener(
   "beforeunload",
@@ -2430,6 +3018,7 @@ window.addEventListener(
     ){
 
       event.preventDefault();
+
       event.returnValue =
         "";
 
@@ -2438,10 +3027,15 @@ window.addEventListener(
   }
 );
 
+
 setToday();
+
 loadDay();
+
 calculateDailyTotal();
+
 showExisting();
+
 renderConnectedState();
 
 </script>
