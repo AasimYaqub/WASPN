@@ -206,8 +206,6 @@
   function applyJournalRiskGuard(){
     if(currentFile() !== "journal.html") return;
 
-    // Do not observe the badge itself: changing its class/text from inside a
-    // MutationObserver can create a self-triggering render loop.
     setInterval(correctJournalRiskDisplay, 750);
     window.addEventListener("storage", correctJournalRiskDisplay);
     window.addEventListener("focus", correctJournalRiskDisplay);
@@ -431,7 +429,6 @@
       trade => trade?.brokerSourceId && trade?.brokerTimingReconciled === true
     ).length;
 
-    // Correct the aggregate timing metric as well as per-trade labels.
     detail.querySelectorAll(".detail-item").forEach(item => {
       const label = item.querySelector(".label")?.textContent?.trim();
       if(label === "Broker Timing"){
@@ -594,6 +591,7 @@
     if(currentFile() !== "data-backup.html") return;
     window.validateJournalObject = hardenedValidateJournalObject;
     window.isDateKey = validDateKey;
+    window.__WASPN_BACKUP_VALIDATION_HARDENED = true;
   }
 
   function injectStyles(){
