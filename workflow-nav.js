@@ -39,6 +39,15 @@
   ];
 
 
+  const WASPN_LIVE_STATUS_ENDPOINT =
+    "https://wasp-backend-api.replit.app/api/waspn/live-status";
+
+
+  let windowBreachRequestInFlight =
+    false;
+
+
+
   /* ========================================
      PWA SERVICE WORKER
   ======================================== */
@@ -297,11 +306,6 @@
         }
 
 
-        /*
-          Always reset the automatic presentation
-          before proving anything for this date.
-        */
-
         q1.checked =
           false;
 
@@ -331,13 +335,6 @@
             ? day.trades
             : [];
 
-
-        /*
-          Window compliance is only automatically
-          proven when every recorded trade has a
-          reliable entry time and every one falls
-          inside an allowed WASPN window.
-        */
 
         if(
           trades.length > 0
@@ -376,11 +373,6 @@
 
         }
 
-
-        /*
-          A partial/reconstructed broker history
-          cannot prove there was no sixth trade.
-        */
 
         const brokerJournal =
           day?.brokerJournal;
@@ -431,12 +423,6 @@
 
         }
 
-
-        /*
-          The hard-stop question remains manual.
-          A WASPN lock does not prove that the user
-          placed no later order directly in TradeZero.
-        */
 
         q3.checked =
           false;
@@ -1006,6 +992,221 @@
 
 
   /* ========================================
+     WINDOW BREACH DISPLAY
+  ======================================== */
+
+  function ensureWindowBreachNote(){
+
+    if(
+      currentFile() !==
+      "live-risk.html"
+    ){
+      return null;
+    }
+
+
+    let note =
+      document.getElementById(
+        "waspnWindowBreachNote"
+      );
+
+
+    if(
+      note
+    ){
+      return note;
+    }
+
+
+    note =
+      document.createElement(
+        "div"
+      );
+
+
+    note.id =
+      "waspnWindowBreachNote";
+
+    note.className =
+      "waspn-window-breach-note";
+
+
+    note.innerHTML = `
+      <strong>
+        ⚠ WINDOW BREACH
+      </strong>
+      <span>
+        TradeZero confirms an entry occurred outside the permitted WASPN trading windows.
+        No further entries are permitted today.
+      </span>
+      <small>
+        Permitted entry windows: 06:30–07:00 ET and 09:00–11:00 ET.
+      </small>
+    `;
+
+
+    const cockpit =
+      document.querySelector(
+        ".cockpit"
+      );
+
+
+    if(
+      cockpit
+    ){
+
+      cockpit.insertAdjacentElement(
+        "beforebegin",
+        note
+      );
+
+    }
+
+
+    return note;
+
+  }
+
+
+  async function renderWindowBreachNote(){
+
+    if(
+      currentFile() !==
+      "live-risk.html"
+    ){
+      return;
+    }
+
+
+    if(
+      windowBreachRequestInFlight
+    ){
+      return;
+    }
+
+
+    const note =
+      ensureWindowBreachNote();
+
+
+    if(
+      !note
+    ){
+      return;
+    }
+
+
+    windowBreachRequestInFlight =
+      true;
+
+
+    try{
+
+      const response =
+        await fetch(
+          WASPN_LIVE_STATUS_ENDPOINT,
+          {
+            method:"GET",
+            cache:"no-store",
+            headers:{
+              "Accept":
+                "application/json"
+            }
+          }
+        );
+
+
+      if(
+        !response.ok
+      ){
+        return;
+      }
+
+
+      const data =
+        await response.json();
+
+
+      const detected =
+        data?.outOfWindowEntryDetected ===
+          true;
+
+
+      note.classList.toggle(
+        "active",
+        detected
+      );
+
+
+      document.body.classList.toggle(
+        "waspn-window-breach-active",
+        detected
+      );
+
+    }
+
+    catch{
+
+      /*
+        Do not clear an already-visible warning
+        merely because one network poll failed.
+      */
+
+    }
+
+    finally{
+
+      windowBreachRequestInFlight =
+        false;
+
+    }
+
+  }
+
+
+  function applyWindowBreachDisplay(){
+
+    if(
+      currentFile() !==
+      "live-risk.html"
+    ){
+      return;
+    }
+
+
+    ensureWindowBreachNote();
+
+    renderWindowBreachNote();
+
+
+    window.addEventListener(
+      "waspn:tradezero-update",
+      renderWindowBreachNote
+    );
+
+
+    window.addEventListener(
+      "focus",
+      renderWindowBreachNote
+    );
+
+
+    window.addEventListener(
+      "pageshow",
+      renderWindowBreachNote
+    );
+
+
+    setInterval(
+      renderWindowBreachNote,
+      5000
+    );
+
+  }
+
+
+
+  /* ========================================
      STYLES
   ======================================== */
 
@@ -1059,6 +1260,147 @@
 
         font-variant-numeric:
           tabular-nums;
+
+      }
+
+
+      .waspn-window-breach-note{
+
+        display:none;
+
+        margin:
+          0
+          0
+          10px;
+
+        padding:
+          14px 13px;
+
+        border:
+          2px solid
+          #ff4255;
+
+        border-radius:
+          14px;
+
+        background:
+          linear-gradient(
+            180deg,
+            #2b1015,
+            #1a0b0e
+          );
+
+        box-shadow:
+          0
+          0
+          22px
+          rgba(
+            255,
+            66,
+            85,
+            .22
+          );
+
+        color:#ffd4d8;
+
+        text-align:center;
+
+        line-height:1.45;
+
+      }
+
+
+      .waspn-window-breach-note.active{
+
+        display:block;
+
+        animation:
+          waspnWindowBreachPulse
+          1.8s
+          ease-in-out
+          infinite;
+
+      }
+
+
+      .waspn-window-breach-note strong{
+
+        display:block;
+
+        color:#ff5263;
+
+        font-size:15px;
+
+        font-weight:1000;
+
+        letter-spacing:
+          1.2px;
+
+        margin-bottom:5px;
+
+      }
+
+
+      .waspn-window-breach-note span{
+
+        display:block;
+
+        color:#ffd7db;
+
+        font-size:10px;
+
+        font-weight:850;
+
+      }
+
+
+      .waspn-window-breach-note small{
+
+        display:block;
+
+        margin-top:6px;
+
+        color:#d49ba2;
+
+        font-size:9px;
+
+        font-weight:750;
+
+      }
+
+
+      @keyframes waspnWindowBreachPulse{
+
+        0%,
+        100%{
+
+          box-shadow:
+            0
+            0
+            16px
+            rgba(
+              255,
+              66,
+              85,
+              .18
+            );
+
+        }
+
+        50%{
+
+          box-shadow:
+            0
+            0
+            30px
+            rgba(
+              255,
+              66,
+              85,
+              .38
+            );
+
+        }
 
       }
 
@@ -1640,6 +1982,8 @@
     applyJournalTiming();
 
     applyObjectiveDisplay();
+
+    applyWindowBreachDisplay();
 
     buildNav();
 
