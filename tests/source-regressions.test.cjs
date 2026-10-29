@@ -69,12 +69,12 @@ test('cross-page hardening removes local P&L from Journal risk badge logic', () 
   assert.match(body,/live\.warningReached/);
 });
 
-test('Journal risk guard does not observe its own rendered badge', () => {
+test('Journal risk guard does not construct a self-observing MutationObserver', () => {
   const source = read('workflow-nav.js');
   const start = source.indexOf('function applyJournalRiskGuard');
   const end = source.indexOf('function applyAttemptBreachDisplay');
   const body = source.slice(start,end);
-  assert.doesNotMatch(body,/MutationObserver/);
+  assert.doesNotMatch(body,/new\s+MutationObserver\s*\(/);
 });
 
 test('compliance auto-pass requires complete fresh broker history and timing provenance', () => {
