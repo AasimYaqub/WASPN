@@ -915,7 +915,7 @@ input[type="date"]{
       </div>
 
       <div class="question-copy">
-        Preliminary 6:30–7:00 AM ET only for exceptional setups. Primary session 9:00–11:00 AM ET.
+        Preliminary 06:30–07:00 ET only for exceptional setups. Primary session 07:00–11:00 ET.
       </div>
 
     </div>
@@ -1113,6 +1113,7 @@ input[type="date"]{
 
 
 
+<script src="session-rules.js?v=2"></script>
 <script>
 
 const STORAGE_KEY =
@@ -1187,17 +1188,8 @@ function getJournal(){
 }
 
 
-function saveJournal(
-  journal
-){
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(
-      journal
-    )
-  );
-
+function saveJournal(journal){
+  WASPNSession.writeJournal(journal);
 }
 
 
@@ -1432,290 +1424,27 @@ function showAuto(
 }
 
 
-function timeToMinutes(
-  value
-){
-
-  if(
-    !value ||
-    !/^\d{1,2}:\d{2}$/
-      .test(
-        value
-      )
-  ){
-
-    return null;
-
-  }
-
-
-  const [
-    hour,
-    minute
-  ] =
-    value
-      .split(":")
-      .map(Number);
-
-
-  return (
-    hour * 60 +
-    minute
-  );
-
-}
-
-
-function tradeTimeInsideWindow(
-  value
-){
-
-  const mins =
-    timeToMinutes(
-      value
-    );
-
-
-  if(
-    mins === null
-  ){
-
-    return null;
-
-  }
-
-
-  const preliminary =
-    mins >= (
-      6 * 60 + 30
-    ) &&
-    mins < (
-      7 * 60
-    );
-
-
-  const main =
-    mins >= (
-      9 * 60
-    ) &&
-    mins < (
-      11 * 60
-    );
-
-
-  return (
-    preliminary ||
-    main
-  );
-
-}
-
+function tradeTimeInsideWindow(value){ return WASPNSession.timeInsideWindow(value); }
 
 
 /* ========================================
    STRUCTURAL PRE-FILL
 ======================================== */
 
-function applyStructuralPrefill(
-  day
-){
-
-  const live =
-    day?.liveRisk;
-
-
-  const trades =
-    Array.isArray(
-      day?.trades
-    )
-      ? day.trades
-      : [];
-
-
-  /*
-    Q1 — WINDOW
-
-    Only pre-fill if every recorded trade
-    actually has an entry time available.
-
-    The streamlined journal no longer asks
-    for this intraday, so this may often
-    remain a manual confirmation until the
-    broker CSV has been reconciled.
-  */
-
-  if(
-    trades.length > 0
-  ){
-
-    const timedTrades =
-      trades.filter(
-        trade =>
-          !!trade?.entryTime
-      );
-
-
-    if(
-      timedTrades.length ===
-        trades.length
-    ){
-
-      const allInside =
-        timedTrades.every(
-          trade =>
-            tradeTimeInsideWindow(
-              trade.entryTime
-            ) === true
-        );
-
-
-      if(
-        allInside
-      ){
-
-        q[0].checked =
-          true;
-
-
-        showAuto(
-          0
-        );
-
-      }
-
-    }
-
+function applyStructuralPrefill(day){
+  const trades = Array.isArray(day?.trades) ? day.trades : [];
+  const live = day?.liveRisk;
+  // Timing absence is unknown. Broker evidence is required for attempt autofill.
+  if (!live?.windowBreach && trades.length && trades.every(t => tradeTimeInsideWindow(t?.entryTime) === true)) {
+    q[0].checked = true; showAuto(0);
   }
-
-
-  /*
-    Q2 — ATTEMPT LIMIT
-  */
-
-  if(
-    live
-  ){
-
-    const maxAttempt =
-      Number(
-        live.maxAttemptReached ??
-        live.attempt ??
-        0
-      );
-
-
-    if(
-      Number.isFinite(
-        maxAttempt
-      ) &&
-      maxAttempt <= 5
-    ){
-
-      q[1].checked =
-        true;
-
-
-      showAuto(
-        1
-      );
-
-    }
-
+  if (day?.brokerJournal?.complete === true && day.brokerJournal.dataFresh === true) {
+    const maximum = Math.max(Number(live?.maxAttemptReached || 0), Number(live?.attempt || 0), trades.length, Number(day.brokerJournal.entryCount || 0));
+    if (Number.isFinite(maximum) && maximum <= WASPNSession.MAX_ATTEMPTS) { q[1].checked = true; showAuto(1); }
   }
-
-  else if(
-    trades.length > 0 &&
-    trades.length <= 5
-  ){
-
-    q[1].checked =
-      true;
-
-
-    showAuto(
-      1
-    );
-
-  }
-
-
-  /*
-    Q3 — HARD STOP
-
-    Staying above -$100 is compliant.
-
-    If -$100 was reached, the stored live
-    session-ended state is used as the
-    current system evidence.
-  */
-
-  if(
-    live
-  ){
-
-    const realisedPnl =
-      Number(
-        live.realisedPnl ??
-        day?.totalNet ??
-        0
-      );
-
-
-    const hardStopReached =
-      !!live.hardStopReached ||
-      realisedPnl <= -100;
-
-
-    if(
-      !hardStopReached &&
-      realisedPnl > -100
-    ){
-
-      q[2].checked =
-        true;
-
-
-      showAuto(
-        2
-      );
-
-    }
-
-    else if(
-      hardStopReached &&
-      live.sessionEnded
-    ){
-
-      q[2].checked =
-        true;
-
-
-      showAuto(
-        2
-      );
-
-    }
-
-  }
-
-  else if(
-    typeof day?.totalNet ===
-      "number" &&
-    day.totalNet > -100
-  ){
-
-    q[2].checked =
-      true;
-
-
-    showAuto(
-      2
-    );
-
-  }
-
+  // A stored hard-stop flag cannot establish that no later entry occurred.
+  // Hard-stop compliance therefore remains a manual attestation.
 }
-
 
 
 /* ========================================
@@ -1836,6 +1565,8 @@ function loadDay(){
 
   }
 
+
+  if (day?.liveRisk?.windowBreach) { q[0].checked = false; autoBadges[0].classList.remove("show"); }
 
   updateScores();
 
@@ -2122,7 +1853,8 @@ loadDay();
 
 </script>
 
-<script src="workflow-nav.js?v=3"></script>
+<script src="tradezero-live.js?v=4"></script>
+<script src="workflow-nav.js?v=4"></script>
 
 </body>
 

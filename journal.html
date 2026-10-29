@@ -777,6 +777,7 @@ textarea:focus{
 
 </div>
 
+<script src="session-rules.js?v=2"></script>
 <script>
 
 const STORAGE_KEY =
@@ -852,17 +853,8 @@ function getJournal(){
 }
 
 
-function saveJournal(
-  journal
-){
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(
-      journal
-    )
-  );
-
+function saveJournal(journal){
+  WASPNSession.writeJournal(journal);
 }
 
 
@@ -2718,6 +2710,8 @@ function showExisting(){
 
 function renderConnectedState(){
 
+  WASPNSession.sync();
+
   const date =
     document.getElementById(
       "tradeDate"
@@ -2759,8 +2753,7 @@ function renderConnectedState(){
       );
 
     liveAttempt.textContent =
-      maxKnownAttempt +
-      "/5";
+      date === WASPNSession.nyParts().date && !WASPNSession.backendStatus().verified && !maxKnownAttempt ? "—" : maxKnownAttempt + "/5";
 
     const pnl =
       Number(
@@ -2780,6 +2773,7 @@ function renderConnectedState(){
       !!live.lossWarning?.resetGateRequired;
 
     if(
+      live.windowBreach ||
       live.sessionEnded ||
       live.hardStopReached ||
       pnl <= -100 ||
@@ -2792,6 +2786,11 @@ function renderConnectedState(){
       riskState.className =
         "summary-value red";
 
+    }
+
+    else if(date === WASPNSession.nyParts().date && !WASPNSession.backendStatus().verified){
+      riskState.textContent = "UNVERIFIED";
+      riskState.className = "summary-value amber";
     }
 
     else if(
@@ -2873,7 +2872,7 @@ function deleteDay(){
     !confirm(
       "Delete the ENTIRE WASPN record for " +
       date +
-      "? This removes Journal, Live Risk, Compliance, Process Score and estimated fees."
+      "? This removes Journal, Compliance, Process Score and estimated fees. Today's latched risk stops remain in effect."
     )
   ){
 
@@ -2896,7 +2895,7 @@ function deleteDay(){
   clearForm();
 
   clearDirty(
-    "Entire daily record deleted."
+    "Daily record deleted; today's latched risk stops remain in effect."
   );
 
   document.getElementById(
@@ -3037,11 +3036,14 @@ calculateDailyTotal();
 showExisting();
 
 renderConnectedState();
+window.addEventListener("waspn:tradezero-update", renderConnectedState);
+setInterval(renderConnectedState, 1000);
 
 </script>
 
-<script src="tradezero-journal.js?v=3"></script>
-<script src="workflow-nav.js?v=3"></script>
+<script src="tradezero-journal.js?v=4"></script>
+<script src="tradezero-live.js?v=4"></script>
+<script src="workflow-nav.js?v=4"></script>
 
 </body>
 </html>

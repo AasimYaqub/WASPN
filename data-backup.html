@@ -647,7 +647,7 @@ input[type="file"]{
         Replace All
       </strong>
 
-      replaces both the current local daily database and the estimated-fee store with the selected backup.
+      replaces both the current local daily database and the estimated-fee store with the selected backup. Today’s latched risk stops remain in effect.
 
     </div>
 
@@ -688,6 +688,7 @@ input[type="file"]{
 </div>
 
 
+<script src="session-rules.js?v=2"></script>
 <script>
 
 const STORAGE_KEY =
@@ -738,17 +739,8 @@ function getJournal(){
 }
 
 
-function saveJournal(
-  data
-){
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(
-      data
-    )
-  );
-
+function saveJournal(journal){
+  WASPNSession.writeJournal(journal);
 }
 
 

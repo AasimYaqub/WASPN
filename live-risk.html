@@ -1431,7 +1431,8 @@ a{
 
 </div>
 
-<script src="tradezero-live.js?v=2"></script>
+<script src="session-rules.js?v=2"></script>
+<script src="tradezero-live.js?v=4"></script>
 
 <script>
 
@@ -1442,16 +1443,16 @@ const ESTIMATED_FEES_KEY =
   "waspnEstimatedFeesV1";
 
 const WARNING_LEVEL =
-  -75;
+  WASPNSession.WARNING;
 
 const HARD_STOP =
-  -100;
+  WASPNSession.HARD_STOP;
 
 const MAX_ATTEMPTS =
-  5;
+  WASPNSession.MAX_ATTEMPTS;
 
 const COOLDOWN_MS =
-  5 * 60 * 1000;
+  WASPNSession.COOLDOWN_MS;
 
 
 /* ========================================
@@ -1479,17 +1480,8 @@ function getJournal(){
 }
 
 
-function saveJournal(
-  journal
-){
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(
-      journal
-    )
-  );
-
+function saveJournal(journal){
+  WASPNSession.writeJournal(journal);
 }
 
 
@@ -1699,169 +1691,7 @@ function getNyDate(){
 }
 
 
-function getSessionClockState(){
-
-  const ny =
-    getNyParts();
-
-  const mins =
-    ny.hour * 60 +
-    ny.minute;
-
-  const weekend =
-    ny.weekday ===
-      "Saturday" ||
-    ny.weekday ===
-      "Sunday";
-
-  if(
-    weekend
-  ){
-
-    return {
-
-      key:
-        "weekend",
-
-      canStart:
-        false,
-
-      title:
-        "MARKET CLOSED — WEEKEND",
-
-      detail:
-        "No WASPN trading session today.",
-
-      className:
-        "closed"
-
-    };
-
-  }
-
-  if(
-    mins >= 390 &&
-    mins < 420
-  ){
-
-    return {
-
-      key:
-        "preliminary",
-
-      canStart:
-        true,
-
-      title:
-        "PRELIMINARY WINDOW",
-
-      detail:
-        "6:30–7:00 AM ET • Exceptional setup / monitoring window.",
-
-      className:
-        "ok"
-
-    };
-
-  }
-
-  if(
-    mins >= 540 &&
-    mins < 660
-  ){
-
-    return {
-
-      key:
-        "main",
-
-      canStart:
-        true,
-
-      title:
-        "WITHIN WASPN",
-
-      detail:
-        "Primary trading window • 9:00–11:00 AM ET.",
-
-      className:
-        "ok"
-
-    };
-
-  }
-
-  if(
-    mins >= 420 &&
-    mins < 540
-  ){
-
-    return {
-
-      key:
-        "wait",
-
-      canStart:
-        false,
-
-      title:
-        "WAIT — MAIN WINDOW NOT OPEN",
-
-      detail:
-        "Main WASPN window begins at 9:00 AM ET.",
-
-      className:
-        "warn"
-
-    };
-
-  }
-
-  if(
-    mins >= 660
-  ){
-
-    return {
-
-      key:
-        "closed",
-
-      canStart:
-        false,
-
-      title:
-        "SESSION CLOSED",
-
-      detail:
-        "11:00 AM ET reached • No reopening later.",
-
-      className:
-        "closed"
-
-    };
-
-  }
-
-  return {
-
-    key:
-      "before",
-
-    canStart:
-      false,
-
-    title:
-      "WAIT — SESSION NOT OPEN",
-
-    detail:
-      "Preliminary monitoring begins at 6:30 AM ET.",
-
-    className:
-      "warn"
-
-  };
-
-}
+function getSessionClockState(){ return WASPNSession.clock(); }
 
 
 /* ========================================
@@ -1981,130 +1811,8 @@ function getTradeZeroState(){
 }
 
 
-function applyTradeZeroStickyRules(
-  localLive,
-  broker
-){
-
-  if(
-    !broker
-  ){
-
-    return localLive;
-
-  }
-
-  const brokerAttempt =
-    Math.max(
-      0,
-      Math.min(
-        MAX_ATTEMPTS,
-        Number(
-          broker.attempts
-        )
-      )
-    );
-
-  const brokerPnl =
-    Number(
-      broker.dayRealized
-    );
-
-  localLive.maxAttemptReached =
-    Math.max(
-      Number(
-        localLive.maxAttemptReached ||
-        0
-      ),
-      Number(
-        localLive.attempt ||
-        0
-      ),
-      brokerAttempt
-    );
-
-  if(
-    broker.warningReached ||
-    brokerPnl <=
-      WARNING_LEVEL
-  ){
-
-    localLive.warningReached =
-      true;
-
-    if(
-      !localLive.lossWarning?.triggered
-    ){
-
-      const now =
-        Date.now();
-
-      localLive.lossWarning = {
-
-        triggered:
-          true,
-
-        active:
-          true,
-
-        resetGateRequired:
-          false,
-
-        startedAt:
-          now,
-
-        until:
-          now +
-          COOLDOWN_MS,
-
-        source:
-          "TRADEZERO",
-
-        triggerPnl:
-          brokerPnl
-
-      };
-
-    }
-
-  }
-
-  if(
-    broker.hardStopReached ||
-    brokerPnl <=
-      HARD_STOP
-  ){
-
-    localLive.hardStopReached =
-      true;
-
-    localLive.sessionEnded =
-      true;
-
-  }
-
-  if(
-    broker.maxAttemptReached ||
-    localLive.maxAttemptReached >=
-      MAX_ATTEMPTS
-  ){
-
-    localLive.sessionEnded =
-      true;
-
-  }
-
-  if(
-    broker.sessionClosed
-  ){
-
-    localLive.sessionEnded =
-      true;
-
-  }
-
-  return localLive;
-
+function applyTradeZeroStickyRules(localLive, broker){
+  return WASPNSession.evaluate(localLive, {broker, date:getNyDate()});
 }
 
 
@@ -2189,28 +1897,6 @@ function buildDisplayLive(
 
     realisedPnl:
       brokerPnl,
-
-    warningReached:
-      !!localLive.warningReached ||
-      !!broker.warningReached ||
-      brokerPnl <=
-        WARNING_LEVEL,
-
-    hardStopReached:
-      !!localLive.hardStopReached ||
-      !!broker.hardStopReached ||
-      brokerPnl <=
-        HARD_STOP,
-
-    sessionEnded:
-      !!localLive.sessionEnded ||
-      !!broker.sessionClosed ||
-      !!broker.hardStopReached ||
-      brokerPnl <=
-        HARD_STOP ||
-      !!broker.maxAttemptReached ||
-      displayAttempt >=
-        MAX_ATTEMPTS,
 
     maxAttemptReached:
       displayAttempt
@@ -2316,6 +2002,8 @@ function getJournalRealisedPnl(
 
 function getLiveState(){
 
+  WASPNSession.sync();
+
   const day =
     getTodayRecord();
 
@@ -2334,6 +2022,8 @@ function getLiveState(){
     );
 
   return {
+
+    ...stored,
 
     attempt:
       journalAttempt,
@@ -2414,6 +2104,7 @@ function saveLiveState(
     liveRisk:{
 
       ...existing.liveRisk,
+      ...live,
 
       attempt:
         live.attempt,
@@ -2521,37 +2212,8 @@ function syncFromJournal(){
    STRUCTURAL STICKY RULES
 ======================================== */
 
-function evaluateStructuralRules(
-  live
-){
-
-  const maxKnownAttempt =
-    Math.max(
-      Number(
-        live.attempt ||
-        0
-      ),
-      Number(
-        live.maxAttemptReached ||
-        0
-      )
-    );
-
-  if(
-    maxKnownAttempt >=
-    MAX_ATTEMPTS
-  ){
-
-    live.sessionEnded =
-      true;
-
-  }
-
-  live.maxAttemptReached =
-    maxKnownAttempt;
-
-  return live;
-
+function evaluateStructuralRules(live){
+  return WASPNSession.evaluate(live, {date:getNyDate()});
 }
 
 
@@ -2682,6 +2344,7 @@ function isSessionPermanentlyClosed(
     );
 
   return (
+    !WASPNSession.backendStatus().verified ||
     clock.key === "closed" ||
     clock.key === "weekend" ||
     live.hardStopReached ||
@@ -2962,6 +2625,10 @@ function getOperationalStatus(
   clock
 ){
 
+  if (live.windowBreach) return {title:"WINDOW BREACH — SESSION OVER", detail:"Confirmed broker entry outside 06:30–07:00 / 07:00–11:00 ET. No further entries today.", className:"stop"};
+  if (live.sessionEnded && !live.hardStopReached && live.maxAttemptReached < MAX_ATTEMPTS && clock.key !== "closed")
+    return {title:"SESSION CLOSED", detail:"Daily stop latched • No reopening today.", className:"closed"};
+
   if(
     live.hardStopReached ||
     (
@@ -3054,6 +2721,12 @@ function getOperationalStatus(
     };
 
   }
+
+  if (!WASPNSession.backendStatus().verified) return {
+    title:"BACKEND VERIFICATION REQUIRED",
+    detail:"Trading is blocked until fresh authenticated session state is available.",
+    className:"stop"
+  };
 
   if(
     live.behaviouralLock?.active
@@ -3413,7 +3086,7 @@ function render(){
   document.getElementById(
     "attempt"
   ).textContent =
-    live.attempt;
+    !WASPNSession.backendStatus().verified && !live.maxAttemptReached ? "—" : live.attempt;
 
   const pnlDisplay =
     document.getElementById(
@@ -3778,7 +3451,7 @@ setInterval(
 
 </script>
 
-<script src="workflow-nav.js?v=3"></script>
+<script src="workflow-nav.js?v=4"></script>
 
 </body>
 </html>

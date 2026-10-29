@@ -12,7 +12,7 @@
     4000;
 
   const MAX_AGE_MS =
-    15000;
+    WASPNSession.BACKEND_MAX_AGE_MS;
 
   let latest =
     null;
@@ -343,6 +343,9 @@
 
     return (
       recent &&
+      latest.tradeDate === WASPNSession.nyParts().date &&
+      latest.attempts !== null && latest.attempts !== "" &&
+      latest.dayRealized !== null && latest.dayRealized !== "" &&
       latest.tradeZeroConnected ===
         true &&
       latest.dataFresh ===
@@ -425,6 +428,7 @@
           401
       ){
 
+        WASPNSession.backendUnavailable();
         clearTimeout(
           timeout
         );
@@ -452,6 +456,7 @@
         !response.ok
       ){
 
+        WASPNSession.backendUnavailable();
         return;
 
       }
@@ -478,6 +483,8 @@
       lastSuccessAt =
         Date.now();
 
+      WASPNSession.sync(data);
+
 
       window.dispatchEvent(
         new CustomEvent(
@@ -493,6 +500,7 @@
 
     catch{
 
+      WASPNSession.backendUnavailable();
       /*
         Silent fallback.
 
@@ -581,9 +589,7 @@
           true,
 
       attempts:
-        Number(
-          latest.attempts
-        ),
+        Math.max(Number(latest.attempts), WASPNSession.sync().maxAttemptReached),
 
       dayRealized:
         Number(
@@ -601,6 +607,8 @@
       maxAttemptReached:
         latest.maxAttemptReached ===
           true,
+
+      outOfWindowEntryDetected: latest.outOfWindowEntryDetected === true,
 
       objectiveReached:
         latest.objectiveReached ===
@@ -655,7 +663,7 @@
 
 
   /*
-    Give the v6 service worker a chance to activate
+    Give the service worker a chance to activate
     before the initial broker request.
   */
 
