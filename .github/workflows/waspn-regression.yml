@@ -35,8 +35,8 @@ jobs:
           node --check workflow-nav.js
           node --check service-worker.js
 
-      - name: Session policy tests
-        run: node --test tests/session-rules.test.cjs
+      - name: Node regressions
+        run: node --test tests/*.test.cjs
 
       - name: Install browser test dependency
         run: |
