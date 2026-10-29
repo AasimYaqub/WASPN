@@ -2,7 +2,7 @@ const CACHE_PREFIX =
   "waspn-pwa-";
 
 const CACHE_NAME =
-  "waspn-pwa-v10";
+  "waspn-pwa-v11";
 
 const APP_SHELL = [
   "./",

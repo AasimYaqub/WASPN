@@ -11,6 +11,7 @@
 
   const MAX_ATTEMPTS = 5;
   const STORAGE_KEY = "waspnJournalV2";
+  let activeReviewDate = null;
 
   function currentFile(){
     return window.location.pathname.split("/").pop() || "";
@@ -479,6 +480,7 @@
     if(typeof window.showDetail === "function" && !window.showDetail.__waspnProvenanceWrapped){
       const original = window.showDetail;
       const wrapped = function(date){
+        activeReviewDate = date;
         const result = original(date);
         setTimeout(() => correctReviewTiming(date), 0);
         return result;
@@ -486,6 +488,34 @@
       wrapped.__waspnProvenanceWrapped = true;
       window.showDetail = wrapped;
     }
+  }
+
+  function applyReviewJournalSync(){
+    if(currentFile() !== "calendar-2026.html") return;
+
+    const refreshOpenReview = () => {
+      if(!activeReviewDate || typeof window.showDetail !== "function") return;
+      window.showDetail(activeReviewDate);
+    };
+
+    window.addEventListener(
+      "waspn:tradezero-journal-update",
+      () => setTimeout(refreshOpenReview, 0)
+    );
+
+    if(window.WASPNTradeZeroJournal?.refresh){
+      window.WASPNTradeZeroJournal.refresh();
+      return;
+    }
+
+    if(document.querySelector('script[data-waspn-review-journal-sync="true"]')) return;
+
+    const script = document.createElement("script");
+    script.src = "tradezero-journal.js?v=4";
+    script.async = true;
+    script.dataset.waspnReviewJournalSync = "true";
+    script.onload = () => window.WASPNTradeZeroJournal?.refresh?.();
+    document.head.appendChild(script);
   }
 
   function validDateKey(value){
@@ -678,6 +708,7 @@
     applyObjectiveDisplay();
     applyComplianceSafety();
     applyReviewProvenance();
+    applyReviewJournalSync();
     applyBackupValidation();
     buildNav();
   };
