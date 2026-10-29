@@ -264,6 +264,69 @@
     return live;
   }
 
+  function invalidateConflictingReviews(day, live){
+    const windowViolation = live.windowBreach === true;
+    const attemptViolation = Math.max(
+      Number(live.attempt) || 0,
+      Number(live.maxAttemptReached) || 0
+    ) > MAX_ATTEMPTS;
+
+    if(!windowViolation && !attemptViolation) return false;
+
+    let changed = false;
+
+    if(day.compliance && typeof day.compliance === "object"){
+      if(windowViolation && day.compliance.window !== false){
+        day.compliance.window = false;
+        changed = true;
+      }
+
+      if(attemptViolation && day.compliance.attempts !== false){
+        day.compliance.attempts = false;
+        changed = true;
+      }
+
+      if(changed){
+        day.compliance.score = [
+          day.compliance.window,
+          day.compliance.attempts,
+          day.compliance.stop
+        ].filter(Boolean).length;
+      }
+    }
+
+    if(day.sessionScore?.answers && typeof day.sessionScore.answers === "object"){
+      let scoreChanged = false;
+
+      if(windowViolation && day.sessionScore.answers.insideWindow !== false){
+        day.sessionScore.answers.insideWindow = false;
+        scoreChanged = true;
+      }
+
+      if(attemptViolation && day.sessionScore.answers.stoppedByFive !== false){
+        day.sessionScore.answers.stoppedByFive = false;
+        scoreChanged = true;
+      }
+
+      if(scoreChanged){
+        day.sessionScore.score = Object.values(day.sessionScore.answers)
+          .filter(value => value === true)
+          .length;
+        changed = true;
+      }
+    }
+
+    if(changed){
+      day.reviewInvalidatedAt = new Date().toISOString();
+      day.reviewInvalidatedReason = [
+        windowViolation ? "WINDOW_BREACH" : null,
+        attemptViolation ? "ATTEMPT_LIMIT_BREACH" : null
+      ].filter(Boolean).join("+");
+    }
+
+    return changed;
+  }
+
   function sync(brokerInput=null){
     const date = resetDay();
 
@@ -321,6 +384,7 @@
     }
 
     day.liveRisk = live;
+    invalidateConflictingReviews(day, live);
     remember(live);
 
     if(JSON.stringify(originalDay) !== JSON.stringify(day)){
@@ -372,6 +436,7 @@
       live.closedReason = previous.closedReason || live.closedReason;
       live.closedAt = previous.closedAt || live.closedAt;
       journal[date] = {...day, liveRisk:live};
+      invalidateConflictingReviews(journal[date], live);
     }
 
     remember(journal[date]?.liveRisk || {});
@@ -396,7 +461,8 @@
     evaluate,
     sync,
     writeJournal,
-    confirmBrokerEntries
+    confirmBrokerEntries,
+    invalidateConflictingReviews
   };
 
   if(typeof module !== "undefined") module.exports = api;
