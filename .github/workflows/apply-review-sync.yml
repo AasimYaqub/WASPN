@@ -1,0 +1,80 @@
+name: Apply Review Timing Sync Fix
+
+on:
+  push:
+    branches: [fix/review-broker-timing-sync-ci]
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-test:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/review-broker-timing-sync-ci
+          fetch-depth: 0
+
+      - name: Apply focused frontend fix
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          nav = Path('workflow-nav.js')
+          text = nav.read_text()
+
+          text = text.replace(
+              '  const STORAGE_KEY = "waspnJournalV2";\n',
+              '  const STORAGE_KEY = "waspnJournalV2";\n  let activeReviewDate = null;\n',
+              1,
+          )
+
+          old = '''      const wrapped = function(date){\n        const result = original(date);\n        setTimeout(() => correctReviewTiming(date), 0);\n        return result;\n      };'''
+          new = '''      const wrapped = function(date){\n        activeReviewDate = date;\n        const result = original(date);\n        setTimeout(() => correctReviewTiming(date), 0);\n        return result;\n      };'''
+          if old not in text:
+              raise SystemExit('review provenance wrapper anchor not found')
+          text = text.replace(old, new, 1)
+
+          anchor = '''  function validDateKey(value){'''
+          addition = '''  function applyReviewJournalSync(){\n    if(currentFile() !== "calendar-2026.html") return;\n\n    const refreshOpenReview = () => {\n      if(!activeReviewDate || typeof window.showDetail !== "function") return;\n      window.showDetail(activeReviewDate);\n    };\n\n    window.addEventListener(\n      "waspn:tradezero-journal-update",\n      () => setTimeout(refreshOpenReview, 0)\n    );\n\n    if(window.WASPNTradeZeroJournal?.refresh){\n      window.WASPNTradeZeroJournal.refresh();\n      return;\n    }\n\n    if(document.querySelector('script[data-waspn-review-journal-sync="true"]')) return;\n\n    const script = document.createElement("script");\n    script.src = "tradezero-journal.js?v=4";\n    script.async = true;\n    script.dataset.waspnReviewJournalSync = "true";\n    script.onload = () => window.WASPNTradeZeroJournal?.refresh?.();\n    document.head.appendChild(script);\n  }\n\n'''
+          if anchor not in text:
+              raise SystemExit('validDateKey anchor not found')
+          text = text.replace(anchor, addition + anchor, 1)
+
+          old_start = '''    applyReviewProvenance();\n    applyBackupValidation();'''
+          new_start = '''    applyReviewProvenance();\n    applyReviewJournalSync();\n    applyBackupValidation();'''
+          if old_start not in text:
+              raise SystemExit('startup anchor not found')
+          text = text.replace(old_start, new_start, 1)
+          nav.write_text(text)
+
+          sw = Path('service-worker.js')
+          sw_text = sw.read_text()
+          if 'waspn-pwa-v10' not in sw_text:
+              raise SystemExit('expected cache v10 not found')
+          sw.write_text(sw_text.replace('waspn-pwa-v10', 'waspn-pwa-v11', 1))
+
+          tests = Path('tests/source-regressions.test.cjs')
+          test_text = tests.read_text()
+          marker = "test('Backup hardening is installed through session-rules, which Data Backup actually loads', () => {"
+          regression = '''test('Review actively syncs broker journal timing and refreshes the open day', () => {\n  const source = read('workflow-nav.js');\n  assert.match(source,/function applyReviewJournalSync/);\n  assert.match(source,/tradezero-journal\\.js\\?v=4/);\n  assert.match(source,/waspn:tradezero-journal-update/);\n  assert.match(source,/activeReviewDate = date/);\n  assert.match(source,/window\\.showDetail\\(activeReviewDate\\)/);\n});\n\n'''
+          if marker not in test_text:
+              raise SystemExit('test insertion anchor not found')
+          test_text = test_text.replace(marker, regression + marker, 1)
+          test_text = test_text.replace('/waspn-pwa-v10/', '/waspn-pwa-v11/', 1)
+          tests.write_text(test_text)
+          PY
+
+      - name: Run policy and source regressions
+        run: node --test tests/session-rules.test.cjs tests/source-regressions.test.cjs
+
+      - name: Commit tested fix and remove temporary workflow
+        run: |
+          rm .github/workflows/apply-review-sync.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add workflow-nav.js service-worker.js tests/source-regressions.test.cjs .github/workflows/apply-review-sync.yml
+          git commit -m "fix: sync broker timing into review"
+          git push origin HEAD:fix/review-broker-timing-sync-ci
