@@ -45,17 +45,8 @@
   }
 
 
-  function saveJournal(
-    journal
-  ){
-
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(
-        journal
-      )
-    );
-
+  function saveJournal(journal){
+    WASPNSession.writeJournal(journal);
   }
 
 
@@ -730,6 +721,11 @@
 
     };
 
+
+    // Inspect every confirmed broker entry, including those beyond the five UI slots.
+    const liveRisk = {...updatedDay.liveRisk};
+    WASPNSession.confirmBrokerEntries(liveRisk, feed.entries);
+    updatedDay.liveRisk = WASPNSession.evaluate(liveRisk, {date:tradeDate});
 
     journal[
       tradeDate

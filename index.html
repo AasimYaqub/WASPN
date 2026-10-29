@@ -1032,7 +1032,7 @@ a{
         id="prelimCountdownCaption"
         class="countdown-caption"
       >
-        6:30–7:00 AM ET
+        06:30–07:00 ET
       </div>
 
     </div>
@@ -1063,7 +1063,7 @@ a{
         id="mainCountdownCaption"
         class="countdown-caption"
       >
-        9:00–11:00 AM ET
+        07:00–11:00 ET
       </div>
 
     </div>
@@ -1230,7 +1230,7 @@ a{
       </div>
 
       <div class="evidence-copy">
-        9:00–9:30 AM ET produced the strongest historical result.
+        The early-session historical sample produced the strongest result.
       </div>
 
     </div>
@@ -1310,6 +1310,7 @@ a{
 </div>
 
 
+<script src="session-rules.js?v=2"></script>
 <script>
 
 
@@ -1593,20 +1594,19 @@ function renderMarketStatus(){
 
 
   const prelimStart =
-    6 * 3600 +
-    30 * 60;
+    WASPNSession.PRELIM_START * 60;
 
 
   const prelimEnd =
-    7 * 3600;
+    WASPNSession.MAIN_START * 60;
 
 
   const mainStart =
-    9 * 3600;
+    WASPNSession.MAIN_START * 60;
 
 
   const close =
-    11 * 3600;
+    WASPNSession.END * 60;
 
 
   const box =
@@ -1683,6 +1683,33 @@ function renderMarketStatus(){
     "countdown-item main";
 
 
+  const daily = WASPNSession.sync();
+  if (daily.sessionEnded && !weekend && nowSeconds < close) {
+    box.className = "market-status closed";
+    main.textContent = daily.windowBreach ? "WINDOW BREACH — SESSION OVER" : "SESSION CLOSED";
+    detail.textContent = "Daily stop latched • No reopening today";
+    prelimLabel.textContent = "Preliminary";
+    prelimTime.textContent = "CLOSED";
+    prelimCaption.textContent = "06:30–07:00 ET";
+    mainLabel.textContent = "Main Window";
+    mainTime.textContent = "CLOSED";
+    mainCaption.textContent = "07:00–11:00 ET";
+    return;
+  }
+
+  if (!daily.backendVerified && !weekend && nowSeconds >= prelimStart && nowSeconds < close) {
+    box.className = "market-status closed";
+    main.textContent = "BACKEND VERIFICATION REQUIRED";
+    detail.textContent = "Trading is blocked until fresh authenticated session state is available";
+    prelimLabel.textContent = "Preliminary";
+    prelimTime.textContent = "UNVERIFIED";
+    prelimCaption.textContent = "06:30–07:00 ET";
+    mainLabel.textContent = "Main Window";
+    mainTime.textContent = "UNVERIFIED";
+    mainCaption.textContent = "07:00–11:00 ET";
+    return;
+  }
+
   /* WEEKEND */
 
   if(
@@ -1733,7 +1760,7 @@ function renderMarketStatus(){
 
 
     mainCaption.textContent =
-      "Until 9:00 AM ET";
+      "Until 7:00 AM ET";
 
 
     return;
@@ -1772,7 +1799,7 @@ function renderMarketStatus(){
 
 
     prelimCaption.textContent =
-      "6:30–7:00 AM ET";
+      "06:30–07:00 ET";
 
 
     mainLabel.textContent =
@@ -1787,7 +1814,7 @@ function renderMarketStatus(){
 
 
     mainCaption.textContent =
-      "9:00–11:00 AM ET";
+      "07:00–11:00 ET";
 
 
     return;
@@ -1813,7 +1840,7 @@ function renderMarketStatus(){
 
 
     detail.textContent =
-      "6:30–7:00 AM ET • Exceptional setups only";
+      "06:30–07:00 ET • Exceptional setups only";
 
 
     prelimBox.classList.add(
@@ -1848,60 +1875,7 @@ function renderMarketStatus(){
 
 
     mainCaption.textContent =
-      "9:00–11:00 AM ET";
-
-
-    return;
-
-  }
-
-
-  /* BETWEEN PRELIMINARY AND MAIN */
-
-  if(
-    nowSeconds >=
-      prelimEnd &&
-    nowSeconds <
-      mainStart
-  ){
-
-    box.className =
-      "market-status waiting";
-
-
-    main.textContent =
-      "WAIT — MAIN WINDOW NOT OPEN";
-
-
-    detail.textContent =
-      "Main trading window begins at 9:00 AM ET";
-
-
-    prelimLabel.textContent =
-      "Preliminary";
-
-
-    prelimTime.textContent =
-      "CLOSED";
-
-
-    prelimCaption.textContent =
-      "Ended at 7:00 AM ET";
-
-
-    mainLabel.textContent =
-      "Main Opens In";
-
-
-    mainTime.textContent =
-      formatCountdown(
-        mainStart -
-        nowSeconds
-      );
-
-
-    mainCaption.textContent =
-      "9:00–11:00 AM ET";
+      "07:00–11:00 ET";
 
 
     return;
@@ -1927,7 +1901,7 @@ function renderMarketStatus(){
 
 
     detail.textContent =
-      "9:00–11:00 AM ET";
+      "07:00–11:00 ET";
 
 
     prelimLabel.textContent =
@@ -2012,7 +1986,7 @@ function renderMarketStatus(){
 
 
   mainCaption.textContent =
-    "Until next 9:00 AM ET";
+    "Until next 7:00 AM ET";
 
 }
 
@@ -2022,6 +1996,7 @@ function renderMarketStatus(){
 ======================================== */
 
 renderMarketStatus();
+window.addEventListener("waspn:tradezero-update", renderMarketStatus);
 
 
 setInterval(
@@ -2031,7 +2006,8 @@ setInterval(
 
 </script>
 
-<script src="workflow-nav.js?v=3"></script>
+<script src="tradezero-live.js?v=4"></script>
+<script src="workflow-nav.js?v=4"></script>
 
 </body>
 

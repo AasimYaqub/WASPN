@@ -2,19 +2,20 @@ const CACHE_PREFIX =
   "waspn-pwa-";
 
 const CACHE_NAME =
-  "waspn-pwa-v6";
+  "waspn-pwa-v8";
 
 const APP_SHELL = [
   "./",
   "./index.html",
+  "./session-rules.js?v=2",
   "./live-risk.html",
   "./journal.html",
   "./compliance.html",
   "./calendar-2026.html",
   "./data-backup.html",
-  "./workflow-nav.js?v=3",
-  "./tradezero-live.js?v=2",
-  "./tradezero-journal.js?v=3",
+  "./workflow-nav.js?v=4",
+  "./tradezero-live.js?v=4",
+  "./tradezero-journal.js?v=4",
   "./manifest.webmanifest",
   "./apple-touch-icon.png",
   "./icon-192.png",

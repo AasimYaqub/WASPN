@@ -39,15 +39,6 @@
   ];
 
 
-  const WASPN_LIVE_STATUS_ENDPOINT =
-    "https://wasp-backend-api.replit.app/api/waspn/live-status";
-
-
-  let windowBreachRequestInFlight =
-    false;
-
-
-
   /* ========================================
      PWA SERVICE WORKER
   ======================================== */
@@ -184,264 +175,6 @@
 
   /* ========================================
      COMPLIANCE SAFETY OVERRIDE
-  ======================================== */
-
-  function complianceTimeInsideWindow(
-    value
-  ){
-
-    if(
-      !value ||
-      !/^\d{1,2}:\d{2}/
-        .test(
-          String(value)
-        )
-    ){
-      return null;
-    }
-
-
-    const match =
-      String(value)
-        .match(
-          /^(\d{1,2}):(\d{2})/
-        );
-
-
-    if(
-      !match
-    ){
-      return null;
-    }
-
-
-    const hour =
-      Number(match[1]);
-
-    const minute =
-      Number(match[2]);
-
-    const mins =
-      hour * 60 +
-      minute;
-
-
-    const preliminary =
-      mins >= 390 &&
-      mins < 420;
-
-    const main =
-      mins >= 540 &&
-      mins < 660;
-
-
-    return (
-      preliminary ||
-      main
-    );
-
-  }
-
-
-  function applyComplianceSafetyOverride(){
-
-    if(
-      currentFile() !==
-      "compliance.html"
-    ){
-      return;
-    }
-
-
-    if(
-      typeof window.loadDay !==
-        "function"
-    ){
-      return;
-    }
-
-
-    window.applyStructuralPrefill =
-      function(
-        day
-      ){
-
-        const q1 =
-          document.getElementById(
-            "q1"
-          );
-
-        const q2 =
-          document.getElementById(
-            "q2"
-          );
-
-        const q3 =
-          document.getElementById(
-            "q3"
-          );
-
-        const auto1 =
-          document.getElementById(
-            "auto1"
-          );
-
-        const auto2 =
-          document.getElementById(
-            "auto2"
-          );
-
-        const auto3 =
-          document.getElementById(
-            "auto3"
-          );
-
-
-        if(
-          !q1 ||
-          !q2 ||
-          !q3
-        ){
-          return;
-        }
-
-
-        q1.checked =
-          false;
-
-        q2.checked =
-          false;
-
-        q3.checked =
-          false;
-
-        auto1?.classList.remove(
-          "show"
-        );
-
-        auto2?.classList.remove(
-          "show"
-        );
-
-        auto3?.classList.remove(
-          "show"
-        );
-
-
-        const trades =
-          Array.isArray(
-            day?.trades
-          )
-            ? day.trades
-            : [];
-
-
-        if(
-          trades.length > 0
-        ){
-
-          const allTimed =
-            trades.every(
-              trade =>
-                complianceTimeInsideWindow(
-                  trade?.entryTime
-                ) !== null
-            );
-
-          const allInside =
-            allTimed &&
-            trades.every(
-              trade =>
-                complianceTimeInsideWindow(
-                  trade?.entryTime
-                ) === true
-            );
-
-
-          if(
-            allInside
-          ){
-
-            q1.checked =
-              true;
-
-            auto1?.classList.add(
-              "show"
-            );
-
-          }
-
-        }
-
-
-        const brokerJournal =
-          day?.brokerJournal;
-
-        const brokerHistoryComplete =
-          brokerJournal?.complete ===
-            true &&
-          brokerJournal?.dataFresh !==
-            false;
-
-
-        if(
-          brokerHistoryComplete
-        ){
-
-          const live =
-            day?.liveRisk;
-
-          const maxAttempt =
-            Math.max(
-              Number(
-                live?.maxAttemptReached ||
-                0
-              ),
-              Number(
-                live?.attempt ||
-                0
-              ),
-              trades.length
-            );
-
-
-          if(
-            Number.isFinite(
-              maxAttempt
-            ) &&
-            maxAttempt <= 5
-          ){
-
-            q2.checked =
-              true;
-
-            auto2?.classList.add(
-              "show"
-            );
-
-          }
-
-        }
-
-
-        q3.checked =
-          false;
-
-        auto3?.classList.remove(
-          "show"
-        );
-
-      };
-
-
-    window.loadDay();
-
-  }
-
-
-
-  /* ========================================
-     JOURNAL BROKER TIMING
   ======================================== */
 
   function getJournalStore(){
@@ -1040,7 +773,7 @@
         No further entries are permitted today.
       </span>
       <small>
-        Permitted entry windows: 06:30–07:00 ET and 09:00–11:00 ET.
+        Permitted entry windows: 06:30–07:00 ET and 07:00–11:00 ET.
       </small>
     `;
 
@@ -1068,101 +801,13 @@
   }
 
 
-  async function renderWindowBreachNote(){
-
-    if(
-      currentFile() !==
-      "live-risk.html"
-    ){
-      return;
-    }
-
-
-    if(
-      windowBreachRequestInFlight
-    ){
-      return;
-    }
-
-
-    const note =
-      ensureWindowBreachNote();
-
-
-    if(
-      !note
-    ){
-      return;
-    }
-
-
-    windowBreachRequestInFlight =
-      true;
-
-
-    try{
-
-      const response =
-        await fetch(
-          WASPN_LIVE_STATUS_ENDPOINT,
-          {
-            method:"GET",
-            cache:"no-store",
-            headers:{
-              "Accept":
-                "application/json"
-            }
-          }
-        );
-
-
-      if(
-        !response.ok
-      ){
-        return;
-      }
-
-
-      const data =
-        await response.json();
-
-
-      const detected =
-        data?.outOfWindowEntryDetected ===
-          true;
-
-
-      note.classList.toggle(
-        "active",
-        detected
-      );
-
-
-      document.body.classList.toggle(
-        "waspn-window-breach-active",
-        detected
-      );
-
-    }
-
-    catch{
-
-      /*
-        Do not clear an already-visible warning
-        merely because one network poll failed.
-      */
-
-    }
-
-    finally{
-
-      windowBreachRequestInFlight =
-        false;
-
-    }
-
+  function renderWindowBreachNote(){
+    const note = ensureWindowBreachNote();
+    if (!note) return;
+    const detected = WASPNSession.sync().windowBreach === true;
+    note.classList.toggle("active", detected);
+    document.body.classList.toggle("waspn-window-breach-active", detected);
   }
-
 
   function applyWindowBreachDisplay(){
 
@@ -1977,7 +1622,7 @@
 
     injectStyles();
 
-    applyComplianceSafetyOverride();
+
 
     applyJournalTiming();
 
