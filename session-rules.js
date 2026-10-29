@@ -108,7 +108,6 @@
   }
 
   function timeInsideWindow(value){
-    // Broker wall-clock fields are ET. ISO timestamps require an explicit offset.
     if(typeof value !== "string") return null;
 
     let minutes;
@@ -133,52 +132,22 @@
     const ny = nyParts(now);
 
     if(["Saturday","Sunday"].includes(ny.weekday)){
-      return {
-        key:"weekend",
-        canStart:false,
-        title:"MARKET CLOSED — WEEKEND",
-        detail:"No WASPN trading session today.",
-        className:"closed"
-      };
+      return {key:"weekend",canStart:false,title:"MARKET CLOSED — WEEKEND",detail:"No WASPN trading session today.",className:"closed"};
     }
 
     if(ny.minutes >= END){
-      return {
-        key:"closed",
-        canStart:false,
-        title:"SESSION CLOSED",
-        detail:"11:00 AM ET reached • No reopening later.",
-        className:"closed"
-      };
+      return {key:"closed",canStart:false,title:"SESSION CLOSED",detail:"11:00 AM ET reached • No reopening later.",className:"closed"};
     }
 
     if(ny.minutes < PRELIM_START){
-      return {
-        key:"before",
-        canStart:false,
-        title:"WAIT — SESSION NOT OPEN",
-        detail:"Preliminary window begins at 06:30 ET.",
-        className:"warn"
-      };
+      return {key:"before",canStart:false,title:"WAIT — SESSION NOT OPEN",detail:"Preliminary window begins at 06:30 ET.",className:"warn"};
     }
 
     if(ny.minutes < MAIN_START){
-      return {
-        key:"preliminary",
-        canStart:true,
-        title:"PRELIMINARY WINDOW",
-        detail:"06:30–07:00 ET • Exceptional setups only.",
-        className:"ok"
-      };
+      return {key:"preliminary",canStart:true,title:"PRELIMINARY WINDOW",detail:"06:30–07:00 ET • Exceptional setups only.",className:"ok"};
     }
 
-    return {
-      key:"main",
-      canStart:true,
-      title:"WITHIN WASPN",
-      detail:"Main trading window • 07:00–11:00 ET.",
-      className:"ok"
-    };
+    return {key:"main",canStart:true,title:"WITHIN WASPN",detail:"Main trading window • 07:00–11:00 ET.",className:"ok"};
   }
 
   function brokerPnlUsable(broker, date){
@@ -187,10 +156,7 @@
       finite(broker.dayRealized) &&
       (
         broker.usable === true ||
-        (
-          broker.tradeZeroConnected === true &&
-          broker.dataFresh === true
-        )
+        (broker.tradeZeroConnected === true && broker.dataFresh === true)
       )
     );
   }
@@ -210,7 +176,6 @@
 
     live.maxAttemptReached = attempts;
 
-    // Positive, date-scoped broker evidence remains latched even if later polls clear it.
     if(sameDate && broker?.outOfWindowEntryDetected === true){
       live.windowBreach = true;
     }
@@ -253,8 +218,6 @@
                 ? "SESSION_END"
                 : null;
 
-    // Backend daily checkpoint flags are authoritative even when live broker data is stale.
-    // objectiveReached alone is informational and never closes the session.
     if(reason){
       live.sessionEnded = true;
       live.closedReason ||= reason;
@@ -350,9 +313,7 @@
       journal = {};
     }
 
-    if(!journal || typeof journal !== "object" || Array.isArray(journal)){
-      journal = {};
-    }
+    if(!journal || typeof journal !== "object" || Array.isArray(journal)) journal = {};
 
     const originalDay = journal[date] || {date};
     const day = {...originalDay};
@@ -361,7 +322,6 @@
 
     live.attempt = Math.max(Number(live.attempt) || 0, trades.length);
 
-    // Journal P&L remains available as a local display/review fallback only.
     if(finite(day.totalNet)){
       live.realisedPnl = Number(day.totalNet);
     }
@@ -372,10 +332,8 @@
 
     evaluate(live, {broker:evaluatedBroker, date});
 
-    // Persist trustworthy same-day broker daily P&L so Review still has it after NY rollover.
     if(brokerPnlUsable(evaluatedBroker, date)){
-      const value = Number(evaluatedBroker.dayRealized);
-      day.brokerDailyNet = value;
+      day.brokerDailyNet = Number(evaluatedBroker.dayRealized);
       day.brokerDailyNetSource = "TRADEZERO_LIVE";
       day.brokerDailyObservedAt =
         typeof evaluatedBroker.lastUpdated === "string"
@@ -396,7 +354,6 @@
   }
 
   function confirmBrokerEntries(live, entries){
-    // Inspect raw broker timings, never reconciled/manual fields that may differ.
     if(
       Array.isArray(entries) &&
       entries.some(entry => entry?.sourceId && timeInsideWindow(entry.entryTime) === false)
@@ -407,7 +364,6 @@
   }
 
   function writeJournal(journal){
-    // Editing, deleting, or importing journal data must not reopen today's session.
     const date = resetDay();
 
     let previous;
@@ -443,37 +399,142 @@
     root.localStorage.setItem(STORAGE_KEY, JSON.stringify(journal));
   }
 
+  /* ========================================
+     BACKUP VALIDATION
+  ======================================== */
+
+  function isRealDateKey(value){
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(String(value || ""))) return false;
+    const [year,month,day] = value.split("-").map(Number);
+    const parsed = new Date(Date.UTC(year,month - 1,day));
+    return (
+      parsed.getUTCFullYear() === year &&
+      parsed.getUTCMonth() === month - 1 &&
+      parsed.getUTCDate() === day
+    );
+  }
+
+  function plainObject(value){
+    return value !== null && typeof value === "object" && !Array.isArray(value);
+  }
+
+  function optionalFinite(value, label){
+    if(value === undefined || value === null || value === "") return;
+    if(!Number.isFinite(Number(value))) throw new Error(label + " must be a finite number.");
+  }
+
+  function validateBackupTrade(trade, date, index){
+    if(!plainObject(trade)) throw new Error(`Invalid trade ${index + 1} in ${date}.`);
+
+    for(const field of [
+      "entryPrice","exitPrice","shares","fees","grossPnl","calculatedNet",
+      "netPnl","actualNet","brokerGrossPnl","brokerFees","brokerCommission"
+    ]){
+      optionalFinite(trade[field], `${date} trade ${index + 1} ${field}`);
+    }
+
+    if(Number(trade.fees ?? 0) < 0) throw new Error(`Negative fee in ${date} trade ${index + 1}.`);
+    if(Number(trade.shares ?? 0) < 0) throw new Error(`Negative share count in ${date} trade ${index + 1}.`);
+
+    for(const field of ["ticker","side","setupReason","entryTime","exitTime","brokerSourceId"]){
+      if(trade[field] !== undefined && trade[field] !== null && typeof trade[field] !== "string"){
+        throw new Error(`${date} trade ${index + 1} ${field} is invalid.`);
+      }
+    }
+  }
+
+  function validateBackupJournal(data){
+    if(!plainObject(data)) throw new Error("The WASPN database in this backup is invalid.");
+
+    for(const [date,day] of Object.entries(data)){
+      if(!isRealDateKey(date)) throw new Error("The backup contains an invalid daily date: " + date);
+      if(!plainObject(day)) throw new Error("Invalid daily record: " + date);
+      if(day.date !== undefined && day.date !== date) throw new Error("Daily record date mismatch: " + date);
+
+      if(day.trades !== undefined){
+        if(!Array.isArray(day.trades) || day.trades.length > MAX_ATTEMPTS){
+          throw new Error("Invalid trades record: " + date);
+        }
+        day.trades.forEach((trade,index) => validateBackupTrade(trade,date,index));
+      }
+
+      for(const field of ["startValue","totalNet","brokerDailyNet"]){
+        optionalFinite(day[field], `${date} ${field}`);
+      }
+
+      if(day.liveRisk !== undefined){
+        if(!plainObject(day.liveRisk)) throw new Error("Invalid live risk record: " + date);
+        for(const field of ["attempt","maxAttemptReached","realisedPnl"]){
+          optionalFinite(day.liveRisk[field], `${date} liveRisk.${field}`);
+        }
+        if(Number(day.liveRisk.attempt ?? 0) < 0 || Number(day.liveRisk.maxAttemptReached ?? 0) < 0){
+          throw new Error("Negative attempt count in " + date);
+        }
+        for(const flag of ["sessionEnded","windowBreach","hardStopReached","warningReached"]){
+          if(day.liveRisk[flag] !== undefined && typeof day.liveRisk[flag] !== "boolean"){
+            throw new Error(`Invalid ${flag} flag in ${date}.`);
+          }
+        }
+      }
+
+      if(day.brokerJournal !== undefined){
+        if(!plainObject(day.brokerJournal)) throw new Error("Invalid broker journal record: " + date);
+        for(const field of ["entryCount","provenAttemptCount"]){
+          optionalFinite(day.brokerJournal[field], `${date} brokerJournal.${field}`);
+          if(Number(day.brokerJournal[field] ?? 0) < 0) throw new Error("Negative broker count in " + date);
+        }
+      }
+
+      if(day.compliance !== undefined){
+        if(!plainObject(day.compliance)) throw new Error("Invalid compliance record: " + date);
+        optionalFinite(day.compliance.score, `${date} compliance.score`);
+        if(Number(day.compliance.score ?? 0) < 0 || Number(day.compliance.score ?? 0) > 3){
+          throw new Error("Compliance score out of range: " + date);
+        }
+      }
+
+      if(day.sessionScore !== undefined){
+        if(!plainObject(day.sessionScore)) throw new Error("Invalid process score record: " + date);
+        optionalFinite(day.sessionScore.score, `${date} sessionScore.score`);
+        if(Number(day.sessionScore.score ?? 0) < 0 || Number(day.sessionScore.score ?? 0) > 5){
+          throw new Error("Process score out of range: " + date);
+        }
+        if(day.sessionScore.answers !== undefined && !plainObject(day.sessionScore.answers)){
+          throw new Error("Invalid process answers: " + date);
+        }
+      }
+    }
+
+    return data;
+  }
+
   const api = {
-    PRELIM_START,
-    MAIN_START,
-    END,
-    WARNING,
-    HARD_STOP,
-    MAX_ATTEMPTS,
-    COOLDOWN_MS,
-    BACKEND_MAX_AGE_MS,
-    backendStatus,
-    backendUnavailable,
-    brokerPnlUsable,
-    nyParts,
-    timeInsideWindow,
-    clock,
-    evaluate,
-    sync,
-    writeJournal,
-    confirmBrokerEntries,
-    invalidateConflictingReviews
+    PRELIM_START,MAIN_START,END,WARNING,HARD_STOP,MAX_ATTEMPTS,COOLDOWN_MS,
+    BACKEND_MAX_AGE_MS,backendStatus,backendUnavailable,brokerPnlUsable,nyParts,
+    timeInsideWindow,clock,evaluate,sync,writeJournal,confirmBrokerEntries,
+    invalidateConflictingReviews,isRealDateKey,validateBackupJournal
   };
 
   if(typeof module !== "undefined") module.exports = api;
 
   if(root.document){
     root.WASPNSession = Object.freeze(api);
+
     const update = () => sync();
     update();
-    root.addEventListener("storage", update);
-    root.addEventListener("focus", update);
-    root.addEventListener("pageshow", update);
-    root.setInterval(update, 1000);
+    root.addEventListener("storage",update);
+    root.addEventListener("focus",update);
+    root.addEventListener("pageshow",update);
+    root.setInterval(update,1000);
+
+    // Data Backup defines its legacy validators in the following inline script.
+    // Install the hardened validators on the next task so the actual file import
+    // handler resolves these stricter functions.
+    if(root.location?.pathname?.endsWith("data-backup.html")){
+      root.setTimeout(() => {
+        root.isDateKey = isRealDateKey;
+        root.validateJournalObject = validateBackupJournal;
+      },0);
+    }
   }
 })(typeof window !== "undefined" ? window : globalThis);
