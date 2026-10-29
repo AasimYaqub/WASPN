@@ -454,8 +454,6 @@
         trade?.brokerTimingReconciled === true
       );
 
-      if(brokerProven) return;
-
       card.querySelectorAll(".reconciled").forEach(node => {
         if(node.textContent.includes("Broker timing reconciled")) node.remove();
       });
@@ -465,12 +463,39 @@
         if(["Entry Time","Exit Time","Duration"].includes(label)) row.remove();
       });
 
-      if(!card.querySelector(".timing-pending")){
-        const pending = document.createElement("div");
-        pending.className = "timing-pending";
-        pending.textContent = "Timing not broker-proven";
-        card.appendChild(pending);
+      card.querySelectorAll(".timing-pending").forEach(node => node.remove());
+
+      if(brokerProven){
+        const reconciled = document.createElement("div");
+        reconciled.className = "reconciled";
+        reconciled.textContent = "Broker timing reconciled";
+        card.appendChild(reconciled);
+
+        const addTimingRow = (label, value) => {
+          const row = document.createElement("div");
+          row.className = "trade-row";
+          const name = document.createElement("span");
+          name.textContent = label;
+          const strong = document.createElement("strong");
+          strong.textContent = value;
+          row.append(name, strong);
+          card.appendChild(row);
+        };
+
+        addTimingRow("Entry Time", formatBrokerTime(trade.entryTime));
+        addTimingRow("Exit Time", formatBrokerTime(trade.exitTime));
+
+        const duration = typeof window.durationLabel === "function"
+          ? window.durationLabel(trade.entryTime, trade.exitTime)
+          : null;
+        if(duration) addTimingRow("Duration", duration);
+        return;
       }
+
+      const pending = document.createElement("div");
+      pending.className = "timing-pending";
+      pending.textContent = "Timing not broker-proven";
+      card.appendChild(pending);
     });
   }
 

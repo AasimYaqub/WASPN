@@ -93,6 +93,14 @@ test('Review strips broker timing claims and aggregate count without provenance'
   assert.match(source,/label === ["']Broker Timing["']/);
 });
 
+test('Review actively replaces stale pending timing for broker-proven trades', () => {
+  const source = read('workflow-nav.js');
+  assert.match(source,/card\.querySelectorAll\("\.timing-pending"\)\.forEach/);
+  assert.match(source,/addTimingRow\("Entry Time", formatBrokerTime\(trade\.entryTime\)\)/);
+  assert.match(source,/addTimingRow\("Exit Time", formatBrokerTime\(trade\.exitTime\)\)/);
+  assert.match(source,/Broker timing reconciled/);
+});
+
 test('Review actively syncs broker journal timing and refreshes the open day', () => {
   const source = read('workflow-nav.js');
   assert.match(source,/function applyReviewJournalSync/);
@@ -116,7 +124,7 @@ test('Backup hardening is installed through session-rules, which Data Backup act
 
 test('hardening release bumps PWA cache', () => {
   const source = read('service-worker.js');
-  assert.match(source,/waspn-pwa-v11/);
+  assert.match(source,/waspn-pwa-v12/);
 });
 
 
