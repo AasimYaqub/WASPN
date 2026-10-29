@@ -12,10 +12,6 @@
   const MAX_ATTEMPTS = 5;
   const STORAGE_KEY = "waspnJournalV2";
 
-  /* ========================================
-     COMMON
-  ======================================== */
-
   function currentFile(){
     return window.location.pathname.split("/").pop() || "";
   }
@@ -40,19 +36,6 @@
     }
   }
 
-  function writeJournalStore(journal){
-    if(window.WASPNSession?.writeJournal){
-      window.WASPNSession.writeJournal(journal);
-    }
-    else{
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(journal));
-    }
-  }
-
-  /* ========================================
-     PWA SERVICE WORKER
-  ======================================== */
-
   function registerServiceWorker(){
     if(!("serviceWorker" in navigator)) return;
 
@@ -67,14 +50,9 @@
     else window.addEventListener("load", register, {once:true});
   }
 
-  /* ========================================
-     JOURNAL BROKER TIMING
-  ======================================== */
-
   function formatBrokerTime(value){
     if(!value) return "—";
     const text = String(value).trim();
-
     if(/^\d{1,2}:\d{2}(?::\d{2})?$/.test(text)) return text;
 
     const parsed = new Date(text);
@@ -158,10 +136,6 @@
     renderJournalTiming();
   }
 
-  /* ========================================
-     JOURNAL RISK BADGE HARDENING
-  ======================================== */
-
   function correctJournalRiskDisplay(){
     if(currentFile() !== "journal.html") return;
 
@@ -200,47 +174,49 @@
       behaviouralRisk
     );
 
+    let text;
+    let className;
+
     if(
       live.windowBreach ||
       live.sessionEnded ||
       live.hardStopReached ||
       maxKnownAttempt >= MAX_ATTEMPTS
     ){
-      riskState.textContent = maxKnownAttempt > MAX_ATTEMPTS ? "BREACH" : "LOCKED";
-      riskState.className = "summary-value red";
+      text = maxKnownAttempt > MAX_ATTEMPTS ? "BREACH" : "LOCKED";
+      className = "summary-value red";
     }
     else if(date === today && !verified){
-      riskState.textContent = "UNVERIFIED";
-      riskState.className = "summary-value amber";
+      text = "UNVERIFIED";
+      className = "summary-value amber";
     }
     else if(warning){
-      riskState.textContent = "WARNING";
-      riskState.className = "summary-value amber";
+      text = "WARNING";
+      className = "summary-value amber";
     }
     else{
-      riskState.textContent = "ACTIVE";
-      riskState.className = "summary-value green";
+      text = "ACTIVE";
+      className = "summary-value green";
     }
+
+    if(riskState.textContent !== text) riskState.textContent = text;
+    if(riskState.className !== className) riskState.className = className;
   }
 
   function applyJournalRiskGuard(){
     if(currentFile() !== "journal.html") return;
 
-    const target = document.getElementById("riskState");
-    if(target){
-      const observer = new MutationObserver(correctJournalRiskDisplay);
-      observer.observe(target, {childList:true, characterData:true, subtree:true, attributes:true});
-    }
-
+    // Do not observe the badge itself: changing its class/text from inside a
+    // MutationObserver can create a self-triggering render loop.
     setInterval(correctJournalRiskDisplay, 750);
+    window.addEventListener("storage", correctJournalRiskDisplay);
+    window.addEventListener("focus", correctJournalRiskDisplay);
+    window.addEventListener("pageshow", correctJournalRiskDisplay);
     window.addEventListener("waspn:tradezero-update", correctJournalRiskDisplay);
     window.addEventListener("waspn:tradezero-journal-update", correctJournalRiskDisplay);
+    document.getElementById("tradeDate")?.addEventListener("change", correctJournalRiskDisplay);
     correctJournalRiskDisplay();
   }
-
-  /* ========================================
-     LIVE ATTEMPT LIMIT BREACH DISPLAY
-  ======================================== */
 
   function applyAttemptBreachDisplay(){
     if(currentFile() !== "live-risk.html") return;
@@ -275,11 +251,7 @@
           Number(live?.maxAttemptReached) || 0
         );
 
-        if(
-          actual > MAX_ATTEMPTS &&
-          !live?.windowBreach &&
-          !live?.hardStopReached
-        ){
+        if(actual > MAX_ATTEMPTS && !live?.windowBreach && !live?.hardStopReached){
           return {
             title:"ATTEMPT LIMIT BREACH — SESSION OVER",
             detail:`${actual} completed attempts confirmed • WASPN limit is 5 • no further trading today.`,
@@ -293,10 +265,6 @@
       window.getOperationalStatus = wrapped;
     }
   }
-
-  /* ========================================
-     +$50 OBJECTIVE DISPLAY
-  ======================================== */
 
   function getTradeZeroState(){
     try{
@@ -343,10 +311,6 @@
     setInterval(renderObjectiveNote, 5000);
   }
 
-  /* ========================================
-     COMPLIANCE SAFETY
-  ======================================== */
-
   function complianceEvidence(date){
     const day = getJournalStore()[date] || {};
     const trades = Array.isArray(day.trades) ? day.trades : [];
@@ -365,7 +329,10 @@
       brokerJournal.complete === true &&
       brokerJournal.dataFresh === true;
 
-    const brokerTimedTrades = trades.filter(trade => trade?.brokerSourceId);
+    const brokerTimedTrades = trades.filter(
+      trade => trade?.brokerSourceId && trade?.brokerTimingReconciled === true
+    );
+
     const timingCoverageComplete =
       completeFresh &&
       Number(brokerJournal.entryCount || 0) === trades.length &&
@@ -408,7 +375,6 @@
     }
     else{
       q1.disabled = false;
-
       if(evidence.allInside){
         q1.checked = true;
         auto1.classList.add("show");
@@ -426,7 +392,6 @@
     }
     else{
       q2.disabled = false;
-
       if(evidence.completeFresh && evidence.maxKnownAttempt <= MAX_ATTEMPTS){
         q2.checked = true;
         auto2.classList.add("show");
@@ -445,10 +410,7 @@
 
     const schedule = () => setTimeout(hardenComplianceUI, 0);
     document.getElementById("date")?.addEventListener("change", schedule);
-
-    // Capture phase ensures known violations are corrected before the existing save handler runs.
     document.getElementById("saveBtn")?.addEventListener("click", hardenComplianceUI, true);
-
     window.addEventListener("storage", schedule);
     window.addEventListener("focus", schedule);
     window.addEventListener("pageshow", schedule);
@@ -457,17 +419,28 @@
     schedule();
   }
 
-  /* ========================================
-     REVIEW TIMING PROVENANCE
-  ======================================== */
-
   function correctReviewTiming(date){
     if(currentFile() !== "calendar-2026.html") return;
 
     const detail = document.getElementById("detail");
     const day = getJournalStore()[date] || {};
     const trades = Array.isArray(day.trades) ? day.trades : [];
-    if(!detail || !trades.length) return;
+    if(!detail) return;
+
+    const provenTimingCount = trades.filter(
+      trade => trade?.brokerSourceId && trade?.brokerTimingReconciled === true
+    ).length;
+
+    // Correct the aggregate timing metric as well as per-trade labels.
+    detail.querySelectorAll(".detail-item").forEach(item => {
+      const label = item.querySelector(".label")?.textContent?.trim();
+      if(label === "Broker Timing"){
+        const value = item.querySelector(".detail-value");
+        if(value){
+          value.textContent = trades.length ? `${provenTimingCount}/${trades.length}` : "—";
+        }
+      }
+    });
 
     const cards = Array.from(detail.querySelectorAll(".trade"));
 
@@ -514,10 +487,6 @@
       window.showDetail = wrapped;
     }
   }
-
-  /* ========================================
-     BACKUP VALIDATION HARDENING
-  ======================================== */
 
   function validDateKey(value){
     if(!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
@@ -623,15 +592,9 @@
 
   function applyBackupValidation(){
     if(currentFile() !== "data-backup.html") return;
-
-    // Existing file-selection handlers resolve these global function bindings at call time.
     window.validateJournalObject = hardenedValidateJournalObject;
     window.isDateKey = validDateKey;
   }
-
-  /* ========================================
-     STYLES / NAV
-  ======================================== */
 
   function injectStyles(){
     if(document.getElementById("waspnWorkflowNavStyles")) return;
@@ -704,10 +667,6 @@
     document.body.appendChild(nav);
     setActive(activeKey());
   }
-
-  /* ========================================
-     START
-  ======================================== */
 
   registerServiceWorker();
 
