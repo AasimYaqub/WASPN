@@ -2,7 +2,7 @@ const CACHE_PREFIX =
   "waspn-pwa-";
 
 const CACHE_NAME =
-  "waspn-pwa-v8";
+  "waspn-pwa-v9";
 
 const APP_SHELL = [
   "./",
@@ -37,929 +37,265 @@ const TOKEN_STORE_NAME =
 const TOKEN_KEY =
   "api-token";
 
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(APP_SHELL))
+      .then(() => self.skipWaiting())
+  );
+});
 
-/* ========================================
-   INSTALL
-======================================== */
-
-self.addEventListener(
-  "install",
-  event => {
-
-    event.waitUntil(
-      caches
-        .open(
-          CACHE_NAME
-        )
-        .then(
-          cache =>
-            cache.addAll(
-              APP_SHELL
-            )
-        )
-        .then(
-          () =>
-            self.skipWaiting()
-        )
-    );
-
-  }
-);
-
-
-/* ========================================
-   ACTIVATE
-======================================== */
-
-self.addEventListener(
-  "activate",
-  event => {
-
-    event.waitUntil(
-      caches
-        .keys()
-        .then(
-          keys =>
-            Promise.all(
-              keys.map(
-                key => {
-
-                  /*
-                    Only remove older WASPN caches.
-
-                    CacheStorage is shared across
-                    the GitHub Pages origin, so
-                    unrelated caches must remain.
-                  */
-
-                  if(
-                    key.startsWith(
-                      CACHE_PREFIX
-                    ) &&
-                    key !==
-                      CACHE_NAME
-                  ){
-
-                    return caches.delete(
-                      key
-                    );
-
-                  }
-
-                  return Promise.resolve();
-
-                }
-              )
-            )
-        )
-        .then(
-          () =>
-            self.clients.claim()
-        )
-    );
-
-  }
-);
-
-
-/* ========================================
-   TOKEN STORAGE
-======================================== */
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(
+        keys.map(key => {
+          if(key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME){
+            return caches.delete(key);
+          }
+          return Promise.resolve();
+        })
+      ))
+      .then(() => self.clients.claim())
+  );
+});
 
 function openTokenDatabase(){
+  return new Promise((resolve,reject) => {
+    const request = indexedDB.open(TOKEN_DB_NAME,TOKEN_DB_VERSION);
 
-  return new Promise(
-    (
-      resolve,
-      reject
-    ) => {
+    request.onupgradeneeded = () => {
+      const database = request.result;
+      if(!database.objectStoreNames.contains(TOKEN_STORE_NAME)){
+        database.createObjectStore(TOKEN_STORE_NAME);
+      }
+    };
 
-      const request =
-        indexedDB.open(
-          TOKEN_DB_NAME,
-          TOKEN_DB_VERSION
-        );
-
-
-      request.onupgradeneeded =
-        () => {
-
-          const database =
-            request.result;
-
-
-          if(
-            !database.objectStoreNames
-              .contains(
-                TOKEN_STORE_NAME
-              )
-          ){
-
-            database.createObjectStore(
-              TOKEN_STORE_NAME
-            );
-
-          }
-
-        };
-
-
-      request.onsuccess =
-        () => {
-
-          resolve(
-            request.result
-          );
-
-        };
-
-
-      request.onerror =
-        () => {
-
-          reject(
-            request.error
-          );
-
-        };
-
-    }
-  );
-
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
 }
 
+async function saveApiToken(token){
+  const clean = String(token || "").trim();
 
-async function saveApiToken(
-  token
-){
-
-  const clean =
-    String(
-      token || ""
-    ).trim();
-
-
-  if(
-    !clean
-  ){
-
+  if(!clean){
     await clearApiToken();
-
     return;
-
   }
 
+  const database = await openTokenDatabase();
 
-  const database =
-    await openTokenDatabase();
-
-
-  await new Promise(
-    (
-      resolve,
-      reject
-    ) => {
-
-      const transaction =
-        database.transaction(
-          TOKEN_STORE_NAME,
-          "readwrite"
-        );
-
-
-      const store =
-        transaction.objectStore(
-          TOKEN_STORE_NAME
-        );
-
-
-      store.put(
-        clean,
-        TOKEN_KEY
-      );
-
-
-      transaction.oncomplete =
-        () => resolve();
-
-
-      transaction.onerror =
-        () =>
-          reject(
-            transaction.error
-          );
-
-
-      transaction.onabort =
-        () =>
-          reject(
-            transaction.error
-          );
-
-    }
-  );
-
+  await new Promise((resolve,reject) => {
+    const transaction = database.transaction(TOKEN_STORE_NAME,"readwrite");
+    transaction.objectStore(TOKEN_STORE_NAME).put(clean,TOKEN_KEY);
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject(transaction.error);
+    transaction.onabort = () => reject(transaction.error);
+  });
 
   database.close();
-
 }
-
 
 async function getApiToken(){
-
   try{
-
-    const database =
-      await openTokenDatabase();
-
-
-    const value =
-      await new Promise(
-        (
-          resolve,
-          reject
-        ) => {
-
-          const transaction =
-            database.transaction(
-              TOKEN_STORE_NAME,
-              "readonly"
-            );
-
-
-          const store =
-            transaction.objectStore(
-              TOKEN_STORE_NAME
-            );
-
-
-          const request =
-            store.get(
-              TOKEN_KEY
-            );
-
-
-          request.onsuccess =
-            () =>
-              resolve(
-                request.result ||
-                ""
-              );
-
-
-          request.onerror =
-            () =>
-              reject(
-                request.error
-              );
-
-        }
-      );
-
-
+    const database = await openTokenDatabase();
+    const value = await new Promise((resolve,reject) => {
+      const transaction = database.transaction(TOKEN_STORE_NAME,"readonly");
+      const request = transaction.objectStore(TOKEN_STORE_NAME).get(TOKEN_KEY);
+      request.onsuccess = () => resolve(request.result || "");
+      request.onerror = () => reject(request.error);
+    });
     database.close();
-
-
-    return String(
-      value || ""
-    ).trim();
-
+    return String(value || "").trim();
   }
-
   catch{
-
     return "";
-
   }
-
 }
-
 
 async function clearApiToken(){
-
   try{
-
-    const database =
-      await openTokenDatabase();
-
-
-    await new Promise(
-      (
-        resolve,
-        reject
-      ) => {
-
-        const transaction =
-          database.transaction(
-            TOKEN_STORE_NAME,
-            "readwrite"
-          );
-
-
-        transaction
-          .objectStore(
-            TOKEN_STORE_NAME
-          )
-          .delete(
-            TOKEN_KEY
-          );
-
-
-        transaction.oncomplete =
-          () => resolve();
-
-
-        transaction.onerror =
-          () =>
-            reject(
-              transaction.error
-            );
-
-
-        transaction.onabort =
-          () =>
-            reject(
-              transaction.error
-            );
-
-      }
-    );
-
-
+    const database = await openTokenDatabase();
+    await new Promise((resolve,reject) => {
+      const transaction = database.transaction(TOKEN_STORE_NAME,"readwrite");
+      transaction.objectStore(TOKEN_STORE_NAME).delete(TOKEN_KEY);
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () => reject(transaction.error);
+      transaction.onabort = () => reject(transaction.error);
+    });
     database.close();
-
   }
-
   catch{
-
-    /*
-      Nothing else to do.
-
-      Failure to clear a missing/nonexistent
-      database is harmless.
-    */
-
+    // Clearing an absent/unavailable token store is harmless.
   }
-
 }
 
+self.addEventListener("message", event => {
+  const data = event.data;
+  if(!data || typeof data !== "object") return;
 
-/* ========================================
-   CLIENT MESSAGES
-======================================== */
-
-self.addEventListener(
-  "message",
-  event => {
-
-    const data =
-      event.data;
-
-
-    if(
-      !data ||
-      typeof data !==
-        "object"
-    ){
-
-      return;
-
-    }
-
-
-    if(
-      data.type ===
-        "WASPN_SET_API_TOKEN"
-    ){
-
-      event.waitUntil(
-        saveApiToken(
-          data.token
-        )
-        .then(
-          () => {
-
-            event.source
-              ?.postMessage(
-                {
-                  type:
-                    "WASPN_API_TOKEN_SAVED"
-                }
-              );
-
-          }
-        )
-      );
-
-      return;
-
-    }
-
-
-    if(
-      data.type ===
-        "WASPN_CLEAR_API_TOKEN"
-    ){
-
-      event.waitUntil(
-        clearApiToken()
-          .then(
-            () => {
-
-              event.source
-                ?.postMessage(
-                  {
-                    type:
-                      "WASPN_API_TOKEN_CLEARED"
-                  }
-                );
-
-            }
-          )
-      );
-
-      return;
-
-    }
-
-
-    if(
-      data.type ===
-        "WASPN_CHECK_API_TOKEN"
-    ){
-
-      event.waitUntil(
-        getApiToken()
-          .then(
-            token => {
-
-              event.source
-                ?.postMessage(
-                  {
-                    type:
-                      "WASPN_API_TOKEN_STATUS",
-
-                    configured:
-                      Boolean(
-                        token
-                      )
-                  }
-                );
-
-            }
-          )
-      );
-
-    }
-
+  if(data.type === "WASPN_SET_API_TOKEN"){
+    event.waitUntil(
+      saveApiToken(data.token)
+        .then(() => event.source?.postMessage({type:"WASPN_API_TOKEN_SAVED"}))
+    );
+    return;
   }
-);
 
+  if(data.type === "WASPN_CLEAR_API_TOKEN"){
+    event.waitUntil(
+      clearApiToken()
+        .then(() => event.source?.postMessage({type:"WASPN_API_TOKEN_CLEARED"}))
+    );
+    return;
+  }
 
-/* ========================================
-   HELPERS
-======================================== */
+  if(data.type === "WASPN_CHECK_API_TOKEN"){
+    event.waitUntil(
+      getApiToken()
+        .then(token => event.source?.postMessage({
+          type:"WASPN_API_TOKEN_STATUS",
+          configured:Boolean(token)
+        }))
+    );
+  }
+});
 
-function isSameOrigin(
-  request
-){
-
+function isSameOrigin(request){
   try{
+    return new URL(request.url).origin === self.location.origin;
+  }
+  catch{
+    return false;
+  }
+}
+
+function isNavigation(request){
+  return request.mode === "navigate";
+}
+
+function isHtmlLike(request){
+  try{
+    const url = new URL(request.url);
+    return (
+      isNavigation(request) ||
+      url.pathname.endsWith(".html") ||
+      url.pathname.endsWith(".js") ||
+      url.pathname.endsWith(".webmanifest")
+    );
+  }
+  catch{
+    return false;
+  }
+}
+
+function isProtectedBackendRequest(request){
+  try{
+    const url = new URL(request.url);
+    if(url.origin !== WASPN_BACKEND_ORIGIN) return false;
 
     return (
-      new URL(
-        request.url
-      ).origin ===
-      self.location.origin
+      url.pathname.startsWith("/api/waspn/") ||
+      url.pathname.startsWith("/api/tradezero/")
     );
-
   }
-
   catch{
-
     return false;
-
   }
-
 }
 
+async function authenticatedBackendFetch(request){
+  const token = await getApiToken();
+  const headers = new Headers(request.headers);
 
-function isNavigation(
-  request
-){
+  // Never add an empty Authorization header.
+  if(token){
+    headers.set("Authorization","Bearer " + token);
+  }
 
-  return (
-    request.mode ===
-    "navigate"
+  const authenticatedRequest = new Request(
+    request,
+    {
+      headers,
+      cache:"no-store"
+    }
   );
 
+  return fetch(authenticatedRequest);
 }
 
-
-function isHtmlLike(
-  request
-){
-
+async function networkFirst(request){
   try{
+    const response = await fetch(request,{cache:"no-store"});
 
-    const url =
-      new URL(
-        request.url
-      );
-
-
-    return (
-      isNavigation(
-        request
-      ) ||
-      url.pathname.endsWith(
-        ".html"
-      ) ||
-      url.pathname.endsWith(
-        ".js"
-      ) ||
-      url.pathname.endsWith(
-        ".webmanifest"
-      )
-    );
-
-  }
-
-  catch{
-
-    return false;
-
-  }
-
-}
-
-
-function isProtectedBackendRequest(
-  request
-){
-
-  try{
-
-    const url =
-      new URL(
-        request.url
-      );
-
-
-    if(
-      url.origin !==
-        WASPN_BACKEND_ORIGIN
-    ){
-
-      return false;
-
+    if(response && response.ok){
+      const cache = await caches.open(CACHE_NAME);
+      await cache.put(request,response.clone());
     }
-
-
-    return (
-      url.pathname.startsWith(
-        "/api/waspn/"
-      ) ||
-      url.pathname.startsWith(
-        "/api/tradezero/"
-      )
-    );
-
-  }
-
-  catch{
-
-    return false;
-
-  }
-
-}
-
-
-/* ========================================
-   AUTHENTICATED BACKEND FETCH
-======================================== */
-
-async function authenticatedBackendFetch(
-  request
-){
-
-  const token =
-    await getApiToken();
-
-
-  const headers =
-    new Headers(
-      request.headers
-    );
-
-
-  /*
-    Never add an empty Authorization header.
-
-    Until the user has configured the frontend
-    token, the protected backend will correctly
-    respond with 401.
-  */
-
-  if(
-    token
-  ){
-
-    headers.set(
-      "Authorization",
-      "Bearer " +
-      token
-    );
-
-  }
-
-
-  const authenticatedRequest =
-    new Request(
-      request,
-      {
-        headers,
-        cache:
-          "no-store"
-      }
-    );
-
-
-  return fetch(
-    authenticatedRequest
-  );
-
-}
-
-
-/* ========================================
-   NETWORK FIRST
-======================================== */
-
-async function networkFirst(
-  request
-){
-
-  try{
-
-    const response =
-      await fetch(
-        request,
-        {
-          cache:
-            "no-store"
-        }
-      );
-
-
-    if(
-      response &&
-      response.ok
-    ){
-
-      const cache =
-        await caches.open(
-          CACHE_NAME
-        );
-
-
-      await cache.put(
-        request,
-        response.clone()
-      );
-
-    }
-
 
     return response;
-
   }
-
   catch{
+    const cached = await caches.match(request);
+    if(cached) return cached;
 
-    const cached =
-      await caches.match(
-        request
-      );
-
-
-    if(
-      cached
-    ){
-
-      return cached;
-
+    if(isNavigation(request)){
+      return await caches.match("./index.html");
     }
 
-
-    if(
-      isNavigation(
-        request
-      )
-    ){
-
-      return (
-        await caches.match(
-          "./index.html"
-        )
-      );
-
-    }
-
-
-    throw new Error(
-      "Network unavailable and no cached response exists."
-    );
-
+    throw new Error("Network unavailable and no cached response exists.");
   }
-
 }
 
+async function cacheFirst(request){
+  const cached = await caches.match(request);
 
-/* ========================================
-   CACHE FIRST
-======================================== */
-
-async function cacheFirst(
-  request
-){
-
-  const cached =
-    await caches.match(
-      request
-    );
-
-
-  if(
-    cached
-  ){
-
-    fetch(
-      request
-    )
-    .then(
-      async response => {
-
-        if(
-          response &&
-          response.ok
-        ){
-
-          const cache =
-            await caches.open(
-              CACHE_NAME
-            );
-
-
-          await cache.put(
-            request,
-            response.clone()
-          );
-
+  if(cached){
+    fetch(request)
+      .then(async response => {
+        if(response && response.ok){
+          const cache = await caches.open(CACHE_NAME);
+          await cache.put(request,response.clone());
         }
-
-      }
-    )
-    .catch(
-      () => {}
-    );
-
+      })
+      .catch(() => {});
 
     return cached;
-
   }
 
+  const response = await fetch(request);
 
-  const response =
-    await fetch(
-      request
-    );
-
-
-  if(
-    response &&
-    response.ok
-  ){
-
-    const cache =
-      await caches.open(
-        CACHE_NAME
-      );
-
-
-    await cache.put(
-      request,
-      response.clone()
-    );
-
+  if(response && response.ok){
+    const cache = await caches.open(CACHE_NAME);
+    await cache.put(request,response.clone());
   }
-
 
   return response;
-
 }
 
+self.addEventListener("fetch", event => {
+  const request = event.request;
 
-/* ========================================
-   FETCH
-======================================== */
-
-self.addEventListener(
-  "fetch",
-  event => {
-
-    const request =
-      event.request;
-
-
-    /*
-      WASPN/TradeZero backend requests are
-      authenticated here and are NEVER cached.
-    */
-
-    if(
-      isProtectedBackendRequest(
-        request
-      )
-    ){
-
-      if(
-        request.method ===
-          "GET"
-      ){
-
-        event.respondWith(
-          authenticatedBackendFetch(
-            request
-          )
-        );
-
-      }
-
-      return;
-
+  // Protected backend GETs are authenticated here and are never cached.
+  if(isProtectedBackendRequest(request)){
+    if(request.method === "GET"){
+      event.respondWith(authenticatedBackendFetch(request));
     }
-
-
-    if(
-      request.method !==
-        "GET"
-    ){
-
-      return;
-
-    }
-
-
-    /*
-      Other external requests pass directly
-      through the browser network layer.
-    */
-
-    if(
-      !isSameOrigin(
-        request
-      )
-    ){
-
-      return;
-
-    }
-
-
-    /*
-      HTML, JS, manifest and navigations use
-      network-first so updates arrive quickly.
-    */
-
-    if(
-      isHtmlLike(
-        request
-      )
-    ){
-
-      event.respondWith(
-        networkFirst(
-          request
-        )
-      );
-
-      return;
-
-    }
-
-
-    /*
-      Remaining same-origin static resources use
-      cache-first with background refresh.
-    */
-
-    event.respondWith(
-      cacheFirst(
-        request
-      )
-    );
-
+    return;
   }
-);
+
+  if(request.method !== "GET") return;
+
+  // Other external requests pass directly through the browser network layer.
+  if(!isSameOrigin(request)) return;
+
+  // HTML, JS, manifest and navigations use network-first so releases replace stale PWA assets quickly.
+  if(isHtmlLike(request)){
+    event.respondWith(networkFirst(request));
+    return;
+  }
+
+  // Remaining same-origin static resources use cache-first with background refresh.
+  event.respondWith(cacheFirst(request));
+});
