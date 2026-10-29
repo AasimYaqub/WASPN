@@ -1,1347 +1,709 @@
 (() => {
+  "use strict";
 
   const STEPS = [
-    {
-      key:"home",
-      label:"Home",
-      icon:"⌂",
-      href:"index.html",
-      color:"#22c7ff"
-    },
-    {
-      key:"risk",
-      label:"Risk",
-      icon:"1",
-      href:"live-risk.html",
-      color:"#22c7ff"
-    },
-    {
-      key:"journal",
-      label:"Journal",
-      icon:"2",
-      href:"journal.html",
-      color:"#75dbe7"
-    },
-    {
-      key:"end",
-      label:"End",
-      icon:"3",
-      href:"compliance.html",
-      color:"#35d07f"
-    },
-    {
-      key:"review",
-      label:"Review",
-      icon:"4",
-      href:"calendar-2026.html",
-      color:"#aeb7ff"
-    }
+    {key:"home",label:"Home",icon:"⌂",href:"index.html",color:"#22c7ff"},
+    {key:"risk",label:"Risk",icon:"1",href:"live-risk.html",color:"#22c7ff"},
+    {key:"journal",label:"Journal",icon:"2",href:"journal.html",color:"#75dbe7"},
+    {key:"end",label:"End",icon:"3",href:"compliance.html",color:"#35d07f"},
+    {key:"review",label:"Review",icon:"4",href:"calendar-2026.html",color:"#aeb7ff"}
   ];
 
+  const MAX_ATTEMPTS = 5;
+  const STORAGE_KEY = "waspnJournalV2";
+
+  /* ========================================
+     COMMON
+  ======================================== */
+
+  function currentFile(){
+    return window.location.pathname.split("/").pop() || "";
+  }
+
+  function activeKey(){
+    const file = currentFile();
+    if(file === "" || file === "index.html") return "home";
+    if(file === "live-risk.html") return "risk";
+    if(file === "journal.html") return "journal";
+    if(file === "compliance.html") return "end";
+    if(file === "calendar-2026.html") return "review";
+    return "";
+  }
+
+  function getJournalStore(){
+    try{
+      const value = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+      return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+    }
+    catch{
+      return {};
+    }
+  }
+
+  function writeJournalStore(journal){
+    if(window.WASPNSession?.writeJournal){
+      window.WASPNSession.writeJournal(journal);
+    }
+    else{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(journal));
+    }
+  }
 
   /* ========================================
      PWA SERVICE WORKER
   ======================================== */
 
   function registerServiceWorker(){
-
-    if(
-      !(
-        "serviceWorker"
-        in navigator
-      )
-    ){
-      return;
-    }
-
+    if(!("serviceWorker" in navigator)) return;
 
     const register = () => {
-
       navigator.serviceWorker
-        .register(
-          "./service-worker.js",
-          {
-            scope:"./"
-          }
-        )
-        .then(
-          registration => {
-
-            registration.update();
-
-          }
-        )
-        .catch(
-          error => {
-
-            console.warn(
-              "WASPN service worker registration failed:",
-              error
-            );
-
-          }
-        );
-
+        .register("./service-worker.js", {scope:"./"})
+        .then(registration => registration.update())
+        .catch(error => console.warn("WASPN service worker registration failed:", error));
     };
 
-
-    if(
-      document.readyState ===
-      "complete"
-    ){
-
-      register();
-
-    }
-
-    else{
-
-      window.addEventListener(
-        "load",
-        register,
-        {
-          once:true
-        }
-      );
-
-    }
-
+    if(document.readyState === "complete") register();
+    else window.addEventListener("load", register, {once:true});
   }
-
-
 
   /* ========================================
-     ACTIVE PAGE
+     JOURNAL BROKER TIMING
   ======================================== */
 
-  function currentFile(){
+  function formatBrokerTime(value){
+    if(!value) return "—";
+    const text = String(value).trim();
 
-    return (
-      window.location.pathname
-        .split("/")
-        .pop() || ""
-    );
+    if(/^\d{1,2}:\d{2}(?::\d{2})?$/.test(text)) return text;
 
-  }
-
-
-  function activeKey(){
-
-    const file =
-      currentFile();
-
-
-    if(
-      file === "" ||
-      file === "index.html"
-    ){
-      return "home";
+    const parsed = new Date(text);
+    if(!Number.isNaN(parsed.getTime())){
+      return new Intl.DateTimeFormat("en-GB", {
+        timeZone:"America/New_York",
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit",
+        hourCycle:"h23"
+      }).format(parsed);
     }
-
-
-    if(
-      file === "live-risk.html"
-    ){
-      return "risk";
-    }
-
-
-    if(
-      file === "journal.html"
-    ){
-      return "journal";
-    }
-
-
-    if(
-      file === "compliance.html"
-    ){
-      return "end";
-    }
-
-
-    if(
-      file === "calendar-2026.html"
-    ){
-      return "review";
-    }
-
-
-    return "";
-
-  }
-
-
-
-  /* ========================================
-     COMPLIANCE SAFETY OVERRIDE
-  ======================================== */
-
-  function getJournalStore(){
-
-    try{
-
-      return JSON.parse(
-        localStorage.getItem(
-          "waspnJournalV2"
-        )
-      ) || {};
-
-    }
-
-    catch{
-
-      return {};
-
-    }
-
-  }
-
-
-  function formatBrokerTime(
-    value
-  ){
-
-    if(
-      !value
-    ){
-      return "—";
-    }
-
-
-    const text =
-      String(
-        value
-      )
-      .trim();
-
-
-    if(
-      /^\d{1,2}:\d{2}(?::\d{2})?$/
-        .test(
-          text
-        )
-    ){
-
-      return text;
-
-    }
-
-
-    const parsed =
-      new Date(
-        text
-      );
-
-
-    if(
-      !Number.isNaN(
-        parsed.getTime()
-      )
-    ){
-
-      return new Intl.DateTimeFormat(
-        "en-GB",
-        {
-          timeZone:
-            "America/New_York",
-          hour:
-            "2-digit",
-          minute:
-            "2-digit",
-          second:
-            "2-digit",
-          hourCycle:
-            "h23"
-        }
-      )
-      .format(
-        parsed
-      );
-
-    }
-
 
     return text;
-
   }
-
 
   function ensureJournalTimingFields(){
+    if(currentFile() !== "journal.html") return;
 
-    if(
-      currentFile() !==
-      "journal.html"
-    ){
-      return;
-    }
+    for(let i = 1; i <= MAX_ATTEMPTS; i++){
+      const entryPrice = document.getElementById("entryPrice" + i);
+      const grid = entryPrice?.closest(".grid");
+      if(!grid || document.getElementById("waspnEntryTime" + i)) continue;
 
-
-    for(
-      let i = 1;
-      i <= 5;
-      i++
-    ){
-
-      const entryPrice =
-        document.getElementById(
-          "entryPrice" +
-          i
-        );
-
-
-      const grid =
-        entryPrice
-          ?.closest(
-            ".grid"
-          );
-
-
-      if(
-        !grid ||
-        document.getElementById(
-          "waspnEntryTime" +
-          i
-        )
-      ){
-        continue;
-      }
-
-
-      const entryWrap =
-        document.createElement(
-          "div"
-        );
-
-      entryWrap.className =
-        "field waspn-broker-time-field";
-
+      const entryWrap = document.createElement("div");
+      entryWrap.className = "field waspn-broker-time-field";
       entryWrap.innerHTML = `
-        <label>
-          Entry Time • Broker
-        </label>
-        <input
-          id="waspnEntryTime${i}"
-          type="text"
-          readonly
-          value="—"
-          aria-label="Broker entry time"
-        >
+        <label>Entry Time • Broker</label>
+        <input id="waspnEntryTime${i}" type="text" readonly value="—" aria-label="Broker entry time">
       `;
 
-
-      const exitWrap =
-        document.createElement(
-          "div"
-        );
-
-      exitWrap.className =
-        "field waspn-broker-time-field";
-
+      const exitWrap = document.createElement("div");
+      exitWrap.className = "field waspn-broker-time-field";
       exitWrap.innerHTML = `
-        <label>
-          Exit Time • Broker
-        </label>
-        <input
-          id="waspnExitTime${i}"
-          type="text"
-          readonly
-          value="—"
-          aria-label="Broker exit time"
-        >
+        <label>Exit Time • Broker</label>
+        <input id="waspnExitTime${i}" type="text" readonly value="—" aria-label="Broker exit time">
       `;
 
-
-      grid.appendChild(
-        entryWrap
-      );
-
-      grid.appendChild(
-        exitWrap
-      );
-
+      grid.appendChild(entryWrap);
+      grid.appendChild(exitWrap);
     }
-
   }
-
 
   function renderJournalTiming(){
-
-    if(
-      currentFile() !==
-      "journal.html"
-    ){
-      return;
-    }
-
-
+    if(currentFile() !== "journal.html") return;
     ensureJournalTimingFields();
 
+    const date = document.getElementById("tradeDate")?.value;
+    const day = date ? getJournalStore()[date] || {} : {};
+    const trades = Array.isArray(day.trades) ? day.trades : [];
 
-    const date =
-      document.getElementById(
-        "tradeDate"
-      )?.value;
-
-
-    const day =
-      date
-        ? getJournalStore()[
-            date
-          ] || {}
-        : {};
-
-
-    const trades =
-      Array.isArray(
-        day.trades
-      )
-        ? day.trades
-        : [];
-
-
-    for(
-      let i = 1;
-      i <= 5;
-      i++
-    ){
-
-      const trade =
-        trades[
-          i - 1
-        ] || {};
-
-
-      const entry =
-        document.getElementById(
-          "waspnEntryTime" +
-          i
-        );
-
-      const exit =
-        document.getElementById(
-          "waspnExitTime" +
-          i
-        );
-
-
-      if(
-        entry
-      ){
-
-        entry.value =
-          formatBrokerTime(
-            trade.entryTime
-          );
-
-      }
-
-
-      if(
-        exit
-      ){
-
-        exit.value =
-          formatBrokerTime(
-            trade.exitTime
-          );
-
-      }
-
+    for(let i = 1; i <= MAX_ATTEMPTS; i++){
+      const trade = trades[i - 1] || {};
+      const entry = document.getElementById("waspnEntryTime" + i);
+      const exit = document.getElementById("waspnExitTime" + i);
+      if(entry) entry.value = trade.brokerSourceId ? formatBrokerTime(trade.entryTime) : "—";
+      if(exit) exit.value = trade.brokerSourceId ? formatBrokerTime(trade.exitTime) : "—";
     }
-
   }
-
 
   function applyJournalTiming(){
-
-    if(
-      currentFile() !==
-      "journal.html"
-    ){
-      return;
-    }
-
-
+    if(currentFile() !== "journal.html") return;
     ensureJournalTimingFields();
 
-
-    if(
-      typeof window.loadDay ===
-        "function" &&
-      !window.loadDay
-        .__waspnTimingWrapped
-    ){
-
-      const originalLoadDay =
-        window.loadDay;
-
-
-      const wrapped =
-        function(
-          ...args
-        ){
-
-          const result =
-            originalLoadDay.apply(
-              this,
-              args
-            );
-
-
-          setTimeout(
-            renderJournalTiming,
-            0
-          );
-
-
-          return result;
-
-        };
-
-
-      wrapped.__waspnTimingWrapped =
-        true;
-
-
-      window.loadDay =
-        wrapped;
-
+    if(typeof window.loadDay === "function" && !window.loadDay.__waspnTimingWrapped){
+      const originalLoadDay = window.loadDay;
+      const wrapped = function(...args){
+        const result = originalLoadDay.apply(this, args);
+        setTimeout(renderJournalTiming, 0);
+        return result;
+      };
+      wrapped.__waspnTimingWrapped = true;
+      window.loadDay = wrapped;
     }
 
-
-    document
-      .getElementById(
-        "tradeDate"
-      )
-      ?.addEventListener(
-        "change",
-        () =>
-          setTimeout(
-            renderJournalTiming,
-            0
-          )
-      );
-
-
-    window.addEventListener(
-      "storage",
-      renderJournalTiming
-    );
-
-    window.addEventListener(
-      "focus",
-      renderJournalTiming
-    );
-
-    window.addEventListener(
-      "pageshow",
-      renderJournalTiming
-    );
-
-
+    document.getElementById("tradeDate")?.addEventListener("change", () => setTimeout(renderJournalTiming, 0));
+    window.addEventListener("storage", renderJournalTiming);
+    window.addEventListener("focus", renderJournalTiming);
+    window.addEventListener("pageshow", renderJournalTiming);
+    window.addEventListener("waspn:tradezero-journal-update", renderJournalTiming);
     renderJournalTiming();
-
   }
 
+  /* ========================================
+     JOURNAL RISK BADGE HARDENING
+  ======================================== */
 
+  function correctJournalRiskDisplay(){
+    if(currentFile() !== "journal.html") return;
+
+    const date = document.getElementById("tradeDate")?.value;
+    const liveAttempt = document.getElementById("liveAttempt");
+    const riskState = document.getElementById("riskState");
+    if(!date || !liveAttempt || !riskState) return;
+
+    const day = getJournalStore()[date] || {};
+    const live = day.liveRisk;
+    if(!live) return;
+
+    const maxKnownAttempt = Math.max(
+      Number(live.attempt) || 0,
+      Number(live.maxAttemptReached) || 0
+    );
+
+    const today = window.WASPNSession?.nyParts().date;
+    const verified = window.WASPNSession?.backendStatus().verified === true;
+
+    liveAttempt.textContent =
+      date === today && !verified && !maxKnownAttempt
+        ? "—"
+        : maxKnownAttempt + "/5";
+
+    const behaviouralRisk = !!(
+      live.tilt ||
+      live.behaviouralLock?.active ||
+      live.behaviouralLock?.resetGateRequired
+    );
+
+    const warning = !!(
+      live.warningReached ||
+      live.lossWarning?.active ||
+      live.lossWarning?.resetGateRequired ||
+      behaviouralRisk
+    );
+
+    if(
+      live.windowBreach ||
+      live.sessionEnded ||
+      live.hardStopReached ||
+      maxKnownAttempt >= MAX_ATTEMPTS
+    ){
+      riskState.textContent = maxKnownAttempt > MAX_ATTEMPTS ? "BREACH" : "LOCKED";
+      riskState.className = "summary-value red";
+    }
+    else if(date === today && !verified){
+      riskState.textContent = "UNVERIFIED";
+      riskState.className = "summary-value amber";
+    }
+    else if(warning){
+      riskState.textContent = "WARNING";
+      riskState.className = "summary-value amber";
+    }
+    else{
+      riskState.textContent = "ACTIVE";
+      riskState.className = "summary-value green";
+    }
+  }
+
+  function applyJournalRiskGuard(){
+    if(currentFile() !== "journal.html") return;
+
+    const target = document.getElementById("riskState");
+    if(target){
+      const observer = new MutationObserver(correctJournalRiskDisplay);
+      observer.observe(target, {childList:true, characterData:true, subtree:true, attributes:true});
+    }
+
+    setInterval(correctJournalRiskDisplay, 750);
+    window.addEventListener("waspn:tradezero-update", correctJournalRiskDisplay);
+    window.addEventListener("waspn:tradezero-journal-update", correctJournalRiskDisplay);
+    correctJournalRiskDisplay();
+  }
+
+  /* ========================================
+     LIVE ATTEMPT LIMIT BREACH DISPLAY
+  ======================================== */
+
+  function applyAttemptBreachDisplay(){
+    if(currentFile() !== "live-risk.html") return;
+
+    if(typeof window.buildDisplayLive === "function" && !window.buildDisplayLive.__waspnAttemptWrapped){
+      const original = window.buildDisplayLive;
+      const wrapped = function(localLive, broker){
+        const result = original(localLive, broker);
+        const actual = Math.max(
+          Number(localLive?.attempt) || 0,
+          Number(localLive?.maxAttemptReached) || 0,
+          Number(broker?.attempts) || 0
+        );
+
+        if(actual > MAX_ATTEMPTS){
+          result.attempt = actual;
+          result.maxAttemptReached = actual;
+        }
+
+        return result;
+      };
+      wrapped.__waspnAttemptWrapped = true;
+      window.buildDisplayLive = wrapped;
+    }
+
+    if(typeof window.getOperationalStatus === "function" && !window.getOperationalStatus.__waspnAttemptWrapped){
+      const original = window.getOperationalStatus;
+      const wrapped = function(live, clock){
+        const result = original(live, clock);
+        const actual = Math.max(
+          Number(live?.attempt) || 0,
+          Number(live?.maxAttemptReached) || 0
+        );
+
+        if(
+          actual > MAX_ATTEMPTS &&
+          !live?.windowBreach &&
+          !live?.hardStopReached
+        ){
+          return {
+            title:"ATTEMPT LIMIT BREACH — SESSION OVER",
+            detail:`${actual} completed attempts confirmed • WASPN limit is 5 • no further trading today.`,
+            className:"stop"
+          };
+        }
+
+        return result;
+      };
+      wrapped.__waspnAttemptWrapped = true;
+      window.getOperationalStatus = wrapped;
+    }
+  }
 
   /* ========================================
      +$50 OBJECTIVE DISPLAY
   ======================================== */
 
   function getTradeZeroState(){
-
     try{
-
-      if(
-        !window.WASPNTradeZero ||
-        typeof window.WASPNTradeZero.getState !==
-          "function"
-      ){
-        return null;
-      }
-
-
+      if(!window.WASPNTradeZero || typeof window.WASPNTradeZero.getState !== "function") return null;
       return window.WASPNTradeZero.getState();
-
     }
-
     catch{
-
       return null;
-
     }
-
   }
-
 
   function ensureObjectiveNote(){
+    if(currentFile() !== "live-risk.html") return null;
 
-    if(
-      currentFile() !==
-      "live-risk.html"
-    ){
-      return null;
-    }
+    let note = document.getElementById("waspnObjectiveNote");
+    if(note) return note;
 
-
-    let note =
-      document.getElementById(
-        "waspnObjectiveNote"
-      );
-
-
-    if(
-      note
-    ){
-      return note;
-    }
-
-
-    note =
-      document.createElement(
-        "div"
-      );
-
-
-    note.id =
-      "waspnObjectiveNote";
-
-    note.className =
-      "waspn-objective-note";
-
+    note = document.createElement("div");
+    note.id = "waspnObjectiveNote";
+    note.className = "waspn-objective-note";
     note.innerHTML = `
-      <strong>
-        +$50 OBJECTIVE REACHED
-      </strong>
-      <span>
-        Informational only • WASPN does not close the session here. Continue only for a genuinely valid setup within all remaining risk rules.
-      </span>
+      <strong>+$50 OBJECTIVE REACHED</strong>
+      <span>Informational only • WASPN does not close the session here. Continue only for a genuinely valid setup within all remaining risk rules.</span>
     `;
 
-
-    const cockpit =
-      document.querySelector(
-        ".cockpit"
-      );
-
-
-    if(
-      cockpit
-    ){
-
-      cockpit.insertAdjacentElement(
-        "afterend",
-        note
-      );
-
-    }
-
-
+    document.querySelector(".cockpit")?.insertAdjacentElement("afterend", note);
     return note;
-
   }
-
 
   function renderObjectiveNote(){
-
-    if(
-      currentFile() !==
-      "live-risk.html"
-    ){
-      return;
-    }
-
-
-    const note =
-      ensureObjectiveNote();
-
-
-    if(
-      !note
-    ){
-      return;
-    }
-
-
-    const state =
-      getTradeZeroState();
-
-
-    note.classList.toggle(
-      "active",
-      !!(
-        state &&
-        state.usable === true &&
-        state.objectiveReached ===
-          true
-      )
-    );
-
+    if(currentFile() !== "live-risk.html") return;
+    const note = ensureObjectiveNote();
+    const state = getTradeZeroState();
+    note?.classList.toggle("active", !!(state?.usable === true && state.objectiveReached === true));
   }
-
 
   function applyObjectiveDisplay(){
-
-    if(
-      currentFile() !==
-      "live-risk.html"
-    ){
-      return;
-    }
-
-
+    if(currentFile() !== "live-risk.html") return;
     ensureObjectiveNote();
-
     renderObjectiveNote();
-
-
-    window.addEventListener(
-      "waspn:tradezero-update",
-      renderObjectiveNote
-    );
-
-
-    window.addEventListener(
-      "focus",
-      renderObjectiveNote
-    );
-
-
-    window.addEventListener(
-      "pageshow",
-      renderObjectiveNote
-    );
-
-
-    setInterval(
-      renderObjectiveNote,
-      5000
-    );
-
+    window.addEventListener("waspn:tradezero-update", renderObjectiveNote);
+    window.addEventListener("focus", renderObjectiveNote);
+    window.addEventListener("pageshow", renderObjectiveNote);
+    setInterval(renderObjectiveNote, 5000);
   }
 
+  /* ========================================
+     COMPLIANCE SAFETY
+  ======================================== */
 
+  function complianceEvidence(date){
+    const day = getJournalStore()[date] || {};
+    const trades = Array.isArray(day.trades) ? day.trades : [];
+    const brokerJournal = day.brokerJournal || {};
+    const live = day.liveRisk || {};
+
+    const maxKnownAttempt = Math.max(
+      Number(live.attempt) || 0,
+      Number(live.maxAttemptReached) || 0,
+      Number(brokerJournal.provenAttemptCount) || 0,
+      Number(brokerJournal.entryCount) || 0
+    );
+
+    const completeFresh =
+      brokerJournal.source === "TRADEZERO" &&
+      brokerJournal.complete === true &&
+      brokerJournal.dataFresh === true;
+
+    const brokerTimedTrades = trades.filter(trade => trade?.brokerSourceId);
+    const timingCoverageComplete =
+      completeFresh &&
+      Number(brokerJournal.entryCount || 0) === trades.length &&
+      brokerTimedTrades.length === trades.length;
+
+    const allInside =
+      trades.length > 0 &&
+      timingCoverageComplete &&
+      trades.every(trade => window.WASPNSession?.timeInsideWindow(trade.entryTime) === true);
+
+    return {
+      day,
+      live,
+      trades,
+      brokerJournal,
+      maxKnownAttempt,
+      completeFresh,
+      allInside,
+      windowViolation:live.windowBreach === true,
+      attemptViolation:maxKnownAttempt > MAX_ATTEMPTS
+    };
+  }
+
+  function hardenComplianceUI(){
+    if(currentFile() !== "compliance.html") return;
+
+    const date = document.getElementById("date")?.value;
+    const q1 = document.getElementById("q1");
+    const q2 = document.getElementById("q2");
+    const auto1 = document.getElementById("auto1");
+    const auto2 = document.getElementById("auto2");
+    if(!date || !q1 || !q2 || !auto1 || !auto2) return;
+
+    const evidence = complianceEvidence(date);
+
+    if(evidence.windowViolation){
+      q1.checked = false;
+      q1.disabled = true;
+      auto1.classList.remove("show");
+    }
+    else{
+      q1.disabled = false;
+
+      if(evidence.allInside){
+        q1.checked = true;
+        auto1.classList.add("show");
+      }
+      else if(auto1.classList.contains("show")){
+        q1.checked = false;
+        auto1.classList.remove("show");
+      }
+    }
+
+    if(evidence.attemptViolation){
+      q2.checked = false;
+      q2.disabled = true;
+      auto2.classList.remove("show");
+    }
+    else{
+      q2.disabled = false;
+
+      if(evidence.completeFresh && evidence.maxKnownAttempt <= MAX_ATTEMPTS){
+        q2.checked = true;
+        auto2.classList.add("show");
+      }
+      else if(auto2.classList.contains("show")){
+        q2.checked = false;
+        auto2.classList.remove("show");
+      }
+    }
+
+    if(typeof window.updateScores === "function") window.updateScores();
+  }
+
+  function applyComplianceSafety(){
+    if(currentFile() !== "compliance.html") return;
+
+    const schedule = () => setTimeout(hardenComplianceUI, 0);
+    document.getElementById("date")?.addEventListener("change", schedule);
+
+    // Capture phase ensures known violations are corrected before the existing save handler runs.
+    document.getElementById("saveBtn")?.addEventListener("click", hardenComplianceUI, true);
+
+    window.addEventListener("storage", schedule);
+    window.addEventListener("focus", schedule);
+    window.addEventListener("pageshow", schedule);
+    window.addEventListener("waspn:tradezero-update", schedule);
+    window.addEventListener("waspn:tradezero-journal-update", schedule);
+    schedule();
+  }
 
   /* ========================================
-     STYLES
+     REVIEW TIMING PROVENANCE
+  ======================================== */
+
+  function correctReviewTiming(date){
+    if(currentFile() !== "calendar-2026.html") return;
+
+    const detail = document.getElementById("detail");
+    const day = getJournalStore()[date] || {};
+    const trades = Array.isArray(day.trades) ? day.trades : [];
+    if(!detail || !trades.length) return;
+
+    const cards = Array.from(detail.querySelectorAll(".trade"));
+
+    trades.forEach((trade, index) => {
+      const card = cards[index];
+      if(!card) return;
+
+      const brokerProven = !!(
+        trade?.brokerSourceId &&
+        trade?.brokerTimingReconciled === true
+      );
+
+      if(brokerProven) return;
+
+      card.querySelectorAll(".reconciled").forEach(node => {
+        if(node.textContent.includes("Broker timing reconciled")) node.remove();
+      });
+
+      card.querySelectorAll(".trade-row").forEach(row => {
+        const label = row.querySelector("span")?.textContent?.trim();
+        if(["Entry Time","Exit Time","Duration"].includes(label)) row.remove();
+      });
+
+      if(!card.querySelector(".timing-pending")){
+        const pending = document.createElement("div");
+        pending.className = "timing-pending";
+        pending.textContent = "Timing not broker-proven";
+        card.appendChild(pending);
+      }
+    });
+  }
+
+  function applyReviewProvenance(){
+    if(currentFile() !== "calendar-2026.html") return;
+
+    if(typeof window.showDetail === "function" && !window.showDetail.__waspnProvenanceWrapped){
+      const original = window.showDetail;
+      const wrapped = function(date){
+        const result = original(date);
+        setTimeout(() => correctReviewTiming(date), 0);
+        return result;
+      };
+      wrapped.__waspnProvenanceWrapped = true;
+      window.showDetail = wrapped;
+    }
+  }
+
+  /* ========================================
+     BACKUP VALIDATION HARDENING
+  ======================================== */
+
+  function validDateKey(value){
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+    const [year, month, day] = value.split("-").map(Number);
+    const date = new Date(Date.UTC(year, month - 1, day));
+    return (
+      date.getUTCFullYear() === year &&
+      date.getUTCMonth() === month - 1 &&
+      date.getUTCDate() === day
+    );
+  }
+
+  function plainObject(value){
+    return value !== null && typeof value === "object" && !Array.isArray(value);
+  }
+
+  function optionalFinite(value, label){
+    if(value === undefined || value === null || value === "") return;
+    if(!Number.isFinite(Number(value))) throw new Error(label + " must be a finite number.");
+  }
+
+  function validateTrade(trade, date, index){
+    if(!plainObject(trade)) throw new Error(`Invalid trade ${index + 1} in ${date}.`);
+
+    for(const field of ["entryPrice","exitPrice","shares","fees","grossPnl","calculatedNet","netPnl","actualNet","brokerGrossPnl","brokerFees","brokerCommission"]){
+      optionalFinite(trade[field], `${date} trade ${index + 1} ${field}`);
+    }
+
+    if(Number(trade.fees ?? 0) < 0) throw new Error(`Negative fee in ${date} trade ${index + 1}.`);
+    if(Number(trade.shares ?? 0) < 0) throw new Error(`Negative share count in ${date} trade ${index + 1}.`);
+
+    for(const field of ["ticker","side","setupReason","entryTime","exitTime","brokerSourceId"]){
+      if(trade[field] !== undefined && trade[field] !== null && typeof trade[field] !== "string"){
+        throw new Error(`${date} trade ${index + 1} ${field} is invalid.`);
+      }
+    }
+  }
+
+  function hardenedValidateJournalObject(data){
+    if(!plainObject(data)) throw new Error("The WASPN database in this backup is invalid.");
+
+    for(const [date, day] of Object.entries(data)){
+      if(!validDateKey(date)) throw new Error("The backup contains an invalid daily date: " + date);
+      if(!plainObject(day)) throw new Error("Invalid daily record: " + date);
+      if(day.date !== undefined && day.date !== date) throw new Error("Daily record date mismatch: " + date);
+
+      if(day.trades !== undefined){
+        if(!Array.isArray(day.trades) || day.trades.length > MAX_ATTEMPTS){
+          throw new Error("Invalid trades record: " + date);
+        }
+        day.trades.forEach((trade, index) => validateTrade(trade, date, index));
+      }
+
+      for(const field of ["startValue","totalNet","brokerDailyNet"]){
+        optionalFinite(day[field], `${date} ${field}`);
+      }
+
+      if(day.liveRisk !== undefined){
+        if(!plainObject(day.liveRisk)) throw new Error("Invalid live risk record: " + date);
+        for(const field of ["attempt","maxAttemptReached","realisedPnl"]){
+          optionalFinite(day.liveRisk[field], `${date} liveRisk.${field}`);
+        }
+        if(Number(day.liveRisk.attempt ?? 0) < 0 || Number(day.liveRisk.maxAttemptReached ?? 0) < 0){
+          throw new Error("Negative attempt count in " + date);
+        }
+        for(const flag of ["sessionEnded","windowBreach","hardStopReached","warningReached"]){
+          if(day.liveRisk[flag] !== undefined && typeof day.liveRisk[flag] !== "boolean"){
+            throw new Error(`Invalid ${flag} flag in ${date}.`);
+          }
+        }
+      }
+
+      if(day.brokerJournal !== undefined){
+        if(!plainObject(day.brokerJournal)) throw new Error("Invalid broker journal record: " + date);
+        for(const field of ["entryCount","provenAttemptCount"]){
+          optionalFinite(day.brokerJournal[field], `${date} brokerJournal.${field}`);
+          if(Number(day.brokerJournal[field] ?? 0) < 0) throw new Error("Negative broker count in " + date);
+        }
+      }
+
+      if(day.compliance !== undefined){
+        if(!plainObject(day.compliance)) throw new Error("Invalid compliance record: " + date);
+        optionalFinite(day.compliance.score, `${date} compliance.score`);
+        if(Number(day.compliance.score ?? 0) < 0 || Number(day.compliance.score ?? 0) > 3){
+          throw new Error("Compliance score out of range: " + date);
+        }
+      }
+
+      if(day.sessionScore !== undefined){
+        if(!plainObject(day.sessionScore)) throw new Error("Invalid process score record: " + date);
+        optionalFinite(day.sessionScore.score, `${date} sessionScore.score`);
+        if(Number(day.sessionScore.score ?? 0) < 0 || Number(day.sessionScore.score ?? 0) > 5){
+          throw new Error("Process score out of range: " + date);
+        }
+        if(day.sessionScore.answers !== undefined && !plainObject(day.sessionScore.answers)){
+          throw new Error("Invalid process answers: " + date);
+        }
+      }
+    }
+
+    return data;
+  }
+
+  function applyBackupValidation(){
+    if(currentFile() !== "data-backup.html") return;
+
+    // Existing file-selection handlers resolve these global function bindings at call time.
+    window.validateJournalObject = hardenedValidateJournalObject;
+    window.isDateKey = validDateKey;
+  }
+
+  /* ========================================
+     STYLES / NAV
   ======================================== */
 
   function injectStyles(){
+    if(document.getElementById("waspnWorkflowNavStyles")) return;
 
-    if(
-      document.getElementById(
-        "waspnWorkflowNavStyles"
-      )
-    ){
-      return;
-    }
-
-
-    const style =
-      document.createElement(
-        "style"
-      );
-
-
-    style.id =
-      "waspnWorkflowNavStyles";
-
-
+    const style = document.createElement("style");
+    style.id = "waspnWorkflowNavStyles";
     style.textContent = `
-
-      body{
-
-        padding-bottom:
-          calc(
-            96px +
-            env(safe-area-inset-bottom)
-          ) !important;
-
-      }
-
-
-      .waspn-broker-time-field input[readonly]{
-
-        color:#9eb4c4 !important;
-
-        background:#0b151d !important;
-
-        border-color:
-          rgba(
-            34,
-            199,
-            255,
-            .22
-          ) !important;
-
-        font-variant-numeric:
-          tabular-nums;
-
-      }
-
-
-      .waspn-objective-note{
-
-        display:none;
-
-        margin-top:8px;
-
-        padding:11px 12px;
-
-        border:
-          1px solid
-          rgba(
-            53,
-            208,
-            127,
-            .35
-          );
-
-        border-radius:13px;
-
-        background:#0e1c15;
-
-        color:#a9dbc0;
-
-        font-size:9px;
-
-        line-height:1.45;
-
-        text-align:center;
-
-      }
-
-
-      .waspn-objective-note.active{
-
-        display:block;
-
-      }
-
-
-      .waspn-objective-note strong{
-
-        display:block;
-
-        color:#35d07f;
-
-        font-size:10px;
-
-        font-weight:950;
-
-        letter-spacing:.8px;
-
-        margin-bottom:3px;
-
-      }
-
-
-      .waspn-objective-note span{
-
-        color:#99b7a7;
-
-        font-weight:750;
-
-      }
-
-
-      .waspn-workflow-nav{
-
-        position:fixed;
-
-        left:0;
-        right:0;
-        bottom:0;
-
-        z-index:9999;
-
-        padding:
-          7px
-          7px
-          max(
-            7px,
-            env(safe-area-inset-bottom)
-          );
-
-        background:
-          rgba(
-            5,
-            9,
-            13,
-            .96
-          );
-
-        border-top:
-          1px solid
-          #273442;
-
-        backdrop-filter:
-          blur(16px);
-
-        -webkit-backdrop-filter:
-          blur(16px);
-
-      }
-
-
-      .waspn-workflow-inner{
-
-        width:100%;
-
-        max-width:1000px;
-
-        margin:0 auto;
-
-        display:grid;
-
-        grid-template-columns:
-          repeat(
-            5,
-            minmax(0,1fr)
-          );
-
-        gap:5px;
-
-      }
-
-
-      .waspn-workflow-item{
-
-        position:relative;
-
-        min-width:0;
-        min-height:61px;
-
-        display:flex;
-
-        flex-direction:column;
-
-        align-items:center;
-        justify-content:center;
-
-        gap:3px;
-
-        padding:
-          6px 2px;
-
-        overflow:hidden;
-
-        border:
-          1px solid
-          #283645;
-
-        border-radius:12px;
-
-        background:
-          linear-gradient(
-            180deg,
-            #111922,
-            #0d141b
-          );
-
-        color:#9ba9b7;
-
-        text-decoration:none;
-
-        text-align:center;
-
-        font-size:
-          clamp(
-            8px,
-            2.3vw,
-            10px
-          );
-
-        font-weight:850;
-
-        line-height:1.1;
-
-        transition:
-          transform .12s ease,
-          border-color .12s ease,
-          background .12s ease,
-          color .12s ease;
-
-        -webkit-tap-highlight-color:
-          transparent;
-
-      }
-
-
-      .waspn-workflow-item:active{
-
-        transform:
-          scale(.96);
-
-      }
-
-
-      .waspn-workflow-icon{
-
-        min-width:25px;
-        height:25px;
-
-        display:flex;
-
-        align-items:center;
-        justify-content:center;
-
-        color:white;
-
-        font-size:14px;
-        font-weight:950;
-
-        line-height:1;
-
-      }
-
-
-      .waspn-workflow-item[data-step="home"]
-      .waspn-workflow-icon{
-
-        font-size:18px;
-
-      }
-
-
-      .waspn-workflow-label{
-
-        overflow:hidden;
-
-        text-overflow:ellipsis;
-
-        white-space:nowrap;
-
-        max-width:100%;
-
-      }
-
-
-      .waspn-workflow-item.active{
-
-        color:
-          var(
-            --workflow-active,
-            #22c7ff
-          );
-
-        border-color:
-          var(
-            --workflow-active,
-            #22c7ff
-          );
-
-        background:#111c24;
-
-        box-shadow:
-          inset
-          0
-          0
-          18px
-          color-mix(
-            in srgb,
-            var(
-              --workflow-active,
-              #22c7ff
-            )
-            10%,
-            transparent
-          );
-
-      }
-
-
-      .waspn-workflow-item.active
-      .waspn-workflow-icon{
-
-        color:
-          var(
-            --workflow-active,
-            #22c7ff
-          );
-
-        text-shadow:
-          0 0 10px
-          var(
-            --workflow-active,
-            #22c7ff
-          );
-
-      }
-
-
-      .waspn-workflow-item.active::before{
-
-        content:"";
-
-        position:absolute;
-
-        left:12px;
-        right:12px;
-        top:0;
-
-        height:2px;
-
-        border-radius:
-          0 0 5px 5px;
-
-        background:
-          var(
-            --workflow-active,
-            #22c7ff
-          );
-
-        box-shadow:
-          0
-          0
-          8px
-          var(
-            --workflow-active,
-            #22c7ff
-          );
-
-      }
-
-
-      @media(max-width:390px){
-
-        .waspn-workflow-inner{
-          gap:4px;
-        }
-
-
-        .waspn-workflow-item{
-
-          min-height:58px;
-
-          border-radius:10px;
-
-        }
-
-
-        .waspn-workflow-icon{
-
-          min-width:23px;
-          height:23px;
-
-          font-size:13px;
-
-        }
-
-      }
-
+      body{padding-bottom:calc(96px + env(safe-area-inset-bottom)) !important}
+      .waspn-broker-time-field input[readonly]{color:#9eb4c4 !important;background:#0b151d !important;border-color:rgba(34,199,255,.22) !important;font-variant-numeric:tabular-nums}
+      .waspn-objective-note{display:none;margin-top:8px;padding:11px 12px;border:1px solid rgba(53,208,127,.35);border-radius:13px;background:#0e1c15;color:#a9dbc0;font-size:9px;line-height:1.45;text-align:center}
+      .waspn-objective-note.active{display:block}
+      .waspn-objective-note strong{display:block;color:#35d07f;font-size:10px;font-weight:950;letter-spacing:.8px;margin-bottom:3px}
+      .waspn-objective-note span{color:#99b7a7;font-weight:750}
+      .waspn-workflow-nav{position:fixed;left:0;right:0;bottom:0;z-index:9999;padding:7px 7px max(7px,env(safe-area-inset-bottom));background:rgba(5,9,13,.96);border-top:1px solid #273442;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+      .waspn-workflow-inner{width:100%;max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+      .waspn-workflow-item{position:relative;min-width:0;min-height:61px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 2px;overflow:hidden;border:1px solid #283645;border-radius:12px;background:linear-gradient(180deg,#111922,#0d141b);color:#9ba9b7;text-decoration:none;text-align:center;font-size:clamp(8px,2.3vw,10px);font-weight:850;line-height:1.1;-webkit-tap-highlight-color:transparent}
+      .waspn-workflow-item:active{transform:scale(.96)}
+      .waspn-workflow-icon{min-width:25px;height:25px;display:flex;align-items:center;justify-content:center;color:white;font-size:14px;font-weight:950;line-height:1}
+      .waspn-workflow-item[data-step="home"] .waspn-workflow-icon{font-size:18px}
+      .waspn-workflow-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+      .waspn-workflow-item.active{color:var(--workflow-active,#22c7ff);border-color:var(--workflow-active,#22c7ff);background:#111c24}
+      .waspn-workflow-item.active .waspn-workflow-icon{color:var(--workflow-active,#22c7ff);text-shadow:0 0 10px var(--workflow-active,#22c7ff)}
+      .waspn-workflow-item.active::before{content:"";position:absolute;left:12px;right:12px;top:0;height:2px;border-radius:0 0 5px 5px;background:var(--workflow-active,#22c7ff);box-shadow:0 0 8px var(--workflow-active,#22c7ff)}
+      @media(max-width:390px){.waspn-workflow-inner{gap:4px}.waspn-workflow-item{min-height:58px;border-radius:10px}.waspn-workflow-icon{min-width:23px;height:23px;font-size:13px}}
     `;
-
-
-    document.head.appendChild(
-      style
-    );
-
+    document.head.appendChild(style);
   }
 
-
-
-  /* ========================================
-     ACTIVE NAV
-  ======================================== */
-
-  function setActive(
-    key
-  ){
-
-    document
-      .querySelectorAll(
-        ".waspn-workflow-item"
-      )
-      .forEach(
-        link => {
-
-          const active =
-            link.dataset.step ===
-            key;
-
-
-          link.classList.toggle(
-            "active",
-            active
-          );
-
-
-          if(
-            active
-          ){
-
-            link.setAttribute(
-              "aria-current",
-              "page"
-            );
-
-          }
-
-          else{
-
-            link.removeAttribute(
-              "aria-current"
-            );
-
-          }
-
-        }
-      );
-
+  function setActive(key){
+    document.querySelectorAll(".waspn-workflow-item").forEach(link => {
+      const active = link.dataset.step === key;
+      link.classList.toggle("active", active);
+      if(active) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
   }
-
-
-
-  /* ========================================
-     BUILD NAV
-  ======================================== */
 
   function buildNav(){
-
     injectStyles();
+    document.querySelectorAll(".bottom-nav, .waspn-workflow-nav").forEach(element => element.remove());
 
+    const nav = document.createElement("nav");
+    nav.className = "waspn-workflow-nav";
+    nav.setAttribute("aria-label", "WASPN chronological workflow");
 
-    document
-      .querySelectorAll(
-        ".bottom-nav, .waspn-workflow-nav"
-      )
-      .forEach(
-        element =>
-          element.remove()
-      );
+    const inner = document.createElement("div");
+    inner.className = "waspn-workflow-inner";
 
+    STEPS.forEach(step => {
+      const link = document.createElement("a");
+      link.href = step.href;
+      link.className = "waspn-workflow-item";
+      link.dataset.step = step.key;
+      link.style.setProperty("--workflow-active", step.color);
+      link.addEventListener("click", () => setActive(step.key));
 
-    const nav =
-      document.createElement(
-        "nav"
-      );
+      const icon = document.createElement("span");
+      icon.className = "waspn-workflow-icon";
+      icon.textContent = step.icon;
 
+      const label = document.createElement("span");
+      label.className = "waspn-workflow-label";
+      label.textContent = step.label;
 
-    nav.className =
-      "waspn-workflow-nav";
+      link.append(icon, label);
+      inner.appendChild(link);
+    });
 
-
-    nav.setAttribute(
-      "aria-label",
-      "WASPN chronological workflow"
-    );
-
-
-    const inner =
-      document.createElement(
-        "div"
-      );
-
-
-    inner.className =
-      "waspn-workflow-inner";
-
-
-    STEPS.forEach(
-      step => {
-
-        const link =
-          document.createElement(
-            "a"
-          );
-
-
-        link.href =
-          step.href;
-
-
-        link.className =
-          "waspn-workflow-item";
-
-
-        link.dataset.step =
-          step.key;
-
-
-        link.style.setProperty(
-          "--workflow-active",
-          step.color
-        );
-
-
-        link.addEventListener(
-          "click",
-          () => {
-
-            setActive(
-              step.key
-            );
-
-          }
-        );
-
-
-        const icon =
-          document.createElement(
-            "span"
-          );
-
-
-        icon.className =
-          "waspn-workflow-icon";
-
-
-        icon.textContent =
-          step.icon;
-
-
-        const label =
-          document.createElement(
-            "span"
-          );
-
-
-        label.className =
-          "waspn-workflow-label";
-
-
-        label.textContent =
-          step.label;
-
-
-        link.appendChild(
-          icon
-        );
-
-
-        link.appendChild(
-          label
-        );
-
-
-        inner.appendChild(
-          link
-        );
-
-      }
-    );
-
-
-    nav.appendChild(
-      inner
-    );
-
-
-    document.body.appendChild(
-      nav
-    );
-
-
-    setActive(
-      activeKey()
-    );
-
+    nav.appendChild(inner);
+    document.body.appendChild(nav);
+    setActive(activeKey());
   }
-
-
 
   /* ========================================
      START
@@ -1349,38 +711,22 @@
 
   registerServiceWorker();
 
-
   const start = () => {
-
     injectStyles();
-
-
-
     applyJournalTiming();
-
+    applyJournalRiskGuard();
+    applyAttemptBreachDisplay();
     applyObjectiveDisplay();
-
+    applyComplianceSafety();
+    applyReviewProvenance();
+    applyBackupValidation();
     buildNav();
-
   };
 
-
-  if(
-    document.readyState ===
-    "loading"
-  ){
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      start
-    );
-
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", start);
   }
-
   else{
-
     start();
-
   }
-
 })();
