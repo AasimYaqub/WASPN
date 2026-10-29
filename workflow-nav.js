@@ -297,6 +297,33 @@
         }
 
 
+        /*
+          Always reset the automatic presentation
+          before proving anything for this date.
+        */
+
+        q1.checked =
+          false;
+
+        q2.checked =
+          false;
+
+        q3.checked =
+          false;
+
+        auto1?.classList.remove(
+          "show"
+        );
+
+        auto2?.classList.remove(
+          "show"
+        );
+
+        auto3?.classList.remove(
+          "show"
+        );
+
+
         const trades =
           Array.isArray(
             day?.trades
@@ -306,11 +333,10 @@
 
 
         /*
-          WINDOW RULE
-
-          Only auto-confirm when every recorded
-          trade has a reliable entry time and
-          every entry is inside a WASPN window.
+          Window compliance is only automatically
+          proven when every recorded trade has a
+          reliable entry time and every one falls
+          inside an allowed WASPN window.
         */
 
         if(
@@ -352,14 +378,8 @@
 
 
         /*
-          ATTEMPT RULE
-
-          Partial/reconstructed broker history
+          A partial/reconstructed broker history
           cannot prove there was no sixth trade.
-
-          Auto-confirm only if the broker journal
-          explicitly says the day's history is
-          complete.
         */
 
         const brokerJournal =
@@ -413,13 +433,9 @@
 
 
         /*
-          HARD STOP RULE
-
-          Never automatically certify this.
-
-          WASPN knowing that it locked itself
-          does not prove that no later order
-          was manually placed in TradeZero.
+          The hard-stop question remains manual.
+          A WASPN lock does not prove that the user
+          placed no later order directly in TradeZero.
         */
 
         q3.checked =
@@ -432,11 +448,6 @@
       };
 
 
-    /*
-      Re-run the current Compliance page after
-      replacing its pre-fill logic.
-    */
-
     window.loadDay();
 
   }
@@ -444,300 +455,551 @@
 
 
   /* ========================================
-     CALENDAR DATE SAFETY
+     JOURNAL BROKER TIMING
   ======================================== */
 
-  function getNewYorkToday(){
+  function getJournalStore(){
 
-    const parts =
-      new Intl.DateTimeFormat(
-        "en-CA",
-        {
-          timeZone:"America/New_York",
-          year:"numeric",
-          month:"2-digit",
-          day:"2-digit"
-        }
-      )
-      .formatToParts(
-        new Date()
-      );
+    try{
 
-
-    const data =
-      {};
-
-
-    parts.forEach(
-      part => {
-
-        if(
-          part.type !==
-          "literal"
-        ){
-
-          data[
-            part.type
-          ] =
-            part.value;
-
-        }
-
-      }
-    );
-
-
-    return {
-
-      year:
-        Number(
-          data.year
-        ),
-
-      month:
-        Number(
-          data.month
-        ),
-
-      day:
-        Number(
-          data.day
-        ),
-
-      iso:
-        data.year +
-        "-" +
-        data.month +
-        "-" +
-        data.day
-
-    };
-
-  }
-
-
-  function normalizeCalendarFutureDays(){
-
-    if(
-      currentFile() !==
-      "calendar-2026.html"
-    ){
-      return;
-    }
-
-
-    const today =
-      getNewYorkToday();
-
-
-    const monthMap = {
-
-      Jan:1,
-      Feb:2,
-      Mar:3,
-      Apr:4,
-      May:5,
-      Jun:6,
-      Jul:7,
-      Aug:8,
-      Sep:9,
-      Oct:10,
-      Nov:11,
-      Dec:12
-
-    };
-
-
-    document
-      .querySelectorAll(
-        "#calendarDays .day:not(.empty)"
-      )
-      .forEach(
-        cell => {
-
-          const text =
-            cell
-              .querySelector(
-                ".date"
-              )
-              ?.textContent
-              ?.trim();
-
-
-          if(
-            !text
-          ){
-            return;
-          }
-
-
-          const match =
-            text.match(
-              /^(\d{1,2})\s+([A-Za-z]{3})/
-            );
-
-
-          if(
-            !match
-          ){
-            return;
-          }
-
-
-          const day =
-            Number(
-              match[1]
-            );
-
-          const month =
-            monthMap[
-              match[2]
-            ];
-
-
-          if(
-            !month
-          ){
-            return;
-          }
-
-
-          const date =
-            "2026-" +
-            String(
-              month
-            )
-            .padStart(
-              2,
-              "0"
-            ) +
-            "-" +
-            String(
-              day
-            )
-            .padStart(
-              2,
-              "0"
-            );
-
-
-          const isFuture =
-            date >
-            today.iso;
-
-
-          cell.classList.toggle(
-            "future",
-            isFuture
-          );
-
-        }
-      );
-
-  }
-
-
-  function applyCalendarSafetyOverride(){
-
-    if(
-      currentFile() !==
-      "calendar-2026.html"
-    ){
-      return;
-    }
-
-
-    const today =
-      getNewYorkToday();
-
-    const buttons =
-      Array.from(
-        document.querySelectorAll(
-          ".month-jump"
+      return JSON.parse(
+        localStorage.getItem(
+          "waspnJournalV2"
         )
+      ) || {};
+
+    }
+
+    catch{
+
+      return {};
+
+    }
+
+  }
+
+
+  function formatBrokerTime(
+    value
+  ){
+
+    if(
+      !value
+    ){
+      return "—";
+    }
+
+
+    const text =
+      String(
+        value
+      )
+      .trim();
+
+
+    if(
+      /^\d{1,2}:\d{2}(?::\d{2})?$/
+        .test(
+          text
+        )
+    ){
+
+      return text;
+
+    }
+
+
+    const parsed =
+      new Date(
+        text
       );
 
 
     if(
-      buttons.length
+      !Number.isNaN(
+        parsed.getTime()
+      )
     ){
 
-      let targetMonth =
-        today.month -
-        1;
+      return new Intl.DateTimeFormat(
+        "en-GB",
+        {
+          timeZone:
+            "America/New_York",
+          hour:
+            "2-digit",
+          minute:
+            "2-digit",
+          second:
+            "2-digit",
+          hourCycle:
+            "h23"
+        }
+      )
+      .format(
+        parsed
+      );
+
+    }
 
 
-      if(
-        today.year <
-        2026
-      ){
+    return text;
 
-        targetMonth =
-          0;
-
-      }
-
-      else if(
-        today.year >
-        2026
-      ){
-
-        targetMonth =
-          11;
-
-      }
+  }
 
 
-      targetMonth =
-        Math.max(
-          0,
-          Math.min(
-            11,
-            targetMonth
-          )
+  function ensureJournalTimingFields(){
+
+    if(
+      currentFile() !==
+      "journal.html"
+    ){
+      return;
+    }
+
+
+    for(
+      let i = 1;
+      i <= 5;
+      i++
+    ){
+
+      const entryPrice =
+        document.getElementById(
+          "entryPrice" +
+          i
         );
 
 
-      const target =
-        buttons[
-          targetMonth
-        ];
+      const grid =
+        entryPrice
+          ?.closest(
+            ".grid"
+          );
 
 
       if(
-        target &&
-        !target.classList.contains(
-          "active"
+        !grid ||
+        document.getElementById(
+          "waspnEntryTime" +
+          i
         )
       ){
+        continue;
+      }
 
-        target.click();
+
+      const entryWrap =
+        document.createElement(
+          "div"
+        );
+
+      entryWrap.className =
+        "field waspn-broker-time-field";
+
+      entryWrap.innerHTML = `
+        <label>
+          Entry Time • Broker
+        </label>
+        <input
+          id="waspnEntryTime${i}"
+          type="text"
+          readonly
+          value="—"
+          aria-label="Broker entry time"
+        >
+      `;
+
+
+      const exitWrap =
+        document.createElement(
+          "div"
+        );
+
+      exitWrap.className =
+        "field waspn-broker-time-field";
+
+      exitWrap.innerHTML = `
+        <label>
+          Exit Time • Broker
+        </label>
+        <input
+          id="waspnExitTime${i}"
+          type="text"
+          readonly
+          value="—"
+          aria-label="Broker exit time"
+        >
+      `;
+
+
+      grid.appendChild(
+        entryWrap
+      );
+
+      grid.appendChild(
+        exitWrap
+      );
+
+    }
+
+  }
+
+
+  function renderJournalTiming(){
+
+    if(
+      currentFile() !==
+      "journal.html"
+    ){
+      return;
+    }
+
+
+    ensureJournalTimingFields();
+
+
+    const date =
+      document.getElementById(
+        "tradeDate"
+      )?.value;
+
+
+    const day =
+      date
+        ? getJournalStore()[
+            date
+          ] || {}
+        : {};
+
+
+    const trades =
+      Array.isArray(
+        day.trades
+      )
+        ? day.trades
+        : [];
+
+
+    for(
+      let i = 1;
+      i <= 5;
+      i++
+    ){
+
+      const trade =
+        trades[
+          i - 1
+        ] || {};
+
+
+      const entry =
+        document.getElementById(
+          "waspnEntryTime" +
+          i
+        );
+
+      const exit =
+        document.getElementById(
+          "waspnExitTime" +
+          i
+        );
+
+
+      if(
+        entry
+      ){
+
+        entry.value =
+          formatBrokerTime(
+            trade.entryTime
+          );
 
       }
 
 
-      buttons.forEach(
-        button => {
+      if(
+        exit
+      ){
 
-          button.addEventListener(
-            "click",
-            () => {
-
-              setTimeout(
-                normalizeCalendarFutureDays,
-                0
-              );
-
-            }
+        exit.value =
+          formatBrokerTime(
+            trade.exitTime
           );
 
-        }
+      }
+
+    }
+
+  }
+
+
+  function applyJournalTiming(){
+
+    if(
+      currentFile() !==
+      "journal.html"
+    ){
+      return;
+    }
+
+
+    ensureJournalTimingFields();
+
+
+    if(
+      typeof window.loadDay ===
+        "function" &&
+      !window.loadDay
+        .__waspnTimingWrapped
+    ){
+
+      const originalLoadDay =
+        window.loadDay;
+
+
+      const wrapped =
+        function(
+          ...args
+        ){
+
+          const result =
+            originalLoadDay.apply(
+              this,
+              args
+            );
+
+
+          setTimeout(
+            renderJournalTiming,
+            0
+          );
+
+
+          return result;
+
+        };
+
+
+      wrapped.__waspnTimingWrapped =
+        true;
+
+
+      window.loadDay =
+        wrapped;
+
+    }
+
+
+    document
+      .getElementById(
+        "tradeDate"
+      )
+      ?.addEventListener(
+        "change",
+        () =>
+          setTimeout(
+            renderJournalTiming,
+            0
+          )
+      );
+
+
+    window.addEventListener(
+      "storage",
+      renderJournalTiming
+    );
+
+    window.addEventListener(
+      "focus",
+      renderJournalTiming
+    );
+
+    window.addEventListener(
+      "pageshow",
+      renderJournalTiming
+    );
+
+
+    renderJournalTiming();
+
+  }
+
+
+
+  /* ========================================
+     +$50 OBJECTIVE DISPLAY
+  ======================================== */
+
+  function getTradeZeroState(){
+
+    try{
+
+      if(
+        !window.WASPNTradeZero ||
+        typeof window.WASPNTradeZero.getState !==
+          "function"
+      ){
+        return null;
+      }
+
+
+      return window.WASPNTradeZero.getState();
+
+    }
+
+    catch{
+
+      return null;
+
+    }
+
+  }
+
+
+  function ensureObjectiveNote(){
+
+    if(
+      currentFile() !==
+      "live-risk.html"
+    ){
+      return null;
+    }
+
+
+    let note =
+      document.getElementById(
+        "waspnObjectiveNote"
+      );
+
+
+    if(
+      note
+    ){
+      return note;
+    }
+
+
+    note =
+      document.createElement(
+        "div"
+      );
+
+
+    note.id =
+      "waspnObjectiveNote";
+
+    note.className =
+      "waspn-objective-note";
+
+    note.innerHTML = `
+      <strong>
+        +$50 OBJECTIVE REACHED
+      </strong>
+      <span>
+        Informational only • WASPN does not close the session here. Continue only for a genuinely valid setup within all remaining risk rules.
+      </span>
+    `;
+
+
+    const cockpit =
+      document.querySelector(
+        ".cockpit"
+      );
+
+
+    if(
+      cockpit
+    ){
+
+      cockpit.insertAdjacentElement(
+        "afterend",
+        note
       );
 
     }
 
 
-    normalizeCalendarFutureDays();
+    return note;
+
+  }
+
+
+  function renderObjectiveNote(){
+
+    if(
+      currentFile() !==
+      "live-risk.html"
+    ){
+      return;
+    }
+
+
+    const note =
+      ensureObjectiveNote();
+
+
+    if(
+      !note
+    ){
+      return;
+    }
+
+
+    const state =
+      getTradeZeroState();
+
+
+    note.classList.toggle(
+      "active",
+      !!(
+        state &&
+        state.usable === true &&
+        state.objectiveReached ===
+          true
+      )
+    );
+
+  }
+
+
+  function applyObjectiveDisplay(){
+
+    if(
+      currentFile() !==
+      "live-risk.html"
+    ){
+      return;
+    }
+
+
+    ensureObjectiveNote();
+
+    renderObjectiveNote();
+
+
+    window.addEventListener(
+      "waspn:tradezero-update",
+      renderObjectiveNote
+    );
+
+
+    window.addEventListener(
+      "focus",
+      renderObjectiveNote
+    );
+
+
+    window.addEventListener(
+      "pageshow",
+      renderObjectiveNote
+    );
+
+
+    setInterval(
+      renderObjectiveNote,
+      5000
+    );
 
   }
 
@@ -777,6 +1039,91 @@
             96px +
             env(safe-area-inset-bottom)
           ) !important;
+
+      }
+
+
+      .waspn-broker-time-field input[readonly]{
+
+        color:#9eb4c4 !important;
+
+        background:#0b151d !important;
+
+        border-color:
+          rgba(
+            34,
+            199,
+            255,
+            .22
+          ) !important;
+
+        font-variant-numeric:
+          tabular-nums;
+
+      }
+
+
+      .waspn-objective-note{
+
+        display:none;
+
+        margin-top:8px;
+
+        padding:11px 12px;
+
+        border:
+          1px solid
+          rgba(
+            53,
+            208,
+            127,
+            .35
+          );
+
+        border-radius:13px;
+
+        background:#0e1c15;
+
+        color:#a9dbc0;
+
+        font-size:9px;
+
+        line-height:1.45;
+
+        text-align:center;
+
+      }
+
+
+      .waspn-objective-note.active{
+
+        display:block;
+
+      }
+
+
+      .waspn-objective-note strong{
+
+        display:block;
+
+        color:#35d07f;
+
+        font-size:10px;
+
+        font-weight:950;
+
+        letter-spacing:.8px;
+
+        margin-bottom:3px;
+
+      }
+
+
+      .waspn-objective-note span{
+
+        color:#99b7a7;
+
+        font-weight:750;
 
       }
 
@@ -1286,9 +1633,13 @@
 
   const start = () => {
 
+    injectStyles();
+
     applyComplianceSafetyOverride();
 
-    applyCalendarSafetyOverride();
+    applyJournalTiming();
+
+    applyObjectiveDisplay();
 
     buildNav();
 
