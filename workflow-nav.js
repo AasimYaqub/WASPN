@@ -67,22 +67,12 @@
         .then(
           registration => {
 
-            /*
-              Check GitHub for a newer worker
-              whenever WASPN is opened online.
-            */
-
             registration.update();
 
           }
         )
         .catch(
           error => {
-
-            /*
-              A failed registration must never
-              interfere with trading controls.
-            */
 
             console.warn(
               "WASPN service worker registration failed:",
@@ -178,6 +168,576 @@
 
 
     return "";
+
+  }
+
+
+
+  /* ========================================
+     COMPLIANCE SAFETY OVERRIDE
+  ======================================== */
+
+  function complianceTimeInsideWindow(
+    value
+  ){
+
+    if(
+      !value ||
+      !/^\d{1,2}:\d{2}/
+        .test(
+          String(value)
+        )
+    ){
+      return null;
+    }
+
+
+    const match =
+      String(value)
+        .match(
+          /^(\d{1,2}):(\d{2})/
+        );
+
+
+    if(
+      !match
+    ){
+      return null;
+    }
+
+
+    const hour =
+      Number(match[1]);
+
+    const minute =
+      Number(match[2]);
+
+    const mins =
+      hour * 60 +
+      minute;
+
+
+    const preliminary =
+      mins >= 390 &&
+      mins < 420;
+
+    const main =
+      mins >= 540 &&
+      mins < 660;
+
+
+    return (
+      preliminary ||
+      main
+    );
+
+  }
+
+
+  function applyComplianceSafetyOverride(){
+
+    if(
+      currentFile() !==
+      "compliance.html"
+    ){
+      return;
+    }
+
+
+    if(
+      typeof window.loadDay !==
+        "function"
+    ){
+      return;
+    }
+
+
+    window.applyStructuralPrefill =
+      function(
+        day
+      ){
+
+        const q1 =
+          document.getElementById(
+            "q1"
+          );
+
+        const q2 =
+          document.getElementById(
+            "q2"
+          );
+
+        const q3 =
+          document.getElementById(
+            "q3"
+          );
+
+        const auto1 =
+          document.getElementById(
+            "auto1"
+          );
+
+        const auto2 =
+          document.getElementById(
+            "auto2"
+          );
+
+        const auto3 =
+          document.getElementById(
+            "auto3"
+          );
+
+
+        if(
+          !q1 ||
+          !q2 ||
+          !q3
+        ){
+          return;
+        }
+
+
+        const trades =
+          Array.isArray(
+            day?.trades
+          )
+            ? day.trades
+            : [];
+
+
+        /*
+          WINDOW RULE
+
+          Only auto-confirm when every recorded
+          trade has a reliable entry time and
+          every entry is inside a WASPN window.
+        */
+
+        if(
+          trades.length > 0
+        ){
+
+          const allTimed =
+            trades.every(
+              trade =>
+                complianceTimeInsideWindow(
+                  trade?.entryTime
+                ) !== null
+            );
+
+          const allInside =
+            allTimed &&
+            trades.every(
+              trade =>
+                complianceTimeInsideWindow(
+                  trade?.entryTime
+                ) === true
+            );
+
+
+          if(
+            allInside
+          ){
+
+            q1.checked =
+              true;
+
+            auto1?.classList.add(
+              "show"
+            );
+
+          }
+
+        }
+
+
+        /*
+          ATTEMPT RULE
+
+          Partial/reconstructed broker history
+          cannot prove there was no sixth trade.
+
+          Auto-confirm only if the broker journal
+          explicitly says the day's history is
+          complete.
+        */
+
+        const brokerJournal =
+          day?.brokerJournal;
+
+        const brokerHistoryComplete =
+          brokerJournal?.complete ===
+            true &&
+          brokerJournal?.dataFresh !==
+            false;
+
+
+        if(
+          brokerHistoryComplete
+        ){
+
+          const live =
+            day?.liveRisk;
+
+          const maxAttempt =
+            Math.max(
+              Number(
+                live?.maxAttemptReached ||
+                0
+              ),
+              Number(
+                live?.attempt ||
+                0
+              ),
+              trades.length
+            );
+
+
+          if(
+            Number.isFinite(
+              maxAttempt
+            ) &&
+            maxAttempt <= 5
+          ){
+
+            q2.checked =
+              true;
+
+            auto2?.classList.add(
+              "show"
+            );
+
+          }
+
+        }
+
+
+        /*
+          HARD STOP RULE
+
+          Never automatically certify this.
+
+          WASPN knowing that it locked itself
+          does not prove that no later order
+          was manually placed in TradeZero.
+        */
+
+        q3.checked =
+          false;
+
+        auto3?.classList.remove(
+          "show"
+        );
+
+      };
+
+
+    /*
+      Re-run the current Compliance page after
+      replacing its pre-fill logic.
+    */
+
+    window.loadDay();
+
+  }
+
+
+
+  /* ========================================
+     CALENDAR DATE SAFETY
+  ======================================== */
+
+  function getNewYorkToday(){
+
+    const parts =
+      new Intl.DateTimeFormat(
+        "en-CA",
+        {
+          timeZone:"America/New_York",
+          year:"numeric",
+          month:"2-digit",
+          day:"2-digit"
+        }
+      )
+      .formatToParts(
+        new Date()
+      );
+
+
+    const data =
+      {};
+
+
+    parts.forEach(
+      part => {
+
+        if(
+          part.type !==
+          "literal"
+        ){
+
+          data[
+            part.type
+          ] =
+            part.value;
+
+        }
+
+      }
+    );
+
+
+    return {
+
+      year:
+        Number(
+          data.year
+        ),
+
+      month:
+        Number(
+          data.month
+        ),
+
+      day:
+        Number(
+          data.day
+        ),
+
+      iso:
+        data.year +
+        "-" +
+        data.month +
+        "-" +
+        data.day
+
+    };
+
+  }
+
+
+  function normalizeCalendarFutureDays(){
+
+    if(
+      currentFile() !==
+      "calendar-2026.html"
+    ){
+      return;
+    }
+
+
+    const today =
+      getNewYorkToday();
+
+
+    const monthMap = {
+
+      Jan:1,
+      Feb:2,
+      Mar:3,
+      Apr:4,
+      May:5,
+      Jun:6,
+      Jul:7,
+      Aug:8,
+      Sep:9,
+      Oct:10,
+      Nov:11,
+      Dec:12
+
+    };
+
+
+    document
+      .querySelectorAll(
+        "#calendarDays .day:not(.empty)"
+      )
+      .forEach(
+        cell => {
+
+          const text =
+            cell
+              .querySelector(
+                ".date"
+              )
+              ?.textContent
+              ?.trim();
+
+
+          if(
+            !text
+          ){
+            return;
+          }
+
+
+          const match =
+            text.match(
+              /^(\d{1,2})\s+([A-Za-z]{3})/
+            );
+
+
+          if(
+            !match
+          ){
+            return;
+          }
+
+
+          const day =
+            Number(
+              match[1]
+            );
+
+          const month =
+            monthMap[
+              match[2]
+            ];
+
+
+          if(
+            !month
+          ){
+            return;
+          }
+
+
+          const date =
+            "2026-" +
+            String(
+              month
+            )
+            .padStart(
+              2,
+              "0"
+            ) +
+            "-" +
+            String(
+              day
+            )
+            .padStart(
+              2,
+              "0"
+            );
+
+
+          const isFuture =
+            date >
+            today.iso;
+
+
+          cell.classList.toggle(
+            "future",
+            isFuture
+          );
+
+        }
+      );
+
+  }
+
+
+  function applyCalendarSafetyOverride(){
+
+    if(
+      currentFile() !==
+      "calendar-2026.html"
+    ){
+      return;
+    }
+
+
+    const today =
+      getNewYorkToday();
+
+    const buttons =
+      Array.from(
+        document.querySelectorAll(
+          ".month-jump"
+        )
+      );
+
+
+    if(
+      buttons.length
+    ){
+
+      let targetMonth =
+        today.month -
+        1;
+
+
+      if(
+        today.year <
+        2026
+      ){
+
+        targetMonth =
+          0;
+
+      }
+
+      else if(
+        today.year >
+        2026
+      ){
+
+        targetMonth =
+          11;
+
+      }
+
+
+      targetMonth =
+        Math.max(
+          0,
+          Math.min(
+            11,
+            targetMonth
+          )
+        );
+
+
+      const target =
+        buttons[
+          targetMonth
+        ];
+
+
+      if(
+        target &&
+        !target.classList.contains(
+          "active"
+        )
+      ){
+
+        target.click();
+
+      }
+
+
+      buttons.forEach(
+        button => {
+
+          button.addEventListener(
+            "click",
+            () => {
+
+              setTimeout(
+                normalizeCalendarFutureDays,
+                0
+              );
+
+            }
+          );
+
+        }
+      );
+
+    }
+
+
+    normalizeCalendarFutureDays();
 
   }
 
@@ -724,6 +1284,17 @@
   registerServiceWorker();
 
 
+  const start = () => {
+
+    applyComplianceSafetyOverride();
+
+    applyCalendarSafetyOverride();
+
+    buildNav();
+
+  };
+
+
   if(
     document.readyState ===
     "loading"
@@ -731,14 +1302,14 @@
 
     document.addEventListener(
       "DOMContentLoaded",
-      buildNav
+      start
     );
 
   }
 
   else{
 
-    buildNav();
+    start();
 
   }
 
