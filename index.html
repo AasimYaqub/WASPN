@@ -866,14 +866,6 @@ a{
       );
   }
 
-  .evidence-grid{
-    grid-template-columns:
-      repeat(
-        4,
-        1fr
-      );
-  }
-
 }
 
 </style>
@@ -1200,102 +1192,6 @@ a{
 
 </section>
 
-
-<!-- ======================================
-     EVIDENCE
-====================================== -->
-
-<section class="card">
-
-  <div class="card-title">
-    Evidence Behind the Guardrails
-  </div>
-
-  <div class="card-copy">
-    Operating constraints derived from observed patterns in historical trading performance.
-  </div>
-
-
-  <div class="evidence-grid">
-
-
-    <div class="evidence">
-
-      <div class="label">
-        Best Early Window
-      </div>
-
-      <div class="evidence-value green">
-        +$544
-      </div>
-
-      <div class="evidence-copy">
-        The early-session historical sample produced the strongest result.
-      </div>
-
-    </div>
-
-
-    <div class="evidence">
-
-      <div class="label">
-        Attempts 1–5
-      </div>
-
-      <div class="evidence-value green">
-        +$343
-      </div>
-
-      <div class="evidence-copy">
-        The first five attempts produced positive aggregate performance.
-      </div>
-
-    </div>
-
-
-    <div class="evidence">
-
-      <div class="label">
-        Attempt 6+
-      </div>
-
-      <div class="evidence-value red">
-        -$1,031
-      </div>
-
-      <div class="evidence-copy">
-        Aggregate performance deteriorated materially beyond attempt five.
-      </div>
-
-    </div>
-
-
-    <div class="evidence">
-
-      <div class="label">
-        After 11 AM ET
-      </div>
-
-      <div class="evidence-value red">
-        -$4,768
-      </div>
-
-      <div class="evidence-copy">
-        Trading after 11:00 AM ET generated the largest historical loss segment.
-      </div>
-
-    </div>
-
-
-  </div>
-
-
-  <div class="evidence-note">
-    Operating principle: concentrate activity early, cap attempts and terminate
-    the session before repeated trading begins to degrade decision quality.
-  </div>
-
-</section>
 
 
 <!-- ======================================
