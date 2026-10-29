@@ -35,6 +35,15 @@ test('401 auth recovery clears rejected tokens and bounds retry', () => {
   assert.match(source,/response\.status === 401/);
 });
 
+test('Performance Review is year-aware at runtime', () => {
+  const source = read('tradezero-live.js');
+  assert.match(source,/installReviewYearAwareness/);
+  assert.match(source,/let reviewYear = Number\(ny\.year\)/);
+  assert.match(source,/reviewYear--/);
+  assert.match(source,/reviewYear\+\+/);
+  assert.match(source,/Year-to-Date/);
+});
+
 test('journal reconciliation prioritizes broker attempt slot before ticker fallback', () => {
   const source = read('tradezero-journal.js');
   const preferred = source.indexOf('const preferredIndex');
