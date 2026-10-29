@@ -55,7 +55,6 @@
 <style>
 
 :root{
-
   --bg:#070b10;
   --panel:#10171f;
   --panel2:#151e28;
@@ -69,7 +68,6 @@
   --amber:#f3b84b;
   --blue:#22c7ff;
   --shadow:0 18px 50px rgba(0,0,0,.26);
-
 }
 
 *{
@@ -84,12 +82,9 @@ html{
 }
 
 body{
-
   margin:0;
-
   min-height:100vh;
   min-height:100dvh;
-
   background:
     radial-gradient(
       circle at 50% -10%,
@@ -101,9 +96,7 @@ body{
       #080d12,
       #070b10
     );
-
   color:var(--text);
-
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -111,7 +104,6 @@ body{
     Arial,
     Helvetica,
     sans-serif;
-
 }
 
 button{
@@ -125,76 +117,37 @@ a{
 }
 
 .wrap{
-
   width:100%;
   max-width:900px;
-
   margin:0 auto;
-
   padding:
-    max(
-      10px,
-      env(safe-area-inset-top)
-    )
+    max(10px,env(safe-area-inset-top))
     10px
-    max(
-      24px,
-      env(safe-area-inset-bottom)
-    );
-
+    max(24px,env(safe-area-inset-bottom));
 }
 
-/* ========================================
-   HEADER
-======================================== */
-
 .topbar{
-
   display:grid;
-
-  grid-template-columns:
-    50px 1fr 50px;
-
+  grid-template-columns:50px 1fr 50px;
   align-items:center;
-
   gap:8px;
-
   margin-bottom:8px;
-
 }
 
 .icon-btn{
-
   width:50px;
   height:48px;
-
   display:flex;
-
   align-items:center;
   justify-content:center;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:13px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #121b24,
-      #0d141b
-    );
-
+  background:linear-gradient(180deg,#121b24,#0d141b);
   color:var(--text);
-
   text-decoration:none;
-
   font-size:20px;
   font-weight:900;
-
   cursor:pointer;
-
 }
 
 .icon-btn:active{
@@ -207,159 +160,88 @@ a{
 }
 
 .wordmark{
-
   color:var(--blue);
-
   font-size:11px;
   font-weight:950;
-
   letter-spacing:2.5px;
-
   text-transform:uppercase;
-
 }
 
 .module-name{
-
   margin-top:1px;
-
   font-size:19px;
   font-weight:950;
-
 }
 
 .prototype-strip{
-
   display:flex;
-
   align-items:center;
   justify-content:center;
-
   gap:7px;
-
   margin-bottom:9px;
-
   color:var(--muted);
-
   font-size:9px;
   font-weight:850;
-
   letter-spacing:1.4px;
-
   text-transform:uppercase;
-
 }
 
 .prototype-dot{
-
   width:6px;
   height:6px;
-
   border-radius:50%;
-
   background:var(--blue);
-
-  box-shadow:
-    0 0 9px
-    rgba(34,199,255,.8);
-
+  box-shadow:0 0 9px rgba(34,199,255,.8);
 }
 
-/* ========================================
-   STATUS
-======================================== */
-
 .status{
-
   position:relative;
-
   overflow:hidden;
-
-  padding:
-    14px 12px 13px;
-
-  border:
-    1px solid
-    var(--border);
-
+  padding:14px 12px 13px;
+  border:1px solid var(--border);
   border-radius:18px;
-
   text-align:center;
-
   box-shadow:var(--shadow);
-
 }
 
 .status::before{
-
   content:"";
-
   position:absolute;
-
   left:0;
   right:0;
   top:0;
-
   height:2px;
-
 }
 
 .status-mode{
-
   margin-bottom:4px;
-
   font-size:9px;
   font-weight:950;
-
   letter-spacing:1.8px;
-
   text-transform:uppercase;
-
   opacity:.72;
-
 }
 
 .status-title{
-
-  font-size:
-    clamp(
-      21px,
-      5.7vw,
-      30px
-    );
-
+  font-size:clamp(21px,5.7vw,30px);
   font-weight:950;
-
   letter-spacing:-.5px;
-
   line-height:1.12;
-
 }
 
 .status-detail{
-
   max-width:620px;
-
-  margin:
-    5px auto 0;
-
+  margin:5px auto 0;
   font-size:11px;
   font-weight:700;
-
   line-height:1.35;
-
   opacity:.76;
-
 }
 
 .status.ok{
-
   color:var(--green);
-
   background:#0d1c15;
-
   border-color:#285c42;
-
 }
 
 .status.ok::before{
@@ -367,13 +249,9 @@ a{
 }
 
 .status.warn{
-
   color:var(--amber);
-
   background:#1d170d;
-
   border-color:#655027;
-
 }
 
 .status.warn::before{
@@ -381,13 +259,9 @@ a{
 }
 
 .status.stop{
-
   color:var(--red);
-
   background:#201014;
-
   border-color:#6d303a;
-
 }
 
 .status.stop::before{
@@ -395,212 +269,101 @@ a{
 }
 
 .status.closed{
-
   color:#a8b4bf;
-
   background:#121920;
-
   border-color:#394754;
-
 }
 
 .status.closed::before{
   background:#667685;
 }
 
-/* ========================================
-   CLOCKS
-======================================== */
-
 .clocks{
-
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns:1fr 1fr;
   gap:8px;
-
   margin-top:8px;
-
 }
 
 .clock{
-
-  padding:
-    9px 8px;
-
+  padding:9px 8px;
   text-align:center;
-
-  background:
-    linear-gradient(
-      180deg,
-      #0e151c,
-      #0a1015
-    );
-
-  border:
-    1px solid
-    var(--border);
-
+  background:linear-gradient(180deg,#0e151c,#0a1015);
+  border:1px solid var(--border);
   border-radius:13px;
-
 }
 
 .label{
-
   color:var(--muted);
-
   font-size:9px;
   font-weight:900;
-
   letter-spacing:1px;
-
   text-transform:uppercase;
-
 }
 
 .clock-time{
-
   margin-top:3px;
-
   font-size:19px;
   font-weight:950;
-
-  font-variant-numeric:
-    tabular-nums;
-
+  font-variant-numeric:tabular-nums;
 }
 
 .clock-detail{
-
   margin-top:2px;
-
   overflow:hidden;
-
   color:var(--muted2);
-
   font-size:9px;
-
   text-overflow:ellipsis;
   white-space:nowrap;
-
 }
 
-/* ========================================
-   RISK METRICS
-======================================== */
-
 .cockpit{
-
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns:1fr 1fr;
   gap:8px;
-
   margin-top:8px;
-
 }
 
 .metric{
-
   min-width:0;
-
   min-height:132px;
-
   display:flex;
-
   flex-direction:column;
-
   align-items:center;
   justify-content:center;
-
-  padding:
-    12px 8px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #121b24,
-      #0c1218
-    );
-
-  border:
-    1px solid
-    var(--border);
-
+  padding:12px 8px;
+  background:linear-gradient(180deg,#121b24,#0c1218);
+  border:1px solid var(--border);
   border-radius:16px;
-
   text-align:center;
-
 }
 
 .metric-value{
-
   margin-top:7px;
-
-  font-size:
-    clamp(
-      35px,
-      10vw,
-      48px
-    );
-
+  font-size:clamp(35px,10vw,48px);
   font-weight:950;
-
   letter-spacing:-1.5px;
-
   line-height:1;
-
-  font-variant-numeric:
-    tabular-nums;
-
+  font-variant-numeric:tabular-nums;
 }
 
 .attempt-max{
-
   color:var(--muted);
-
   font-size:.5em;
-
   letter-spacing:0;
-
 }
 
-/* ========================================
-   JOURNAL ACTION
-======================================== */
-
 .journal-action{
-
   display:block;
-
   margin-top:8px;
-
   min-height:58px;
-
   padding:12px;
-
   border-radius:15px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #1594d3,
-      #0e72aa
-    );
-
+  background:linear-gradient(180deg,#1594d3,#0e72aa);
   color:white;
-
   text-align:center;
   text-decoration:none;
-
-  box-shadow:
-    0 12px 28px
-    rgba(0,135,205,.16);
-
+  box-shadow:0 12px 28px rgba(0,135,205,.16);
 }
 
 .journal-action:active{
@@ -608,134 +371,77 @@ a{
 }
 
 .journal-kicker{
-
   font-size:8px;
   font-weight:900;
-
   letter-spacing:1.2px;
-
   text-transform:uppercase;
-
   opacity:.72;
-
 }
 
 .journal-title{
-
   margin-top:3px;
-
   font-size:16px;
   font-weight:950;
-
 }
 
-/* ========================================
-   BEHAVIOURAL LOCK
-======================================== */
-
 .behaviour-card{
-
   margin-top:8px;
-
   padding:13px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #141b22,
-      #0d141a
-    );
-
-  border:
-    1px solid
-    var(--border);
-
+  background:linear-gradient(180deg,#141b22,#0d141a);
+  border:1px solid var(--border);
   border-radius:16px;
-
 }
 
 .behaviour-row{
-
   display:flex;
-
   align-items:center;
   justify-content:space-between;
-
   gap:12px;
-
 }
 
 .behaviour-title{
-
   font-size:13px;
   font-weight:950;
-
 }
 
 .behaviour-note{
-
   margin-top:3px;
-
   color:var(--muted2);
-
   font-size:9px;
-
   line-height:1.35;
-
 }
 
 .switch{
-
   position:relative;
-
   width:54px;
   height:30px;
-
   flex:0 0 auto;
-
 }
 
 .switch input{
-
   opacity:0;
-
   width:0;
   height:0;
-
 }
 
 .slider{
-
   position:absolute;
-
   inset:0;
-
   border-radius:999px;
-
   background:#303944;
-
   cursor:pointer;
-
 }
 
 .slider::before{
-
   content:"";
-
   position:absolute;
-
   width:24px;
   height:24px;
-
   left:3px;
   top:3px;
-
   border-radius:50%;
-
   background:white;
-
   transition:.15s;
-
 }
 
 .switch input:checked + .slider{
@@ -747,37 +453,22 @@ a{
 }
 
 .switch input:disabled + .slider{
-
   opacity:.35;
-
   cursor:not-allowed;
-
 }
 
 .switch input:disabled:not(:checked) + .slider{
-
   background:#202831;
-
 }
 
 .behaviour-lock-panel{
-
   display:none;
-
   margin-top:12px;
-
   padding:13px;
-
-  border:
-    1px solid
-    #67323b;
-
+  border:1px solid #67323b;
   border-radius:13px;
-
   background:#1b1014;
-
   text-align:center;
-
 }
 
 .behaviour-lock-panel.active{
@@ -785,72 +476,36 @@ a{
 }
 
 .lock-kicker{
-
   color:var(--red);
-
   font-size:9px;
   font-weight:950;
-
   letter-spacing:1.5px;
-
   text-transform:uppercase;
-
 }
 
 .lock-countdown{
-
-  margin:
-    4px 0;
-
+  margin:4px 0;
   color:var(--red);
-
-  font-size:
-    clamp(
-      42px,
-      13vw,
-      60px
-    );
-
+  font-size:clamp(42px,13vw,60px);
   font-weight:950;
-
   line-height:1;
-
-  font-variant-numeric:
-    tabular-nums;
-
+  font-variant-numeric:tabular-nums;
 }
 
 .lock-message{
-
   color:#d6bfc3;
-
   font-size:10px;
   font-weight:750;
-
   line-height:1.45;
-
 }
 
-/* ========================================
-   RESET GATE
-======================================== */
-
 .reset-gate{
-
   display:none;
-
   margin-top:10px;
-
   padding:13px;
-
   background:#111921;
-
-  border:
-    1px solid
-    #654f29;
-
+  border:1px solid #654f29;
   border-radius:15px;
-
 }
 
 .reset-gate.active{
@@ -858,385 +513,203 @@ a{
 }
 
 .gate-title{
-
   color:var(--amber);
-
   font-size:14px;
   font-weight:950;
-
 }
 
 .gate-intro{
-
   margin-top:4px;
-
   color:var(--muted);
-
   font-size:10px;
-
   line-height:1.4;
-
 }
 
 .gate-question{
-
   margin-top:10px;
-
   padding:10px;
-
   background:#090f14;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:10px;
-
 }
 
 .gate-question-text{
-
   font-size:11px;
   font-weight:850;
-
   line-height:1.4;
-
 }
 
 .gate-options{
-
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns:1fr 1fr;
   gap:7px;
-
   margin-top:8px;
-
 }
 
 .gate-option{
-
   position:relative;
-
 }
 
 .gate-option input{
-
   position:absolute;
-
   opacity:0;
-
   pointer-events:none;
-
 }
 
 .gate-option span{
-
   min-height:42px;
-
   display:flex;
-
   align-items:center;
   justify-content:center;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:9px;
-
   background:#121a22;
-
   color:var(--text);
-
   font-size:11px;
   font-weight:900;
-
   cursor:pointer;
-
 }
 
 .gate-option input:checked + span{
-
   border-color:var(--blue);
-
   background:#0e2633;
-
   color:var(--blue);
-
 }
 
 .gate-result{
-
   margin-top:10px;
-
   padding:10px;
-
   border-radius:10px;
-
   text-align:center;
-
   font-size:10px;
   font-weight:900;
-
   line-height:1.4;
-
   background:#17130c;
-
-  border:
-    1px solid
-    #5e4924;
-
+  border:1px solid #5e4924;
   color:var(--amber);
-
 }
 
 .gate-result.safe{
-
   background:#0e1c15;
-
   border-color:#285c42;
-
   color:var(--green);
-
 }
 
 .gate-result.stop{
-
   background:#1d1014;
-
   border-color:#65313a;
-
   color:var(--red);
-
 }
 
 .clear-lock-btn{
-
   width:100%;
-
   min-height:49px;
-
   margin-top:9px;
-
   border:0;
-
   border-radius:11px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #168b53,
-      #10653d
-    );
-
+  background:linear-gradient(180deg,#168b53,#10653d);
   color:white;
-
   font-size:12px;
   font-weight:950;
-
   cursor:pointer;
-
 }
 
 .clear-lock-btn:disabled{
-
   opacity:.25;
-
   cursor:not-allowed;
-
 }
 
-/* ========================================
-   GUARDRAILS
-======================================== */
-
 .guardrails{
-
   display:grid;
-
-  grid-template-columns:
-    repeat(4,1fr);
-
+  grid-template-columns:repeat(4,1fr);
   gap:6px;
-
   margin-top:8px;
-
 }
 
 .guardrail{
-
-  padding:
-    9px 3px;
-
+  padding:9px 3px;
   text-align:center;
-
   background:#0a1015;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:11px;
-
 }
 
 .guardrail-value{
-
   margin-top:3px;
-
   font-size:13px;
   font-weight:950;
-
 }
 
-.blue{
-  color:var(--blue);
-}
-
-.green{
-  color:var(--green);
-}
-
-.amber{
-  color:var(--amber);
-}
-
-.red{
-  color:var(--red);
-}
-
-/* ========================================
-   CONNECTED RECORD
-======================================== */
+.blue{color:var(--blue)}
+.green{color:var(--green)}
+.amber{color:var(--amber)}
+.red{color:var(--red)}
 
 .section{
-
   margin-top:10px;
-
   padding:13px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #111921,
-      #0d141b
-    );
-
-  border:
-    1px solid
-    var(--border);
-
+  background:linear-gradient(180deg,#111921,#0d141b);
+  border:1px solid var(--border);
   border-radius:16px;
-
 }
 
 .section-head{
-
   display:flex;
-
   align-items:center;
   justify-content:space-between;
-
   gap:10px;
-
   margin-bottom:9px;
-
 }
 
 .section-title{
-
   font-size:14px;
   font-weight:950;
-
 }
 
 .section-state{
-
   color:var(--muted2);
-
   font-size:9px;
   font-weight:850;
-
   text-transform:uppercase;
-
 }
 
 .summary{
-
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns:1fr 1fr;
   gap:7px;
-
 }
 
 .summary-item{
-
   padding:10px;
-
   background:#090f14;
-
-  border:
-    1px solid
-    var(--border);
-
+  border:1px solid var(--border);
   border-radius:10px;
-
 }
 
 .summary-value{
-
   margin-top:4px;
-
   font-size:16px;
   font-weight:950;
-
 }
 
 .save-state{
-
   margin-top:8px;
-
   text-align:center;
-
   color:var(--muted2);
-
   font-size:9px;
-
 }
 
-/* ========================================
-   RULE REMINDER
-======================================== */
-
 .rule-reminder{
-
   margin-top:10px;
-
   padding:12px;
-
-  border:
-    1px solid
-    #573039;
-
+  border:1px solid #573039;
   border-radius:13px;
-
   background:#1b1014;
-
   color:#d8c0c5;
-
   text-align:center;
-
   font-size:10px;
   font-weight:800;
-
   line-height:1.5;
-
 }
 
 .rule-reminder strong{
@@ -1246,17 +719,11 @@ a{
 @media(min-width:700px){
 
   .wrap{
-
-    padding:
-      20px 18px 30px;
-
+    padding:20px 18px 30px;
   }
 
   .summary{
-
-    grid-template-columns:
-      repeat(4,1fr);
-
+    grid-template-columns:repeat(4,1fr);
   }
 
 }
@@ -1267,10 +734,7 @@ a{
 
 <body>
 
-<div
-  class="wrap"
-  id="top"
->
+<div class="wrap" id="top">
 
 <header>
 
@@ -1308,11 +772,8 @@ a{
   </div>
 
   <div class="prototype-strip">
-
     <span class="prototype-dot"></span>
-
     Evidence-led intraday risk engine
-
   </div>
 
 </header>
@@ -1402,15 +863,8 @@ a{
     </div>
 
     <div class="metric-value">
-
-      <span id="attempt">
-        0
-      </span>
-
-      <span class="attempt-max">
-        /5
-      </span>
-
+      <span id="attempt">0</span>
+      <span class="attempt-max">/5</span>
     </div>
 
   </section>
@@ -1438,7 +892,7 @@ a{
 >
 
   <div class="journal-kicker">
-    Record completed trade
+    Review / annotate completed trades
   </div>
 
   <div class="journal-title">
@@ -1518,7 +972,7 @@ a{
   </div>
 
   <div class="gate-intro">
-    The five-minute behavioural lock has expired.
+    The five-minute lockout has expired.
     Complete all checks before WASPN can re-enable another trade.
   </div>
 
@@ -1531,31 +985,13 @@ a{
     <div class="gate-options">
 
       <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate1"
-          value="risk"
-        >
-
-        <span>
-          Yes
-        </span>
-
+        <input type="radio" name="gate1" value="risk">
+        <span>Yes</span>
       </label>
 
       <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate1"
-          value="safe"
-        >
-
-        <span>
-          No
-        </span>
-
+        <input type="radio" name="gate1" value="safe">
+        <span>No</span>
       </label>
 
     </div>
@@ -1571,31 +1007,13 @@ a{
     <div class="gate-options">
 
       <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate2"
-          value="risk"
-        >
-
-        <span>
-          Yes
-        </span>
-
+        <input type="radio" name="gate2" value="risk">
+        <span>Yes</span>
       </label>
 
       <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate2"
-          value="safe"
-        >
-
-        <span>
-          No
-        </span>
-
+        <input type="radio" name="gate2" value="safe">
+        <span>No</span>
       </label>
 
     </div>
@@ -1611,31 +1029,13 @@ a{
     <div class="gate-options">
 
       <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate3"
-          value="risk"
-        >
-
-        <span>
-          Yes
-        </span>
-
+        <input type="radio" name="gate3" value="risk">
+        <span>Yes</span>
       </label>
 
       <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate3"
-          value="safe"
-        >
-
-        <span>
-          No
-        </span>
-
+        <input type="radio" name="gate3" value="safe">
+        <span>No</span>
       </label>
 
     </div>
@@ -1651,31 +1051,13 @@ a{
     <div class="gate-options">
 
       <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate4"
-          value="safe"
-        >
-
-        <span>
-          Yes
-        </span>
-
+        <input type="radio" name="gate4" value="safe">
+        <span>Yes</span>
       </label>
 
       <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate4"
-          value="risk"
-        >
-
-        <span>
-          No
-        </span>
-
+        <input type="radio" name="gate4" value="risk">
+        <span>No</span>
       </label>
 
     </div>
@@ -1691,31 +1073,13 @@ a{
     <div class="gate-options">
 
       <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate5"
-          value="safe"
-        >
-
-        <span>
-          Yes
-        </span>
-
+        <input type="radio" name="gate5" value="safe">
+        <span>Yes</span>
       </label>
 
       <label class="gate-option">
-
-        <input
-          type="radio"
-          name="gate5"
-          value="risk"
-        >
-
-        <span>
-          No
-        </span>
-
+        <input type="radio" name="gate5" value="risk">
+        <span>No</span>
       </label>
 
     </div>
@@ -1735,7 +1099,7 @@ a{
     type="button"
     disabled
   >
-    CLEAR BEHAVIOURAL LOCK
+    PASS RESET GATE
   </button>
 
 </section>
@@ -1743,51 +1107,23 @@ a{
 <div class="guardrails">
 
   <div class="guardrail">
-
-    <div class="label">
-      Window
-    </div>
-
-    <div class="guardrail-value blue">
-      9–11 ET
-    </div>
-
+    <div class="label">Window</div>
+    <div class="guardrail-value blue">9–11 ET</div>
   </div>
 
   <div class="guardrail">
-
-    <div class="label">
-      Attempts
-    </div>
-
-    <div class="guardrail-value">
-      5 Max
-    </div>
-
+    <div class="label">Attempts</div>
+    <div class="guardrail-value">5 Max</div>
   </div>
 
   <div class="guardrail">
-
-    <div class="label">
-      Warning
-    </div>
-
-    <div class="guardrail-value amber">
-      -$75
-    </div>
-
+    <div class="label">Warning</div>
+    <div class="guardrail-value amber">-$75</div>
   </div>
 
   <div class="guardrail">
-
-    <div class="label">
-      Hard Stop
-    </div>
-
-    <div class="guardrail-value red">
-      -$100
-    </div>
-
+    <div class="label">Hard Stop</div>
+    <div class="guardrail-value red">-$100</div>
   </div>
 
 </div>
@@ -1812,63 +1148,23 @@ a{
   <div class="summary">
 
     <div class="summary-item">
-
-      <div class="label">
-        Journal Trades
-      </div>
-
-      <div
-        id="journalTrades"
-        class="summary-value"
-      >
-        —
-      </div>
-
+      <div class="label">Journal Trades</div>
+      <div id="journalTrades" class="summary-value">—</div>
     </div>
 
     <div class="summary-item">
-
-      <div class="label">
-        Journal Net
-      </div>
-
-      <div
-        id="journalNet"
-        class="summary-value"
-      >
-        —
-      </div>
-
+      <div class="label">Journal Net</div>
+      <div id="journalNet" class="summary-value">—</div>
     </div>
 
     <div class="summary-item">
-
-      <div class="label">
-        Compliance
-      </div>
-
-      <div
-        id="complianceSummary"
-        class="summary-value"
-      >
-        —
-      </div>
-
+      <div class="label">Compliance</div>
+      <div id="complianceSummary" class="summary-value">—</div>
     </div>
 
     <div class="summary-item">
-
-      <div class="label">
-        Process
-      </div>
-
-      <div
-        id="processSummary"
-        class="summary-value"
-      >
-        —
-      </div>
-
+      <div class="label">Process</div>
+      <div id="processSummary" class="summary-value">—</div>
     </div>
 
   </div>
@@ -1884,9 +1180,7 @@ a{
 
 <div class="rule-reminder">
 
-  <strong>
-    HARD FINISH:
-  </strong>
+  <strong>HARD FINISH:</strong>
 
   Attempt 5 • -$100 realised • 11:00 AM ET
 
@@ -1916,10 +1210,6 @@ const MAX_ATTEMPTS =
 
 const COOLDOWN_MS =
   5 * 60 * 1000;
-
-/* ========================================
-   STORAGE
-======================================== */
 
 function getJournal(){
 
@@ -1954,44 +1244,21 @@ function saveJournal(
 
 }
 
-/* ========================================
-   DATE / TIME
-======================================== */
-
 function getNyParts(){
 
   const formatted =
     new Intl.DateTimeFormat(
       "en-GB",
       {
-
-        timeZone:
-          "America/New_York",
-
-        weekday:
-          "long",
-
-        year:
-          "numeric",
-
-        month:
-          "2-digit",
-
-        day:
-          "2-digit",
-
-        hour:
-          "2-digit",
-
-        minute:
-          "2-digit",
-
-        second:
-          "2-digit",
-
-        hourCycle:
-          "h23"
-
+        timeZone:"America/New_York",
+        weekday:"long",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit",
+        hourCycle:"h23"
       }
     )
     .formatToParts(
@@ -2020,34 +1287,13 @@ function getNyParts(){
   );
 
   return {
-
-    weekday:
-      data.weekday,
-
-    year:
-      data.year,
-
-    month:
-      data.month,
-
-    day:
-      data.day,
-
-    hour:
-      Number(
-        data.hour
-      ),
-
-    minute:
-      Number(
-        data.minute
-      ),
-
-    second:
-      Number(
-        data.second
-      )
-
+    weekday:data.weekday,
+    year:data.year,
+    month:data.month,
+    day:data.day,
+    hour:Number(data.hour),
+    minute:Number(data.minute),
+    second:Number(data.second)
   };
 
 }
@@ -2077,32 +1323,19 @@ function getSessionClockState(){
     ny.minute;
 
   const weekend =
-    ny.weekday ===
-      "Saturday" ||
-    ny.weekday ===
-      "Sunday";
+    ny.weekday === "Saturday" ||
+    ny.weekday === "Sunday";
 
   if(
     weekend
   ){
 
     return {
-
-      key:
-        "weekend",
-
-      canStart:
-        false,
-
-      title:
-        "MARKET CLOSED — WEEKEND",
-
-      detail:
-        "No WASPN trading session today.",
-
-      className:
-        "closed"
-
+      key:"weekend",
+      canStart:false,
+      title:"MARKET CLOSED — WEEKEND",
+      detail:"No WASPN trading session today.",
+      className:"closed"
     };
 
   }
@@ -2113,22 +1346,11 @@ function getSessionClockState(){
   ){
 
     return {
-
-      key:
-        "preliminary",
-
-      canStart:
-        true,
-
-      title:
-        "PRELIMINARY WINDOW",
-
-      detail:
-        "6:30–7:00 AM ET • Exceptional setup / monitoring window.",
-
-      className:
-        "ok"
-
+      key:"preliminary",
+      canStart:true,
+      title:"PRELIMINARY WINDOW",
+      detail:"6:30–7:00 AM ET • Exceptional setup / monitoring window.",
+      className:"ok"
     };
 
   }
@@ -2139,22 +1361,11 @@ function getSessionClockState(){
   ){
 
     return {
-
-      key:
-        "main",
-
-      canStart:
-        true,
-
-      title:
-        "WITHIN WASPN",
-
-      detail:
-        "Primary trading window • 9:00–11:00 AM ET.",
-
-      className:
-        "ok"
-
+      key:"main",
+      canStart:true,
+      title:"WITHIN WASPN",
+      detail:"Primary trading window • 9:00–11:00 AM ET.",
+      className:"ok"
     };
 
   }
@@ -2165,22 +1376,11 @@ function getSessionClockState(){
   ){
 
     return {
-
-      key:
-        "wait",
-
-      canStart:
-        false,
-
-      title:
-        "WAIT — MAIN WINDOW NOT OPEN",
-
-      detail:
-        "Main WASPN window begins at 9:00 AM ET.",
-
-      className:
-        "warn"
-
+      key:"wait",
+      canStart:false,
+      title:"WAIT — MAIN WINDOW NOT OPEN",
+      detail:"Main WASPN window begins at 9:00 AM ET.",
+      className:"warn"
     };
 
   }
@@ -2190,50 +1390,24 @@ function getSessionClockState(){
   ){
 
     return {
-
-      key:
-        "closed",
-
-      canStart:
-        false,
-
-      title:
-        "SESSION CLOSED",
-
-      detail:
-        "11:00 AM ET reached • No reopening later.",
-
-      className:
-        "closed"
-
+      key:"closed",
+      canStart:false,
+      title:"SESSION CLOSED",
+      detail:"11:00 AM ET reached • No reopening later.",
+      className:"closed"
     };
 
   }
 
   return {
-
-    key:
-      "before",
-
-    canStart:
-      false,
-
-    title:
-      "WAIT — SESSION NOT OPEN",
-
-    detail:
-      "Preliminary monitoring begins at 6:30 AM ET.",
-
-    className:
-      "warn"
-
+    key:"before",
+    canStart:false,
+    title:"WAIT — SESSION NOT OPEN",
+    detail:"Preliminary monitoring begins at 6:30 AM ET.",
+    className:"warn"
   };
 
 }
-
-/* ========================================
-   MONEY
-======================================== */
 
 function money(
   value
@@ -2250,9 +1424,7 @@ function money(
 
     return (
       "+$" +
-      n.toFixed(
-        2
-      )
+      n.toFixed(2)
     );
 
   }
@@ -2263,12 +1435,7 @@ function money(
 
     return (
       "-$" +
-      Math.abs(
-        n
-      )
-      .toFixed(
-        2
-      )
+      Math.abs(n).toFixed(2)
     );
 
   }
@@ -2276,10 +1443,6 @@ function money(
   return "$0.00";
 
 }
-
-/* ========================================
-   TRADEZERO
-======================================== */
 
 function getTradeZeroState(){
 
@@ -2300,8 +1463,7 @@ function getTradeZeroState(){
 
     if(
       !state ||
-      state.usable !==
-        true
+      state.usable !== true
     ){
 
       return null;
@@ -2375,10 +1537,22 @@ function applyTradeZeroStickyRules(
       broker.dayRealized
     );
 
+  localLive.maxAttemptReached =
+    Math.max(
+      Number(
+        localLive.maxAttemptReached ||
+        0
+      ),
+      Number(
+        localLive.attempt ||
+        0
+      ),
+      brokerAttempt
+    );
+
   if(
     broker.warningReached ||
-    brokerPnl <=
-      WARNING_LEVEL
+    brokerPnl <= WARNING_LEVEL
   ){
 
     localLive.warningReached =
@@ -2392,26 +1566,13 @@ function applyTradeZeroStickyRules(
         Date.now();
 
       localLive.lossWarning = {
-
-        triggered:
-          true,
-
-        active:
-          true,
-
-        startedAt:
-          now,
-
-        until:
-          now +
-          COOLDOWN_MS,
-
-        source:
-          "TRADEZERO",
-
-        triggerPnl:
-          brokerPnl
-
+        triggered:true,
+        active:true,
+        resetGateRequired:false,
+        startedAt:now,
+        until:now + COOLDOWN_MS,
+        source:"TRADEZERO",
+        triggerPnl:brokerPnl
       };
 
     }
@@ -2420,8 +1581,7 @@ function applyTradeZeroStickyRules(
 
   if(
     broker.hardStopReached ||
-    brokerPnl <=
-      HARD_STOP
+    brokerPnl <= HARD_STOP
   ){
 
     localLive.hardStopReached =
@@ -2434,7 +1594,7 @@ function applyTradeZeroStickyRules(
 
   if(
     broker.maxAttemptReached ||
-    brokerAttempt >=
+    localLive.maxAttemptReached >=
       MAX_ATTEMPTS
   ){
 
@@ -2452,15 +1612,6 @@ function applyTradeZeroStickyRules(
 
   }
 
-  localLive.maxAttemptReached =
-    Math.max(
-      Number(
-        localLive.maxAttemptReached ||
-        0
-      ),
-      brokerAttempt
-    );
-
   return localLive;
 
 }
@@ -2470,12 +1621,34 @@ function buildDisplayLive(
   broker
 ){
 
+  const localKnownAttempt =
+    Math.max(
+      Number(
+        localLive.attempt ||
+        0
+      ),
+      Number(
+        localLive.maxAttemptReached ||
+        0
+      )
+    );
+
   if(
     !broker
   ){
 
     return {
-      ...localLive
+      ...localLive,
+      attempt:
+        Math.min(
+          MAX_ATTEMPTS,
+          localKnownAttempt
+        ),
+      maxAttemptReached:
+        Math.min(
+          MAX_ATTEMPTS,
+          localKnownAttempt
+        )
     };
 
   }
@@ -2491,17 +1664,25 @@ function buildDisplayLive(
       )
     );
 
+  const displayAttempt =
+    Math.min(
+      MAX_ATTEMPTS,
+      Math.max(
+        localKnownAttempt,
+        brokerAttempt
+      )
+    );
+
   const brokerPnl =
     Number(
       broker.dayRealized
     );
 
   return {
-
     ...localLive,
 
     attempt:
-      brokerAttempt,
+      displayAttempt,
 
     realisedPnl:
       brokerPnl,
@@ -2509,41 +1690,27 @@ function buildDisplayLive(
     warningReached:
       !!localLive.warningReached ||
       !!broker.warningReached ||
-      brokerPnl <=
-        WARNING_LEVEL,
+      brokerPnl <= WARNING_LEVEL,
 
     hardStopReached:
       !!localLive.hardStopReached ||
       !!broker.hardStopReached ||
-      brokerPnl <=
-        HARD_STOP,
+      brokerPnl <= HARD_STOP,
 
     sessionEnded:
       !!localLive.sessionEnded ||
       !!broker.sessionClosed ||
       !!broker.hardStopReached ||
-      brokerPnl <=
-        HARD_STOP ||
+      brokerPnl <= HARD_STOP ||
       !!broker.maxAttemptReached ||
-      brokerAttempt >=
-        MAX_ATTEMPTS,
+      displayAttempt >= MAX_ATTEMPTS,
 
     maxAttemptReached:
-      Math.max(
-        Number(
-          localLive.maxAttemptReached ||
-          0
-        ),
-        brokerAttempt
-      )
+      displayAttempt
 
   };
 
 }
-
-/* ========================================
-   DAILY RECORD
-======================================== */
 
 function getTodayRecord(){
 
@@ -2567,11 +1734,10 @@ function getJournalTrades(
 
   }
 
-  return day.trades
-    .slice(
-      0,
-      MAX_ATTEMPTS
-    );
+  return day.trades.slice(
+    0,
+    MAX_ATTEMPTS
+  );
 
 }
 
@@ -2683,16 +1849,9 @@ function getLiveState(){
     behaviouralLock:
       stored.behaviouralLock ||
       {
-
-        active:
-          false,
-
-        until:
-          null,
-
-        resetGateRequired:
-          false
-
+        active:false,
+        until:null,
+        resetGateRequired:false
       },
 
     timer:
@@ -2776,10 +1935,6 @@ function saveLiveState(
 
 }
 
-/* ========================================
-   JOURNAL SYNC
-======================================== */
-
 function syncFromJournal(){
 
   const day =
@@ -2835,10 +1990,6 @@ function syncFromJournal(){
 
 }
 
-/* ========================================
-   STICKY RULES
-======================================== */
-
 function evaluateStickyRules(
   live
 ){
@@ -2866,8 +2017,20 @@ function evaluateStickyRules(
 
   }
 
+  const maxKnownAttempt =
+    Math.max(
+      Number(
+        live.attempt ||
+        0
+      ),
+      Number(
+        live.maxAttemptReached ||
+        0
+      )
+    );
+
   if(
-    live.attempt >=
+    maxKnownAttempt >=
     MAX_ATTEMPTS
   ){
 
@@ -2877,24 +2040,11 @@ function evaluateStickyRules(
   }
 
   live.maxAttemptReached =
-    Math.max(
-      Number(
-        live.maxAttemptReached ||
-        0
-      ),
-      Number(
-        live.attempt ||
-        0
-      )
-    );
+    maxKnownAttempt;
 
   return live;
 
 }
-
-/* ========================================
-   LOSS WARNING
-======================================== */
 
 function triggerLossCooldown(
   live
@@ -2924,28 +2074,15 @@ function triggerLossCooldown(
     Date.now();
 
   live.lossWarning = {
-
-    triggered:
-      true,
-
-    active:
-      true,
-
-    startedAt:
-      now,
-
-    until:
-      now +
-      COOLDOWN_MS,
-
-    source:
-      "JOURNAL",
-
-    triggerPnl:
-      Number(
-        live.realisedPnl
-      )
-
+    triggered:true,
+    active:true,
+    resetGateRequired:false,
+    startedAt:now,
+    until:now + COOLDOWN_MS,
+    source:"JOURNAL",
+    triggerPnl:Number(
+      live.realisedPnl
+    )
   };
 
   live.warningReached =
@@ -2979,8 +2116,9 @@ function updateLossCooldown(
 
       ...live.lossWarning,
 
-      active:
-        false,
+      active:false,
+
+      resetGateRequired:true,
 
       completedAt:
         Date.now()
@@ -3051,29 +2189,33 @@ function getLossCooldownCountdown(
 
 }
 
-/* ========================================
-   PERMANENT SESSION CLOSURE
-======================================== */
-
 function isSessionPermanentlyClosed(
   live,
   clock = getSessionClockState()
 ){
+
+  const maxKnownAttempt =
+    Math.max(
+      Number(
+        live.attempt ||
+        0
+      ),
+      Number(
+        live.maxAttemptReached ||
+        0
+      )
+    );
 
   return (
     clock.key === "closed" ||
     clock.key === "weekend" ||
     live.hardStopReached ||
     live.realisedPnl <= HARD_STOP ||
-    live.attempt >= MAX_ATTEMPTS ||
+    maxKnownAttempt >= MAX_ATTEMPTS ||
     live.sessionEnded
   );
 
 }
-
-/* ========================================
-   BEHAVIOURAL LOCK
-======================================== */
 
 function activateBehaviouralLock(){
 
@@ -3096,7 +2238,9 @@ function activateBehaviouralLock(){
     isSessionPermanentlyClosed(
       live,
       clock
-    )
+    ) ||
+    localLive.lossWarning?.active ||
+    localLive.lossWarning?.resetGateRequired
   ){
 
     return;
@@ -3104,20 +2248,10 @@ function activateBehaviouralLock(){
   }
 
   localLive.behaviouralLock = {
-
-    active:
-      true,
-
-    startedAt:
-      Date.now(),
-
-    until:
-      Date.now() +
-      COOLDOWN_MS,
-
-    resetGateRequired:
-      false
-
+    active:true,
+    startedAt:Date.now(),
+    until:Date.now() + COOLDOWN_MS,
+    resetGateRequired:false
   };
 
   saveLiveState(
@@ -3145,11 +2279,9 @@ function updateBehaviouralLock(
 
       ...live.behaviouralLock,
 
-      active:
-        false,
+      active:false,
 
-      resetGateRequired:
-        true
+      resetGateRequired:true
 
     };
 
@@ -3170,19 +2302,37 @@ function clearBehaviouralLock(){
 
   live.behaviouralLock = {
 
-    active:
-      false,
+    ...live.behaviouralLock,
 
-    until:
-      null,
+    active:false,
 
-    resetGateRequired:
-      false,
+    until:null,
+
+    resetGateRequired:false,
 
     clearedAt:
       Date.now()
 
   };
+
+  if(
+    live.lossWarning
+  ){
+
+    live.lossWarning = {
+
+      ...live.lossWarning,
+
+      active:false,
+
+      resetGateRequired:false,
+
+      gateClearedAt:
+        Date.now()
+
+    };
+
+  }
 
   saveLiveState(
     live
@@ -3210,20 +2360,14 @@ function clearBehaviouralLock(){
 
 }
 
-/* ========================================
-   RESET GATE
-======================================== */
-
 function evaluateGate(){
 
   const names = [
-
     "gate1",
     "gate2",
     "gate3",
     "gate4",
     "gate5"
-
   ];
 
   const answers =
@@ -3268,8 +2412,7 @@ function evaluateGate(){
   if(
     answers.some(
       answer =>
-        answer ===
-        "risk"
+        answer === "risk"
     )
   ){
 
@@ -3297,10 +2440,6 @@ function evaluateGate(){
 
 }
 
-/* ========================================
-   STATUS LOGIC
-======================================== */
-
 function getOperationalStatus(
   live,
   clock
@@ -3313,36 +2452,31 @@ function getOperationalStatus(
   ){
 
     return {
-
-      title:
-        "HARD STOP — SESSION OVER",
-
-      detail:
-        "-$100 realised reached • No further trading today.",
-
-      className:
-        "stop"
-
+      title:"HARD STOP — SESSION OVER",
+      detail:"-$100 realised reached • No further trading today.",
+      className:"stop"
     };
 
   }
 
   if(
-    live.attempt >=
+    Math.max(
+      Number(
+        live.attempt ||
+        0
+      ),
+      Number(
+        live.maxAttemptReached ||
+        0
+      )
+    ) >=
     MAX_ATTEMPTS
   ){
 
     return {
-
-      title:
-        "ATTEMPT 5 — SESSION OVER",
-
-      detail:
-        "Maximum completed attempts reached • No reopening later.",
-
-      className:
-        "stop"
-
+      title:"ATTEMPT 5 — SESSION OVER",
+      detail:"Maximum completed attempts reached • No reopening later.",
+      className:"stop"
     };
 
   }
@@ -3353,16 +2487,9 @@ function getOperationalStatus(
   ){
 
     return {
-
-      title:
-        "SESSION CLOSED",
-
-      detail:
-        "11:00 AM ET reached • No reopening later.",
-
-      className:
-        "closed"
-
+      title:"SESSION CLOSED",
+      detail:"11:00 AM ET reached • No reopening later.",
+      className:"closed"
     };
 
   }
@@ -3373,16 +2500,9 @@ function getOperationalStatus(
   ){
 
     return {
-
-      title:
-        "MARKET CLOSED — WEEKEND",
-
-      detail:
-        "No WASPN trading session today.",
-
-      className:
-        "closed"
-
+      title:"MARKET CLOSED — WEEKEND",
+      detail:"No WASPN trading session today.",
+      className:"closed"
     };
 
   }
@@ -3392,35 +2512,9 @@ function getOperationalStatus(
   ){
 
     return {
-
-      title:
-        "BEHAVIOURAL LOCK ACTIVE",
-
-      detail:
-        "New trade starts are blocked during the five-minute circuit breaker.",
-
-      className:
-        "stop"
-
-    };
-
-  }
-
-  if(
-    live.behaviouralLock?.resetGateRequired
-  ){
-
-    return {
-
-      title:
-        "RESET GATE REQUIRED",
-
-      detail:
-        "Complete the behavioural reset before another WASPN trade.",
-
-      className:
-        "warn"
-
+      title:"BEHAVIOURAL LOCK ACTIVE",
+      detail:"New trade starts are blocked during the five-minute circuit breaker.",
+      className:"stop"
     };
 
   }
@@ -3436,7 +2530,6 @@ function getOperationalStatus(
       "00:00";
 
     return {
-
       title:
         "-$75 WARNING — COOLDOWN " +
         countdown,
@@ -3444,9 +2537,20 @@ function getOperationalStatus(
       detail:
         "Mandatory five-minute lockout • No new WASPN trade until the timer reaches 00:00.",
 
-      className:
-        "warn"
+      className:"warn"
+    };
 
+  }
+
+  if(
+    live.behaviouralLock?.resetGateRequired ||
+    live.lossWarning?.resetGateRequired
+  ){
+
+    return {
+      title:"RESET GATE REQUIRED",
+      detail:"Complete all five reset checks before another WASPN trade.",
+      className:"warn"
     };
 
   }
@@ -3457,16 +2561,9 @@ function getOperationalStatus(
   ){
 
     return {
-
-      title:
-        "-$75 WARNING ACTIVE",
-
-      detail:
-        "Five-minute cooldown completed • reassess before another trade.",
-
-      className:
-        "warn"
-
+      title:"-$75 WARNING ACTIVE",
+      detail:"Cooldown and reset completed • remain selective before another trade.",
+      className:"warn"
     };
 
   }
@@ -3474,10 +2571,6 @@ function getOperationalStatus(
   return clock;
 
 }
-
-/* ========================================
-   CLOCK DISPLAY
-======================================== */
 
 function renderClocks(){
 
@@ -3490,16 +2583,9 @@ function renderClocks(){
     now.toLocaleTimeString(
       [],
       {
-
-        hour:
-          "2-digit",
-
-        minute:
-          "2-digit",
-
-        second:
-          "2-digit"
-
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
       }
     );
 
@@ -3517,30 +2603,11 @@ function renderClocks(){
   document.getElementById(
     "etTime"
   ).textContent =
-
-    String(
-      ny.hour
-    )
-    .padStart(
-      2,
-      "0"
-    ) +
+    String(ny.hour).padStart(2,"0") +
     ":" +
-    String(
-      ny.minute
-    )
-    .padStart(
-      2,
-      "0"
-    ) +
+    String(ny.minute).padStart(2,"0") +
     ":" +
-    String(
-      ny.second
-    )
-    .padStart(
-      2,
-      "0"
-    );
+    String(ny.second).padStart(2,"0");
 
   document.getElementById(
     "nyDay"
@@ -3550,10 +2617,6 @@ function renderClocks(){
     getNyDate();
 
 }
-
-/* ========================================
-   CONNECTED RECORD
-======================================== */
 
 function renderConnectedRecord(
   broker
@@ -3569,12 +2632,9 @@ function renderConnectedRecord(
       ? day.trades.length
       : null;
 
-  const journalTrades =
-    document.getElementById(
-      "journalTrades"
-    );
-
-  journalTrades.textContent =
+  document.getElementById(
+    "journalTrades"
+  ).textContent =
     trades !== null
       ? trades
       : "—";
@@ -3658,10 +2718,6 @@ function renderConnectedRecord(
       : "Live session record";
 
 }
-
-/* ========================================
-   RENDER
-======================================== */
 
 function render(){
 
@@ -3772,7 +2828,9 @@ function render(){
     !!localLive.behaviouralLock?.resetGateRequired;
 
   behaviourToggle.disabled =
-    permanentlyClosed;
+    permanentlyClosed ||
+    !!localLive.lossWarning?.active ||
+    !!localLive.lossWarning?.resetGateRequired;
 
   document.getElementById(
     "behaviourNote"
@@ -3781,7 +2839,9 @@ function render(){
       ? "Unavailable • today's WASPN session is closed."
       : localLive.lossWarning?.active
         ? "Unavailable during the mandatory -$75 loss cooldown."
-        : "Activate when recovery thinking, rushed execution, anger, repeated re-entry or “one more” appears.";
+        : localLive.lossWarning?.resetGateRequired
+          ? "Unavailable until the -$75 reset gate is passed."
+          : "Activate when recovery thinking, rushed execution, anger, repeated re-entry or “one more” appears.";
 
   const behaviourPanel =
     document.getElementById(
@@ -3800,7 +2860,8 @@ function render(){
 
   resetGate.classList.toggle(
     "active",
-    !!localLive.behaviouralLock?.resetGateRequired
+    !!localLive.behaviouralLock?.resetGateRequired ||
+    !!localLive.lossWarning?.resetGateRequired
   );
 
   if(
@@ -3836,22 +2897,9 @@ function render(){
     document.getElementById(
       "behaviourCountdown"
     ).textContent =
-
-      String(
-        mins
-      )
-      .padStart(
-        2,
-        "0"
-      ) +
+      String(mins).padStart(2,"0") +
       ":" +
-      String(
-        secs
-      )
-      .padStart(
-        2,
-        "0"
-      );
+      String(secs).padStart(2,"0");
 
   }
 
@@ -3862,10 +2910,6 @@ function render(){
   );
 
 }
-
-/* ========================================
-   RESET
-======================================== */
 
 function resetBehaviouralControls(){
 
@@ -3921,37 +2965,31 @@ function resetBehaviouralControls(){
       ),
 
     warningReached:
-      pnl <=
-      WARNING_LEVEL,
+      pnl <= WARNING_LEVEL,
 
     hardStopReached:
-      pnl <=
-      HARD_STOP,
+      pnl <= HARD_STOP,
 
     sessionEnded:
-      attempt >=
-        MAX_ATTEMPTS ||
-      pnl <=
-        HARD_STOP,
+      Math.max(
+        attempt,
+        Number(
+          existing.liveRisk?.maxAttemptReached ||
+          0
+        )
+      ) >= MAX_ATTEMPTS ||
+      pnl <= HARD_STOP,
 
     lossWarning:
       null,
 
     behaviouralLock:{
-
-      active:
-        false,
-
-      until:
-        null,
-
-      resetGateRequired:
-        false
-
+      active:false,
+      until:null,
+      resetGateRequired:false
     },
 
-    timer:
-      null,
+    timer:null,
 
     updatedAt:
       new Date()
@@ -3989,10 +3027,6 @@ function resetBehaviouralControls(){
 
 }
 
-/* ========================================
-   EVENTS
-======================================== */
-
 document.getElementById(
   "behaviourToggle"
 )
@@ -4004,7 +3038,7 @@ document.getElementById(
       event.target.checked
     ){
 
-      let localLive =
+      const localLive =
         getLiveState();
 
       const broker =
@@ -4024,7 +3058,8 @@ document.getElementById(
           live,
           clock
         ) ||
-        localLive.lossWarning?.active
+        localLive.lossWarning?.active ||
+        localLive.lossWarning?.resetGateRequired
       ){
 
         event.target.checked =
@@ -4092,10 +3127,6 @@ window.addEventListener(
   render
 );
 
-/* ========================================
-   START
-======================================== */
-
 render();
 
 setInterval(
@@ -4108,5 +3139,4 @@ setInterval(
 <script src="workflow-nav.js?v=3"></script>
 
 </body>
-
 </html>
