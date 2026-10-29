@@ -93,6 +93,15 @@ test('Review strips broker timing claims and aggregate count without provenance'
   assert.match(source,/label === ["']Broker Timing["']/);
 });
 
+test('Review actively syncs broker journal timing and refreshes the open day', () => {
+  const source = read('workflow-nav.js');
+  assert.match(source,/function applyReviewJournalSync/);
+  assert.match(source,/tradezero-journal\.js\?v=4/);
+  assert.match(source,/waspn:tradezero-journal-update/);
+  assert.match(source,/activeReviewDate = date/);
+  assert.match(source,/window\.showDetail\(activeReviewDate\)/);
+});
+
 test('Backup hardening is installed through session-rules, which Data Backup actually loads', () => {
   const rules = read('session-rules.js');
   const backup = read('data-backup.html');
@@ -107,7 +116,7 @@ test('Backup hardening is installed through session-rules, which Data Backup act
 
 test('hardening release bumps PWA cache', () => {
   const source = read('service-worker.js');
-  assert.match(source,/waspn-pwa-v10/);
+  assert.match(source,/waspn-pwa-v11/);
 });
 
 
