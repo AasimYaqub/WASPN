@@ -435,6 +435,7 @@ input:focus,select:focus,textarea:focus{
 <div class="wrap" id="top">
 
 <header>
+
   <div class="topbar">
 
     <a href="index.html" class="icon-btn" aria-label="Home">←</a>
@@ -450,8 +451,9 @@ input:focus,select:focus,textarea:focus{
 
   <div class="product-strip">
     <span class="product-dot"></span>
-    Fast intraday trade capture
+    Broker-assisted trade review
   </div>
+
 </header>
 
 <section class="session-card">
@@ -481,10 +483,9 @@ input:focus,select:focus,textarea:focus{
 </section>
 
 <div class="intraday-note">
-  <strong>One WASPN attempt = one trade idea.</strong>
-  A trade may contain multiple broker entry and exit executions.
-  Capture the trade quickly while trading, then reconcile exact
-  fills, fees, timing and weighted prices from the broker later.
+  <strong>TradeZero supplies the mechanical trade data when available.</strong>
+  Use the Journal to review the broker-populated trade and add the setup/reason,
+  notes, fees or corrections that TradeZero cannot safely infer.
 </div>
 
 <div class="daily-summary">
@@ -521,7 +522,7 @@ input:focus,select:focus,textarea:focus{
 
   <div class="section-copy">
     Optional. Only capture something here if it is worth remembering
-    before the broker reconciliation or weekly review.
+    before the weekly review.
   </div>
 
   <textarea
@@ -596,7 +597,6 @@ const tradeContainer =
 let dirty =
   false;
 
-
 function money(
   value
 ){
@@ -613,9 +613,7 @@ function money(
 
     return (
       "+$" +
-      n.toFixed(
-        2
-      )
+      n.toFixed(2)
     );
 
   }
@@ -626,12 +624,7 @@ function money(
 
     return (
       "-$" +
-      Math.abs(
-        n
-      )
-      .toFixed(
-        2
-      )
+      Math.abs(n).toFixed(2)
     );
 
   }
@@ -639,7 +632,6 @@ function money(
   return "$0.00";
 
 }
-
 
 function getJournal(){
 
@@ -661,7 +653,6 @@ function getJournal(){
 
 }
 
-
 function saveJournal(
   journal
 ){
@@ -675,26 +666,16 @@ function saveJournal(
 
 }
 
-
 function getNyDate(){
 
   const parts =
     new Intl.DateTimeFormat(
       "en-CA",
       {
-
-        timeZone:
-          "America/New_York",
-
-        year:
-          "numeric",
-
-        month:
-          "2-digit",
-
-        day:
-          "2-digit"
-
+        timeZone:"America/New_York",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit"
       }
     )
     .formatToParts(
@@ -732,7 +713,6 @@ function getNyDate(){
 
 }
 
-
 function setDirty(){
 
   dirty =
@@ -753,7 +733,6 @@ function setDirty(){
     "status dirty";
 
 }
-
 
 function clearDirty(
   message
@@ -777,7 +756,6 @@ function clearDirty(
     "status";
 
 }
-
 
 function parseNullableNumber(
   value
@@ -811,26 +789,20 @@ function parseNullableNumber(
 
 }
 
-
 function hasBrokerActual(
   trade
 ){
 
   return (
-
     trade &&
-
     typeof trade.actualNet ===
       "number" &&
-
     Number.isFinite(
       trade.actualNet
     )
-
   );
 
 }
-
 
 function authoritativeTradeNet(
   trade,
@@ -895,7 +867,6 @@ function authoritativeTradeNet(
 
 }
 
-
 function createTrade(
   i
 ){
@@ -912,15 +883,12 @@ function createTrade(
     <div class="trade-head">
 
       <div class="trade-title-wrap">
-
         <div class="trade-kicker">
           Attempt ${i}
         </div>
-
         <div class="trade-title">
           Trade ${i}
         </div>
-
       </div>
 
       <div
@@ -938,46 +906,25 @@ function createTrade(
       <div class="grid">
 
         <div class="field">
-
-          <label>
-            Ticker
-          </label>
-
+          <label>Ticker</label>
           <input
             id="ticker${i}"
             autocomplete="off"
             autocapitalize="characters"
             placeholder="ABCD"
           >
-
         </div>
 
         <div class="field">
-
-          <label>
-            Side
-          </label>
-
+          <label>Side</label>
           <select id="side${i}">
-
-            <option value="long">
-              Long
-            </option>
-
-            <option value="short">
-              Short
-            </option>
-
+            <option value="long">Long</option>
+            <option value="short">Short</option>
           </select>
-
         </div>
 
         <div class="field">
-
-          <label>
-            Quick / Avg Entry
-          </label>
-
+          <label>Quick / Avg Entry</label>
           <input
             id="entryPrice${i}"
             type="number"
@@ -985,15 +932,10 @@ function createTrade(
             step="0.0001"
             placeholder="Optional"
           >
-
         </div>
 
         <div class="field">
-
-          <label>
-            Quick / Avg Exit
-          </label>
-
+          <label>Quick / Avg Exit</label>
           <input
             id="exitPrice${i}"
             type="number"
@@ -1001,15 +943,10 @@ function createTrade(
             step="0.0001"
             placeholder="Optional"
           >
-
         </div>
 
         <div class="field">
-
-          <label>
-            Total Shares
-          </label>
-
+          <label>Total Shares</label>
           <input
             id="shares${i}"
             type="number"
@@ -1017,15 +954,10 @@ function createTrade(
             step="1"
             placeholder="Optional"
           >
-
         </div>
 
         <div class="field">
-
-          <label>
-            Total Trade Fees
-          </label>
-
+          <label>Total Trade Fees</label>
           <input
             id="fees${i}"
             type="number"
@@ -1034,7 +966,6 @@ function createTrade(
             step="0.01"
             placeholder="Reconcile later"
           >
-
         </div>
 
       </div>
@@ -1064,7 +995,7 @@ function createTrade(
           >
 
           <div class="setup-help">
-            Keep this to one sentence. Record the setup and the reason the trade was taken.
+            This remains manual because TradeZero cannot know why the trade was taken.
           </div>
 
         </div>
@@ -1155,7 +1086,6 @@ function createTrade(
 
 }
 
-
 for(
   let i = 1;
   i <= 5;
@@ -1168,58 +1098,42 @@ for(
 
 }
 
-
 function hasTradeEconomics(
   i
 ){
 
   const entry =
     parseNullableNumber(
-      document
-        .getElementById(
-          "entryPrice" +
-          i
-        )
-        .value
+      document.getElementById(
+        "entryPrice" +
+        i
+      ).value
     );
 
   const exit =
     parseNullableNumber(
-      document
-        .getElementById(
-          "exitPrice" +
-          i
-        )
-        .value
+      document.getElementById(
+        "exitPrice" +
+        i
+      ).value
     );
 
   const shares =
     parseNullableNumber(
-      document
-        .getElementById(
-          "shares" +
-          i
-        )
-        .value
+      document.getElementById(
+        "shares" +
+        i
+      ).value
     );
 
   return (
-
-    entry !==
-      null &&
-
-    exit !==
-      null &&
-
-    shares !==
-      null &&
-
+    entry !== null &&
+    exit !== null &&
+    shares !== null &&
     shares > 0
-
   );
 
 }
-
 
 function grossPnl(
   i
@@ -1237,59 +1151,48 @@ function grossPnl(
 
   const entry =
     Number(
-      document
-        .getElementById(
-          "entryPrice" +
-          i
-        )
-        .value
+      document.getElementById(
+        "entryPrice" +
+        i
+      ).value
     );
 
   const exit =
     Number(
-      document
-        .getElementById(
-          "exitPrice" +
-          i
-        )
-        .value
+      document.getElementById(
+        "exitPrice" +
+        i
+      ).value
     );
 
   const shares =
     Number(
-      document
-        .getElementById(
-          "shares" +
-          i
-        )
-        .value
+      document.getElementById(
+        "shares" +
+        i
+      ).value
     );
 
   const side =
-    document
-      .getElementById(
-        "side" +
-        i
-      )
-      .value;
+    document.getElementById(
+      "side" +
+      i
+    ).value;
 
   return side ===
     "long"
-
-    ? (
-        exit -
-        entry
-      ) *
-      shares
-
-    : (
-        entry -
-        exit
-      ) *
-      shares;
+      ? (
+          exit -
+          entry
+        ) *
+        shares
+      : (
+          entry -
+          exit
+        ) *
+        shares;
 
 }
-
 
 function tradeFees(
   i
@@ -1297,12 +1200,10 @@ function tradeFees(
 
   const raw =
     parseNullableNumber(
-      document
-        .getElementById(
-          "fees" +
-          i
-        )
-        .value
+      document.getElementById(
+        "fees" +
+        i
+      ).value
     );
 
   if(
@@ -1320,7 +1221,6 @@ function tradeFees(
   );
 
 }
-
 
 function calculatedNet(
   i
@@ -1349,7 +1249,6 @@ function calculatedNet(
 
 }
 
-
 function calculateTrade(
   i
 ){
@@ -1370,11 +1269,9 @@ function calculateTrade(
     );
 
   const date =
-    document
-      .getElementById(
-        "tradeDate"
-      )
-      .value;
+    document.getElementById(
+      "tradeDate"
+    ).value;
 
   const existingTrade =
     getExistingTrade(
@@ -1383,40 +1280,28 @@ function calculateTrade(
     );
 
   const brokerActual =
-
     hasBrokerActual(
       existingTrade
     )
-
       ? Number(
           existingTrade.actualNet
         )
-
       : null;
 
-
   const displayNet =
-
-    brokerActual !==
-      null
-
+    brokerActual !== null
       ? brokerActual
-
       : (
-          calc !==
-            null
-
+          calc !== null
             ? calc
             : 0
         );
-
 
   const calcBox =
     document.getElementById(
       "calcText" +
       i
     );
-
 
   if(
     brokerActual !==
@@ -1429,14 +1314,39 @@ function calculateTrade(
         brokerActual
       ) +
       (
-        calc !==
-          null
-
+        calc !== null
           ? " • Quick estimate: " +
             money(
               calc
             )
+          : ""
+      );
 
+    calcBox.className =
+      "calculation reconciled";
+
+  }
+
+  else if(
+    typeof existingTrade.brokerGrossPnl ===
+      "number" &&
+    Number.isFinite(
+      existingTrade.brokerGrossPnl
+    )
+  ){
+
+    calcBox.textContent =
+      "TradeZero gross: " +
+      money(
+        existingTrade.brokerGrossPnl
+      ) +
+      " • Fees not yet broker-confirmed" +
+      (
+        calc !== null
+          ? " • Journal estimate: " +
+            money(
+              calc
+            )
           : ""
       );
 
@@ -1448,10 +1358,7 @@ function calculateTrade(
   else{
 
     calcBox.textContent =
-
-      gross ===
-        null
-
+      gross === null
         ? (
             "Quick estimate only • Gross: — • Fees: " +
             money(
@@ -1459,7 +1366,6 @@ function calculateTrade(
             ) +
             " • Calculated Net: —"
           )
-
         : (
             "Quick estimate only • Gross: " +
             money(
@@ -1479,7 +1385,6 @@ function calculateTrade(
       "calculation";
 
   }
-
 
   const display =
     document.getElementById(
@@ -1509,7 +1414,6 @@ function calculateTrade(
 
 }
 
-
 function calculateDailyTotal(){
 
   let total =
@@ -1523,13 +1427,10 @@ function calculateDailyTotal(){
 
     total +=
       Number(
-        document
-          .getElementById(
-            "tradePnl" +
-            i
-          )
-          .dataset
-          .pnl ||
+        document.getElementById(
+          "tradePnl" +
+          i
+        ).dataset.pnl ||
         0
       );
 
@@ -1583,7 +1484,6 @@ function calculateDailyTotal(){
 
 }
 
-
 function getExistingTrade(
   date,
   i
@@ -1613,7 +1513,6 @@ function getExistingTrade(
 
 }
 
-
 function tradeData(
   i,
   existingTrade = {}
@@ -1630,71 +1529,48 @@ function tradeData(
     );
 
   const calc =
-
-    gross !==
-      null
-
+    gross !== null
       ? gross -
         fees
-
       : null;
-
 
   const entryPrice =
     parseNullableNumber(
-      document
-        .getElementById(
-          "entryPrice" +
-          i
-        )
-        .value
+      document.getElementById(
+        "entryPrice" +
+        i
+      ).value
     );
-
 
   const exitPrice =
     parseNullableNumber(
-      document
-        .getElementById(
-          "exitPrice" +
-          i
-        )
-        .value
+      document.getElementById(
+        "exitPrice" +
+        i
+      ).value
     );
-
 
   const shares =
     parseNullableNumber(
-      document
-        .getElementById(
-          "shares" +
-          i
-        )
-        .value
+      document.getElementById(
+        "shares" +
+        i
+      ).value
     );
 
-
   const currentSetupReason =
-
-    document
-      .getElementById(
-        "setupReason" +
-        i
-      )
-      .value
-      .trim();
-
+    document.getElementById(
+      "setupReason" +
+      i
+    ).value.trim();
 
   const preservedSetupReason =
-
     currentSetupReason ||
-
     String(
       existingTrade.setupReason ||
       existingTrade.setup ||
       ""
-    )
-    .trim();
-
+    ).trim();
 
   const finalNet =
     authoritativeTradeNet(
@@ -1702,30 +1578,23 @@ function tradeData(
       calc
     );
 
-
   return {
 
     ...existingTrade,
 
     ticker:
-
-      document
-        .getElementById(
-          "ticker" +
-          i
-        )
-        .value
-        .trim()
-        .toUpperCase(),
+      document.getElementById(
+        "ticker" +
+        i
+      ).value
+      .trim()
+      .toUpperCase(),
 
     side:
-
-      document
-        .getElementById(
-          "side" +
-          i
-        )
-        .value,
+      document.getElementById(
+        "side" +
+        i
+      ).value,
 
     entryPrice:
       entryPrice ??
@@ -1758,36 +1627,26 @@ function tradeData(
 
 }
 
-
 function isTradeUsed(
   trade
 ){
 
   return Boolean(
-
     trade.ticker ||
-
     trade.entryPrice ||
-
     trade.exitPrice ||
-
     trade.shares ||
-
     trade.setupReason
-
   );
 
 }
 
-
 function updateTradeCount(){
 
   const date =
-    document
-      .getElementById(
-        "tradeDate"
-      )
-      .value;
+    document.getElementById(
+      "tradeDate"
+    ).value;
 
   let count =
     0;
@@ -1816,24 +1675,19 @@ function updateTradeCount(){
 
   }
 
-  document
-    .getElementById(
-      "tradeCount"
-    )
-    .textContent =
-      count;
+  document.getElementById(
+    "tradeCount"
+  ).textContent =
+    count;
 
 }
-
 
 function saveDay(){
 
   const date =
-    document
-      .getElementById(
-        "tradeDate"
-      )
-      .value;
+    document.getElementById(
+      "tradeDate"
+    ).value;
 
   if(
     !date
@@ -1847,10 +1701,8 @@ function saveDay(){
 
   }
 
-
   const journal =
     getJournal();
-
 
   const existing =
     journal[
@@ -1858,21 +1710,15 @@ function saveDay(){
     ] ||
     {};
 
-
   const previousTrades =
-
     Array.isArray(
       existing.trades
     )
-
       ? existing.trades
-
       : [];
-
 
   const trades =
     [];
-
 
   for(
     let i = 1;
@@ -1903,29 +1749,23 @@ function saveDay(){
 
   }
 
-
   const total =
-
     trades.reduce(
       (
         sum,
         trade
       ) =>
-
         sum +
         authoritativeTradeNet(
           trade,
           trade.calculatedNet
         ),
-
       0
     );
-
 
   const now =
     new Date()
       .toISOString();
-
 
   journal[
     date
@@ -1936,13 +1776,10 @@ function saveDay(){
     date,
 
     startValue:
-
       Number(
-        document
-          .getElementById(
-            "startValue"
-          )
-          .value ||
+        document.getElementById(
+          "startValue"
+        ).value ||
         0
       ),
 
@@ -1952,12 +1789,9 @@ function saveDay(){
       total,
 
     notes:
-
-      document
-        .getElementById(
-          "dailyNotes"
-        )
-        .value,
+      document.getElementById(
+        "dailyNotes"
+      ).value,
 
     journalSavedAt:
       now,
@@ -1967,14 +1801,11 @@ function saveDay(){
 
   };
 
-
   saveJournal(
     journal
   );
 
-
   clearDirty(
-
     "Saved " +
     date +
     " • " +
@@ -1983,30 +1814,23 @@ function saveDay(){
     money(
       total
     )
-
   );
-
 
   loadDay();
 
 }
 
-
 function clearForm(){
 
-  document
-    .getElementById(
-      "startValue"
-    )
-    .value =
-      "";
+  document.getElementById(
+    "startValue"
+  ).value =
+    "";
 
-  document
-    .getElementById(
-      "dailyNotes"
-    )
-    .value =
-      "";
+  document.getElementById(
+    "dailyNotes"
+  ).value =
+    "";
 
   for(
     let i = 1;
@@ -2014,61 +1838,47 @@ function clearForm(){
     i++
   ){
 
-    document
-      .getElementById(
-        "ticker" +
-        i
-      )
-      .value =
-        "";
+    document.getElementById(
+      "ticker" +
+      i
+    ).value =
+      "";
 
-    document
-      .getElementById(
-        "side" +
-        i
-      )
-      .value =
-        "long";
+    document.getElementById(
+      "side" +
+      i
+    ).value =
+      "long";
 
-    document
-      .getElementById(
-        "entryPrice" +
-        i
-      )
-      .value =
-        "";
+    document.getElementById(
+      "entryPrice" +
+      i
+    ).value =
+      "";
 
-    document
-      .getElementById(
-        "exitPrice" +
-        i
-      )
-      .value =
-        "";
+    document.getElementById(
+      "exitPrice" +
+      i
+    ).value =
+      "";
 
-    document
-      .getElementById(
-        "shares" +
-        i
-      )
-      .value =
-        "";
+    document.getElementById(
+      "shares" +
+      i
+    ).value =
+      "";
 
-    document
-      .getElementById(
-        "fees" +
-        i
-      )
-      .value =
-        "";
+    document.getElementById(
+      "fees" +
+      i
+    ).value =
+      "";
 
-    document
-      .getElementById(
-        "setupReason" +
-        i
-      )
-      .value =
-        "";
+    document.getElementById(
+      "setupReason" +
+      i
+    ).value =
+      "";
 
     const calcBox =
       document.getElementById(
@@ -2087,15 +1897,12 @@ function clearForm(){
 
 }
 
-
 function loadDay(){
 
   const date =
-    document
-      .getElementById(
-        "tradeDate"
-      )
-      .value;
+    document.getElementById(
+      "tradeDate"
+    ).value;
 
   if(
     !date
@@ -2105,15 +1912,12 @@ function loadDay(){
 
   }
 
-
   clearForm();
-
 
   const day =
     getJournal()[
       date
     ];
-
 
   if(
     !day
@@ -2125,31 +1929,23 @@ function loadDay(){
     );
 
     showExisting();
-
     renderConnectedState();
 
     return;
 
   }
 
+  document.getElementById(
+    "startValue"
+  ).value =
+    day.startValue ||
+    "";
 
-  document
-    .getElementById(
-      "startValue"
-    )
-    .value =
-      day.startValue ||
-      "";
-
-
-  document
-    .getElementById(
-      "dailyNotes"
-    )
-    .value =
-      day.notes ||
-      "";
-
+  document.getElementById(
+    "dailyNotes"
+  ).value =
+    day.notes ||
+    "";
 
   (
     day.trades ||
@@ -2169,78 +1965,57 @@ function loadDay(){
         index +
         1;
 
-      document
-        .getElementById(
-          "ticker" +
-          i
-        )
-        .value =
-          trade.ticker ||
-          "";
+      document.getElementById(
+        "ticker" +
+        i
+      ).value =
+        trade.ticker ||
+        "";
 
-      document
-        .getElementById(
-          "side" +
-          i
-        )
-        .value =
-          trade.side ||
-          "long";
+      document.getElementById(
+        "side" +
+        i
+      ).value =
+        trade.side ||
+        "long";
 
-      document
-        .getElementById(
-          "entryPrice" +
-          i
-        )
-        .value =
-          trade.entryPrice ||
-          "";
+      document.getElementById(
+        "entryPrice" +
+        i
+      ).value =
+        trade.entryPrice ||
+        "";
 
-      document
-        .getElementById(
-          "exitPrice" +
-          i
-        )
-        .value =
-          trade.exitPrice ||
-          "";
+      document.getElementById(
+        "exitPrice" +
+        i
+      ).value =
+        trade.exitPrice ||
+        "";
 
-      document
-        .getElementById(
-          "shares" +
-          i
-        )
-        .value =
-          trade.shares ||
-          "";
+      document.getElementById(
+        "shares" +
+        i
+      ).value =
+        trade.shares ||
+        "";
 
-      document
-        .getElementById(
-          "fees" +
-          i
-        )
-        .value =
+      document.getElementById(
+        "fees" +
+        i
+      ).value =
+        trade.fees !== undefined &&
+        trade.fees !== null
+          ? trade.fees
+          : "";
 
-          trade.fees !==
-            undefined &&
-
-          trade.fees !==
-            null
-
-            ? trade.fees
-
-            : "";
-
-      document
-        .getElementById(
-          "setupReason" +
-          i
-        )
-        .value =
-
-          trade.setupReason ||
-          trade.setup ||
-          "";
+      document.getElementById(
+        "setupReason" +
+        i
+      ).value =
+        trade.setupReason ||
+        trade.setup ||
+        "";
 
       calculateTrade(
         i
@@ -2248,7 +2023,6 @@ function loadDay(){
 
     }
   );
-
 
   calculateDailyTotal();
 
@@ -2263,15 +2037,12 @@ function loadDay(){
 
 }
 
-
 function showExisting(){
 
   const date =
-    document
-      .getElementById(
-        "tradeDate"
-      )
-      .value;
+    document.getElementById(
+      "tradeDate"
+    ).value;
 
   const box =
     document.getElementById(
@@ -2282,7 +2053,6 @@ function showExisting(){
     getJournal()[
       date
     ];
-
 
   if(
     !day
@@ -2295,10 +2065,8 @@ function showExisting(){
 
   }
 
-
   const parts =
     [];
-
 
   if(
     typeof day.brokerDailyNet ===
@@ -2309,103 +2077,87 @@ function showExisting(){
   ){
 
     parts.push(
-
       "Broker reconciled " +
       money(
         day.brokerDailyNet
       )
-
     );
 
   }
-
 
   if(
     day.liveRisk
   ){
 
+    const maxKnownAttempt =
+      Math.max(
+        Number(
+          day.liveRisk.attempt ||
+          0
+        ),
+        Number(
+          day.liveRisk.maxAttemptReached ||
+          0
+        )
+      );
+
     parts.push(
-
       "Live attempt " +
-      Number(
-        day.liveRisk.attempt ||
-        0
-      )
-
+      maxKnownAttempt
     );
 
   }
-
 
   if(
     day.compliance
   ){
 
     parts.push(
-
       "Compliance " +
       (
-
         typeof day.compliance.score ===
           "number"
-
           ? day.compliance.score +
             "/3"
-
           : "saved"
-
       )
-
     );
 
   }
-
 
   if(
     day.sessionScore
   ){
 
     parts.push(
-
       "Process Score " +
       day.sessionScore.score +
       "/5"
-
     );
 
   }
 
-
   box.textContent =
-
     "Connected record • " +
     (
-
       parts.length
-
         ? parts.join(
             " • "
           )
-
         : "daily record exists"
-
     );
-
 
   box.style.display =
     "block";
 
 }
 
-
 function renderConnectedState(){
 
   const date =
-    document
-      .getElementById(
-        "tradeDate"
-      )
-      .value;
+    document.getElementById(
+      "tradeDate"
+    ).value;
 
   const day =
     getJournal()[
@@ -2426,19 +2178,25 @@ function renderConnectedState(){
       "riskState"
     );
 
-
   if(
     live
   ){
 
+    const maxKnownAttempt =
+      Math.max(
+        Number(
+          live.attempt ||
+          0
+        ),
+        Number(
+          live.maxAttemptReached ||
+          0
+        )
+      );
+
     liveAttempt.textContent =
-
-      Number(
-        live.attempt ||
-        0
-      ) +
+      maxKnownAttempt +
       "/5";
-
 
     const pnl =
       Number(
@@ -2446,38 +2204,22 @@ function renderConnectedState(){
         0
       );
 
-
     const behaviouralRisk =
-
       !!live.tilt ||
-
-      !!live.behaviouralLock
-        ?.active ||
-
-      !!live.behaviouralLock
-        ?.resetGateRequired;
-
+      !!live.behaviouralLock?.active ||
+      !!live.behaviouralLock?.resetGateRequired;
 
     const lossCooldown =
-      !!live.lossWarning
-        ?.active;
+      !!live.lossWarning?.active;
 
+    const lossResetGate =
+      !!live.lossWarning?.resetGateRequired;
 
     if(
-
       live.sessionEnded ||
-
       live.hardStopReached ||
-
-      pnl <=
-        -100 ||
-
-      Number(
-        live.attempt ||
-        0
-      ) >=
-        5
-
+      pnl <= -100 ||
+      maxKnownAttempt >= 5
     ){
 
       riskState.textContent =
@@ -2489,14 +2231,10 @@ function renderConnectedState(){
     }
 
     else if(
-
       behaviouralRisk ||
-
       lossCooldown ||
-
-      pnl <=
-        -75
-
+      lossResetGate ||
+      pnl <= -75
     ){
 
       riskState.textContent =
@@ -2534,15 +2272,12 @@ function renderConnectedState(){
 
 }
 
-
 function deleteDay(){
 
   const date =
-    document
-      .getElementById(
-        "tradeDate"
-      )
-      .value;
+    document.getElementById(
+      "tradeDate"
+    ).value;
 
   if(
     !date
@@ -2552,10 +2287,8 @@ function deleteDay(){
 
   }
 
-
   const journal =
     getJournal();
-
 
   if(
     !journal[
@@ -2571,14 +2304,11 @@ function deleteDay(){
 
   }
 
-
   if(
     !confirm(
-
       "Delete the ENTIRE WASPN record for " +
       date +
       "? This removes Journal, Live Risk, Compliance and Process Score."
-
     )
   ){
 
@@ -2586,32 +2316,24 @@ function deleteDay(){
 
   }
 
-
   delete journal[
     date
   ];
-
 
   saveJournal(
     journal
   );
 
-
   clearForm();
-
 
   clearDirty(
     "Entire daily record deleted."
   );
 
-
-  document
-    .getElementById(
-      "status"
-    )
-    .style.color =
-      "var(--red)";
-
+  document.getElementById(
+    "status"
+  ).style.color =
+    "var(--red)";
 
   showExisting();
 
@@ -2619,112 +2341,85 @@ function deleteDay(){
 
 }
 
-
 function setToday(){
 
-  document
-    .getElementById(
-      "tradeDate"
-    )
-    .value =
-      getNyDate();
+  document.getElementById(
+    "tradeDate"
+  ).value =
+    getNyDate();
 
 }
 
+document.getElementById(
+  "saveBtn"
+)
+.addEventListener(
+  "click",
+  saveDay
+);
 
-document
-  .getElementById(
-    "saveBtn"
-  )
-  .addEventListener(
-    "click",
-    saveDay
-  );
+document.getElementById(
+  "loadBtn"
+)
+.addEventListener(
+  "click",
+  loadDay
+);
 
+document.getElementById(
+  "deleteBtn"
+)
+.addEventListener(
+  "click",
+  deleteDay
+);
 
-document
-  .getElementById(
-    "loadBtn"
-  )
-  .addEventListener(
-    "click",
-    loadDay
-  );
+document.getElementById(
+  "tradeDate"
+)
+.addEventListener(
+  "change",
+  loadDay
+);
 
+document.getElementById(
+  "startValue"
+)
+.addEventListener(
+  "input",
+  setDirty
+);
 
-document
-  .getElementById(
-    "deleteBtn"
-  )
-  .addEventListener(
-    "click",
-    deleteDay
-  );
-
-
-document
-  .getElementById(
-    "tradeDate"
-  )
-  .addEventListener(
-    "change",
-    loadDay
-  );
-
-
-document
-  .getElementById(
-    "startValue"
-  )
-  .addEventListener(
-    "input",
-    setDirty
-  );
-
-
-document
-  .getElementById(
-    "dailyNotes"
-  )
-  .addEventListener(
-    "input",
-    setDirty
-  );
-
+document.getElementById(
+  "dailyNotes"
+)
+.addEventListener(
+  "input",
+  setDirty
+);
 
 window.addEventListener(
   "storage",
   () => {
-
     loadDay();
-
   }
 );
-
 
 window.addEventListener(
   "focus",
   () => {
-
     showExisting();
-
     renderConnectedState();
-
   }
 );
-
 
 window.addEventListener(
   "pageshow",
   () => {
-
     showExisting();
-
     renderConnectedState();
-
   }
 );
-
 
 window.addEventListener(
   "beforeunload",
@@ -2735,7 +2430,6 @@ window.addEventListener(
     ){
 
       event.preventDefault();
-
       event.returnValue =
         "";
 
@@ -2744,20 +2438,15 @@ window.addEventListener(
   }
 );
 
-
 setToday();
-
 loadDay();
-
 calculateDailyTotal();
-
 showExisting();
-
 renderConnectedState();
 
 </script>
 
-<script src="tradezero-journal.js?v=2"></script>
+<script src="tradezero-journal.js?v=3"></script>
 <script src="workflow-nav.js?v=3"></script>
 
 </body>
