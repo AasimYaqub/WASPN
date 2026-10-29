@@ -31,7 +31,9 @@
   --amber:#f3b84b;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 html{
   min-height:100%;
@@ -45,20 +47,40 @@ body{
   min-height:100vh;
   min-height:100dvh;
   background:
-    radial-gradient(circle at 50% -10%,rgba(34,199,255,.07),transparent 35%),
+    radial-gradient(
+      circle at 50% -10%,
+      rgba(34,199,255,.07),
+      transparent 35%
+    ),
     #070b10;
   color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,Helvetica,sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    Helvetica,
+    sans-serif;
 }
 
-button,input{font:inherit}
-button,a{-webkit-tap-highlight-color:transparent}
+button,
+input{
+  font:inherit;
+}
+
+button,
+a{
+  -webkit-tap-highlight-color:transparent;
+}
 
 .wrap{
   width:100%;
   max-width:760px;
   margin:0 auto;
-  padding:max(10px,env(safe-area-inset-top)) 10px max(24px,env(safe-area-inset-bottom));
+  padding:
+    max(10px,env(safe-area-inset-top))
+    10px
+    max(24px,env(safe-area-inset-bottom));
 }
 
 .topbar{
@@ -83,8 +105,13 @@ button,a{-webkit-tap-highlight-color:transparent}
   font-weight:900;
 }
 
-.icon-btn:active{transform:scale(.97)}
-.product{text-align:center}
+.icon-btn:active{
+  transform:scale(.97);
+}
+
+.product{
+  text-align:center;
+}
 
 .wordmark{
   color:var(--blue);
@@ -112,7 +139,12 @@ button,a{-webkit-tap-highlight-color:transparent}
 .card{
   margin-top:8px;
   padding:14px;
-  background:linear-gradient(180deg,#111921,#0d141a);
+  background:
+    linear-gradient(
+      180deg,
+      #111921,
+      #0d141a
+    );
   border:1px solid var(--border);
   border-radius:16px;
 }
@@ -162,10 +194,21 @@ button,a{-webkit-tap-highlight-color:transparent}
   font-weight:950;
 }
 
-.green{color:var(--green)}
-.red{color:var(--red)}
-.blue{color:var(--blue)}
-.amber{color:var(--amber)}
+.green{
+  color:var(--green);
+}
+
+.red{
+  color:var(--red);
+}
+
+.blue{
+  color:var(--blue);
+}
+
+.amber{
+  color:var(--amber);
+}
 
 .export-card{
   border-color:rgba(53,208,127,.32);
@@ -177,15 +220,24 @@ button,a{-webkit-tap-highlight-color:transparent}
   margin-top:12px;
   border:0;
   border-radius:14px;
-  background:linear-gradient(180deg,#1b8e55,#11683d);
+  background:
+    linear-gradient(
+      180deg,
+      #1b8e55,
+      #11683d
+    );
   color:white;
   font-size:16px;
   font-weight:950;
   cursor:pointer;
-  box-shadow:0 14px 30px rgba(20,120,70,.18);
+  box-shadow:
+    0 14px 30px
+    rgba(20,120,70,.18);
 }
 
-.export-btn:active{transform:scale(.99)}
+.export-btn:active{
+  transform:scale(.99);
+}
 
 .status{
   margin-top:9px;
@@ -199,8 +251,13 @@ button,a{-webkit-tap-highlight-color:transparent}
   line-height:1.4;
 }
 
-.import-card{margin-top:8px}
-.file-wrap{margin-top:11px}
+.import-card{
+  margin-top:8px;
+}
+
+.file-wrap{
+  margin-top:11px;
+}
 
 input[type="file"]{
   width:100%;
@@ -277,7 +334,9 @@ input[type="file"]{
   line-height:1.45;
 }
 
-.definition strong{color:white}
+.definition strong{
+  color:white;
+}
 
 .nav{
   display:grid;
@@ -302,7 +361,9 @@ input[type="file"]{
   font-weight:900;
 }
 
-.nav-link:active{transform:scale(.98)}
+.nav-link:active{
+  transform:scale(.98);
+}
 
 .nav-link.review{
   color:#c8cdff;
@@ -318,13 +379,27 @@ input[type="file"]{
   line-height:1.45;
 }
 
-.utility-note strong{color:#b8c4cf}
+.utility-note strong{
+  color:#b8c4cf;
+}
 
 @media(min-width:700px){
-  .wrap{padding:18px}
-  .database-status{grid-template-columns:repeat(4,1fr)}
+
+  .wrap{
+    padding:18px;
+  }
+
+  .database-status{
+    grid-template-columns:
+      repeat(
+        4,
+        1fr
+      );
+  }
+
 }
 </style>
+
 </head>
 
 <body>
@@ -335,11 +410,24 @@ input[type="file"]{
 
   <div class="topbar">
 
-    <a href="index.html" class="icon-btn" aria-label="Home">←</a>
+    <a
+      href="index.html"
+      class="icon-btn"
+      aria-label="Home"
+    >
+      ←
+    </a>
 
     <div class="product">
-      <div class="wordmark">WASPN</div>
-      <div class="page-title">Data Backup</div>
+
+      <div class="wordmark">
+        WASPN
+      </div>
+
+      <div class="page-title">
+        Data Backup
+      </div>
+
     </div>
 
     <a
@@ -352,81 +440,149 @@ input[type="file"]{
 
   </div>
 
-  <div class="sub">Local Database Protection</div>
+  <div class="sub">
+    Local Database Protection
+  </div>
 
 </header>
 
+
 <section class="card">
 
-  <div class="card-title">Database Status</div>
+  <div class="card-title">
+    Database Status
+  </div>
 
   <div class="card-copy">
-    WASPN currently stores its connected trading records locally in this browser.
+    WASPN stores its connected daily records and estimated fee records locally in this browser.
   </div>
+
 
   <div class="database-status">
 
     <div class="metric">
-      <div class="label">Daily Records</div>
-      <div id="recordCount" class="metric-value">0</div>
+
+      <div class="label">
+        Daily Records
+      </div>
+
+      <div
+        id="recordCount"
+        class="metric-value"
+      >
+        0
+      </div>
+
     </div>
 
-    <div class="metric">
-      <div class="label">Journal Days</div>
-      <div id="journalCount" class="metric-value blue">0</div>
-    </div>
 
     <div class="metric">
-      <div class="label">Completed Reviews</div>
-      <div id="reviewCount" class="metric-value green">0</div>
+
+      <div class="label">
+        Journal Days
+      </div>
+
+      <div
+        id="journalCount"
+        class="metric-value blue"
+      >
+        0
+      </div>
+
     </div>
 
+
     <div class="metric">
-      <div class="label">Storage</div>
-      <div class="metric-value" style="font-size:16px;">Local</div>
+
+      <div class="label">
+        Completed Reviews
+      </div>
+
+      <div
+        id="reviewCount"
+        class="metric-value green"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="metric">
+
+      <div class="label">
+        Fee Records
+      </div>
+
+      <div
+        id="feeRecordCount"
+        class="metric-value amber"
+      >
+        0
+      </div>
+
     </div>
 
   </div>
 
 </section>
 
+
 <section class="card export-card">
 
-  <div class="label">Recommended Action</div>
+  <div class="label">
+    Recommended Action
+  </div>
 
-  <div class="card-title" style="margin-top:4px;">
+  <div
+    class="card-title"
+    style="margin-top:4px;"
+  >
     Export WASPN Backup
   </div>
 
   <div class="card-copy">
-    Creates a portable JSON copy of the complete connected WASPN database and Review display settings on this device.
+    Creates a portable JSON copy of the complete WASPN daily database, estimated-fee records and Review display settings on this device.
   </div>
 
-  <button id="exportBtn" class="export-btn" type="button">
+  <button
+    id="exportBtn"
+    class="export-btn"
+    type="button"
+  >
     EXPORT COMPLETE BACKUP
   </button>
 
-  <div id="exportStatus" class="status">
+  <div
+    id="exportStatus"
+    class="status"
+  >
     No backup exported during this visit.
   </div>
 
 </section>
 
+
 <section class="card import-card">
 
-  <div class="card-title">Restore Data</div>
+  <div class="card-title">
+    Restore Data
+  </div>
 
   <div class="card-copy">
     Select a valid WASPN JSON backup. The file is validated before either restore option becomes available.
   </div>
 
   <div class="file-wrap">
+
     <input
       id="fileInput"
       type="file"
       accept=".json,application/json"
     >
+
   </div>
+
 
   <div class="import-actions">
 
@@ -450,448 +606,1253 @@ input[type="file"]{
 
   </div>
 
-  <div id="importStatus" class="status">
+
+  <div
+    id="importStatus"
+    class="status"
+  >
     No backup file selected.
   </div>
 
 </section>
 
+
 <section class="safety">
 
-  <div class="safety-title">Restore Safety</div>
+  <div class="safety-title">
+    Restore Safety
+  </div>
 
   <div class="safety-copy">
     Export a fresh backup before replacing the local database.
   </div>
 
+
   <div class="action-definition">
 
     <div class="definition">
-      <strong>Import &amp; Merge</strong>
-      keeps dates that exist only on this device and imports dates from the backup. If the same date exists in both places, the backup version wins.
+
+      <strong>
+        Import &amp; Merge
+      </strong>
+
+      keeps dates that exist only on this device and imports dates from the backup. If the same date exists in both places, the backup version wins. Estimated-fee records follow the same date-level rule.
+
     </div>
 
+
     <div class="definition">
-      <strong>Replace All</strong>
-      removes the current local WASPN daily database and replaces it entirely with the selected backup.
+
+      <strong>
+        Replace All
+      </strong>
+
+      replaces both the current local daily database and the estimated-fee store with the selected backup.
+
     </div>
 
   </div>
 
 </section>
 
+
 <div class="nav">
 
-  <a href="index.html" class="nav-link">
+  <a
+    href="index.html"
+    class="nav-link"
+  >
     ← HOME
   </a>
 
-  <a href="calendar-2026.html" class="nav-link review">
+  <a
+    href="calendar-2026.html"
+    class="nav-link review"
+  >
     PERFORMANCE REVIEW →
   </a>
 
 </div>
 
+
 <div class="utility-note">
-  <strong>Data Backup is a utility.</strong>
+
+  <strong>
+    Data Backup is a utility.
+  </strong>
+
   It protects the shared database used by Risk, Journal, End and Review.
+
 </div>
 
 </div>
+
 
 <script>
-const STORAGE_KEY = "waspnJournalV2";
-const FX_STORAGE_KEY = "waspnUsdGbpRateV1";
-const BACKUP_VERSION = 2;
 
-let pendingData = null;
-let pendingSettings = null;
+const STORAGE_KEY =
+  "waspnJournalV2";
+
+const FX_STORAGE_KEY =
+  "waspnUsdGbpRateV1";
+
+const ESTIMATED_FEES_KEY =
+  "waspnEstimatedFeesV1";
+
+const BACKUP_VERSION =
+  3;
+
+
+let pendingData =
+  null;
+
+let pendingSettings =
+  null;
+
+let pendingEstimatedFees =
+  null;
+
+
+/* ========================================
+   JOURNAL STORAGE
+======================================== */
 
 function getJournal(){
+
   try{
+
     return JSON.parse(
-      localStorage.getItem(STORAGE_KEY)
+      localStorage.getItem(
+        STORAGE_KEY
+      )
     ) || {};
-  }catch{
-    return {};
+
   }
+
+  catch{
+
+    return {};
+
+  }
+
 }
 
-function saveJournal(data){
+
+function saveJournal(
+  data
+){
+
   localStorage.setItem(
     STORAGE_KEY,
-    JSON.stringify(data)
+    JSON.stringify(
+      data
+    )
   );
+
 }
 
-function isDateKey(value){
-  return /^\d{4}-\d{2}-\d{2}$/.test(value);
+
+/* ========================================
+   ESTIMATED FEES STORAGE
+======================================== */
+
+function getEstimatedFees(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        ESTIMATED_FEES_KEY
+      )
+    ) || {};
+
+  }
+
+  catch{
+
+    return {};
+
+  }
+
 }
 
-function isPlainObject(value){
+
+function saveEstimatedFees(
+  data
+){
+
+  localStorage.setItem(
+    ESTIMATED_FEES_KEY,
+    JSON.stringify(
+      data
+    )
+  );
+
+}
+
+
+/* ========================================
+   VALIDATION HELPERS
+======================================== */
+
+function isDateKey(
+  value
+){
+
+  return /^\d{4}-\d{2}-\d{2}$/
+    .test(
+      value
+    );
+
+}
+
+
+function isPlainObject(
+  value
+){
+
   return (
-    value !== null &&
-    typeof value === "object" &&
-    !Array.isArray(value)
+    value !==
+      null &&
+    typeof value ===
+      "object" &&
+    !Array.isArray(
+      value
+    )
   );
+
 }
 
-function validateJournalObject(data){
-  if(!isPlainObject(data)){
+
+/* ========================================
+   JOURNAL VALIDATION
+======================================== */
+
+function validateJournalObject(
+  data
+){
+
+  if(
+    !isPlainObject(
+      data
+    )
+  ){
+
     throw new Error(
       "The WASPN database in this backup is invalid."
     );
+
   }
 
-  const keys = Object.keys(data);
+
+  const keys =
+    Object.keys(
+      data
+    );
+
 
   if(
-    !keys.every(isDateKey)
+    !keys.every(
+      isDateKey
+    )
   ){
+
     throw new Error(
       "The backup contains invalid daily record keys."
     );
+
   }
 
-  for(const date of keys){
-    const day = data[date];
 
-    if(!isPlainObject(day)){
-      throw new Error(
-        "Invalid daily record: " + date
-      );
-    }
+  for(
+    const date
+    of keys
+  ){
+
+    const day =
+      data[
+        date
+      ];
+
 
     if(
-      day.trades !== undefined &&
-      !Array.isArray(day.trades)
+      !isPlainObject(
+        day
+      )
     ){
+
       throw new Error(
-        "Invalid trades record: " + date
+        "Invalid daily record: " +
+        date
       );
+
     }
+
+
+    if(
+      day.trades !==
+        undefined &&
+      !Array.isArray(
+        day.trades
+      )
+    ){
+
+      throw new Error(
+        "Invalid trades record: " +
+        date
+      );
+
+    }
+
   }
 
+
   return data;
+
 }
+
+
+/* ========================================
+   ESTIMATED FEES VALIDATION
+======================================== */
+
+function validateEstimatedFeesObject(
+  data
+){
+
+  if(
+    data ===
+      undefined ||
+    data ===
+      null
+  ){
+
+    return {};
+
+  }
+
+
+  if(
+    !isPlainObject(
+      data
+    )
+  ){
+
+    throw new Error(
+      "The estimated-fee store in this backup is invalid."
+    );
+
+  }
+
+
+  const keys =
+    Object.keys(
+      data
+    );
+
+
+  if(
+    !keys.every(
+      isDateKey
+    )
+  ){
+
+    throw new Error(
+      "The backup contains invalid estimated-fee date keys."
+    );
+
+  }
+
+
+  const clean =
+    {};
+
+
+  for(
+    const date
+    of keys
+  ){
+
+    const record =
+      data[
+        date
+      ];
+
+
+    if(
+      !isPlainObject(
+        record
+      )
+    ){
+
+      throw new Error(
+        "Invalid estimated-fee record: " +
+        date
+      );
+
+    }
+
+
+    const trades =
+      Array.isArray(
+        record.trades
+      )
+        ? record.trades
+            .slice(
+              0,
+              5
+            )
+            .map(
+              value => {
+
+                if(
+                  value ===
+                    null ||
+                  value ===
+                    undefined ||
+                  value ===
+                    ""
+                ){
+
+                  return null;
+
+                }
+
+
+                const n =
+                  Number(
+                    value
+                  );
+
+
+                if(
+                  !Number.isFinite(
+                    n
+                  ) ||
+                  n < 0
+                ){
+
+                  throw new Error(
+                    "Invalid estimated fee in " +
+                    date
+                  );
+
+                }
+
+
+                return n;
+
+              }
+            )
+        : [
+            null,
+            null,
+            null,
+            null,
+            null
+          ];
+
+
+    while(
+      trades.length <
+      5
+    ){
+
+      trades.push(
+        null
+      );
+
+    }
+
+
+    const total =
+      trades.reduce(
+        (
+          sum,
+          value
+        ) =>
+          sum +
+          (
+            Number.isFinite(
+              Number(
+                value
+              )
+            )
+              ? Number(
+                  value
+                )
+              : 0
+          ),
+        0
+      );
+
+
+    clean[
+      date
+    ] = {
+
+      trades,
+
+      total,
+
+      updatedAt:
+        typeof record.updatedAt ===
+          "string"
+          ? record.updatedAt
+          : null
+
+    };
+
+  }
+
+
+  return clean;
+
+}
+
+
+/* ========================================
+   COUNTS
+======================================== */
 
 function updateCounts(){
-  const journal = getJournal();
-  const days = Object.values(journal);
 
-  document.getElementById("recordCount").textContent =
-    days.length;
+  const journal =
+    getJournal();
 
-  document.getElementById("journalCount").textContent =
-    days.filter(
-      day => !!day?.journalSavedAt
-    ).length;
 
-  document.getElementById("reviewCount").textContent =
-    days.filter(
-      day =>
-        !!day?.sessionScore?.savedAt ||
-        !!day?.sessionCompletedAt
-    ).length;
+  const days =
+    Object.values(
+      journal
+    );
+
+
+  const estimatedFees =
+    getEstimatedFees();
+
+
+  document
+    .getElementById(
+      "recordCount"
+    )
+    .textContent =
+      days.length;
+
+
+  document
+    .getElementById(
+      "journalCount"
+    )
+    .textContent =
+      days.filter(
+        day =>
+          !!day?.journalSavedAt
+      )
+      .length;
+
+
+  document
+    .getElementById(
+      "reviewCount"
+    )
+    .textContent =
+      days.filter(
+        day =>
+          !!day?.sessionScore?.savedAt ||
+          !!day?.sessionCompletedAt
+      )
+      .length;
+
+
+  document
+    .getElementById(
+      "feeRecordCount"
+    )
+    .textContent =
+      Object.keys(
+        estimatedFees
+      )
+      .length;
+
 }
 
-function exportData(){
-  const journal = getJournal();
 
-  const fxRate = Number(
-    localStorage.getItem(FX_STORAGE_KEY)
-  );
+/* ========================================
+   EXPORT
+======================================== */
+
+function exportData(){
+
+  const journal =
+    getJournal();
+
+
+  const estimatedFees =
+    getEstimatedFees();
+
+
+  const fxRate =
+    Number(
+      localStorage.getItem(
+        FX_STORAGE_KEY
+      )
+    );
+
 
   const payload = {
-    application:"WASPN",
-    backupVersion:BACKUP_VERSION,
-    storageKey:STORAGE_KEY,
-    exportedAt:new Date().toISOString(),
-    recordCount:Object.keys(journal).length,
+
+    application:
+      "WASPN",
+
+    backupVersion:
+      BACKUP_VERSION,
+
+    storageKey:
+      STORAGE_KEY,
+
+    exportedAt:
+      new Date()
+        .toISOString(),
+
+    recordCount:
+      Object.keys(
+        journal
+      )
+      .length,
 
     settings:{
+
       usdGbpRate:
-        Number.isFinite(fxRate) && fxRate > 0
+        Number.isFinite(
+          fxRate
+        ) &&
+        fxRate >
+          0
           ? fxRate
           : null
+
     },
 
-    data:journal
+    estimatedFees,
+
+    data:
+      journal
+
   };
 
-  const blob = new Blob(
-    [
-      JSON.stringify(
-        payload,
-        null,
-        2
-      )
-    ],
-    {
-      type:"application/json"
-    }
-  );
 
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
+  const blob =
+    new Blob(
+      [
+        JSON.stringify(
+          payload,
+          null,
+          2
+        )
+      ],
+      {
+        type:
+          "application/json"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const link =
+    document.createElement(
+      "a"
+    );
+
 
   const stamp =
     new Date()
       .toISOString()
-      .slice(0,10);
+      .slice(
+        0,
+        10
+      );
 
-  link.href = url;
+
+  link.href =
+    url;
+
+
   link.download =
     "WASPN-backup-" +
     stamp +
     ".json";
 
-  document.body.appendChild(link);
+
+  document.body.appendChild(
+    link
+  );
+
 
   link.click();
+
+
   link.remove();
 
+
   setTimeout(
-    () => URL.revokeObjectURL(url),
+    () =>
+      URL.revokeObjectURL(
+        url
+      ),
     1000
   );
 
+
   const status =
-    document.getElementById("exportStatus");
+    document.getElementById(
+      "exportStatus"
+    );
+
 
   status.textContent =
     "Complete backup exported • " +
-    Object.keys(journal).length +
-    " record(s).";
+    Object.keys(
+      journal
+    )
+    .length +
+    " daily record(s) • " +
+    Object.keys(
+      estimatedFees
+    )
+    .length +
+    " fee record(s).";
+
 
   status.style.color =
     "var(--green)";
+
 }
 
-function validatePayload(parsed){
+
+/* ========================================
+   BACKUP PAYLOAD VALIDATION
+======================================== */
+
+function validatePayload(
+  parsed
+){
+
   /*
     Current structured backup.
   */
+
   if(
-    isPlainObject(parsed) &&
-    parsed.application === "WASPN" &&
-    isPlainObject(parsed.data)
+    isPlainObject(
+      parsed
+    ) &&
+    parsed.application ===
+      "WASPN" &&
+    isPlainObject(
+      parsed.data
+    )
   ){
+
     const data =
-      validateJournalObject(parsed.data);
+      validateJournalObject(
+        parsed.data
+      );
+
 
     const settings =
-      isPlainObject(parsed.settings)
+      isPlainObject(
+        parsed.settings
+      )
         ? parsed.settings
         : {};
 
+
+    const estimatedFees =
+      validateEstimatedFeesObject(
+        parsed.estimatedFees
+      );
+
+
     return {
+
       data,
-      settings
+
+      settings,
+
+      estimatedFees
+
     };
+
   }
+
 
   /*
     Legacy raw date-keyed WASPN journal.
+
+    Older backups did not contain a separate
+    estimated-fee store, so it restores as empty.
   */
-  if(isPlainObject(parsed)){
+
+  if(
+    isPlainObject(
+      parsed
+    )
+  ){
+
     const data =
-      validateJournalObject(parsed);
+      validateJournalObject(
+        parsed
+      );
+
 
     return {
+
       data,
-      settings:{}
+
+      settings:{},
+
+      estimatedFees:{}
+
     };
+
   }
+
 
   throw new Error(
     "This is not a valid WASPN backup."
   );
+
 }
 
-function setImportReady(ready){
-  document.getElementById("mergeBtn").disabled =
-    !ready;
 
-  document.getElementById("replaceBtn").disabled =
-    !ready;
+/* ========================================
+   IMPORT STATE
+======================================== */
+
+function setImportReady(
+  ready
+){
+
+  document
+    .getElementById(
+      "mergeBtn"
+    )
+    .disabled =
+      !ready;
+
+
+  document
+    .getElementById(
+      "replaceBtn"
+    )
+    .disabled =
+      !ready;
+
 }
 
-function restoreSettings(settings){
-  if(!isPlainObject(settings)){
-    return;
-  }
 
-  const fxRate =
-    Number(settings.usdGbpRate);
+/* ========================================
+   SETTINGS RESTORE
+======================================== */
+
+function restoreSettings(
+  settings
+){
 
   if(
-    Number.isFinite(fxRate) &&
-    fxRate > 0
+    !isPlainObject(
+      settings
+    )
   ){
+
+    return;
+
+  }
+
+
+  const fxRate =
+    Number(
+      settings.usdGbpRate
+    );
+
+
+  if(
+    Number.isFinite(
+      fxRate
+    ) &&
+    fxRate >
+      0
+  ){
+
     localStorage.setItem(
       FX_STORAGE_KEY,
-      String(fxRate)
+      String(
+        fxRate
+      )
     );
+
   }
+
 }
 
+
+/* ========================================
+   FILE SELECTION
+======================================== */
+
 document
-  .getElementById("fileInput")
+  .getElementById(
+    "fileInput"
+  )
   .addEventListener(
     "change",
     async event => {
-      pendingData = null;
-      pendingSettings = null;
 
-      setImportReady(false);
+      pendingData =
+        null;
+
+      pendingSettings =
+        null;
+
+      pendingEstimatedFees =
+        null;
+
+
+      setImportReady(
+        false
+      );
+
 
       const file =
-        event.target.files[0];
+        event.target.files[
+          0
+        ];
+
 
       const status =
-        document.getElementById("importStatus");
+        document.getElementById(
+          "importStatus"
+        );
 
-      if(!file){
+
+      if(
+        !file
+      ){
+
         status.textContent =
           "No backup file selected.";
+
 
         status.style.color =
           "var(--muted)";
 
+
         return;
+
       }
 
+
       try{
-        const text = await file.text();
-        const parsed = JSON.parse(text);
+
+        const text =
+          await file.text();
+
+
+        const parsed =
+          JSON.parse(
+            text
+          );
+
 
         const validated =
-          validatePayload(parsed);
+          validatePayload(
+            parsed
+          );
+
 
         pendingData =
           validated.data;
 
+
         pendingSettings =
           validated.settings;
 
+
+        pendingEstimatedFees =
+          validated.estimatedFees;
+
+
         status.textContent =
           "Validated • " +
-          Object.keys(pendingData).length +
-          " record(s) ready to restore.";
+          Object.keys(
+            pendingData
+          )
+          .length +
+          " daily record(s) • " +
+          Object.keys(
+            pendingEstimatedFees
+          )
+          .length +
+          " fee record(s) ready to restore.";
+
 
         status.style.color =
           "var(--green)";
 
-        setImportReady(true);
+
+        setImportReady(
+          true
+        );
+
       }
 
-      catch(error){
-        pendingData = null;
-        pendingSettings = null;
+      catch(
+        error
+      ){
 
-        setImportReady(false);
+        pendingData =
+          null;
+
+        pendingSettings =
+          null;
+
+        pendingEstimatedFees =
+          null;
+
+
+        setImportReady(
+          false
+        );
+
 
         status.textContent =
           error.message;
 
+
         status.style.color =
           "var(--red)";
+
       }
+
     }
   );
 
+
+/* ========================================
+   MERGE RESTORE
+======================================== */
+
 document
-  .getElementById("mergeBtn")
+  .getElementById(
+    "mergeBtn"
+  )
   .addEventListener(
     "click",
     () => {
-      if(!pendingData){
+
+      if(
+        !pendingData ||
+        pendingEstimatedFees ===
+          null
+      ){
+
         return;
+
       }
+
 
       const existing =
         getJournal();
 
+
+      const existingFees =
+        getEstimatedFees();
+
+
       const merged = {
+
         ...existing,
+
         ...pendingData
+
       };
 
-      saveJournal(merged);
-      restoreSettings(pendingSettings);
+
+      const mergedFees = {
+
+        ...existingFees,
+
+        ...pendingEstimatedFees
+
+      };
+
+
+      saveJournal(
+        merged
+      );
+
+
+      saveEstimatedFees(
+        mergedFees
+      );
+
+
+      restoreSettings(
+        pendingSettings
+      );
+
+
       updateCounts();
 
+
       const status =
-        document.getElementById("importStatus");
+        document.getElementById(
+          "importStatus"
+        );
+
 
       status.textContent =
         "Merge complete • " +
-        Object.keys(merged).length +
-        " total record(s).";
+        Object.keys(
+          merged
+        )
+        .length +
+        " daily record(s) • " +
+        Object.keys(
+          mergedFees
+        )
+        .length +
+        " fee record(s).";
+
 
       status.style.color =
         "var(--green)";
+
     }
   );
 
+
+/* ========================================
+   REPLACE RESTORE
+======================================== */
+
 document
-  .getElementById("replaceBtn")
+  .getElementById(
+    "replaceBtn"
+  )
   .addEventListener(
     "click",
     () => {
-      if(!pendingData){
+
+      if(
+        !pendingData ||
+        pendingEstimatedFees ===
+          null
+      ){
+
         return;
+
       }
+
 
       if(
         !confirm(
-          "Replace ALL current local WASPN data with this backup? This cannot be undone unless you already exported a separate backup."
+          "Replace ALL current local WASPN daily data and estimated-fee records with this backup? This cannot be undone unless you already exported a separate backup."
         )
       ){
+
         return;
+
       }
 
-      saveJournal(pendingData);
-      restoreSettings(pendingSettings);
+
+      saveJournal(
+        pendingData
+      );
+
+
+      saveEstimatedFees(
+        pendingEstimatedFees
+      );
+
+
+      restoreSettings(
+        pendingSettings
+      );
+
+
       updateCounts();
 
+
       const status =
-        document.getElementById("importStatus");
+        document.getElementById(
+          "importStatus"
+        );
+
 
       status.textContent =
         "Local database replaced • " +
-        Object.keys(pendingData).length +
-        " record(s).";
+        Object.keys(
+          pendingData
+        )
+        .length +
+        " daily record(s) • " +
+        Object.keys(
+          pendingEstimatedFees
+        )
+        .length +
+        " fee record(s).";
+
 
       status.style.color =
         "var(--green)";
+
     }
   );
 
+
+/* ========================================
+   EXPORT BUTTON
+======================================== */
+
 document
-  .getElementById("exportBtn")
+  .getElementById(
+    "exportBtn"
+  )
   .addEventListener(
     "click",
     exportData
   );
+
+
+/* ========================================
+   REFRESH
+======================================== */
 
 window.addEventListener(
   "focus",
   updateCounts
 );
 
+
 window.addEventListener(
   "pageshow",
   updateCounts
 );
+
 
 window.addEventListener(
   "storage",
   updateCounts
 );
 
+
 updateCounts();
+
 </script>
 
 </body>
