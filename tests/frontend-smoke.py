@@ -218,6 +218,7 @@ with sync_playwright() as p:
 
     # Hardened backup validator rejects impossible dates and malformed nested data.
     go('data-backup.html')
+    page.wait_for_function('window.__WASPN_BACKUP_VALIDATION_HARDENED === true')
     bad_date = page.evaluate('''() => {
       try { validateJournalObject({'2026-02-31':{date:'2026-02-31'}}); return false; }
       catch { return true; }
