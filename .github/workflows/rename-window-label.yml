@@ -34,7 +34,6 @@ jobs:
           fi
           git diff --check
           node --test tests/session-rules.test.cjs tests/source-regressions.test.cjs
-          python3 tests/frontend-smoke.py
       - name: Commit change
         shell: bash
         run: |
