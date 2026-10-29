@@ -327,9 +327,7 @@ button,a{-webkit-tap-highlight-color:transparent}
   white-space:nowrap;
 }
 
-.pnl{
-  margin-top:12px;
-}
+.pnl{margin-top:12px}
 
 .pnl-usd{
   font-size:clamp(9px,2.8vw,14px);
@@ -344,6 +342,15 @@ button,a{-webkit-tap-highlight-color:transparent}
   font-size:clamp(8px,2.3vw,11px);
   font-weight:800;
   white-space:nowrap;
+}
+
+.live-badge{
+  margin-top:5px;
+  color:var(--blue);
+  font-size:7px;
+  font-weight:950;
+  letter-spacing:.5px;
+  text-transform:uppercase;
 }
 
 .detail{
@@ -419,9 +426,7 @@ button,a{-webkit-tap-highlight-color:transparent}
   margin-top:4px;
 }
 
-.trade-row span:first-child{
-  color:var(--muted);
-}
+.trade-row span:first-child{color:var(--muted)}
 
 .trade-gbp{
   color:var(--muted);
@@ -535,7 +540,6 @@ button,a{-webkit-tap-highlight-color:transparent}
 
 <header>
   <div class="topbar">
-
     <a href="index.html" class="icon-btn" aria-label="Home">←</a>
 
     <div class="product">
@@ -544,7 +548,6 @@ button,a{-webkit-tap-highlight-color:transparent}
     </div>
 
     <a href="data-backup.html" class="icon-btn" aria-label="Backup">⇩</a>
-
   </div>
 
   <div class="sub">
@@ -553,7 +556,6 @@ button,a{-webkit-tap-highlight-color:transparent}
 </header>
 
 <section class="card">
-
   <div class="label">2026 Year-to-Date</div>
 
   <div class="year-grid" style="margin-top:9px;">
@@ -592,19 +594,14 @@ button,a{-webkit-tap-highlight-color:transparent}
     </div>
 
   </div>
-
 </section>
 
 <section class="card">
 
   <div class="month-head">
-
     <button id="prev" class="nav-btn" type="button">←</button>
-
     <div id="monthTitle" class="month-title">—</div>
-
     <button id="next" class="nav-btn" type="button">→</button>
-
   </div>
 
   <div id="monthButtons" class="month-buttons"></div>
@@ -640,13 +637,12 @@ button,a{-webkit-tap-highlight-color:transparent}
     <span>● Profit</span>
     <span>● Loss</span>
     <span>Blue outline = Today</span>
+    <span>LIVE = TradeZero current day</span>
     <span>Blue dot = WASPN record</span>
-    <span>Broker history takes priority</span>
     <span>GBP = approximate</span>
   </div>
 
   <div class="calendar">
-
     <div class="weekday">Mon</div>
     <div class="weekday">Tue</div>
     <div class="weekday">Wed</div>
@@ -654,7 +650,6 @@ button,a{-webkit-tap-highlight-color:transparent}
     <div class="weekday">Fri</div>
 
     <div id="calendarDays" style="display:contents;"></div>
-
   </div>
 
   <div id="detail" class="detail">
@@ -670,11 +665,9 @@ button,a{-webkit-tap-highlight-color:transparent}
   <div class="fx-row">
 
     <div>
-
       <div class="label">Display Conversion</div>
 
       <div class="fx-wrap">
-
         <strong>$1 =</strong>
 
         <input
@@ -687,9 +680,7 @@ button,a{-webkit-tap-highlight-color:transparent}
         >
 
         <strong>GBP</strong>
-
       </div>
-
     </div>
 
     <button id="saveFxBtn" class="save-fx" type="button">
@@ -699,12 +690,14 @@ button,a{-webkit-tap-highlight-color:transparent}
   </div>
 
   <div class="fx-note">
-    USD is authoritative. Historical broker results take priority over Journal estimates. GBP is display-only.
+    USD is authoritative. Today uses usable live TradeZero realised P&amp;L. Historical days use saved/reconciled results. GBP is display-only.
   </div>
 
 </section>
 
 </div>
+
+<script src="tradezero-live.js?v=2"></script>
 
 <script>
 
@@ -713,7 +706,6 @@ const FX_STORAGE_KEY = "waspnUsdGbpRateV1";
 const DEFAULT_FX_RATE = 0.7500;
 
 const tradingData = {
-
   "2026-06-30":50.30,
 
   "2026-07-01":39.67,
@@ -797,44 +789,25 @@ const tradingData = {
   "2026-10-21":-31.44,
   "2026-10-22":-599.78,
   "2026-10-23":-95.22
-
 };
 
 const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"
+  "January","February","March","April",
+  "May","June","July","August",
+  "September","October","November","December"
 ];
 
 function getJournal(){
-
   try{
-
     return JSON.parse(
-      localStorage.getItem(
-        STORAGE_KEY
-      )
+      localStorage.getItem(STORAGE_KEY)
     ) || {};
-
   }catch{
-
     return {};
-
   }
-
 }
 
 function getNewYorkDateParts(){
-
   const parts = new Intl.DateTimeFormat(
     "en-CA",
     {
@@ -843,18 +816,14 @@ function getNewYorkDateParts(){
       month:"2-digit",
       day:"2-digit"
     }
-  ).formatToParts(
-    new Date()
-  );
+  ).formatToParts(new Date());
 
   const values = {};
 
   parts.forEach(part => {
-
     if(part.type !== "literal"){
       values[part.type] = part.value;
     }
-
   });
 
   return {
@@ -862,11 +831,9 @@ function getNewYorkDateParts(){
     month:Number(values.month),
     day:Number(values.day)
   };
-
 }
 
 function getNewYorkDateKey(){
-
   const ny = getNewYorkDateParts();
 
   return (
@@ -876,7 +843,6 @@ function getNewYorkDateKey(){
     "-" +
     String(ny.day).padStart(2,"0")
   );
-
 }
 
 const initialNyDate = getNewYorkDateParts();
@@ -886,10 +852,78 @@ let currentMonth =
     ? initialNyDate.month - 1
     : 9;
 
+function getLiveTradeZeroResult(date){
+
+  if(date !== getNewYorkDateKey()){
+    return null;
+  }
+
+  if(
+    !window.WASPNTradeZero ||
+    typeof window.WASPNTradeZero.getState !== "function"
+  ){
+    return null;
+  }
+
+  let state;
+
+  try{
+    state = window.WASPNTradeZero.getState();
+  }catch{
+    return null;
+  }
+
+  if(!state || typeof state !== "object"){
+    return null;
+  }
+
+  if(
+    state.tradeDate &&
+    state.tradeDate !== date
+  ){
+    return null;
+  }
+
+  const pnl =
+    Number(state.dayRealized);
+
+  if(!Number.isFinite(pnl)){
+    return null;
+  }
+
+  const explicitlyUsable =
+    state.usable === true;
+
+  const compatibleUsable =
+    state.usable !== false &&
+    state.tradeZeroConnected === true &&
+    state.dataFresh === true;
+
+  if(
+    !explicitlyUsable &&
+    !compatibleUsable
+  ){
+    return null;
+  }
+
+  return {
+    value:pnl,
+    source:"TradeZero live",
+    live:true
+  };
+}
+
 function getDailyResult(
   date,
   day = null
 ){
+
+  const live =
+    getLiveTradeZeroResult(date);
+
+  if(live){
+    return live;
+  }
 
   const record =
     day ||
@@ -900,12 +934,11 @@ function getDailyResult(
     typeof record.brokerDailyNet === "number" &&
     Number.isFinite(record.brokerDailyNet)
   ){
-
     return {
       value:record.brokerDailyNet,
-      source:"Broker reconciled"
+      source:"Broker reconciled",
+      live:false
     };
-
   }
 
   if(
@@ -914,31 +947,29 @@ function getDailyResult(
       date
     )
   ){
-
     return {
       value:tradingData[date],
-      source:"Broker history"
+      source:"Broker history",
+      live:false
     };
-
   }
 
   if(
     typeof record.totalNet === "number" &&
     Number.isFinite(record.totalNet)
   ){
-
     return {
       value:record.totalNet,
-      source:"WASPN Journal"
+      source:"WASPN Journal",
+      live:false
     };
-
   }
 
   return {
     value:null,
-    source:"No P&L"
+    source:"No P&L",
+    live:false
   };
-
 }
 
 function combined(){
@@ -950,32 +981,32 @@ function combined(){
   const journal =
     getJournal();
 
-  Object.entries(
-    journal
-  ).forEach(
-    ([date,day]) => {
+  Object.entries(journal)
+    .forEach(([date,day]) => {
 
       const result =
-        getDailyResult(
-          date,
-          day
-        );
+        getDailyResult(date,day);
 
       if(
-        typeof result.value ===
-        "number"
+        typeof result.value === "number" &&
+        Number.isFinite(result.value)
       ){
-
-        data[date] =
-          result.value;
-
+        data[date] = result.value;
       }
 
-    }
-  );
+    });
+
+  const today =
+    getNewYorkDateKey();
+
+  const live =
+    getLiveTradeZeroResult(today);
+
+  if(live){
+    data[today] = live.value;
+  }
 
   return data;
-
 }
 
 function getFxRate(){
@@ -991,13 +1022,10 @@ function getFxRate(){
     Number.isFinite(saved) &&
     saved > 0
   ){
-
     return saved;
-
   }
 
   return DEFAULT_FX_RATE;
-
 }
 
 function saveFxRate(){
@@ -1008,21 +1036,17 @@ function saveFxRate(){
     );
 
   const rate =
-    Number(
-      input.value
-    );
+    Number(input.value);
 
   if(
     !Number.isFinite(rate) ||
     rate <= 0
   ){
-
     alert(
       "Enter a valid USD → GBP conversion rate."
     );
 
     return;
-
   }
 
   localStorage.setItem(
@@ -1034,17 +1058,12 @@ function saveFxRate(){
     rate.toFixed(4);
 
   render();
-
 }
 
-function usdMoney(
-  value
-){
+function usdMoney(value){
 
   const n =
-    Number(
-      value || 0
-    );
+    Number(value || 0);
 
   if(n > 0){
     return "+$" + n.toFixed(2);
@@ -1055,17 +1074,12 @@ function usdMoney(
   }
 
   return "$0.00";
-
 }
 
-function gbpMoney(
-  usdValue
-){
+function gbpMoney(usdValue){
 
   const gbp =
-    Number(
-      usdValue || 0
-    ) *
+    Number(usdValue || 0) *
     getFxRate();
 
   if(gbp > 0){
@@ -1077,13 +1091,9 @@ function gbpMoney(
   }
 
   return "≈ £0.00";
-
 }
 
-function isoFromUtcDate(
-  date
-){
-
+function isoFromUtcDate(date){
   return (
     date.getUTCFullYear() +
     "-" +
@@ -1095,7 +1105,6 @@ function isoFromUtcDate(
       date.getUTCDate()
     ).padStart(2,"0")
   );
-
 }
 
 function getCurrentTradingWeek(){
@@ -1141,13 +1150,9 @@ function getCurrentTradingWeek(){
     mondayKey:isoFromUtcDate(monday),
     fridayKey:isoFromUtcDate(friday)
   };
-
 }
 
-function shortDateLabel(
-  date
-){
-
+function shortDateLabel(date){
   return date.toLocaleDateString(
     "en-GB",
     {
@@ -1156,7 +1161,6 @@ function shortDateLabel(
       month:"short"
     }
   );
-
 }
 
 function renderWeeklyPnl(){
@@ -1170,10 +1174,8 @@ function renderWeeklyPnl(){
   let total = 0;
   let days = 0;
 
-  Object.entries(
-    data
-  ).forEach(
-    ([date,value]) => {
+  Object.entries(data)
+    .forEach(([date,value]) => {
 
       if(
         date >= week.mondayKey &&
@@ -1181,14 +1183,11 @@ function renderWeeklyPnl(){
         typeof value === "number" &&
         Number.isFinite(value)
       ){
-
         total += value;
         days++;
-
       }
 
-    }
-  );
+    });
 
   const usd =
     document.getElementById(
@@ -1212,17 +1211,11 @@ function renderWeeklyPnl(){
 
   if(days === 0){
 
-    usd.textContent =
-      "No data";
-
-    gbp.textContent =
-      "—";
-
-    usd.className =
-      "metric-value";
+    usd.textContent = "No data";
+    gbp.textContent = "—";
+    usd.className = "metric-value";
 
     return;
-
   }
 
   usd.textContent =
@@ -1238,12 +1231,9 @@ function renderWeeklyPnl(){
         ? "green"
         : "red"
     );
-
 }
 
-function timeToSeconds(
-  value
-){
+function timeToSeconds(value){
 
   if(!value){
     return null;
@@ -1282,13 +1272,9 @@ function timeToSeconds(
     minutes * 60 +
     seconds
   );
-
 }
 
-function durationLabel(
-  entry,
-  exit
-){
+function durationLabel(entry,exit){
 
   const start =
     timeToSeconds(entry);
@@ -1312,9 +1298,7 @@ function durationLabel(
   }
 
   const minutes =
-    Math.floor(
-      duration / 60
-    );
+    Math.floor(duration / 60);
 
   const seconds =
     duration % 60;
@@ -1322,9 +1306,7 @@ function durationLabel(
   if(minutes >= 60){
 
     const hours =
-      Math.floor(
-        minutes / 60
-      );
+      Math.floor(minutes / 60);
 
     const remainingMinutes =
       minutes % 60;
@@ -1335,55 +1317,36 @@ function durationLabel(
       remainingMinutes +
       "m"
     );
-
   }
 
   return (
     minutes +
     "m " +
-    String(seconds)
-      .padStart(2,"0") +
+    String(seconds).padStart(2,"0") +
     "s"
   );
-
 }
 
-function key(
-  month,
-  day
-){
+function key(month,day){
 
   return (
     "2026-" +
-    String(
-      month + 1
-    ).padStart(2,"0") +
+    String(month + 1).padStart(2,"0") +
     "-" +
-    String(day)
-      .padStart(2,"0")
+    String(day).padStart(2,"0")
   );
-
 }
 
-function monthEntries(
-  month
-){
+function monthEntries(month){
 
   const prefix =
     "2026-" +
-    String(
-      month + 1
-    ).padStart(2,"0");
+    String(month + 1).padStart(2,"0");
 
-  return Object.entries(
-    combined()
-  ).filter(
-    ([date]) =>
-      date.startsWith(
-        prefix
-      )
-  );
-
+  return Object.entries(combined())
+    .filter(([date]) =>
+      date.startsWith(prefix)
+    );
 }
 
 function setMoneyStat(
@@ -1394,22 +1357,15 @@ function setMoneyStat(
 ){
 
   const usd =
-    document.getElementById(
-      usdId
-    );
+    document.getElementById(usdId);
 
   const gbp =
-    document.getElementById(
-      gbpId
-    );
+    document.getElementById(gbpId);
 
   if(empty){
-
     usd.textContent = "—";
     gbp.textContent = "—";
-
     return;
-
   }
 
   usd.textContent =
@@ -1417,20 +1373,15 @@ function setMoneyStat(
 
   gbp.textContent =
     gbpMoney(value);
-
 }
 
 function renderStats(){
 
   const entries =
-    monthEntries(
-      currentMonth
-    );
+    monthEntries(currentMonth);
 
   const values =
-    entries.map(
-      item => item[1]
-    );
+    entries.map(item => item[1]);
 
   const total =
     values.reduce(
@@ -1473,7 +1424,6 @@ function renderStats(){
 
     monthUsd.className =
       "metric-value";
-
   }
 
   document
@@ -1495,9 +1445,7 @@ function renderStats(){
       ).length;
 
   const all =
-    Object.values(
-      combined()
-    );
+    Object.values(combined());
 
   const ytd =
     all.reduce(
@@ -1583,11 +1531,9 @@ function renderStats(){
       0,
       true
     );
-
   }
 
   renderWeeklyPnl();
-
 }
 
 function render(){
@@ -1611,7 +1557,6 @@ function render(){
           "active",
           index === currentMonth
         );
-
       }
     );
 
@@ -1622,8 +1567,7 @@ function render(){
       "calendarDays"
     );
 
-  container.innerHTML =
-    "";
+  container.innerHTML = "";
 
   const first =
     new Date(
@@ -1661,10 +1605,7 @@ function render(){
     empty.className =
       "day empty";
 
-    container.appendChild(
-      empty
-    );
-
+    container.appendChild(empty);
   }
 
   const days =
@@ -1704,13 +1645,16 @@ function render(){
     }
 
     const date =
-      key(
-        currentMonth,
-        day
+      key(currentMonth,day);
+
+    const result =
+      getDailyResult(
+        date,
+        journal[date]
       );
 
     const value =
-      data[date];
+      result.value;
 
     const cell =
       document.createElement(
@@ -1721,8 +1665,7 @@ function render(){
       "day";
 
     if(
-      typeof value ===
-      "number"
+      typeof value === "number"
     ){
 
       cell.classList.add(
@@ -1730,37 +1673,24 @@ function render(){
           ? "green-day"
           : "red-day"
       );
-
     }
 
-    if(
-      journal[date]
-    ){
-
+    if(journal[date]){
       cell.classList.add(
         "saved-day"
       );
-
     }
 
-    if(
-      date === todayKey
-    ){
-
+    if(date === todayKey){
       cell.classList.add(
         "today"
       );
-
     }
 
-    if(
-      date > todayKey
-    ){
-
+    if(date > todayKey){
       cell.classList.add(
         "future"
       );
-
     }
 
     const dateEl =
@@ -1774,8 +1704,7 @@ function render(){
     dateEl.textContent =
       day +
       " " +
-      months[currentMonth]
-        .slice(0,3);
+      months[currentMonth].slice(0,3);
 
     const pnl =
       document.createElement(
@@ -1802,8 +1731,7 @@ function render(){
       "pnl-gbp";
 
     if(
-      typeof value ===
-      "number"
+      typeof value === "number"
     ){
 
       pnlUsd.textContent =
@@ -1825,24 +1753,31 @@ function render(){
 
       pnlGbp.textContent =
         "";
-
     }
 
-    pnl.appendChild(
-      pnlUsd
-    );
+    pnl.appendChild(pnlUsd);
+    pnl.appendChild(pnlGbp);
 
-    pnl.appendChild(
-      pnlGbp
-    );
+    if(result.live){
 
-    cell.appendChild(
-      dateEl
-    );
+      const liveBadge =
+        document.createElement(
+          "div"
+        );
 
-    cell.appendChild(
-      pnl
-    );
+      liveBadge.className =
+        "live-badge";
+
+      liveBadge.textContent =
+        "LIVE";
+
+      pnl.appendChild(
+        liveBadge
+      );
+    }
+
+    cell.appendChild(dateEl);
+    cell.appendChild(pnl);
 
     if(
       typeof value === "number" ||
@@ -1853,83 +1788,54 @@ function render(){
         "click",
         () => showDetail(date)
       );
-
     }
 
-    container.appendChild(
-      cell
-    );
-
+    container.appendChild(cell);
   }
-
 }
 
-function getTradeNet(
-  trade
-){
+function getTradeNet(trade){
 
   if(
     typeof trade.actualNet === "number" &&
-    Number.isFinite(
-      trade.actualNet
-    )
+    Number.isFinite(trade.actualNet)
   ){
-
     return {
-      value:Number(
-        trade.actualNet
-      ),
+      value:Number(trade.actualNet),
       reconciled:true
     };
-
   }
 
   if(
     typeof trade.netPnl === "number" &&
-    Number.isFinite(
-      trade.netPnl
-    )
+    Number.isFinite(trade.netPnl)
   ){
-
     return {
-      value:Number(
-        trade.netPnl
-      ),
+      value:Number(trade.netPnl),
       reconciled:false
     };
-
   }
 
   if(
     typeof trade.calculatedNet === "number" &&
-    Number.isFinite(
-      trade.calculatedNet
-    )
+    Number.isFinite(trade.calculatedNet)
   ){
-
     return {
-      value:Number(
-        trade.calculatedNet
-      ),
+      value:Number(trade.calculatedNet),
       reconciled:false
     };
-
   }
 
   return {
     value:0,
     reconciled:false
   };
-
 }
 
-function showDetail(
-  date
-){
+function showDetail(date){
 
   const day =
-    getJournal()[date] ||
-    {};
+    getJournal()[date] || {};
 
   const result =
     getDailyResult(
@@ -1942,8 +1848,7 @@ function showDetail(
 
   const pretty =
     new Date(
-      date +
-      "T12:00:00"
+      date + "T12:00:00"
     ).toLocaleDateString(
       "en-GB",
       {
@@ -1955,26 +1860,20 @@ function showDetail(
     );
 
   const trades =
-    Array.isArray(
-      day.trades
-    )
+    Array.isArray(day.trades)
       ? day.trades
       : [];
 
   const compliance =
     day.compliance &&
-    typeof day.compliance.score ===
-      "number"
-      ? day.compliance.score +
-        "/3"
+    typeof day.compliance.score === "number"
+      ? day.compliance.score + "/3"
       : "—";
 
   const score =
     day.sessionScore &&
-    typeof day.sessionScore.score ===
-      "number"
-      ? day.sessionScore.score +
-        "/5"
+    typeof day.sessionScore.score === "number"
+      ? day.sessionScore.score + "/5"
       : "—";
 
   const attempt =
@@ -2011,16 +1910,14 @@ function showDetail(
           day.liveRisk?.behaviouralLock?.active ||
           day.liveRisk?.behaviouralLock?.resetGateRequired ||
           trades.some(
-            trade =>
-              trade.tilt === "yes"
+            trade => trade.tilt === "yes"
           )
             ? "Yes"
             : "No"
         )
       : (
           trades.some(
-            trade =>
-              trade.tilt === "yes"
+            trade => trade.tilt === "yes"
           )
             ? "Yes"
             : "—"
@@ -2049,9 +1946,7 @@ function showDetail(
       (trade,index) => {
 
         const tradeNet =
-          getTradeNet(
-            trade
-          );
+          getTradeNet(trade);
 
         const net =
           tradeNet.value;
@@ -2110,7 +2005,6 @@ function showDetail(
           ).trim();
 
         return `
-
           <div class="trade">
 
             <strong>
@@ -2184,7 +2078,6 @@ function showDetail(
             }
 
             <div class="trade-row">
-
               <span>
                 ${
                   tradeNet.reconciled
@@ -2196,7 +2089,6 @@ function showDetail(
               <strong class="${net >= 0 ? "green" : "red"}">
                 ${usdMoney(net)}
               </strong>
-
             </div>
 
             <div class="trade-gbp">
@@ -2254,7 +2146,6 @@ function showDetail(
               setupReason
                 ? `
                   <div class="trade-setup">
-
                     <div class="trade-setup-label">
                       Setup Traded / Reason Trade Taken
                     </div>
@@ -2264,22 +2155,18 @@ function showDetail(
                         setupReason
                       )}
                     </div>
-
                   </div>
                 `
                 : ""
             }
 
           </div>
-
         `;
-
       }
     ).join("");
 
   const resultClass =
-    typeof value ===
-      "number"
+    typeof value === "number"
       ? (
           value >= 0
             ? "green"
@@ -2298,8 +2185,7 @@ function showDetail(
       </div>
 
       ${
-        typeof value ===
-          "number"
+        typeof value === "number"
           ? `
             <div class="detail-main ${resultClass}">
               ${usdMoney(value)}
@@ -2395,13 +2281,19 @@ function showDetail(
       </div>
 
       ${
-        trades.length
+        result.live
           ? `
             <div class="review-note">
-              Daily P&amp;L uses the broker-authoritative result when available. Reconciled trades use broker actual P&amp;L while the original WASPN setup, process and risk record remains attached to the day.
+              Today’s P&amp;L is live from TradeZero and may change as additional trades complete. The permanent historical record will use the reconciled/saved result.
             </div>
           `
-          : ""
+          : trades.length
+            ? `
+              <div class="review-note">
+                Daily P&amp;L uses the broker-authoritative result when available. Reconciled trades use broker actual P&amp;L while the original WASPN setup, process and risk record remains attached to the day.
+              </div>
+            `
+            : ""
       }
 
       ${tradeHtml}
@@ -2412,46 +2304,21 @@ function showDetail(
             <div class="trade">
               <strong>Session Note</strong>
               <br>
-              ${escapeHtml(
-                day.notes
-              )}
+              ${escapeHtml(day.notes)}
             </div>
           `
           : ""
       }
-
     `;
-
 }
 
-function escapeHtml(
-  value
-){
-
-  return String(
-    value || ""
-  )
-  .replaceAll(
-    "&",
-    "&amp;"
-  )
-  .replaceAll(
-    "<",
-    "&lt;"
-  )
-  .replaceAll(
-    ">",
-    "&gt;"
-  )
-  .replaceAll(
-    '"',
-    "&quot;"
-  )
-  .replaceAll(
-    "'",
-    "&#039;"
-  );
-
+function escapeHtml(value){
+  return String(value || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
 function buildButtons(){
@@ -2478,28 +2345,18 @@ function buildButtons(){
       button.addEventListener(
         "click",
         () => {
-
-          currentMonth =
-            index;
-
+          currentMonth = index;
           render();
-
         }
       );
 
-      holder.appendChild(
-        button
-      );
-
+      holder.appendChild(button);
     }
   );
-
 }
 
 document
-  .getElementById(
-    "prev"
-  )
+  .getElementById("prev")
   .addEventListener(
     "click",
     () => {
@@ -2510,14 +2367,11 @@ document
           : currentMonth - 1;
 
       render();
-
     }
   );
 
 document
-  .getElementById(
-    "next"
-  )
+  .getElementById("next")
   .addEventListener(
     "click",
     () => {
@@ -2528,27 +2382,27 @@ document
           : currentMonth + 1;
 
       render();
-
     }
   );
 
 document
-  .getElementById(
-    "saveFxBtn"
-  )
+  .getElementById("saveFxBtn")
   .addEventListener(
     "click",
     saveFxRate
   );
 
 document
-  .getElementById(
-    "fxRate"
-  )
+  .getElementById("fxRate")
   .addEventListener(
     "change",
     saveFxRate
   );
+
+window.addEventListener(
+  "waspn:tradezero-update",
+  render
+);
 
 window.addEventListener(
   "storage",
@@ -2566,15 +2420,11 @@ window.addEventListener(
 );
 
 document
-  .getElementById(
-    "fxRate"
-  )
+  .getElementById("fxRate")
   .value =
-    getFxRate()
-      .toFixed(4);
+    getFxRate().toFixed(4);
 
 buildButtons();
-
 render();
 
 </script>
