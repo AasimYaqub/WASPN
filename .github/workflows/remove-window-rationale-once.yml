@@ -1,0 +1,119 @@
+name: Remove window rationale once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/remove-window-rationale-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  clean:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Remove evidence and rationale copy
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          text = p.read_text()
+
+          # Remove the dedicated Evidence CSS block.
+          text, n_css = re.subn(
+              r'\n/\* ={39}\n   EVIDENCE\n={40} \*/.*?(?=\n/\* ={39}\n   FOOTER\n={40} \*/) ',
+              '\n',
+              text,
+              flags=re.S,
+          )
+          if n_css == 0:
+              # Formatting-safe fallback based on the actual section comments.
+              text, n_css = re.subn(
+                  r'\n/\* ========================================\n   EVIDENCE\n======================================== \*/.*?(?=\n/\* ========================================\n   FOOTER\n======================================== \*/) ',
+                  '\n',
+                  text,
+                  flags=re.S,
+              )
+
+          # Remove the desktop-only Evidence grid rule.
+          text = re.sub(
+              r'\n\s*\.evidence-grid\{\n\s*grid-template-columns:\n\s*repeat\(\n\s*4,\n\s*1fr\n\s*\);\n\s*\}\n',
+              '\n',
+              text,
+              flags=re.S,
+          )
+
+          # Remove the entire Home-page Evidence card.
+          text, n_html = re.subn(
+              r'\n<!-- ======================================\n     EVIDENCE\n====================================== -->\n.*?(?=\n<!-- ======================================\n     FOOTER\n====================================== -->)',
+              '\n',
+              text,
+              flags=re.S,
+          )
+
+          if n_html != 1:
+              raise SystemExit(f'Expected to remove one Evidence card, removed {n_html}')
+
+          p.write_text(text)
+
+          # Remove any surviving explanatory/rationale copy about why the
+          # trading window exists. Operational rule labels/times are retained.
+          phrases = [
+              'Evidence Behind the Guardrails',
+              'Operating constraints derived from observed patterns in historical trading performance.',
+              'The early-session historical sample produced the strongest result.',
+              'Trading after 11:00 AM ET generated the largest historical loss segment.',
+              'Operating principle: concentrate activity early',
+          ]
+
+          editable = [
+              *Path('.').glob('*.html'),
+              *Path('.').glob('*.js'),
+              *Path('.').glob('*.md'),
+          ]
+          for file in editable:
+              s = file.read_text()
+              original = s
+              for phrase in phrases:
+                  s = s.replace(phrase, '')
+              if s != original:
+                  file.write_text(s)
+
+          # Guard against the old rationale returning elsewhere in the app.
+          forbidden = [
+              'Evidence Behind the Guardrails',
+              'Best Early Window',
+              'strongest result',
+              'largest historical loss segment',
+              'concentrate activity early',
+              'derived from observed patterns in historical trading performance',
+          ]
+          hits = []
+          for file in editable:
+              s = file.read_text().lower()
+              for phrase in forbidden:
+                  if phrase.lower() in s:
+                      hits.append(f'{file}: {phrase}')
+          if hits:
+              raise SystemExit('Rationale copy remains:\n' + '\n'.join(hits))
+          PY
+
+      - name: Commit cleanup
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html '*.html' '*.js' '*.md'
+          if git diff --cached --quiet; then
+            echo 'No cleanup changes required.'
+            exit 0
+          fi
+          git commit -m 'Remove evidence and window rationale copy'
+          git push origin HEAD:main
