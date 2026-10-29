@@ -2,7 +2,7 @@ const CACHE_PREFIX =
   "waspn-pwa-";
 
 const CACHE_NAME =
-  "waspn-pwa-v5";
+  "waspn-pwa-v6";
 
 const APP_SHELL = [
   "./",
@@ -20,6 +20,21 @@ const APP_SHELL = [
   "./icon-192.png",
   "./icon-512.png"
 ];
+
+const WASPN_BACKEND_ORIGIN =
+  "https://wasp-backend-api.replit.app";
+
+const TOKEN_DB_NAME =
+  "waspn-secure-auth";
+
+const TOKEN_DB_VERSION =
+  1;
+
+const TOKEN_STORE_NAME =
+  "auth";
+
+const TOKEN_KEY =
+  "api-token";
 
 
 /* ========================================
@@ -69,12 +84,11 @@ self.addEventListener(
                 key => {
 
                   /*
-                    Only delete old WASPN caches.
+                    Only remove older WASPN caches.
 
-                    CacheStorage is origin-wide on
-                    GitHub Pages. Never delete caches
-                    belonging to another app/repo on
-                    the same origin.
+                    CacheStorage is shared across
+                    the GitHub Pages origin, so
+                    unrelated caches must remain.
                   */
 
                   if(
@@ -102,6 +116,400 @@ self.addEventListener(
             self.clients.claim()
         )
     );
+
+  }
+);
+
+
+/* ========================================
+   TOKEN STORAGE
+======================================== */
+
+function openTokenDatabase(){
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    ) => {
+
+      const request =
+        indexedDB.open(
+          TOKEN_DB_NAME,
+          TOKEN_DB_VERSION
+        );
+
+
+      request.onupgradeneeded =
+        () => {
+
+          const database =
+            request.result;
+
+
+          if(
+            !database.objectStoreNames
+              .contains(
+                TOKEN_STORE_NAME
+              )
+          ){
+
+            database.createObjectStore(
+              TOKEN_STORE_NAME
+            );
+
+          }
+
+        };
+
+
+      request.onsuccess =
+        () => {
+
+          resolve(
+            request.result
+          );
+
+        };
+
+
+      request.onerror =
+        () => {
+
+          reject(
+            request.error
+          );
+
+        };
+
+    }
+  );
+
+}
+
+
+async function saveApiToken(
+  token
+){
+
+  const clean =
+    String(
+      token || ""
+    ).trim();
+
+
+  if(
+    !clean
+  ){
+
+    await clearApiToken();
+
+    return;
+
+  }
+
+
+  const database =
+    await openTokenDatabase();
+
+
+  await new Promise(
+    (
+      resolve,
+      reject
+    ) => {
+
+      const transaction =
+        database.transaction(
+          TOKEN_STORE_NAME,
+          "readwrite"
+        );
+
+
+      const store =
+        transaction.objectStore(
+          TOKEN_STORE_NAME
+        );
+
+
+      store.put(
+        clean,
+        TOKEN_KEY
+      );
+
+
+      transaction.oncomplete =
+        () => resolve();
+
+
+      transaction.onerror =
+        () =>
+          reject(
+            transaction.error
+          );
+
+
+      transaction.onabort =
+        () =>
+          reject(
+            transaction.error
+          );
+
+    }
+  );
+
+
+  database.close();
+
+}
+
+
+async function getApiToken(){
+
+  try{
+
+    const database =
+      await openTokenDatabase();
+
+
+    const value =
+      await new Promise(
+        (
+          resolve,
+          reject
+        ) => {
+
+          const transaction =
+            database.transaction(
+              TOKEN_STORE_NAME,
+              "readonly"
+            );
+
+
+          const store =
+            transaction.objectStore(
+              TOKEN_STORE_NAME
+            );
+
+
+          const request =
+            store.get(
+              TOKEN_KEY
+            );
+
+
+          request.onsuccess =
+            () =>
+              resolve(
+                request.result ||
+                ""
+              );
+
+
+          request.onerror =
+            () =>
+              reject(
+                request.error
+              );
+
+        }
+      );
+
+
+    database.close();
+
+
+    return String(
+      value || ""
+    ).trim();
+
+  }
+
+  catch{
+
+    return "";
+
+  }
+
+}
+
+
+async function clearApiToken(){
+
+  try{
+
+    const database =
+      await openTokenDatabase();
+
+
+    await new Promise(
+      (
+        resolve,
+        reject
+      ) => {
+
+        const transaction =
+          database.transaction(
+            TOKEN_STORE_NAME,
+            "readwrite"
+          );
+
+
+        transaction
+          .objectStore(
+            TOKEN_STORE_NAME
+          )
+          .delete(
+            TOKEN_KEY
+          );
+
+
+        transaction.oncomplete =
+          () => resolve();
+
+
+        transaction.onerror =
+          () =>
+            reject(
+              transaction.error
+            );
+
+
+        transaction.onabort =
+          () =>
+            reject(
+              transaction.error
+            );
+
+      }
+    );
+
+
+    database.close();
+
+  }
+
+  catch{
+
+    /*
+      Nothing else to do.
+
+      Failure to clear a missing/nonexistent
+      database is harmless.
+    */
+
+  }
+
+}
+
+
+/* ========================================
+   CLIENT MESSAGES
+======================================== */
+
+self.addEventListener(
+  "message",
+  event => {
+
+    const data =
+      event.data;
+
+
+    if(
+      !data ||
+      typeof data !==
+        "object"
+    ){
+
+      return;
+
+    }
+
+
+    if(
+      data.type ===
+        "WASPN_SET_API_TOKEN"
+    ){
+
+      event.waitUntil(
+        saveApiToken(
+          data.token
+        )
+        .then(
+          () => {
+
+            event.source
+              ?.postMessage(
+                {
+                  type:
+                    "WASPN_API_TOKEN_SAVED"
+                }
+              );
+
+          }
+        )
+      );
+
+      return;
+
+    }
+
+
+    if(
+      data.type ===
+        "WASPN_CLEAR_API_TOKEN"
+    ){
+
+      event.waitUntil(
+        clearApiToken()
+          .then(
+            () => {
+
+              event.source
+                ?.postMessage(
+                  {
+                    type:
+                      "WASPN_API_TOKEN_CLEARED"
+                  }
+                );
+
+            }
+          )
+      );
+
+      return;
+
+    }
+
+
+    if(
+      data.type ===
+        "WASPN_CHECK_API_TOKEN"
+    ){
+
+      event.waitUntil(
+        getApiToken()
+          .then(
+            token => {
+
+              event.source
+                ?.postMessage(
+                  {
+                    type:
+                      "WASPN_API_TOKEN_STATUS",
+
+                    configured:
+                      Boolean(
+                        token
+                      )
+                  }
+                );
+
+            }
+          )
+      );
+
+    }
 
   }
 );
@@ -158,6 +566,7 @@ function isHtmlLike(
         request.url
       );
 
+
     return (
       isNavigation(
         request
@@ -180,6 +589,105 @@ function isHtmlLike(
     return false;
 
   }
+
+}
+
+
+function isProtectedBackendRequest(
+  request
+){
+
+  try{
+
+    const url =
+      new URL(
+        request.url
+      );
+
+
+    if(
+      url.origin !==
+        WASPN_BACKEND_ORIGIN
+    ){
+
+      return false;
+
+    }
+
+
+    return (
+      url.pathname.startsWith(
+        "/api/waspn/"
+      ) ||
+      url.pathname.startsWith(
+        "/api/tradezero/"
+      )
+    );
+
+  }
+
+  catch{
+
+    return false;
+
+  }
+
+}
+
+
+/* ========================================
+   AUTHENTICATED BACKEND FETCH
+======================================== */
+
+async function authenticatedBackendFetch(
+  request
+){
+
+  const token =
+    await getApiToken();
+
+
+  const headers =
+    new Headers(
+      request.headers
+    );
+
+
+  /*
+    Never add an empty Authorization header.
+
+    Until the user has configured the frontend
+    token, the protected backend will correctly
+    respond with 401.
+  */
+
+  if(
+    token
+  ){
+
+    headers.set(
+      "Authorization",
+      "Bearer " +
+      token
+    );
+
+  }
+
+
+  const authenticatedRequest =
+    new Request(
+      request,
+      {
+        headers,
+        cache:
+          "no-store"
+      }
+    );
+
+
+  return fetch(
+    authenticatedRequest
+  );
 
 }
 
@@ -364,9 +872,38 @@ self.addEventListener(
       event.request;
 
 
+    /*
+      WASPN/TradeZero backend requests are
+      authenticated here and are NEVER cached.
+    */
+
+    if(
+      isProtectedBackendRequest(
+        request
+      )
+    ){
+
+      if(
+        request.method ===
+          "GET"
+      ){
+
+        event.respondWith(
+          authenticatedBackendFetch(
+            request
+          )
+        );
+
+      }
+
+      return;
+
+    }
+
+
     if(
       request.method !==
-      "GET"
+        "GET"
     ){
 
       return;
@@ -375,10 +912,8 @@ self.addEventListener(
 
 
     /*
-      External requests — including the Replit
-      TradeZero backend — pass straight through.
-
-      Broker API responses are never cached.
+      Other external requests pass directly
+      through the browser network layer.
     */
 
     if(
@@ -391,6 +926,11 @@ self.addEventListener(
 
     }
 
+
+    /*
+      HTML, JS, manifest and navigations use
+      network-first so updates arrive quickly.
+    */
 
     if(
       isHtmlLike(
@@ -408,6 +948,11 @@ self.addEventListener(
 
     }
 
+
+    /*
+      Remaining same-origin static resources use
+      cache-first with background refresh.
+    */
 
     event.respondWith(
       cacheFirst(
