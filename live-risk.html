@@ -347,6 +347,22 @@ a{
   font-variant-numeric:tabular-nums;
 }
 
+.metric-sub{
+  margin-top:8px;
+  min-height:30px;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  line-height:1.35;
+}
+
+.metric-sub-value{
+  color:#a9c9d6;
+  font-size:12px;
+  font-weight:950;
+  font-variant-numeric:tabular-nums;
+}
+
 .attempt-max{
   color:var(--muted);
   font-size:.5em;
@@ -740,11 +756,7 @@ a{
 
   <div class="topbar">
 
-    <a
-      href="index.html"
-      class="icon-btn"
-      aria-label="Home"
-    >
+    <a href="index.html" class="icon-btn" aria-label="Home">
       ←
     </a>
 
@@ -778,29 +790,17 @@ a{
 
 </header>
 
-<section
-  id="status"
-  class="status warn"
->
+<section id="status" class="status warn">
 
-  <div
-    id="statusMode"
-    class="status-mode"
-  >
+  <div id="statusMode" class="status-mode">
     SESSION ENGINE
   </div>
 
-  <div
-    id="statusTitle"
-    class="status-title"
-  >
+  <div id="statusTitle" class="status-title">
     CHECKING SESSION
   </div>
 
-  <div
-    id="statusDetail"
-    class="status-detail"
-  >
+  <div id="statusDetail" class="status-detail">
     Loading New York trading state…
   </div>
 
@@ -814,17 +814,11 @@ a{
       Local Time
     </div>
 
-    <div
-      id="localTime"
-      class="clock-time"
-    >
+    <div id="localTime" class="clock-time">
       --:--
     </div>
 
-    <div
-      id="localZone"
-      class="clock-detail"
-    >
+    <div id="localZone" class="clock-detail">
       Local
     </div>
 
@@ -836,17 +830,11 @@ a{
       New York
     </div>
 
-    <div
-      id="etTime"
-      class="clock-time"
-    >
+    <div id="etTime" class="clock-time">
       --:--
     </div>
 
-    <div
-      id="nyDay"
-      class="clock-detail"
-    >
+    <div id="nyDay" class="clock-detail">
       —
     </div>
 
@@ -872,7 +860,7 @@ a{
   <section class="metric">
 
     <div class="label">
-      Realised P&amp;L
+      TradeZero Realised P&amp;L
     </div>
 
     <div
@@ -880,6 +868,19 @@ a{
       class="metric-value"
     >
       $0.00
+    </div>
+
+    <div
+      id="pnlEstimate"
+      class="metric-sub"
+    >
+      Estimated after manual fees:
+      <span
+        id="pnlEstimateValue"
+        class="metric-sub-value"
+      >
+        —
+      </span>
     </div>
 
   </section>
@@ -977,13 +978,11 @@ a{
   </div>
 
   <div class="gate-question">
-
     <div class="gate-question-text">
       1. Am I trying to make back a previous loss?
     </div>
 
     <div class="gate-options">
-
       <label class="gate-option">
         <input type="radio" name="gate1" value="risk">
         <span>Yes</span>
@@ -993,19 +992,15 @@ a{
         <input type="radio" name="gate1" value="safe">
         <span>No</span>
       </label>
-
     </div>
-
   </div>
 
   <div class="gate-question">
-
     <div class="gate-question-text">
       2. Am I increasing size because I am red?
     </div>
 
     <div class="gate-options">
-
       <label class="gate-option">
         <input type="radio" name="gate2" value="risk">
         <span>Yes</span>
@@ -1015,19 +1010,15 @@ a{
         <input type="radio" name="gate2" value="safe">
         <span>No</span>
       </label>
-
     </div>
-
   </div>
 
   <div class="gate-question">
-
     <div class="gate-question-text">
       3. Am I re-entering because I need to be right?
     </div>
 
     <div class="gate-options">
-
       <label class="gate-option">
         <input type="radio" name="gate3" value="risk">
         <span>Yes</span>
@@ -1037,19 +1028,15 @@ a{
         <input type="radio" name="gate3" value="safe">
         <span>No</span>
       </label>
-
     </div>
-
   </div>
 
   <div class="gate-question">
-
     <div class="gate-question-text">
       4. Am I calmer and prepared to wait for a valid setup?
     </div>
 
     <div class="gate-options">
-
       <label class="gate-option">
         <input type="radio" name="gate4" value="safe">
         <span>Yes</span>
@@ -1059,19 +1046,15 @@ a{
         <input type="radio" name="gate4" value="risk">
         <span>No</span>
       </label>
-
     </div>
-
   </div>
 
   <div class="gate-question">
-
     <div class="gate-question-text">
       5. Is the next trade genuinely inside WASPN rather than a recovery trade?
     </div>
 
     <div class="gate-options">
-
       <label class="gate-option">
         <input type="radio" name="gate5" value="safe">
         <span>Yes</span>
@@ -1081,9 +1064,7 @@ a{
         <input type="radio" name="gate5" value="risk">
         <span>No</span>
       </label>
-
     </div>
-
   </div>
 
   <div
@@ -1179,15 +1160,10 @@ a{
 </section>
 
 <div class="rule-reminder">
-
   <strong>HARD FINISH:</strong>
-
   Attempt 5 • -$100 realised • 11:00 AM ET
-
   <br>
-
   No reopening later.
-
 </div>
 
 </div>
@@ -1198,6 +1174,9 @@ a{
 
 const STORAGE_KEY =
   "waspnJournalV2";
+
+const ESTIMATED_FEES_KEY =
+  "waspnEstimatedFeesV1";
 
 const WARNING_LEVEL =
   -75;
@@ -1210,6 +1189,7 @@ const MAX_ATTEMPTS =
 
 const COOLDOWN_MS =
   5 * 60 * 1000;
+
 
 function getJournal(){
 
@@ -1231,6 +1211,7 @@ function getJournal(){
 
 }
 
+
 function saveJournal(
   journal
 ){
@@ -1243,6 +1224,98 @@ function saveJournal(
   );
 
 }
+
+
+function getEstimatedFeesStore(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        ESTIMATED_FEES_KEY
+      )
+    ) || {};
+
+  }
+
+  catch{
+
+    return {};
+
+  }
+
+}
+
+
+function getEstimatedFeesForDate(
+  date
+){
+
+  const record =
+    getEstimatedFeesStore()[
+      date
+    ];
+
+  if(
+    !record
+  ){
+
+    return 0;
+
+  }
+
+  if(
+    Number.isFinite(
+      Number(
+        record.total
+      )
+    )
+  ){
+
+    return Math.max(
+      0,
+      Number(
+        record.total
+      )
+    );
+
+  }
+
+  if(
+    Array.isArray(
+      record.trades
+    )
+  ){
+
+    return record.trades.reduce(
+      (
+        total,
+        value
+      ) =>
+        total +
+        (
+          Number.isFinite(
+            Number(
+              value
+            )
+          )
+            ? Math.max(
+                0,
+                Number(
+                  value
+                )
+              )
+            : 0
+        ),
+      0
+    );
+
+  }
+
+  return 0;
+
+}
+
 
 function getNyParts(){
 
@@ -1298,6 +1371,7 @@ function getNyParts(){
 
 }
 
+
 function getNyDate(){
 
   const ny =
@@ -1312,6 +1386,7 @@ function getNyDate(){
   );
 
 }
+
 
 function getSessionClockState(){
 
@@ -1409,13 +1484,15 @@ function getSessionClockState(){
 
 }
 
+
 function money(
   value
 ){
 
   const n =
     Number(
-      value || 0
+      value ||
+      0
     );
 
   if(
@@ -1443,6 +1520,7 @@ function money(
   return "$0.00";
 
 }
+
 
 function getTradeZeroState(){
 
@@ -1507,6 +1585,7 @@ function getTradeZeroState(){
   }
 
 }
+
 
 function applyTradeZeroStickyRules(
   localLive,
@@ -1616,6 +1695,7 @@ function applyTradeZeroStickyRules(
 
 }
 
+
 function buildDisplayLive(
   localLive,
   broker
@@ -1639,11 +1719,13 @@ function buildDisplayLive(
 
     return {
       ...localLive,
+
       attempt:
         Math.min(
           MAX_ATTEMPTS,
           localKnownAttempt
         ),
+
       maxAttemptReached:
         Math.min(
           MAX_ATTEMPTS,
@@ -1712,6 +1794,7 @@ function buildDisplayLive(
 
 }
 
+
 function getTodayRecord(){
 
   return getJournal()[
@@ -1719,6 +1802,7 @@ function getTodayRecord(){
   ] || {};
 
 }
+
 
 function getJournalTrades(
   day
@@ -1741,6 +1825,7 @@ function getJournalTrades(
 
 }
 
+
 function getJournalAttemptCount(
   day
 ){
@@ -1753,6 +1838,7 @@ function getJournalAttemptCount(
   );
 
 }
+
 
 function getJournalRealisedPnl(
   day
@@ -1796,6 +1882,7 @@ function getJournalRealisedPnl(
   );
 
 }
+
 
 function getLiveState(){
 
@@ -1860,6 +1947,7 @@ function getLiveState(){
   };
 
 }
+
 
 function saveLiveState(
   live
@@ -1935,6 +2023,7 @@ function saveLiveState(
 
 }
 
+
 function syncFromJournal(){
 
   const day =
@@ -1989,6 +2078,7 @@ function syncFromJournal(){
   );
 
 }
+
 
 function evaluateStickyRules(
   live
@@ -2046,6 +2136,7 @@ function evaluateStickyRules(
 
 }
 
+
 function triggerLossCooldown(
   live
 ){
@@ -2092,6 +2183,7 @@ function triggerLossCooldown(
 
 }
 
+
 function updateLossCooldown(
   live
 ){
@@ -2130,6 +2222,7 @@ function updateLossCooldown(
   return live;
 
 }
+
 
 function getLossCooldownCountdown(
   live
@@ -2189,6 +2282,7 @@ function getLossCooldownCountdown(
 
 }
 
+
 function isSessionPermanentlyClosed(
   live,
   clock = getSessionClockState()
@@ -2217,9 +2311,10 @@ function isSessionPermanentlyClosed(
 
 }
 
+
 function activateBehaviouralLock(){
 
-  let localLive =
+  const localLive =
     getLiveState();
 
   const broker =
@@ -2262,6 +2357,7 @@ function activateBehaviouralLock(){
 
 }
 
+
 function updateBehaviouralLock(
   live
 ){
@@ -2294,6 +2390,7 @@ function updateBehaviouralLock(
   return live;
 
 }
+
 
 function clearBehaviouralLock(){
 
@@ -2359,6 +2456,7 @@ function clearBehaviouralLock(){
   render();
 
 }
+
 
 function evaluateGate(){
 
@@ -2439,6 +2537,7 @@ function evaluateGate(){
     false;
 
 }
+
 
 function getOperationalStatus(
   live,
@@ -2572,6 +2671,7 @@ function getOperationalStatus(
 
 }
 
+
 function renderClocks(){
 
   const now =
@@ -2617,6 +2717,7 @@ function renderClocks(){
     getNyDate();
 
 }
+
 
 function renderConnectedRecord(
   broker
@@ -2719,6 +2820,7 @@ function renderConnectedRecord(
 
 }
 
+
 function render(){
 
   syncFromJournal();
@@ -2818,6 +2920,62 @@ function render(){
           : ""
     );
 
+
+  const estimateValue =
+    document.getElementById(
+      "pnlEstimateValue"
+    );
+
+  const estimatedFees =
+    getEstimatedFeesForDate(
+      getNyDate()
+    );
+
+  if(
+    broker
+  ){
+
+    const estimatedAfterFees =
+      Number(
+        broker.dayRealized
+      ) -
+      estimatedFees;
+
+    estimateValue.textContent =
+      money(
+        estimatedAfterFees
+      );
+
+    estimateValue.className =
+      "metric-sub-value " +
+      (
+        estimatedAfterFees > 0
+          ? "green"
+          : estimatedAfterFees < 0
+            ? "red"
+            : ""
+      );
+
+    document.getElementById(
+      "pnlEstimate"
+    ).title =
+      "Manual estimated fees: $" +
+      estimatedFees.toFixed(2) +
+      ". Risk rules still use TradeZero realised P&L.";
+
+  }
+
+  else{
+
+    estimateValue.textContent =
+      "—";
+
+    estimateValue.className =
+      "metric-sub-value";
+
+  }
+
+
   const behaviourToggle =
     document.getElementById(
       "behaviourToggle"
@@ -2910,6 +3068,7 @@ function render(){
   );
 
 }
+
 
 function resetBehaviouralControls(){
 
@@ -3027,6 +3186,7 @@ function resetBehaviouralControls(){
 
 }
 
+
 document.getElementById(
   "behaviourToggle"
 )
@@ -3076,6 +3236,7 @@ document.getElementById(
   }
 );
 
+
 document
   .querySelectorAll(
     '#resetGate input[type="radio"]'
@@ -3091,6 +3252,7 @@ document
     }
   );
 
+
 document.getElementById(
   "clearBehaviourLockBtn"
 )
@@ -3098,6 +3260,7 @@ document.getElementById(
   "click",
   clearBehaviouralLock
 );
+
 
 document.getElementById(
   "resetBtn"
@@ -3107,27 +3270,33 @@ document.getElementById(
   resetBehaviouralControls
 );
 
+
 window.addEventListener(
   "storage",
   render
 );
+
 
 window.addEventListener(
   "focus",
   render
 );
 
+
 window.addEventListener(
   "pageshow",
   render
 );
+
 
 window.addEventListener(
   "waspn:tradezero-update",
   render
 );
 
+
 render();
+
 
 setInterval(
   render,
