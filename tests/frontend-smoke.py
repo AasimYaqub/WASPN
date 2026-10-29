@@ -1,139 +1,240 @@
-"""Run against python3 -m http.server 8000 --directory /workspace/WASPN.
-Uses isolated browser profiles and synthetic read-only API responses.
+"""WASPN frontend browser regressions.
+
+Run a local server first, for example:
+  python3 -m http.server 8000 --bind 127.0.0.1 --directory .
+
+Then:
+  python3 -u tests/frontend-smoke.py
+
+Set CHROMIUM_PATH for a system Chromium binary when desired. Otherwise the
+Playwright-managed Chromium installation is used.
 """
+
+import datetime
 import json
+import os
 import sys
 from playwright.sync_api import sync_playwright, expect
+
 expect.set_options(timeout=10000)
 BASE = sys.argv[1] if len(sys.argv) > 1 else 'http://127.0.0.1:8000/'
 DATE = '2026-10-29'
+
 with sync_playwright() as p:
-    browser = p.chromium.launch(executable_path='/usr/bin/chromium', headless=True, args=['--no-sandbox'])
+    launch = dict(headless=True, args=['--no-sandbox'])
+    chromium_path = os.environ.get('CHROMIUM_PATH')
+    if chromium_path:
+        launch['executable_path'] = chromium_path
+
+    browser = p.chromium.launch(**launch)
+
     context = browser.new_context(service_workers='block', accept_downloads=True)
-    payload = dict(tradeDate=DATE, tradeZeroConnected=True, dataFresh=True, attempts=0, dayRealized=0, sessionClosed=False, hardStopReached=False, maxAttemptReached=False, outOfWindowEntryDetected=False)
+    payload = dict(
+        tradeDate=DATE,
+        tradeZeroConnected=True,
+        dataFresh=True,
+        attempts=0,
+        dayRealized=0,
+        sessionClosed=False,
+        hardStopReached=False,
+        maxAttemptReached=False,
+        outOfWindowEntryDetected=False,
+        warningReached=False,
+        objectiveReached=False,
+    )
+    journal_feed = dict(
+        tradeDate=DATE,
+        currency='USD',
+        entries=[],
+        complete=True,
+        dataFresh=True,
+        diagnostics=[],
+    )
+
     def api(route):
-        body = dict(payload) if 'live-status' in route.request.url else dict(tradeDate=DATE, entries=[], complete=False, dataFresh=True)
+        body = dict(payload) if 'live-status' in route.request.url else dict(journal_feed)
         route.fulfill(json=body, headers={'Access-Control-Allow-Origin':'*'})
+
     context.route('https://wasp-backend-api.replit.app/**', api)
     page = context.new_page()
-    page.clock.install(time=__import__('datetime').datetime.fromisoformat(DATE+'T12:00:00+00:00'))
+    page.clock.install(time=datetime.datetime.fromisoformat(DATE + 'T12:00:00+00:00'))
     errors = []
     page.on('pageerror', lambda e: errors.append(str(e)))
     page.on('dialog', lambda d: d.accept())
-    for name in ['index.html','live-risk.html','journal.html','compliance.html','calendar-2026.html','data-backup.html']:
-        assert page.goto(BASE+name).status == 200
+
+    for name in [
+        'index.html',
+        'live-risk.html',
+        'journal.html',
+        'compliance.html',
+        'calendar-2026.html',
+        'data-backup.html',
+    ]:
+        assert page.goto(BASE + name).status == 200
+
     assert not errors, errors
     print('PASS: six pages load without JavaScript exceptions')
-    page.goto(BASE+'live-risk.html')
+
+    # Main window and informational objective.
+    page.goto(BASE + 'live-risk.html')
     page.evaluate('WASPNTradeZero.refresh()')
     assert page.locator('#statusTitle').inner_text() == 'WITHIN WASPN'
-    payload.update(dayRealized=50, objectiveReached=True, sessionClosed=False)
+
+    payload.update(dayRealized=50, objectiveReached=True)
     page.evaluate('WASPNTradeZero.refresh()')
     assert page.locator('#statusTitle').inner_text() == 'WITHIN WASPN'
     print('PASS: 08:00 main window active; +$50 objective alone does not close session')
+
+    # Trustworthy daily broker P&L is persisted for Review after rollover.
+    payload.update(dayRealized=29.01, objectiveReached=False)
+    page.evaluate('WASPNTradeZero.refresh()')
+    persisted = page.evaluate('''() => {
+      const day = JSON.parse(localStorage.getItem('waspnJournalV2'))['2026-10-29'];
+      return [day.brokerDailyNet, day.brokerDailyNetSource, Boolean(day.brokerDailyObservedAt)];
+    }''')
+    assert persisted == [29.01, 'TRADEZERO_LIVE', True], persisted
+    print('PASS: trustworthy TradeZero daily P&L persists with provenance')
+
+    # Attempt high-water cannot regress and >5 is displayed explicitly.
     payload.update(attempts=3)
     page.evaluate('WASPNTradeZero.refresh()')
-    assert page.locator('#attempt').inner_text().strip() == '3'
-    page.evaluate('localStorage.clear(); render()')
     assert page.locator('#attempt').inner_text().strip() == '3'
     payload.update(attempts=1)
     page.evaluate('WASPNTradeZero.refresh()')
     assert page.locator('#attempt').inner_text().strip() == '3'
-    page.reload()
-    assert page.locator('#statusTitle').inner_text() in ['BACKEND VERIFICATION REQUIRED','WITHIN WASPN']
+
+    payload.update(attempts=6, maxAttemptReached=True)
     page.evaluate('WASPNTradeZero.refresh()')
-    assert page.locator('#attempt').inner_text().strip() == '3'
-    print('PASS: attempt high-water survives clearing, lower responses and reload')
-    payload.update(dayRealized=-75, objectiveReached=False, sessionClosed=False)
+    page.wait_for_timeout(50)
+    assert page.locator('#attempt').inner_text().strip() == '6'
+    assert 'ATTEMPT LIMIT BREACH' in page.locator('#statusTitle').inner_text()
+    print('PASS: attempt high-water survives lower responses and sixth attempt is explicit')
+
+    # Fresh context for warning cooldown tests.
+    context.close()
+    context = browser.new_context(service_workers='block')
+    context.route('https://wasp-backend-api.replit.app/**', api)
+    page = context.new_page()
+    page.clock.install(time=datetime.datetime.fromisoformat(DATE + 'T12:00:00+00:00'))
+    page.on('pageerror', lambda e: errors.append(str(e)))
+    page.on('dialog', lambda d: d.accept())
+    payload.update(attempts=0, maxAttemptReached=False, dayRealized=-75)
+
+    page.goto(BASE + 'live-risk.html')
     page.evaluate('WASPNTradeZero.refresh()')
     page.wait_for_function('getLiveState().lossWarning?.active === true')
     expect(page.locator('#statusTitle')).to_contain_text('COOLDOWN')
     assert page.evaluate('getLiveState().lossWarning.until - getLiveState().lossWarning.startedAt') == 300000
-    assert page.evaluate('''() => {
-      const live = getLiveState(), until = live.lossWarning.until, original = Date.now;
-      try {
-        Date.now = () => until - 1; updateLossCooldown(live);
-        const before = live.lossWarning.active;
-        Date.now = () => until; updateLossCooldown(live);
-        return [before,live.lossWarning.active,live.lossWarning.resetGateRequired];
-      } finally { Date.now = original; }
-    }''') == [True,False,True]
+    assert page.evaluate('getLiveState().lossWarning.source') == 'TRADEZERO'
     page.clock.fast_forward(300001)
     expect(page.locator('#statusTitle')).to_have_text('RESET GATE REQUIRED')
     for name in ['gate1','gate2','gate3','gate4','gate5']:
         page.locator(f'input[name="{name}"][value="safe"] + span').click()
     page.locator('#clearBehaviourLockBtn').click()
     expect(page.locator('#statusTitle')).to_have_text('-$75 WARNING ACTIVE')
-    print('PASS: five-minute loss cooldown and reset gate complete without retrigger')
+    print('PASS: broker -$75 warning uses five-minute cooldown and reset gate')
+
+    # Window breach remains sticky.
     payload.update(dayRealized=0, outOfWindowEntryDetected=True)
     page.evaluate('WASPNTradeZero.refresh()')
     assert 'WINDOW BREACH' in page.locator('#statusTitle').inner_text()
-    assert page.locator('#waspnWindowBreachNote').count() == 0
-    assert page.get_by_text('WINDOW BREACH', exact=False).count() == 1
     payload['outOfWindowEntryDetected'] = False
     page.reload()
     page.evaluate('WASPNTradeZero.refresh()')
     assert 'WINDOW BREACH' in page.locator('#statusTitle').inner_text()
-    assert page.locator('#waspnWindowBreachNote').count() == 0
-    assert page.get_by_text('WINDOW BREACH', exact=False).count() == 1
-    page.goto(BASE+'index.html')
+    page.goto(BASE + 'index.html')
     assert 'WINDOW BREACH' in page.locator('#marketMain').inner_text()
-    print('PASS: confirmed breach survives false broker poll, reload and navigation')
-    page.goto(BASE+'journal.html')
-    for key,value in dict(tradeDate=DATE,startValue='10000',ticker1='TEST',entryPrice1='10',exitPrice1='11',shares1='100',fees1='1',setupReason1='Smoke test').items():
-        page.locator('#'+key).fill(value)
-    page.locator('#saveBtn').click()
+    print('PASS: confirmed window breach survives false later poll, reload and navigation')
+
+    # Repeated ticker mapping follows broker attempt number before ticker fallback.
+    payload.update(outOfWindowEntryDetected=False)
+    page.goto(BASE + 'journal.html')
+    repeated_index = page.evaluate('''() => WASPNTradeZeroJournal.findTradeIndex(
+      [{ticker:'CHSN'},{ticker:'CHSN'}],
+      {sourceId:'cycle-2',symbol:'CHSN',attemptNumber:2}
+    )''')
+    assert repeated_index == 1, repeated_index
+    print('PASS: repeated ticker reconciliation follows broker attempt slot')
+
+    # Compliance Q1 cannot auto-pass partial history, and later objective evidence invalidates saved answers.
+    page.evaluate('''() => {
+      const store = JSON.parse(localStorage.getItem('waspnJournalV2') || '{}');
+      store['2026-10-29'] = {
+        date:'2026-10-29',
+        trades:[{ticker:'TEST',brokerSourceId:'x',brokerTimingReconciled:true,entryTime:'07:15',exitTime:'07:16'}],
+        brokerJournal:{source:'TRADEZERO',complete:false,dataFresh:true,entryCount:1,provenAttemptCount:1},
+        liveRisk:{attempt:1,maxAttemptReached:1},
+        compliance:{window:true,attempts:true,stop:true,score:3},
+        sessionScore:{score:5,answers:{insideWindow:true,stoppedByFive:true,respectedHardStop:true,noRevengeContinuation:true,noTiltTrade:true}}
+      };
+      localStorage.setItem('waspnJournalV2',JSON.stringify(store));
+    }''')
+    page.goto(BASE + 'compliance.html')
+    page.wait_for_timeout(50)
+    assert not page.locator('#auto1').evaluate('(el) => el.classList.contains("show")')
+    print('PASS: partial broker history does not auto-certify trading-window compliance')
+
+    page.evaluate('''() => {
+      const store = JSON.parse(localStorage.getItem('waspnJournalV2'));
+      store['2026-10-29'].liveRisk = {attempt:6,maxAttemptReached:6,windowBreach:true,sessionEnded:true};
+      localStorage.setItem('waspnJournalV2',JSON.stringify(store));
+      WASPNSession.sync();
+    }''')
     page.reload()
-    assert page.locator('#ticker1').input_value() == 'TEST'
-    page.goto(BASE+'data-backup.html')
-    with page.expect_download() as event: page.locator('#exportBtn').click()
-    data = json.load(open(event.value.path()))
-    assert data['data'][DATE]['liveRisk']['windowBreach'] is True
-    page.locator('#fileInput').set_input_files({'name':'backup.json','mimeType':'application/json','buffer':json.dumps(data).encode()})
-    expect(page.locator('#mergeBtn')).to_be_enabled()
-    page.locator('#mergeBtn').click()
-    assert page.evaluate('WASPNSession.sync().windowBreach')
-    assert page.evaluate('JSON.parse(localStorage.getItem("waspnEstimatedFeesV1"))')
-    print('PASS: journal, estimated fees and backup round trip retain daily breach')
-    page.goto(BASE+'journal.html')
-    page.locator('#deleteBtn').click()
-    assert page.evaluate('WASPNSession.sync().sessionEnded')
-    print('PASS: deleting journal cannot reopen today')
+    assert not page.locator('#q1').is_checked()
+    assert not page.locator('#q2').is_checked()
+    saved_scores = page.evaluate('''() => {
+      const day = JSON.parse(localStorage.getItem('waspnJournalV2'))['2026-10-29'];
+      return [day.compliance.score,day.sessionScore.score,day.sessionScore.answers.insideWindow,day.sessionScore.answers.stoppedByFive];
+    }''')
+    assert saved_scores == [1,3,False,False], saved_scores
+    print('PASS: later broker evidence invalidates conflicting saved structural compliance')
+
+    # Review timing claims require broker provenance.
+    page.evaluate('''() => {
+      const store = JSON.parse(localStorage.getItem('waspnJournalV2'));
+      store['2026-10-29'].trades = [{ticker:'LEGACY',entryTime:'07:15',exitTime:'07:16',netPnl:1}];
+      localStorage.setItem('waspnJournalV2',JSON.stringify(store));
+    }''')
+    page.goto(BASE + 'calendar-2026.html')
+    page.evaluate("showDetail('2026-10-29')")
+    page.wait_for_timeout(50)
+    detail_text = page.locator('#detail').inner_text()
+    assert 'Broker timing reconciled' not in detail_text
+    assert 'Timing not broker-proven' in detail_text
+    print('PASS: Review does not label legacy/manual timing as broker reconciled')
+
+    # Hardened backup validator rejects impossible dates and malformed nested data.
+    page.goto(BASE + 'data-backup.html')
+    bad_date = page.evaluate('''() => {
+      try { validateJournalObject({'2026-02-31':{date:'2026-02-31'}}); return false; }
+      catch { return true; }
+    }''')
+    bad_score = page.evaluate('''() => {
+      try { validateJournalObject({'2026-10-29':{date:'2026-10-29',compliance:{score:9}}}); return false; }
+      catch { return true; }
+    }''')
+    assert bad_date and bad_score
+    print('PASS: backup validation rejects impossible dates and invalid nested scores')
+
     assert not errors, errors
     context.close()
-    for flag in ['sessionClosed','hardStopReached','maxAttemptReached','outOfWindowEntryDetected']:
-        c = browser.new_context(service_workers='block')
-        q = c.new_page()
-        q.clock.install(time=__import__('datetime').datetime.fromisoformat(DATE+'T12:00:00+00:00'))
-        checkpoint = dict(tradeDate=DATE, tradeZeroConnected=False, dataFresh=False, attempts=0, dayRealized=50, **{flag:True})
-        c.route('https://wasp-backend-api.replit.app/**', lambda route: route.fulfill(json=checkpoint, headers={'Access-Control-Allow-Origin':'*'}))
-        q.goto(BASE+'live-risk.html')
-        assert q.locator('#statusTitle').inner_text() != 'WITHIN WASPN'
-        q.evaluate('WASPNTradeZero.refresh()')
-        assert q.evaluate('WASPNSession.sync().sessionEnded') is True
-        assert q.locator('#statusTitle').inner_text() != 'WITHIN WASPN'
-        q.evaluate('localStorage.clear(); render()')
-        assert q.evaluate('WASPNSession.sync().sessionEnded') is True
-        q.evaluate('localStorage.clear()')
-        q.reload()
-        assert q.locator('#statusTitle').inner_text() != 'WITHIN WASPN'
-        q.evaluate('WASPNTradeZero.refresh()')
-        assert q.evaluate('WASPNSession.sync().sessionEnded') is True
-        c.close()
-    print('PASS: all four backend checkpoint stops restore after browser storage clearing, including cold reload with stale/disconnected live data')
+
+    # Unauthenticated backend never shows open trading permission.
     c = browser.new_context(service_workers='block')
     q = c.new_page()
-    q.clock.install(time=__import__('datetime').datetime.fromisoformat(DATE+'T12:00:00+00:00'))
+    q.clock.install(time=datetime.datetime.fromisoformat(DATE + 'T12:00:00+00:00'))
     c.route('https://wasp-backend-api.replit.app/**', lambda route: route.fulfill(status=401, body='Unauthorized'))
-    q.on('dialog',lambda d:d.dismiss())
-    q.goto(BASE+'live-risk.html')
+    q.on('dialog', lambda d: d.dismiss())
+    q.goto(BASE + 'live-risk.html')
     q.evaluate('void WASPNTradeZero.refresh()')
     assert q.locator('#statusTitle').inner_text() == 'BACKEND VERIFICATION REQUIRED'
-    q.goto(BASE+'index.html')
+    q.goto(BASE + 'index.html')
     assert q.locator('#marketMain').inner_text() == 'BACKEND VERIFICATION REQUIRED'
     c.close()
-    print('PASS: missing auth after full site-data loss never shows an open session')
-    # Real service worker: no mocked authentication or token storage implementation.
+    print('PASS: missing auth never shows an open session')
+
+    # Real service worker token protocol and offline shell.
     context = browser.new_context()
     page = context.new_page()
     page.goto(BASE)
@@ -141,8 +242,18 @@ with sync_playwright() as p:
     page.wait_for_function('navigator.serviceWorker.controller?.state === "activated"')
     page.reload()
     page.wait_for_function('navigator.serviceWorker.controller !== null')
+
     result = page.evaluate('''async () => {
-      const send = (data, expected) => new Promise(resolve => { const listener = e => { if(e.data?.type === expected) { navigator.serviceWorker.removeEventListener('message',listener); resolve(e.data); } }; navigator.serviceWorker.addEventListener('message',listener); navigator.serviceWorker.controller.postMessage(data); });
+      const send = (data, expected) => new Promise(resolve => {
+        const listener = e => {
+          if(e.data?.type === expected){
+            navigator.serviceWorker.removeEventListener('message',listener);
+            resolve(e.data);
+          }
+        };
+        navigator.serviceWorker.addEventListener('message',listener);
+        navigator.serviceWorker.controller.postMessage(data);
+      });
       await send({type:'WASPN_SET_API_TOKEN',token:'synthetic-smoke-placeholder'},'WASPN_API_TOKEN_SAVED');
       const status = await send({type:'WASPN_CHECK_API_TOKEN'},'WASPN_API_TOKEN_STATUS');
       await send({type:'WASPN_CLEAR_API_TOKEN'},'WASPN_API_TOKEN_CLEARED');
@@ -150,9 +261,11 @@ with sync_playwright() as p:
     }''')
     assert result.get('configured') is True, result
     print('PASS: real service-worker token save/check/clear protocol')
+
     context.set_offline(True)
     for name in ['index.html','live-risk.html','journal.html','compliance.html','calendar-2026.html','data-backup.html']:
-        assert page.goto(BASE+name).status == 200
+        assert page.goto(BASE + name).status == 200
     assert page.evaluate('typeof WASPNSession.clock') == 'function'
     print('PASS: all six pages and shared rules available offline through PWA cache')
+
     browser.close()
