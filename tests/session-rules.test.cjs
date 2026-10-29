@@ -20,6 +20,14 @@ const broker = extra => ({
 });
 const evaluate = (live, extra={}) => R.evaluate(live, {date, now, ...extra});
 
+
+test('single trading window constants are 06:30–11:00 ET', () => {
+  assert.equal(R.START, 390);
+  assert.equal(R.END, 660);
+  assert.equal(Object.prototype.hasOwnProperty.call(R, 'PRELIM_START'), false);
+  assert.equal(Object.prototype.hasOwnProperty.call(R, 'MAIN_START'), false);
+});
+
 for(const [time,expected] of [
   ['06:29:59',false],
   ['06:30',true],
@@ -40,9 +48,9 @@ for(const [time,expected] of [
 
 for(const [utc,key] of [
   ['10:29:59','before'],
-  ['10:30:00','preliminary'],
-  ['11:00:00','main'],
-  ['14:59:59','main'],
+  ['10:30:00','window'],
+  ['11:00:00','window'],
+  ['14:59:59','window'],
   ['15:00:00','closed']
 ]){
   test('clock boundary ' + utc, () => assert.equal(R.clock(new Date(date + 'T' + utc + 'Z')).key, key));
@@ -52,7 +60,7 @@ test('winter and summer ET timestamps', () => {
   assert.equal(R.timeInsideWindow('2026-12-01T12:00:00Z'), true);
   assert.equal(R.timeInsideWindow('2026-07-01T10:30:00Z'), true);
   assert.equal(R.timeInsideWindow('2026-12-01T11:29:59Z'), false);
-  assert.equal(R.clock(new Date('2026-12-01T12:00:00Z')).key, 'main');
+  assert.equal(R.clock(new Date('2026-12-01T12:00:00Z')).key, 'window');
 });
 
 test('objective alone does not close a session; backend sessionClosed is authoritative', () => {

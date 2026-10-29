@@ -2,8 +2,7 @@
 (function(root){
   "use strict";
 
-  const PRELIM_START = 390;
-  const MAIN_START = 420;
+  const START = 390;
   const END = 660;
   const WARNING = -75;
   const HARD_STOP = -100;
@@ -125,7 +124,7 @@
       return null;
     }
 
-    return minutes >= PRELIM_START && minutes < END;
+    return minutes >= START && minutes < END;
   }
 
   function clock(now = new Date()){
@@ -139,15 +138,11 @@
       return {key:"closed",canStart:false,title:"SESSION CLOSED",detail:"11:00 AM ET reached • No reopening later.",className:"closed"};
     }
 
-    if(ny.minutes < PRELIM_START){
-      return {key:"before",canStart:false,title:"WAIT — SESSION NOT OPEN",detail:"Preliminary window begins at 06:30 ET.",className:"warn"};
+    if(ny.minutes < START){
+      return {key:"before",canStart:false,title:"WAIT — SESSION NOT OPEN",detail:"Trading window begins at 06:30 ET.",className:"warn"};
     }
 
-    if(ny.minutes < MAIN_START){
-      return {key:"preliminary",canStart:true,title:"PRELIMINARY WINDOW",detail:"06:30–07:00 ET • Exceptional setups only.",className:"ok"};
-    }
-
-    return {key:"main",canStart:true,title:"WITHIN WASPN",detail:"Main trading window • 07:00–11:00 ET.",className:"ok"};
+    return {key:"window",canStart:true,title:"WITHIN WASPN",detail:"Trading window • 06:30–11:00 ET.",className:"ok"};
   }
 
   function brokerPnlUsable(broker, date){
@@ -509,7 +504,7 @@
   }
 
   const api = {
-    PRELIM_START,MAIN_START,END,WARNING,HARD_STOP,MAX_ATTEMPTS,COOLDOWN_MS,
+    START,END,WARNING,HARD_STOP,MAX_ATTEMPTS,COOLDOWN_MS,
     BACKEND_MAX_AGE_MS,backendStatus,backendUnavailable,brokerPnlUsable,nyParts,
     timeInsideWindow,clock,evaluate,sync,writeJournal,confirmBrokerEntries,
     invalidateConflictingReviews,isRealDateKey,validateBackupJournal

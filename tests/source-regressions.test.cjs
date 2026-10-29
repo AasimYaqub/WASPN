@@ -96,7 +96,7 @@ test('Review strips broker timing claims and aggregate count without provenance'
 test('Backup hardening is installed through session-rules, which Data Backup actually loads', () => {
   const rules = read('session-rules.js');
   const backup = read('data-backup.html');
-  assert.match(backup,/session-rules\.js\?v=2/);
+  assert.match(backup,/session-rules\.js\?v=3/);
   assert.match(rules,/function validateBackupJournal/);
   assert.match(rules,/function isRealDateKey/);
   assert.match(rules,/Date\.UTC/);
@@ -107,5 +107,19 @@ test('Backup hardening is installed through session-rules, which Data Backup act
 
 test('hardening release bumps PWA cache', () => {
   const source = read('service-worker.js');
-  assert.match(source,/waspn-pwa-v9/);
+  assert.match(source,/waspn-pwa-v10/);
+});
+
+
+test('single-window release has no old split-window copy', () => {
+  const files = ['index.html','live-risk.html','compliance.html','session-rules.js'];
+  for(const file of files){
+    const source = read(file);
+    assert.doesNotMatch(source,/06:30–07:00 ET/);
+    assert.doesNotMatch(source,/07:00–11:00 ET/);
+    assert.doesNotMatch(source,/PRELIMINARY WINDOW|Preliminary 06:30/);
+  }
+  const rules = read('session-rules.js');
+  assert.match(rules,/const START = 390/);
+  assert.doesNotMatch(rules,/MAIN_START|PRELIM_START/);
 });

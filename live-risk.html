@@ -1431,7 +1431,7 @@ a{
 
 </div>
 
-<script src="session-rules.js?v=2"></script>
+<script src="session-rules.js?v=3"></script>
 <script src="tradezero-live.js?v=4"></script>
 
 <script>
@@ -2625,7 +2625,7 @@ function getOperationalStatus(
   clock
 ){
 
-  if (live.windowBreach) return {title:"WINDOW BREACH — SESSION OVER", detail:"Confirmed broker entry outside 06:30–07:00 / 07:00–11:00 ET. No further entries today.", className:"stop"};
+  if (live.windowBreach) return {title:"WINDOW BREACH — SESSION OVER", detail:"Confirmed broker entry outside 06:30–11:00 ET. No further entries today.", className:"stop"};
   if (live.sessionEnded && !live.hardStopReached && live.maxAttemptReached < MAX_ATTEMPTS && clock.key !== "closed")
     return {title:"SESSION CLOSED", detail:"Daily stop latched • No reopening today.", className:"closed"};
 

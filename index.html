@@ -408,7 +408,7 @@ a{
   display:grid;
 
   grid-template-columns:
-    1fr 1fr;
+    1fr;
 
   gap:7px;
 
@@ -925,7 +925,7 @@ a{
     </div>
 
     <div class="rule-value blue">
-      07:00–11:00 ET
+      06:30–11:00 ET
     </div>
 
   </div>
@@ -998,68 +998,33 @@ a{
 
   <div class="window-countdowns">
 
-
     <div
-      id="prelimCountdownBox"
-      class="countdown-item prelim"
+      id="windowCountdownBox"
+      class="countdown-item"
     >
 
       <div
-        id="prelimCountdownLabel"
+        id="windowCountdownLabel"
         class="countdown-label"
       >
-        Preliminary
+        Trading Window
       </div>
 
-
       <div
-        id="prelimCountdown"
+        id="windowCountdown"
         class="countdown-time"
       >
         --:--:--
       </div>
 
-
       <div
-        id="prelimCountdownCaption"
+        id="windowCountdownCaption"
         class="countdown-caption"
       >
-        06:30–07:00 ET
+        06:30–11:00 ET
       </div>
 
     </div>
-
-
-    <div
-      id="mainCountdownBox"
-      class="countdown-item main"
-    >
-
-      <div
-        id="mainCountdownLabel"
-        class="countdown-label"
-      >
-        Main Window
-      </div>
-
-
-      <div
-        id="mainCountdown"
-        class="countdown-time"
-      >
-        --:--:--
-      </div>
-
-
-      <div
-        id="mainCountdownCaption"
-        class="countdown-caption"
-      >
-        07:00–11:00 ET
-      </div>
-
-    </div>
-
 
   </div>
 
@@ -1206,7 +1171,7 @@ a{
 </div>
 
 
-<script src="session-rules.js?v=2"></script>
+<script src="session-rules.js?v=3"></script>
 <script>
 
 
@@ -1473,417 +1438,81 @@ function nextSessionCountdown(
 
 function renderMarketStatus(){
 
-  const ny =
-    getNyParts();
+  const ny = getNyParts();
+  const nowSeconds = secondsNow(ny);
+  const weekend = isWeekend(ny.weekday);
+  const start = WASPNSession.START * 60;
+  const close = WASPNSession.END * 60;
 
+  const box = document.getElementById("marketStatus");
+  const main = document.getElementById("marketMain");
+  const detail = document.getElementById("marketDetail");
+  const windowBox = document.getElementById("windowCountdownBox");
+  const windowLabel = document.getElementById("windowCountdownLabel");
+  const windowTime = document.getElementById("windowCountdown");
+  const windowCaption = document.getElementById("windowCountdownCaption");
 
-  const nowSeconds =
-    secondsNow(
-      ny
-    );
-
-
-  const weekend =
-    isWeekend(
-      ny.weekday
-    );
-
-
-  const prelimStart =
-    WASPNSession.PRELIM_START * 60;
-
-
-  const prelimEnd =
-    WASPNSession.MAIN_START * 60;
-
-
-  const mainStart =
-    WASPNSession.MAIN_START * 60;
-
-
-  const close =
-    WASPNSession.END * 60;
-
-
-  const box =
-    document.getElementById(
-      "marketStatus"
-    );
-
-
-  const main =
-    document.getElementById(
-      "marketMain"
-    );
-
-
-  const detail =
-    document.getElementById(
-      "marketDetail"
-    );
-
-
-  const prelimBox =
-    document.getElementById(
-      "prelimCountdownBox"
-    );
-
-
-  const prelimLabel =
-    document.getElementById(
-      "prelimCountdownLabel"
-    );
-
-
-  const prelimTime =
-    document.getElementById(
-      "prelimCountdown"
-    );
-
-
-  const prelimCaption =
-    document.getElementById(
-      "prelimCountdownCaption"
-    );
-
-
-  const mainBox =
-    document.getElementById(
-      "mainCountdownBox"
-    );
-
-
-  const mainLabel =
-    document.getElementById(
-      "mainCountdownLabel"
-    );
-
-
-  const mainTime =
-    document.getElementById(
-      "mainCountdown"
-    );
-
-
-  const mainCaption =
-    document.getElementById(
-      "mainCountdownCaption"
-    );
-
-
-  prelimBox.className =
-    "countdown-item prelim";
-
-
-  mainBox.className =
-    "countdown-item main";
-
+  windowBox.className = "countdown-item";
 
   const daily = WASPNSession.sync();
-  if (daily.sessionEnded && !weekend && nowSeconds < close) {
+
+  if(daily.sessionEnded && !weekend && nowSeconds < close){
     box.className = "market-status closed";
     main.textContent = daily.windowBreach ? "WINDOW BREACH — SESSION OVER" : "SESSION CLOSED";
     detail.textContent = "Daily stop latched • No reopening today";
-    prelimLabel.textContent = "Preliminary";
-    prelimTime.textContent = "CLOSED";
-    prelimCaption.textContent = "06:30–07:00 ET";
-    mainLabel.textContent = "Main Window";
-    mainTime.textContent = "CLOSED";
-    mainCaption.textContent = "07:00–11:00 ET";
+    windowLabel.textContent = "Trading Window";
+    windowTime.textContent = "CLOSED";
+    windowCaption.textContent = "06:30–11:00 ET";
     return;
   }
 
-  if (!daily.backendVerified && !weekend && nowSeconds >= prelimStart && nowSeconds < close) {
+  if(!daily.backendVerified && !weekend && nowSeconds >= start && nowSeconds < close){
     box.className = "market-status closed";
     main.textContent = "BACKEND VERIFICATION REQUIRED";
     detail.textContent = "Trading is blocked until fresh authenticated session state is available";
-    prelimLabel.textContent = "Preliminary";
-    prelimTime.textContent = "UNVERIFIED";
-    prelimCaption.textContent = "06:30–07:00 ET";
-    mainLabel.textContent = "Main Window";
-    mainTime.textContent = "UNVERIFIED";
-    mainCaption.textContent = "07:00–11:00 ET";
+    windowLabel.textContent = "Trading Window";
+    windowTime.textContent = "UNVERIFIED";
+    windowCaption.textContent = "06:30–11:00 ET";
     return;
   }
 
-  /* WEEKEND */
-
-  if(
-    weekend
-  ){
-
-    box.className =
-      "market-status closed";
-
-
-    main.textContent =
-      "MARKET CLOSED — WEEKEND";
-
-
-    detail.textContent =
-      ny.weekday +
-      " in New York • Next WASPN session below";
-
-
-    prelimLabel.textContent =
-      "Next Preliminary";
-
-
-    prelimTime.textContent =
-      formatCountdown(
-        nextSessionCountdown(
-          ny,
-          prelimStart
-        )
-      );
-
-
-    prelimCaption.textContent =
-      "Until 6:30 AM ET";
-
-
-    mainLabel.textContent =
-      "Next Main Window";
-
-
-    mainTime.textContent =
-      formatCountdown(
-        nextSessionCountdown(
-          ny,
-          mainStart
-        )
-      );
-
-
-    mainCaption.textContent =
-      "Until 7:00 AM ET";
-
-
+  if(weekend){
+    box.className = "market-status closed";
+    main.textContent = "MARKET CLOSED — WEEKEND";
+    detail.textContent = ny.weekday + " in New York • Next WASPN session below";
+    windowLabel.textContent = "Next Window Opens In";
+    windowTime.textContent = formatCountdown(nextSessionCountdown(ny,start));
+    windowCaption.textContent = "Next session starts 06:30 ET";
     return;
-
   }
 
-
-  /* BEFORE PRELIMINARY */
-
-  if(
-    nowSeconds <
-    prelimStart
-  ){
-
-    box.className =
-      "market-status waiting";
-
-
-    main.textContent =
-      "WAIT — SESSION NOT OPEN";
-
-
-    detail.textContent =
-      "Preliminary monitoring begins at 6:30 AM ET";
-
-
-    prelimLabel.textContent =
-      "Preliminary Opens In";
-
-
-    prelimTime.textContent =
-      formatCountdown(
-        prelimStart -
-        nowSeconds
-      );
-
-
-    prelimCaption.textContent =
-      "06:30–07:00 ET";
-
-
-    mainLabel.textContent =
-      "Main Opens In";
-
-
-    mainTime.textContent =
-      formatCountdown(
-        mainStart -
-        nowSeconds
-      );
-
-
-    mainCaption.textContent =
-      "07:00–11:00 ET";
-
-
+  if(nowSeconds < start){
+    box.className = "market-status waiting";
+    main.textContent = "WAIT — SESSION NOT OPEN";
+    detail.textContent = "Trading window begins at 06:30 ET";
+    windowLabel.textContent = "Window Opens In";
+    windowTime.textContent = formatCountdown(start - nowSeconds);
+    windowCaption.textContent = "06:30–11:00 ET";
     return;
-
   }
 
-
-  /* PRELIMINARY ACTIVE */
-
-  if(
-    nowSeconds >=
-      prelimStart &&
-    nowSeconds <
-      prelimEnd
-  ){
-
-    box.className =
-      "market-status open";
-
-
-    main.textContent =
-      "PRELIMINARY WINDOW ACTIVE";
-
-
-    detail.textContent =
-      "06:30–07:00 ET • Exceptional setups only";
-
-
-    prelimBox.classList.add(
-      "active"
-    );
-
-
-    prelimLabel.textContent =
-      "Preliminary Remaining";
-
-
-    prelimTime.textContent =
-      formatCountdown(
-        prelimEnd -
-        nowSeconds
-      );
-
-
-    prelimCaption.textContent =
-      "Closes at 7:00 AM ET";
-
-
-    mainLabel.textContent =
-      "Main Opens In";
-
-
-    mainTime.textContent =
-      formatCountdown(
-        mainStart -
-        nowSeconds
-      );
-
-
-    mainCaption.textContent =
-      "07:00–11:00 ET";
-
-
+  if(nowSeconds < close){
+    box.className = "market-status open";
+    main.textContent = "WASPN WINDOW ACTIVE";
+    detail.textContent = "06:30–11:00 ET";
+    windowBox.classList.add("active");
+    windowLabel.textContent = "Window Remaining";
+    windowTime.textContent = formatCountdown(close - nowSeconds);
+    windowCaption.textContent = "Hard close at 11:00 AM ET";
     return;
-
   }
 
-
-  /* MAIN WINDOW ACTIVE */
-
-  if(
-    nowSeconds >=
-      mainStart &&
-    nowSeconds <
-      close
-  ){
-
-    box.className =
-      "market-status open";
-
-
-    main.textContent =
-      "MAIN WASPN WINDOW ACTIVE";
-
-
-    detail.textContent =
-      "07:00–11:00 ET";
-
-
-    prelimLabel.textContent =
-      "Preliminary";
-
-
-    prelimTime.textContent =
-      "CLOSED";
-
-
-    prelimCaption.textContent =
-      "Ended at 7:00 AM ET";
-
-
-    mainBox.classList.add(
-      "active"
-    );
-
-
-    mainLabel.textContent =
-      "Main Remaining";
-
-
-    mainTime.textContent =
-      formatCountdown(
-        close -
-        nowSeconds
-      );
-
-
-    mainCaption.textContent =
-      "Hard close at 11:00 AM ET";
-
-
-    return;
-
-  }
-
-
-  /* AFTER 11 AM */
-
-  box.className =
-    "market-status closed";
-
-
-  main.textContent =
-    "SESSION CLOSED";
-
-
-  detail.textContent =
-    "11:00 AM ET reached • No reopening later";
-
-
-  prelimLabel.textContent =
-    "Next Preliminary";
-
-
-  prelimTime.textContent =
-    formatCountdown(
-      nextSessionCountdown(
-        ny,
-        prelimStart
-      )
-    );
-
-
-  prelimCaption.textContent =
-    "Until next 6:30 AM ET";
-
-
-  mainLabel.textContent =
-    "Next Main Window";
-
-
-  mainTime.textContent =
-    formatCountdown(
-      nextSessionCountdown(
-        ny,
-        mainStart
-      )
-    );
-
-
-  mainCaption.textContent =
-    "Until next 7:00 AM ET";
-
+  box.className = "market-status closed";
+  main.textContent = "SESSION CLOSED";
+  detail.textContent = "11:00 AM ET reached • No reopening later";
+  windowLabel.textContent = "Next Window Opens In";
+  windowTime.textContent = formatCountdown(nextSessionCountdown(ny,start));
+  windowCaption.textContent = "Next session starts 06:30 ET";
 }
 
 
