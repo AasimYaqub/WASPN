@@ -527,14 +527,32 @@
     root.addEventListener("pageshow",update);
     root.setInterval(update,1000);
 
-    // Data Backup defines its legacy validators in the following inline script.
-    // Install the hardened validators on the next task so the actual file import
-    // handler resolves these stricter functions.
     if(root.location?.pathname?.endsWith("data-backup.html")){
-      root.setTimeout(() => {
+      const installBackupValidators = () => {
         root.isDateKey = isRealDateKey;
         root.validateJournalObject = validateBackupJournal;
-      },0);
+
+        // Explicitly update the classic-script global bindings created by the
+        // Backup page's inline function declarations.
+        try{
+          root.eval(
+            "isDateKey = WASPNSession.isRealDateKey; " +
+            "validateJournalObject = WASPNSession.validateBackupJournal;"
+          );
+        }
+        catch{}
+
+        root.__WASPN_BACKUP_VALIDATION_HARDENED = true;
+      };
+
+      // The Backup page defines its legacy functions after session-rules.js.
+      // Install once the inline script has run, and again after DOM readiness.
+      root.setTimeout(installBackupValidators,0);
+      root.addEventListener(
+        "DOMContentLoaded",
+        () => root.setTimeout(installBackupValidators,0),
+        {once:true}
+      );
     }
   }
 })(typeof window !== "undefined" ? window : globalThis);
