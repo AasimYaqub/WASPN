@@ -1,40 +1,46 @@
-/* iPhone dock geometry correction: keep the workflow bar visually anchored to the bottom. */
+/* iPhone dock geometry correction: keep the workflow bar low without making it undersized. */
 .waspn-workflow-nav{
   bottom:-2px!important;
-  padding:3px 6px max(4px,calc(env(safe-area-inset-bottom) - 14px))!important;
-  border-radius:18px 18px 12px 12px!important;
+  padding:6px 7px max(7px,calc(env(safe-area-inset-bottom) - 10px))!important;
+  border-radius:20px 20px 12px 12px!important;
 }
 .waspn-workflow-item{
-  min-height:42px!important;
-  padding:2px 2px!important;
+  min-height:50px!important;
+  padding:4px 2px!important;
 }
 .waspn-workflow-icon{
-  height:19px!important;
-  font-size:13px!important;
+  height:22px!important;
+  font-size:15px!important;
 }
 .waspn-workflow-label{
-  font-size:7.6px!important;
+  font-size:8.4px!important;
 }
 .waspn-build-version{
-  bottom:60px!important;
+  bottom:68px!important;
 }
 body{
-  padding-bottom:86px!important;
+  padding-bottom:96px!important;
 }
 @media(max-width:430px){
   .waspn-workflow-nav{
     left:7px!important;
     right:7px!important;
     bottom:-3px!important;
-    padding-bottom:max(3px,calc(env(safe-area-inset-bottom) - 16px))!important;
+    padding:6px 7px max(6px,calc(env(safe-area-inset-bottom) - 11px))!important;
   }
   .waspn-workflow-item{
-    min-height:40px!important;
+    min-height:49px!important;
+  }
+  .waspn-workflow-icon{
+    font-size:15px!important;
+  }
+  .waspn-workflow-label{
+    font-size:8.3px!important;
   }
   .waspn-build-version{
-    bottom:56px!important;
+    bottom:66px!important;
   }
   body{
-    padding-bottom:80px!important;
+    padding-bottom:94px!important;
   }
 }
