@@ -43,6 +43,7 @@
     prompt.id = "waspnUpdatePrompt";
     prompt.className = "waspn-update-prompt";
     prompt.type = "button";
+    prompt.setAttribute("aria-live", "polite");
     prompt.textContent = "WASPN update ready • Refresh";
     prompt.addEventListener("click", () => registration.waiting?.postMessage({type:"WASPN_ACTIVATE_UPDATE"}));
     document.body.appendChild(prompt);
@@ -54,6 +55,7 @@
     prompt.id = "waspnUpdatePrompt";
     prompt.className = "waspn-update-prompt";
     prompt.type = "button";
+    prompt.setAttribute("aria-live", "polite");
     prompt.textContent = "WASPN update ready • Refresh";
     prompt.addEventListener("click", () => registration.waiting?.postMessage({type:"WASPN_ACTIVATE_UPDATE"}));
     document.body.appendChild(prompt);
@@ -732,6 +734,8 @@
     if(document.getElementById("waspnBrokerState")) return;
     const badge = document.createElement("div");
     badge.id = "waspnBrokerState";
+    badge.setAttribute("role", "status");
+    badge.setAttribute("aria-live", "polite");
     badge.className = "waspn-broker-state degraded";
     document.querySelector(".prototype-strip, .topbar")?.insertAdjacentElement("afterend", badge);
     onSharedRefresh(renderBrokerState);
@@ -788,6 +792,8 @@
     if(document.getElementById("waspnBrokerState")) return;
     const badge = document.createElement("div");
     badge.id = "waspnBrokerState";
+    badge.setAttribute("role", "status");
+    badge.setAttribute("aria-live", "polite");
     badge.className = "waspn-broker-state degraded";
     document.querySelector(".prototype-strip, .topbar")?.insertAdjacentElement("afterend", badge);
     onSharedRefresh(renderBrokerState);
