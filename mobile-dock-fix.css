@@ -1,0 +1,40 @@
+/* iPhone dock geometry correction: keep the workflow bar visually anchored to the bottom. */
+.waspn-workflow-nav{
+  bottom:-2px!important;
+  padding:3px 6px max(4px,calc(env(safe-area-inset-bottom) - 14px))!important;
+  border-radius:18px 18px 12px 12px!important;
+}
+.waspn-workflow-item{
+  min-height:42px!important;
+  padding:2px 2px!important;
+}
+.waspn-workflow-icon{
+  height:19px!important;
+  font-size:13px!important;
+}
+.waspn-workflow-label{
+  font-size:7.6px!important;
+}
+.waspn-build-version{
+  bottom:60px!important;
+}
+body{
+  padding-bottom:86px!important;
+}
+@media(max-width:430px){
+  .waspn-workflow-nav{
+    left:7px!important;
+    right:7px!important;
+    bottom:-3px!important;
+    padding-bottom:max(3px,calc(env(safe-area-inset-bottom) - 16px))!important;
+  }
+  .waspn-workflow-item{
+    min-height:40px!important;
+  }
+  .waspn-build-version{
+    bottom:56px!important;
+  }
+  body{
+    padding-bottom:80px!important;
+  }
+}
