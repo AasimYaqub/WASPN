@@ -277,6 +277,27 @@
   }
 
   /* ========================================
+     LIVE RISK MOBILE FIT
+  ======================================== */
+
+  function installLiveRiskMobileFit(){
+    if(!window.location.pathname.endsWith("live-risk.html")) return;
+
+    const style = document.createElement("style");
+    style.id = "waspn-live-risk-mobile-fit";
+    style.textContent = `
+      @media (max-width: 430px){
+        .guardrail:first-child .guardrail-value{
+          font-size:clamp(8px,2.25vw,9px);
+          letter-spacing:-.25px;
+        }
+      }
+    `;
+
+    document.head.appendChild(style);
+  }
+
+  /* ========================================
      YEAR-AWARE PERFORMANCE REVIEW
   ======================================== */
 
@@ -481,6 +502,7 @@
     clearApiToken
   };
 
+  installLiveRiskMobileFit();
   installReviewYearAwareness();
 
   Promise.resolve()
