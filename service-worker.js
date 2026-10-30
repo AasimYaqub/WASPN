@@ -13,8 +13,8 @@ const APP_SHELL = [
   "./compliance.html",
   "./calendar-2026.html",
   "./data-backup.html",
-  "./premium-theme.css?v=4",
-  "./mobile-dock-fix.css?v=1",
+  "./premium-theme.css?v=5",
+  "./mobile-dock-fix.css?v=2",
   "./workflow-nav.js?v=5",
   "./tradezero-live.js?v=4",
   "./tradezero-journal.js?v=4",
@@ -221,7 +221,7 @@ async function applyPremiumTheme(request,response){
     return new Response(text,response);
   }
 
-  const theme = '<link rel="stylesheet" href="./premium-theme.css?v=4" data-waspn-premium-theme="true">\n<link rel="stylesheet" href="./mobile-dock-fix.css?v=1" data-waspn-dock-fix="true">';
+  const theme = '<link rel="stylesheet" href="./premium-theme.css?v=5" data-waspn-premium-theme="true">\n<link rel="stylesheet" href="./mobile-dock-fix.css?v=2" data-waspn-dock-fix="true">';
   const themed = text.includes("</head>")
     ? text.replace("</head>",theme + "\n</head>")
     : theme + text;
@@ -252,7 +252,6 @@ async function authenticatedBackendFetch(request){
   const token = await getApiToken();
   const headers = new Headers(request.headers);
 
-  // Never add an empty Authorization header.
   if(token){
     headers.set("Authorization","Bearer " + token);
   }
@@ -321,7 +320,6 @@ async function cacheFirst(request){
 self.addEventListener("fetch", event => {
   const request = event.request;
 
-  // Protected backend GETs are authenticated here and are never cached.
   if(isProtectedBackendRequest(request)){
     if(request.method === "GET"){
       event.respondWith(authenticatedBackendFetch(request));
@@ -331,15 +329,12 @@ self.addEventListener("fetch", event => {
 
   if(request.method !== "GET") return;
 
-  // Other external requests pass directly through the browser network layer.
   if(!isSameOrigin(request)) return;
 
-  // HTML, JS, manifest and navigations use network-first so releases replace stale PWA assets quickly.
   if(isHtmlLike(request)){
     event.respondWith(networkFirst(request));
     return;
   }
 
-  // Remaining same-origin static resources use cache-first with background refresh.
   event.respondWith(cacheFirst(request));
 });
