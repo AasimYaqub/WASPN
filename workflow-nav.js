@@ -3,7 +3,7 @@
 
   const STEPS = [
     {key:"home",label:"Home",icon:"⌂",href:"index.html",color:"#22c7ff"},
-    {key:"risk",label:"Risk",icon:"1",href:"live-risk.html",color:"#22c7ff"},
+    {key:"risk",label:"Risk",icon:"1",href:"live-risk.html",color:"#ff5f6d"},
     {key:"journal",label:"Journal",icon:"2",href:"journal.html",color:"#75dbe7"},
     {key:"end",label:"End",icon:"3",href:"compliance.html",color:"#35d07f"},
     {key:"review",label:"Review",icon:"4",href:"calendar-2026.html",color:"#aeb7ff"}
