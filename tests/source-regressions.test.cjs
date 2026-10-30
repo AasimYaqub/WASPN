@@ -113,7 +113,7 @@ test('Review actively syncs broker journal timing and refreshes the open day', (
 test('Backup hardening is installed through session-rules, which Data Backup actually loads', () => {
   const rules = read('session-rules.js');
   const backup = read('data-backup.html');
-  assert.match(backup,/session-rules\.js\?v=3/);
+  assert.match(backup,/session-rules\.js\?v=4/);
   assert.match(rules,/function validateBackupJournal/);
   assert.match(rules,/function isRealDateKey/);
   assert.match(rules,/Date\.UTC/);
@@ -124,7 +124,7 @@ test('Backup hardening is installed through session-rules, which Data Backup act
 
 test('hardening release bumps PWA cache', () => {
   const source = read('service-worker.js');
-  assert.match(source,/waspn-pwa-v13/);
+  assert.match(source,/waspn-pwa-v14/);
 });
 
 
@@ -148,3 +148,55 @@ test('single-window release has no old split-window copy', () => {
   assert.match(rules,/const START = 390/);
   assert.doesNotMatch(rules,/MAIN_START|PRELIM_START/);
 });
+
+
+test('policy display labels are shared and hydrated centrally', () => {
+  assert.match(read('session-rules.js'),/function policyLabels\(\)/);
+  assert.match(read('workflow-nav.js'),/function applyPolicyLabels/);
+  assert.match(read('workflow-nav.js'),/WASPNSession\?\.policyLabels/);
+});
+
+test('PWA exposes build version and explicit update prompt', () => {
+  const nav=read('workflow-nav.js'), sw=read('service-worker.js');
+  assert.match(nav,/waspnBuildVersion/); assert.match(nav,/WASPN update ready • Refresh/);
+  assert.match(sw,/WASPN_ACTIVATE_UPDATE/); assert.match(sw,/waspn-pwa-v14/);
+});
+
+test('broker authority state is visually explicit', () => {
+  const nav=read('workflow-nav.js');
+  assert.match(nav,/BROKER VERIFIED/); assert.match(nav,/BROKER DEGRADED \/ UNVERIFIED/);
+});
+
+test('legacy window and split terminology is absent from production frontend', () => {
+  const files=fs.readdirSync(root).filter(name=>/\.(html|js)$/.test(name));
+  const forbidden=[/7–11 ET/i,/06:30–07:00 ET/i,/07:00–11:00 ET/i,/PRELIMINARY WINDOW/i,/MAIN WINDOW/i];
+  for(const file of files) for(const pattern of forbidden) assert.doesNotMatch(read(file),pattern,`${file} contains legacy rule copy`);
+});
+
+test('shared refresh plumbing is centralized', () => assert.match(read('workflow-nav.js'),/function onSharedRefresh/));
+
+
+test('policy display labels are shared and hydrated centrally', () => {
+  assert.match(read('session-rules.js'),/function policyLabels\(\)/);
+  assert.match(read('workflow-nav.js'),/function applyPolicyLabels/);
+  assert.match(read('workflow-nav.js'),/WASPNSession\?\.policyLabels/);
+});
+
+test('PWA exposes build version and explicit update prompt', () => {
+  const nav=read('workflow-nav.js'), sw=read('service-worker.js');
+  assert.match(nav,/waspnBuildVersion/); assert.match(nav,/WASPN update ready • Refresh/);
+  assert.match(sw,/WASPN_ACTIVATE_UPDATE/); assert.match(sw,/waspn-pwa-v14/);
+});
+
+test('broker authority state is visually explicit', () => {
+  const nav=read('workflow-nav.js');
+  assert.match(nav,/BROKER VERIFIED/); assert.match(nav,/BROKER DEGRADED \/ UNVERIFIED/);
+});
+
+test('legacy window and split terminology is absent from production frontend', () => {
+  const files=fs.readdirSync(root).filter(name=>/\.(html|js)$/.test(name));
+  const forbidden=[/7–11 ET/i,/06:30–07:00 ET/i,/07:00–11:00 ET/i,/PRELIMINARY WINDOW/i,/MAIN WINDOW/i];
+  for(const file of files) for(const pattern of forbidden) assert.doesNotMatch(read(file),pattern,`${file} contains legacy rule copy`);
+});
+
+test('shared refresh plumbing is centralized', () => assert.match(read('workflow-nav.js'),/function onSharedRefresh/));

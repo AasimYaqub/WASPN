@@ -2,18 +2,18 @@ const CACHE_PREFIX =
   "waspn-pwa-";
 
 const CACHE_NAME =
-  "waspn-pwa-v13";
+  "waspn-pwa-v14";
 
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./session-rules.js?v=3",
+  "./session-rules.js?v=4",
   "./live-risk.html",
   "./journal.html",
   "./compliance.html",
   "./calendar-2026.html",
   "./data-backup.html",
-  "./workflow-nav.js?v=4",
+  "./workflow-nav.js?v=5",
   "./tradezero-live.js?v=4",
   "./tradezero-journal.js?v=4",
   "./manifest.webmanifest",
@@ -41,7 +41,6 @@ self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
   );
 });
 
@@ -134,6 +133,16 @@ async function clearApiToken(){
 self.addEventListener("message", event => {
   const data = event.data;
   if(!data || typeof data !== "object") return;
+
+  if(data.type === "WASPN_ACTIVATE_UPDATE"){
+    event.waitUntil(self.skipWaiting());
+    return;
+  }
+
+  if(data.type === "WASPN_ACTIVATE_UPDATE"){
+    event.waitUntil(self.skipWaiting());
+    return;
+  }
 
   if(data.type === "WASPN_SET_API_TOKEN"){
     event.waitUntil(
