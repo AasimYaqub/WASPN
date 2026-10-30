@@ -13,6 +13,7 @@ const APP_SHELL = [
   "./compliance.html",
   "./calendar-2026.html",
   "./data-backup.html",
+  "./premium-theme.css?v=1",
   "./workflow-nav.js?v=5",
   "./tradezero-live.js?v=4",
   "./tradezero-journal.js?v=4",
@@ -199,6 +200,38 @@ function isHtmlLike(request){
   }
 }
 
+function isHtmlDocument(request,response){
+  if(!response?.ok) return false;
+  if(isNavigation(request)) return true;
+  try{
+    const url = new URL(request.url);
+    return url.pathname.endsWith(".html");
+  }
+  catch{
+    return false;
+  }
+}
+
+async function applyPremiumTheme(request,response){
+  if(!isHtmlDocument(request,response)) return response;
+
+  const text = await response.text();
+  if(text.includes("premium-theme.css")){
+    return new Response(text,response);
+  }
+
+  const theme = '<link rel="stylesheet" href="./premium-theme.css?v=1" data-waspn-premium-theme="true">';
+  const themed = text.includes("</head>")
+    ? text.replace("</head>",theme + "\n</head>")
+    : theme + text;
+
+  return new Response(themed,{
+    status:response.status,
+    statusText:response.statusText,
+    headers:response.headers
+  });
+}
+
 function isProtectedBackendRequest(request){
   try{
     const url = new URL(request.url);
@@ -236,7 +269,8 @@ async function authenticatedBackendFetch(request){
 
 async function networkFirst(request){
   try{
-    const response = await fetch(request,{cache:"no-store"});
+    const fetched = await fetch(request,{cache:"no-store"});
+    const response = await applyPremiumTheme(request,fetched);
 
     if(response && response.ok){
       const cache = await caches.open(CACHE_NAME);
