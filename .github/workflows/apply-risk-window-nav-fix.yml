@@ -1,0 +1,66 @@
+name: Apply Risk Window/Nav Fix
+
+on:
+  push:
+    branches:
+      - fix/risk-window-label-nav-red
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/risk-window-label-nav-red
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Apply focused frontend fix
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('live-risk.html')
+          s = p.read_text()
+          old = '      7–11 ET'
+          new = '      06:30–11:00 ET'
+          assert s.count(old) == 1, f'expected one old window label, found {s.count(old)}'
+          p.write_text(s.replace(old, new))
+
+          p = Path('workflow-nav.js')
+          s = p.read_text()
+          old = '{key:"risk",label:"Risk",icon:"1",href:"live-risk.html",color:"#22c7ff"}'
+          new = '{key:"risk",label:"Risk",icon:"1",href:"live-risk.html",color:"#ff5f6d"}'
+          assert s.count(old) == 1, f'expected one Risk step definition, found {s.count(old)}'
+          p.write_text(s.replace(old, new))
+
+          p = Path('service-worker.js')
+          s = p.read_text()
+          assert '"waspn-pwa-v12"' in s
+          p.write_text(s.replace('"waspn-pwa-v12"', '"waspn-pwa-v13"', 1))
+
+          p = Path('tests/source-regressions.test.cjs')
+          s = p.read_text()
+          s = s.replace('assert.match(source,/waspn-pwa-v12/);', 'assert.match(source,/waspn-pwa-v13/);')
+          anchor = "test('single-window release has no old split-window copy', () => {"
+          insert = '''test('Live Risk shows authoritative window and red active Risk nav theme', () => {\n  const liveRisk = read('live-risk.html');\n  const nav = read('workflow-nav.js');\n  assert.match(liveRisk,/06:30–11:00 ET/);\n  assert.doesNotMatch(liveRisk,/>\\s*7–11 ET\\s*</);\n  assert.match(nav,/key:\"risk\",label:\"Risk\",icon:\"1\",href:\"live-risk.html\",color:\"#ff5f6d\"/);\n});\n\n'''
+          assert anchor in s
+          s = s.replace(anchor, insert + anchor, 1)
+          p.write_text(s)
+          PY
+
+          rm .github/workflows/apply-risk-window-nav-fix.yml
+      - name: Run policy and source regressions
+        run: |
+          node --test tests/session-rules.test.cjs tests/source-regressions.test.cjs
+      - name: Commit tested patch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add live-risk.html workflow-nav.js service-worker.js tests/source-regressions.test.cjs .github/workflows/apply-risk-window-nav-fix.yml
+          git commit -m 'fix: correct risk window label and active nav colour'
+          git push
