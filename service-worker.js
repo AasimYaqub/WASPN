@@ -2,7 +2,7 @@ const CACHE_PREFIX =
   "waspn-pwa-";
 
 const CACHE_NAME =
-  "waspn-pwa-v15";
+  "waspn-pwa-v16";
 
 const APP_SHELL = [
   "./",
@@ -13,7 +13,7 @@ const APP_SHELL = [
   "./compliance.html",
   "./calendar-2026.html",
   "./data-backup.html",
-  "./premium-theme.css?v=5",
+  "./premium-theme.css?v=6",
   "./mobile-dock-fix.css?v=2",
   "./workflow-nav.js?v=5",
   "./review-indicators.css?v=1",
@@ -227,7 +227,7 @@ async function applyPremiumTheme(request,response){
     return new Response(text,response);
   }
 
-  const theme = '<link rel="stylesheet" href="./premium-theme.css?v=5" data-waspn-premium-theme="true">\n<link rel="stylesheet" href="./mobile-dock-fix.css?v=2" data-waspn-dock-fix="true">';
+  const theme = '<link rel="stylesheet" href="./premium-theme.css?v=6" data-waspn-premium-theme="true">\n<link rel="stylesheet" href="./mobile-dock-fix.css?v=2" data-waspn-dock-fix="true">';
   const indicatorStyle = '<link rel="stylesheet" href="./review-indicators.css?v=1" data-waspn-review-indicator-styles="true">';
   const indicatorScript = '<script src="./review-broker-indicators.js?v=2" defer data-waspn-review-indicators="true"></script>';
 
