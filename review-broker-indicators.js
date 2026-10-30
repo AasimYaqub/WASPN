@@ -19,6 +19,25 @@
     }
   }
 
+  function getNewYorkDateKey(){
+    const parts = new Intl.DateTimeFormat(
+      "en-CA",
+      {
+        timeZone:"America/New_York",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit"
+      }
+    ).formatToParts(new Date());
+
+    const values = {};
+    parts.forEach(part => {
+      if(part.type !== "literal") values[part.type] = part.value;
+    });
+
+    return `${values.year}-${values.month}-${values.day}`;
+  }
+
   function isBrokerReconciled(day){
     if(!day || typeof day !== "object") return false;
 
@@ -49,14 +68,29 @@
     return `${year}-${month}-${day}`;
   }
 
+  function shouldShowWaspnDot(date,day,today){
+    if(!date || !day || typeof day !== "object") return false;
+
+    // The active trading day may be both a WASPN record and TradeZero LIVE.
+    // Historical dates stop carrying the local-record dot once broker reconciled.
+    if(date === today) return true;
+
+    return !isBrokerReconciled(day);
+  }
+
   function reconcileIndicators(){
     const journal = getJournal();
+    const today = getNewYorkDateKey();
 
-    document.querySelectorAll(".day.saved-day").forEach(cell => {
+    document.querySelectorAll(".day:not(.empty)").forEach(cell => {
       const date = dateKeyForCell(cell);
-      if(date && isBrokerReconciled(journal[date])){
-        cell.classList.remove("saved-day");
-      }
+      if(!date) return;
+
+      cell.classList.toggle("today",date === today);
+      cell.classList.toggle(
+        "saved-day",
+        shouldShowWaspnDot(date,journal[date],today)
+      );
     });
   }
 
