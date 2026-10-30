@@ -16,6 +16,7 @@ const APP_SHELL = [
   "./premium-theme.css?v=5",
   "./mobile-dock-fix.css?v=2",
   "./workflow-nav.js?v=5",
+  "./review-broker-indicators.js?v=1",
   "./tradezero-live.js?v=4",
   "./tradezero-journal.js?v=4",
   "./manifest.webmanifest",
@@ -217,14 +218,29 @@ async function applyPremiumTheme(request,response){
   if(!isHtmlDocument(request,response)) return response;
 
   const text = await response.text();
-  if(text.includes("premium-theme.css") && text.includes("mobile-dock-fix.css")){
+  const hasTheme = text.includes("premium-theme.css") && text.includes("mobile-dock-fix.css");
+  const hasReviewIndicators = text.includes("review-broker-indicators.js");
+
+  if(hasTheme && hasReviewIndicators){
     return new Response(text,response);
   }
 
   const theme = '<link rel="stylesheet" href="./premium-theme.css?v=5" data-waspn-premium-theme="true">\n<link rel="stylesheet" href="./mobile-dock-fix.css?v=2" data-waspn-dock-fix="true">';
-  const themed = text.includes("</head>")
-    ? text.replace("</head>",theme + "\n</head>")
-    : theme + text;
+  const indicatorScript = '<script src="./review-broker-indicators.js?v=1" defer data-waspn-review-indicators="true"></script>';
+
+  let themed = text;
+
+  if(!hasTheme){
+    themed = themed.includes("</head>")
+      ? themed.replace("</head>",theme + "\n</head>")
+      : theme + themed;
+  }
+
+  if(!hasReviewIndicators){
+    themed = themed.includes("</body>")
+      ? themed.replace("</body>",indicatorScript + "\n</body>")
+      : themed + "\n" + indicatorScript;
+  }
 
   return new Response(themed,{
     status:response.status,
