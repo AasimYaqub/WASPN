@@ -1,0 +1,9 @@
+.day.today,
+.day.today.green-day,
+.day.today.red-day{
+  border:2px solid var(--blue,#22c7ff)!important;
+  box-shadow:
+    0 0 0 1px rgba(34,199,255,.18),
+    0 0 18px rgba(34,199,255,.12),
+    inset 0 1px 0 rgba(255,255,255,.025)!important;
+}

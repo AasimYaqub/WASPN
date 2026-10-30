@@ -16,7 +16,8 @@ const APP_SHELL = [
   "./premium-theme.css?v=5",
   "./mobile-dock-fix.css?v=2",
   "./workflow-nav.js?v=5",
-  "./review-broker-indicators.js?v=1",
+  "./review-indicators.css?v=1",
+  "./review-broker-indicators.js?v=2",
   "./tradezero-live.js?v=4",
   "./tradezero-journal.js?v=4",
   "./manifest.webmanifest",
@@ -219,14 +220,16 @@ async function applyPremiumTheme(request,response){
 
   const text = await response.text();
   const hasTheme = text.includes("premium-theme.css") && text.includes("mobile-dock-fix.css");
-  const hasReviewIndicators = text.includes("review-broker-indicators.js");
+  const hasReviewIndicatorStyles = text.includes("review-indicators.css?v=1");
+  const hasReviewIndicators = text.includes("review-broker-indicators.js?v=2");
 
-  if(hasTheme && hasReviewIndicators){
+  if(hasTheme && hasReviewIndicatorStyles && hasReviewIndicators){
     return new Response(text,response);
   }
 
   const theme = '<link rel="stylesheet" href="./premium-theme.css?v=5" data-waspn-premium-theme="true">\n<link rel="stylesheet" href="./mobile-dock-fix.css?v=2" data-waspn-dock-fix="true">';
-  const indicatorScript = '<script src="./review-broker-indicators.js?v=1" defer data-waspn-review-indicators="true"></script>';
+  const indicatorStyle = '<link rel="stylesheet" href="./review-indicators.css?v=1" data-waspn-review-indicator-styles="true">';
+  const indicatorScript = '<script src="./review-broker-indicators.js?v=2" defer data-waspn-review-indicators="true"></script>';
 
   let themed = text;
 
@@ -236,10 +239,22 @@ async function applyPremiumTheme(request,response){
       : theme + themed;
   }
 
+  if(!hasReviewIndicatorStyles){
+    themed = themed.includes("</head>")
+      ? themed.replace("</head>",indicatorStyle + "\n</head>")
+      : indicatorStyle + themed;
+  }
+
   if(!hasReviewIndicators){
-    themed = themed.includes("</body>")
-      ? themed.replace("</body>",indicatorScript + "\n</body>")
-      : themed + "\n" + indicatorScript;
+    const oldIndicator = /<script[^>]*review-broker-indicators\.js\?v=\d+[^>]*><\/script>/;
+    if(oldIndicator.test(themed)){
+      themed = themed.replace(oldIndicator,indicatorScript);
+    }
+    else{
+      themed = themed.includes("</body>")
+        ? themed.replace("</body>",indicatorScript + "\n</body>")
+        : themed + "\n" + indicatorScript;
+    }
   }
 
   return new Response(themed,{
