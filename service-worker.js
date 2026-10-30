@@ -13,7 +13,7 @@ const APP_SHELL = [
   "./compliance.html",
   "./calendar-2026.html",
   "./data-backup.html",
-  "./premium-theme.css?v=2",
+  "./premium-theme.css?v=3",
   "./workflow-nav.js?v=5",
   "./tradezero-live.js?v=4",
   "./tradezero-journal.js?v=4",
@@ -220,7 +220,7 @@ async function applyPremiumTheme(request,response){
     return new Response(text,response);
   }
 
-  const theme = '<link rel="stylesheet" href="./premium-theme.css?v=2" data-waspn-premium-theme="true">';
+  const theme = '<link rel="stylesheet" href="./premium-theme.css?v=3" data-waspn-premium-theme="true">';
   const themed = text.includes("</head>")
     ? text.replace("</head>",theme + "\n</head>")
     : theme + text;
