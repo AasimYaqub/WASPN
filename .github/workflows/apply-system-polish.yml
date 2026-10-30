@@ -1,0 +1,215 @@
+name: Apply System Polish
+on:
+  push:
+    branches: [fix/system-polish-all]
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/system-polish-all
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Apply full frontend polish
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          # Shared policy owns display labels and version.
+          p=Path('session-rules.js'); s=p.read_text()
+          s=s.replace('  const HARD_STOP = -100;\n  const MAX_ATTEMPTS = 5;', '  const HARD_STOP = -100;\n  const OBJECTIVE = 50;\n  const MAX_ATTEMPTS = 5;\n  const APP_VERSION = "14";')
+          s=s.replace('  function clock(now = new Date()){', '''  function formatPolicyMinute(total){
+    const hour = Math.floor(total / 60);
+    const minute = total % 60;
+    return String(hour).padStart(2,"0") + ":" + String(minute).padStart(2,"0");
+  }
+
+  function policyLabels(){
+    return Object.freeze({
+      window:`${formatPolicyMinute(START)}–${formatPolicyMinute(END)} ET`,
+      start:`${formatPolicyMinute(START)} ET`,
+      end:`${formatPolicyMinute(END)} ET`,
+      attempts:`${MAX_ATTEMPTS} Max`,
+      warning:`-$${Math.abs(WARNING)}`,
+      hardStop:`-$${Math.abs(HARD_STOP)}`,
+      objective:`+$${OBJECTIVE}`
+    });
+  }
+
+  function clock(now = new Date()){''')
+          s=s.replace('detail:"11:00 AM ET reached • No reopening later."', 'detail:`${policyLabels().end} reached • No reopening later.`')
+          s=s.replace('detail:"Trading window begins at 06:30 ET."', 'detail:`Trading window begins at ${policyLabels().start}.`')
+          s=s.replace('detail:"Trading window • 06:30–11:00 ET."', 'detail:`Trading window • ${policyLabels().window}.`')
+          s=s.replace('START,END,WARNING,HARD_STOP,MAX_ATTEMPTS,COOLDOWN_MS', 'START,END,WARNING,HARD_STOP,OBJECTIVE,MAX_ATTEMPTS,APP_VERSION,COOLDOWN_MS')
+          s=s.replace('timeInsideWindow,clock,evaluate,sync,writeJournal', 'formatPolicyMinute,policyLabels,timeInsideWindow,clock,evaluate,sync,writeJournal')
+          p.write_text(s)
+
+          # Shared UI layer: update prompt, policy hydration, build badge, broker authority badge.
+          p=Path('workflow-nav.js'); s=p.read_text()
+          a=s.index('  function registerServiceWorker(){'); b=s.index('\n  function formatBrokerTime',a)
+          swreg='''  function showUpdatePrompt(registration){
+    if(document.getElementById("waspnUpdatePrompt")) return;
+    const prompt = document.createElement("button");
+    prompt.id = "waspnUpdatePrompt";
+    prompt.className = "waspn-update-prompt";
+    prompt.type = "button";
+    prompt.textContent = "WASPN update ready • Refresh";
+    prompt.addEventListener("click", () => registration.waiting?.postMessage({type:"WASPN_ACTIVATE_UPDATE"}));
+    document.body.appendChild(prompt);
+  }
+
+  function registerServiceWorker(){
+    if(!("serviceWorker" in navigator)) return;
+    let reloading = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if(reloading) return;
+      reloading = true;
+      window.location.reload();
+    });
+    const register = () => navigator.serviceWorker.register("./service-worker.js", {scope:"./"})
+      .then(registration => {
+        if(registration.waiting) showUpdatePrompt(registration);
+        registration.addEventListener("updatefound", () => {
+          const worker = registration.installing;
+          worker?.addEventListener("statechange", () => {
+            if(worker.state === "installed" && navigator.serviceWorker.controller) showUpdatePrompt(registration);
+          });
+        });
+        return registration.update();
+      })
+      .catch(error => console.warn("WASPN service worker registration failed:", error));
+    if(document.readyState === "complete") register();
+    else window.addEventListener("load", register, {once:true});
+  }
+'''
+          s=s[:a]+swreg+s[b:]
+          marker='  function injectStyles(){'
+          helpers='''  function sharedPolicyLabels(){
+    return window.WASPNSession?.policyLabels?.() || {window:"06:30–11:00 ET",attempts:"5 Max",warning:"-$75",hardStop:"-$100",objective:"+$50"};
+  }
+
+  function applyPolicyLabels(){
+    const labels = sharedPolicyLabels();
+    document.querySelectorAll(".guardrail").forEach(card => {
+      const name = card.querySelector(".label")?.textContent?.trim().toLowerCase();
+      const value = card.querySelector(".guardrail-value");
+      if(!value) return;
+      if(name === "window") value.textContent = labels.window;
+      else if(name === "attempts") value.textContent = labels.attempts;
+      else if(name?.includes("warning")) value.textContent = labels.warning;
+      else if(name?.includes("stop")) value.textContent = labels.hardStop;
+    });
+    document.querySelectorAll("[data-waspn-policy]").forEach(node => {
+      const value = labels[node.dataset.waspnPolicy];
+      if(value) node.textContent = value;
+    });
+  }
+
+  function ensureBuildVersion(){
+    if(document.getElementById("waspnBuildVersion")) return;
+    const badge = document.createElement("div");
+    badge.id = "waspnBuildVersion";
+    badge.className = "waspn-build-version";
+    badge.textContent = `WASPN v${window.WASPNSession?.APP_VERSION || "14"}`;
+    document.body.appendChild(badge);
+  }
+
+  function renderBrokerState(){
+    const badge = document.getElementById("waspnBrokerState");
+    if(!badge) return;
+    const verified = window.WASPNSession?.backendStatus?.().verified === true;
+    const broker = getTradeZeroState();
+    const ok = verified && (broker?.usable === true || broker?.dataFresh === true);
+    badge.className = `waspn-broker-state ${ok ? "verified" : "degraded"}`;
+    badge.textContent = ok ? "BROKER VERIFIED" : "BROKER DEGRADED / UNVERIFIED";
+  }
+
+  function onSharedRefresh(handler){
+    ["storage","focus","pageshow","waspn:tradezero-update","waspn:tradezero-journal-update"].forEach(event => window.addEventListener(event, handler));
+  }
+
+  function ensureBrokerState(){
+    if(!["live-risk.html","journal.html","compliance.html","calendar-2026.html"].includes(currentFile())) return;
+    if(document.getElementById("waspnBrokerState")) return;
+    const badge = document.createElement("div");
+    badge.id = "waspnBrokerState";
+    badge.className = "waspn-broker-state degraded";
+    document.querySelector(".prototype-strip, .topbar")?.insertAdjacentElement("afterend", badge);
+    onSharedRefresh(renderBrokerState);
+    setInterval(renderBrokerState,5000);
+    renderBrokerState();
+  }
+
+'''
+          s=s.replace(marker,helpers+marker)
+          s=s.replace('body{padding-bottom:calc(96px + env(safe-area-inset-bottom)) !important}', 'body{padding-bottom:calc(96px + env(safe-area-inset-bottom)) !important}\n      .waspn-build-version{position:fixed;right:10px;bottom:calc(82px + env(safe-area-inset-bottom));z-index:9998;padding:3px 7px;border:1px solid #273442;border-radius:999px;background:rgba(7,11,16,.9);color:#657687;font-size:8px;font-weight:850}\n      .waspn-update-prompt{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:10001;border:1px solid #22c7ff;border-radius:999px;background:#0e2633;color:#75dbe7;padding:8px 12px;font-size:10px;font-weight:900}\n      .waspn-broker-state{width:max-content;max-width:calc(100% - 20px);margin:0 auto 8px;padding:5px 9px;border-radius:999px;font-size:8px;font-weight:950;letter-spacing:.8px;text-align:center}\n      .waspn-broker-state.verified{border:1px solid rgba(53,208,127,.35);background:#0e1c15;color:#35d07f}\n      .waspn-broker-state.degraded{border:1px solid rgba(243,184,75,.42);background:#1d170d;color:#f3b84b}')
+          s=s.replace('    applyBackupValidation();\n    buildNav();', '    applyBackupValidation();\n    applyPolicyLabels();\n    ensureBrokerState();\n    buildNav();\n    ensureBuildVersion();')
+          p.write_text(s)
+
+          # Explicit update activation; no automatic takeover while user is mid-session.
+          p=Path('service-worker.js'); s=p.read_text()
+          s=s.replace('"waspn-pwa-v13"','"waspn-pwa-v14"')
+          s=s.replace('.then(cache => cache.addAll(APP_SHELL))\n      .then(() => self.skipWaiting())', '.then(cache => cache.addAll(APP_SHELL))')
+          s=s.replace('  if(data.type === "WASPN_SET_API_TOKEN"){', '  if(data.type === "WASPN_ACTIVATE_UPDATE"){\n    event.waitUntil(self.skipWaiting());\n    return;\n  }\n\n  if(data.type === "WASPN_SET_API_TOKEN"){')
+          s=s.replace('session-rules.js?v=3','session-rules.js?v=4').replace('workflow-nav.js?v=4','workflow-nav.js?v=5')
+          p.write_text(s)
+
+          # Version all shared script references.
+          for p in Path('.').glob('*.html'):
+            s=p.read_text().replace('session-rules.js?v=3','session-rules.js?v=4').replace('workflow-nav.js?v=4','workflow-nav.js?v=5')
+            p.write_text(s)
+
+          # Stronger source regressions + cross-page consistency suite.
+          p=Path('tests/source-regressions.test.cjs'); s=p.read_text()
+          s=s.replace('waspn-pwa-v13','waspn-pwa-v14').replace('session-rules\\.js\\?v=3','session-rules\\.js\\?v=4')
+          s += r'''
+
+test('policy display labels are shared and hydrated centrally', () => {
+  assert.match(read('session-rules.js'),/function policyLabels\(\)/);
+  assert.match(read('workflow-nav.js'),/function applyPolicyLabels/);
+  assert.match(read('workflow-nav.js'),/WASPNSession\?\.policyLabels/);
+});
+
+test('PWA exposes build version and explicit update prompt', () => {
+  const nav=read('workflow-nav.js'), sw=read('service-worker.js');
+  assert.match(nav,/waspnBuildVersion/); assert.match(nav,/WASPN update ready • Refresh/);
+  assert.match(sw,/WASPN_ACTIVATE_UPDATE/); assert.match(sw,/waspn-pwa-v14/);
+});
+
+test('broker authority state is visually explicit', () => {
+  const nav=read('workflow-nav.js');
+  assert.match(nav,/BROKER VERIFIED/); assert.match(nav,/BROKER DEGRADED \/ UNVERIFIED/);
+});
+
+test('legacy window and split terminology is absent from production frontend', () => {
+  const files=fs.readdirSync(root).filter(name=>/\.(html|js)$/.test(name));
+  const forbidden=[/7–11 ET/i,/06:30–07:00 ET/i,/07:00–11:00 ET/i,/PRELIMINARY WINDOW/i,/MAIN WINDOW/i];
+  for(const file of files) for(const pattern of forbidden) assert.doesNotMatch(read(file),pattern,`${file} contains legacy rule copy`);
+});
+
+test('shared refresh plumbing is centralized', () => assert.match(read('workflow-nav.js'),/function onSharedRefresh/));
+'''
+          p.write_text(s)
+
+          Path('tests/cross-page-consistency.test.cjs').write_text(r'''const {test}=require('node:test');
+const assert=require('node:assert/strict'); const fs=require('node:fs'); const path=require('node:path');
+const root=path.resolve(__dirname,'..'); const read=f=>fs.readFileSync(path.join(root,f),'utf8');
+const pages=['live-risk.html','journal.html','compliance.html','calendar-2026.html'];
+test('all core pages load shared policy and UI layers',()=>{for(const f of pages){const s=read(f);assert.match(s,/session-rules\.js\?v=4/);assert.match(s,/workflow-nav\.js\?v=5/);}});
+test('all risk limits have one shared definition',()=>{const s=read('session-rules.js');for(const r of [/const START = 390/,/const END = 660/,/const WARNING = -75/,/const HARD_STOP = -100/,/const OBJECTIVE = 50/,/const MAX_ATTEMPTS = 5/])assert.match(s,r);});
+test('shared layer covers closure, attempts and broker timing provenance',()=>{const s=read('workflow-nav.js');assert.match(s,/live\.windowBreach/);assert.match(s,/maxKnownAttempt/);assert.match(s,/brokerTimingReconciled === true/);});
+''')
+          PY
+      - name: Run policy and source regressions
+        run: node --test tests/*.test.cjs
+      - name: Commit tested patch
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add session-rules.js workflow-nav.js service-worker.js '*.html' tests
+          git commit -m "feat: unify policy UI and harden PWA consistency"
+          git push
