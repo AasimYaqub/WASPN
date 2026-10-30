@@ -124,9 +124,17 @@ test('Backup hardening is installed through session-rules, which Data Backup act
 
 test('hardening release bumps PWA cache', () => {
   const source = read('service-worker.js');
-  assert.match(source,/waspn-pwa-v12/);
+  assert.match(source,/waspn-pwa-v13/);
 });
 
+
+test('Live Risk shows authoritative window and red active Risk nav theme', () => {
+  const liveRisk = read('live-risk.html');
+  const nav = read('workflow-nav.js');
+  assert.match(liveRisk,/06:30–11:00 ET/);
+  assert.doesNotMatch(liveRisk,/>\s*7–11 ET\s*</);
+  assert.match(nav,/key:"risk",label:"Risk",icon:"1",href:"live-risk.html",color:"#ff5f6d"/);
+});
 
 test('single-window release has no old split-window copy', () => {
   const files = ['index.html','live-risk.html','compliance.html','session-rules.js'];
