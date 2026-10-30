@@ -6,7 +6,9 @@
   const END = 660;
   const WARNING = -75;
   const HARD_STOP = -100;
+  const OBJECTIVE = 50;
   const MAX_ATTEMPTS = 5;
+  const APP_VERSION = "14";
   const COOLDOWN_MS = 5 * 60 * 1000;
   const STORAGE_KEY = "waspnJournalV2";
   const BACKEND_MAX_AGE_MS = 15000;
@@ -127,6 +129,24 @@
     return minutes >= START && minutes < END;
   }
 
+  function formatPolicyMinute(total){
+    const hour = Math.floor(total / 60);
+    const minute = total % 60;
+    return String(hour).padStart(2,"0") + ":" + String(minute).padStart(2,"0");
+  }
+
+  function policyLabels(){
+    return Object.freeze({
+      window:`${formatPolicyMinute(START)}–${formatPolicyMinute(END)} ET`,
+      start:`${formatPolicyMinute(START)} ET`,
+      end:`${formatPolicyMinute(END)} ET`,
+      attempts:`${MAX_ATTEMPTS} Max`,
+      warning:`-$${Math.abs(WARNING)}`,
+      hardStop:`-$${Math.abs(HARD_STOP)}`,
+      objective:`+$${OBJECTIVE}`
+    });
+  }
+
   function clock(now = new Date()){
     const ny = nyParts(now);
 
@@ -135,14 +155,14 @@
     }
 
     if(ny.minutes >= END){
-      return {key:"closed",canStart:false,title:"SESSION CLOSED",detail:"11:00 AM ET reached • No reopening later.",className:"closed"};
+      return {key:"closed",canStart:false,title:"SESSION CLOSED",detail:`${policyLabels().end} reached • No reopening later.`,className:"closed"};
     }
 
     if(ny.minutes < START){
-      return {key:"before",canStart:false,title:"WAIT — SESSION NOT OPEN",detail:"Trading window begins at 06:30 ET.",className:"warn"};
+      return {key:"before",canStart:false,title:"WAIT — SESSION NOT OPEN",detail:`Trading window begins at ${policyLabels().start}.`,className:"warn"};
     }
 
-    return {key:"window",canStart:true,title:"WITHIN WASPN",detail:"Trading window • 06:30–11:00 ET.",className:"ok"};
+    return {key:"window",canStart:true,title:"WITHIN WASPN",detail:`Trading window • ${policyLabels().window}.`,className:"ok"};
   }
 
   function brokerPnlUsable(broker, date){
@@ -504,9 +524,9 @@
   }
 
   const api = {
-    START,END,WARNING,HARD_STOP,MAX_ATTEMPTS,COOLDOWN_MS,
+    START,END,WARNING,HARD_STOP,OBJECTIVE,MAX_ATTEMPTS,APP_VERSION,COOLDOWN_MS,
     BACKEND_MAX_AGE_MS,backendStatus,backendUnavailable,brokerPnlUsable,nyParts,
-    timeInsideWindow,clock,evaluate,sync,writeJournal,confirmBrokerEntries,
+    formatPolicyMinute,policyLabels,timeInsideWindow,clock,evaluate,sync,writeJournal,confirmBrokerEntries,
     invalidateConflictingReviews,isRealDateKey,validateBackupJournal
   };
 
