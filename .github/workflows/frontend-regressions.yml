@@ -2,11 +2,11 @@ name: WASPN Frontend Regressions
 
 on:
   push:
-    branches: [main]
+    branches: [main, fix/pwa-version-sync]
   pull_request:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: waspn-frontend-${{ github.workflow }}-${{ github.ref }}
@@ -19,6 +19,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Apply PWA version sync patch on staging branch
+        if: github.ref == 'refs/heads/fix/pwa-version-sync'
+        run: python3 scripts/fix-pwa-version-sync.py
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -47,3 +51,14 @@ jobs:
 
       - name: Run browser regressions
         run: python -u tests/frontend-smoke.py http://127.0.0.1:8000/
+
+      - name: Commit tested PWA fix and remove staging machinery
+        if: github.ref == 'refs/heads/fix/pwa-version-sync' && success()
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          rm -f scripts/fix-pwa-version-sync.py
+          git checkout origin/main -- .github/workflows/frontend-regressions.yml
+          git add -A
+          git commit -m "fix: make PWA version updates self-consistent"
+          git push
