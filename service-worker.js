@@ -13,7 +13,8 @@ const APP_SHELL = [
   "./compliance.html",
   "./calendar-2026.html",
   "./data-backup.html",
-  "./premium-theme.css?v=3",
+  "./premium-theme.css?v=4",
+  "./mobile-dock-fix.css?v=1",
   "./workflow-nav.js?v=5",
   "./tradezero-live.js?v=4",
   "./tradezero-journal.js?v=4",
@@ -216,11 +217,11 @@ async function applyPremiumTheme(request,response){
   if(!isHtmlDocument(request,response)) return response;
 
   const text = await response.text();
-  if(text.includes("premium-theme.css")){
+  if(text.includes("premium-theme.css") && text.includes("mobile-dock-fix.css")){
     return new Response(text,response);
   }
 
-  const theme = '<link rel="stylesheet" href="./premium-theme.css?v=3" data-waspn-premium-theme="true">';
+  const theme = '<link rel="stylesheet" href="./premium-theme.css?v=4" data-waspn-premium-theme="true">\n<link rel="stylesheet" href="./mobile-dock-fix.css?v=1" data-waspn-dock-fix="true">';
   const themed = text.includes("</head>")
     ? text.replace("</head>",theme + "\n</head>")
     : theme + text;
