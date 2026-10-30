@@ -124,7 +124,7 @@ test('Backup hardening is installed through session-rules, which Data Backup act
 
 test('hardening release bumps PWA cache', () => {
   const source = read('service-worker.js');
-  assert.match(source,/waspn-pwa-v14/);
+  assert.match(source,/waspn-pwa-v15/);
 });
 
 
@@ -159,7 +159,7 @@ test('policy display labels are shared and hydrated centrally', () => {
 test('PWA exposes build version and explicit update prompt', () => {
   const nav=read('workflow-nav.js'), sw=read('service-worker.js');
   assert.match(nav,/waspnBuildVersion/); assert.match(nav,/WASPN update ready • Refresh/);
-  assert.match(sw,/WASPN_ACTIVATE_UPDATE/); assert.match(sw,/waspn-pwa-v14/);
+  assert.match(sw,/WASPN_ACTIVATE_UPDATE/); assert.match(sw,/waspn-pwa-v15/);
 });
 
 test('broker authority state is visually explicit', () => {
@@ -185,7 +185,7 @@ test('policy display labels are shared and hydrated centrally', () => {
 test('PWA exposes build version and explicit update prompt', () => {
   const nav=read('workflow-nav.js'), sw=read('service-worker.js');
   assert.match(nav,/waspnBuildVersion/); assert.match(nav,/WASPN update ready • Refresh/);
-  assert.match(sw,/WASPN_ACTIVATE_UPDATE/); assert.match(sw,/waspn-pwa-v14/);
+  assert.match(sw,/WASPN_ACTIVATE_UPDATE/); assert.match(sw,/waspn-pwa-v15/);
 });
 
 test('broker authority state is visually explicit', () => {
@@ -200,3 +200,17 @@ test('legacy window and split terminology is absent from production frontend', (
 });
 
 test('shared refresh plumbing is centralized', () => assert.match(read('workflow-nav.js'),/function onSharedRefresh/));
+
+
+test('Live Risk guardrail values are genuinely centered and non-wrapping on mobile', () => {
+  const source = read('live-risk.html');
+  assert.match(source,/\.guardrail\{[\s\S]*display:flex;[\s\S]*align-items:center;[\s\S]*justify-content:center;/);
+  assert.match(source,/\.guardrail-value\{[\s\S]*display:flex;[\s\S]*justify-content:center;[\s\S]*text-align:center;[\s\S]*white-space:nowrap/);
+  assert.match(source,/font-size:clamp\(10px,2\.7vw,13px\)/);
+});
+
+test('shared broker and update statuses are accessible live regions', () => {
+  const source = read('workflow-nav.js');
+  assert.match(source,/waspnBrokerState[\s\S]*aria-live/);
+  assert.match(source,/waspnUpdatePrompt[\s\S]*aria-live/);
+});
