@@ -139,6 +139,11 @@ self.addEventListener("message", event => {
     return;
   }
 
+  if(data.type === "WASPN_ACTIVATE_UPDATE"){
+    event.waitUntil(self.skipWaiting());
+    return;
+  }
+
   if(data.type === "WASPN_SET_API_TOKEN"){
     event.waitUntil(
       saveApiToken(data.token)

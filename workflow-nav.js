@@ -48,6 +48,17 @@
     document.body.appendChild(prompt);
   }
 
+  function showUpdatePrompt(registration){
+    if(document.getElementById("waspnUpdatePrompt")) return;
+    const prompt = document.createElement("button");
+    prompt.id = "waspnUpdatePrompt";
+    prompt.className = "waspn-update-prompt";
+    prompt.type = "button";
+    prompt.textContent = "WASPN update ready • Refresh";
+    prompt.addEventListener("click", () => registration.waiting?.postMessage({type:"WASPN_ACTIVATE_UPDATE"}));
+    document.body.appendChild(prompt);
+  }
+
   function registerServiceWorker(){
     if(!("serviceWorker" in navigator)) return;
     let reloading = false;
@@ -728,6 +739,62 @@
     renderBrokerState();
   }
 
+  function sharedPolicyLabels(){
+    return window.WASPNSession?.policyLabels?.() || {window:"06:30–11:00 ET",attempts:"5 Max",warning:"-$75",hardStop:"-$100",objective:"+$50"};
+  }
+
+  function applyPolicyLabels(){
+    const labels = sharedPolicyLabels();
+    document.querySelectorAll(".guardrail").forEach(card => {
+      const name = card.querySelector(".label")?.textContent?.trim().toLowerCase();
+      const value = card.querySelector(".guardrail-value");
+      if(!value) return;
+      if(name === "window") value.textContent = labels.window;
+      else if(name === "attempts") value.textContent = labels.attempts;
+      else if(name?.includes("warning")) value.textContent = labels.warning;
+      else if(name?.includes("stop")) value.textContent = labels.hardStop;
+    });
+    document.querySelectorAll("[data-waspn-policy]").forEach(node => {
+      const value = labels[node.dataset.waspnPolicy];
+      if(value) node.textContent = value;
+    });
+  }
+
+  function ensureBuildVersion(){
+    if(document.getElementById("waspnBuildVersion")) return;
+    const badge = document.createElement("div");
+    badge.id = "waspnBuildVersion";
+    badge.className = "waspn-build-version";
+    badge.textContent = `WASPN v${window.WASPNSession?.APP_VERSION || "14"}`;
+    document.body.appendChild(badge);
+  }
+
+  function renderBrokerState(){
+    const badge = document.getElementById("waspnBrokerState");
+    if(!badge) return;
+    const verified = window.WASPNSession?.backendStatus?.().verified === true;
+    const broker = getTradeZeroState();
+    const ok = verified && (broker?.usable === true || broker?.dataFresh === true);
+    badge.className = `waspn-broker-state ${ok ? "verified" : "degraded"}`;
+    badge.textContent = ok ? "BROKER VERIFIED" : "BROKER DEGRADED / UNVERIFIED";
+  }
+
+  function onSharedRefresh(handler){
+    ["storage","focus","pageshow","waspn:tradezero-update","waspn:tradezero-journal-update"].forEach(event => window.addEventListener(event, handler));
+  }
+
+  function ensureBrokerState(){
+    if(!["live-risk.html","journal.html","compliance.html","calendar-2026.html"].includes(currentFile())) return;
+    if(document.getElementById("waspnBrokerState")) return;
+    const badge = document.createElement("div");
+    badge.id = "waspnBrokerState";
+    badge.className = "waspn-broker-state degraded";
+    document.querySelector(".prototype-strip, .topbar")?.insertAdjacentElement("afterend", badge);
+    onSharedRefresh(renderBrokerState);
+    setInterval(renderBrokerState,5000);
+    renderBrokerState();
+  }
+
   function injectStyles(){
     if(document.getElementById("waspnWorkflowNavStyles")) return;
 
@@ -735,6 +802,11 @@
     style.id = "waspnWorkflowNavStyles";
     style.textContent = `
       body{padding-bottom:calc(96px + env(safe-area-inset-bottom)) !important}
+      .waspn-build-version{position:fixed;right:10px;bottom:calc(82px + env(safe-area-inset-bottom));z-index:9998;padding:3px 7px;border:1px solid #273442;border-radius:999px;background:rgba(7,11,16,.9);color:#657687;font-size:8px;font-weight:850}
+      .waspn-update-prompt{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:10001;border:1px solid #22c7ff;border-radius:999px;background:#0e2633;color:#75dbe7;padding:8px 12px;font-size:10px;font-weight:900}
+      .waspn-broker-state{width:max-content;max-width:calc(100% - 20px);margin:0 auto 8px;padding:5px 9px;border-radius:999px;font-size:8px;font-weight:950;letter-spacing:.8px;text-align:center}
+      .waspn-broker-state.verified{border:1px solid rgba(53,208,127,.35);background:#0e1c15;color:#35d07f}
+      .waspn-broker-state.degraded{border:1px solid rgba(243,184,75,.42);background:#1d170d;color:#f3b84b}
       .waspn-build-version{position:fixed;right:10px;bottom:calc(82px + env(safe-area-inset-bottom));z-index:9998;padding:3px 7px;border:1px solid #273442;border-radius:999px;background:rgba(7,11,16,.9);color:#657687;font-size:8px;font-weight:850}
       .waspn-update-prompt{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:10001;border:1px solid #22c7ff;border-radius:999px;background:#0e2633;color:#75dbe7;padding:8px 12px;font-size:10px;font-weight:900}
       .waspn-broker-state{width:max-content;max-width:calc(100% - 20px);margin:0 auto 8px;padding:5px 9px;border-radius:999px;font-size:8px;font-weight:950;letter-spacing:.8px;text-align:center}

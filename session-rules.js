@@ -147,6 +147,24 @@
     });
   }
 
+  function formatPolicyMinute(total){
+    const hour = Math.floor(total / 60);
+    const minute = total % 60;
+    return String(hour).padStart(2,"0") + ":" + String(minute).padStart(2,"0");
+  }
+
+  function policyLabels(){
+    return Object.freeze({
+      window:`${formatPolicyMinute(START)}–${formatPolicyMinute(END)} ET`,
+      start:`${formatPolicyMinute(START)} ET`,
+      end:`${formatPolicyMinute(END)} ET`,
+      attempts:`${MAX_ATTEMPTS} Max`,
+      warning:`-$${Math.abs(WARNING)}`,
+      hardStop:`-$${Math.abs(HARD_STOP)}`,
+      objective:`+$${OBJECTIVE}`
+    });
+  }
+
   function clock(now = new Date()){
     const ny = nyParts(now);
 
@@ -526,7 +544,7 @@
   const api = {
     START,END,WARNING,HARD_STOP,OBJECTIVE,MAX_ATTEMPTS,APP_VERSION,COOLDOWN_MS,
     BACKEND_MAX_AGE_MS,backendStatus,backendUnavailable,brokerPnlUsable,nyParts,
-    formatPolicyMinute,policyLabels,timeInsideWindow,clock,evaluate,sync,writeJournal,confirmBrokerEntries,
+    formatPolicyMinute,policyLabels,formatPolicyMinute,policyLabels,timeInsideWindow,clock,evaluate,sync,writeJournal,confirmBrokerEntries,
     invalidateConflictingReviews,isRealDateKey,validateBackupJournal
   };
 
