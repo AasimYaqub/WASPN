@@ -8,6 +8,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: waspn-frontend-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -21,8 +25,8 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Run policy and source regressions
-        run: node --test tests/session-rules.test.cjs tests/source-regressions.test.cjs
+      - name: Run all policy and source regressions
+        run: node --test tests/*.test.cjs
 
       - name: Set up Python
         uses: actions/setup-python@v5
