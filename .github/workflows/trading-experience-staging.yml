@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 20
       - name: Apply guarded polish
-        run: python3 scripts/trading-experience-polish.py
+        run: python3 scripts/trading-experience-polish-v2.py
       - name: Run all source tests
         run: node --test tests/*.test.cjs
       - name: Commit tested polish
