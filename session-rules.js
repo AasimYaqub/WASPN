@@ -13,6 +13,22 @@
   const STORAGE_KEY = "waspnJournalV2";
   const BACKEND_MAX_AGE_MS = 15000;
 
+  // TradeZero execution CSV exported 2026-11-04 confirms that the 2026-11-03
+  // live +137.67 figure was gross proceeds, not broker net proceeds.
+  // Only repair that exact, known stale value; never rewrite unrelated days.
+  function reconcileNov3BrokerCsv(journal){
+    const day = journal && journal["2026-11-03"];
+    if(!day || typeof day !== "object" || Array.isArray(day)) return false;
+    if(day.brokerDailyNet !== 137.67) return false;
+
+    day.brokerDailyNet = 129.49;
+    day.brokerDailyGross = 137.67;
+    day.brokerDailyFees = 8.18;
+    day.brokerDailyNetSource = "TRADEZERO_EXECUTION_CSV_2026-11-04";
+    // Do not mutate trades, totalNet, notes or latched breach evidence.
+    return true;
+  }
+
   let rememberedDate = null;
   let rememberedRisk = {};
   let backend = null;
@@ -348,6 +364,10 @@
 
     if(!journal || typeof journal !== "object" || Array.isArray(journal)) journal = {};
 
+    if(reconcileNov3BrokerCsv(journal)){
+      root.localStorage.setItem(STORAGE_KEY, JSON.stringify(journal));
+    }
+
     const originalDay = journal[date] || {date};
     const day = {...originalDay};
     const live = retain({...day.liveRisk}, rememberedRisk);
@@ -397,6 +417,7 @@
   }
 
   function writeJournal(journal){
+    reconcileNov3BrokerCsv(journal);
     const date = resetDay();
 
     let previous;
