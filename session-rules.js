@@ -379,7 +379,9 @@
 
     if(!journal || typeof journal !== "object" || Array.isArray(journal)) journal = {};
 
-    if(reconcileNov3BrokerCsv(journal) || reconcileNov4BrokerCsv(journal)){
+    const nov3Corrected = reconcileNov3BrokerCsv(journal);
+    const nov4Corrected = reconcileNov4BrokerCsv(journal);
+    if(nov3Corrected || nov4Corrected){
       root.localStorage.setItem(STORAGE_KEY, JSON.stringify(journal));
     }
 
