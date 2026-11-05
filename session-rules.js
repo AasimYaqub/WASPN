@@ -29,6 +29,21 @@
     return true;
   }
 
+  // November 4 execution report: 4 round trips, 8 fills, gross +109.00,
+  // execution fees 4.79, resulting in broker-confirmed net +104.21.
+  // Repair only a stale live gross value; keep journal and compliance intact.
+  function reconcileNov4BrokerCsv(journal){
+    const day = journal && journal["2026-11-04"];
+    if(!day || typeof day !== "object" || Array.isArray(day)) return false;
+    if(day.brokerDailyNet !== 109) return false;
+
+    day.brokerDailyNet = 104.21;
+    day.brokerDailyGross = 109;
+    day.brokerDailyFees = 4.79;
+    day.brokerDailyNetSource = "TRADEZERO_EXECUTION_REPORT_2026-11-05";
+    return true;
+  }
+
   let rememberedDate = null;
   let rememberedRisk = {};
   let backend = null;
@@ -364,7 +379,9 @@
 
     if(!journal || typeof journal !== "object" || Array.isArray(journal)) journal = {};
 
-    if(reconcileNov3BrokerCsv(journal)){
+    const nov3Corrected = reconcileNov3BrokerCsv(journal);
+    const nov4Corrected = reconcileNov4BrokerCsv(journal);
+    if(nov3Corrected || nov4Corrected){
       root.localStorage.setItem(STORAGE_KEY, JSON.stringify(journal));
     }
 
@@ -418,6 +435,7 @@
 
   function writeJournal(journal){
     reconcileNov3BrokerCsv(journal);
+    reconcileNov4BrokerCsv(journal);
     const date = resetDay();
 
     let previous;
