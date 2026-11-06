@@ -697,7 +697,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 
 </div>
 
-<script src="session-rules.js?v=4"></script>
+<script src="session-rules.js?v=5"></script>
 <script src="tradezero-live.js?v=4"></script>
 
 <script>
@@ -941,6 +941,17 @@ function getDailyResult(
     day ||
     getJournal()[date] ||
     {};
+
+  // Finalized TradeZero execution report outranks any older live gross,
+  // rounded value or journal estimate saved on the device for this date.
+  // Current-day live P&L is handled above and remains unchanged.
+  if(date === "2026-11-05"){
+    return {
+      value:tradingData["2026-11-05"],
+      source:"TradeZero execution report · net after fees",
+      live:false
+    };
+  }
 
   if(
     typeof record.brokerDailyNet === "number" &&
