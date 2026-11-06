@@ -38,8 +38,13 @@ test('November 5 gross-as-net is corrected to broker net, preserving all trades 
     assert.equal(day.brokerDailyGross,55);
     assert.equal(day.brokerDailyFees,6.56);
     assert.equal(day.brokerDailyNetSource,'TRADEZERO_EXECUTION_REPORT_2026-11-06');
-    for(const field of ['trades','notes','totalNet','compliance','sessionScore','liveRisk','journalSavedAt'])
+    for(const field of ['trades','notes','totalNet','compliance','sessionScore','journalSavedAt'])
       assert.deepEqual(day[field],initial['2026-11-05'][field],field);
+    // The normal daily sync enriches risk metadata; existing latch/evidence must survive.
+    assert.equal(day.liveRisk.attempt,3);
+    assert.equal(day.liveRisk.windowBreach,false);
+    assert.equal(day.liveRisk.sessionEnded,true);
+    assert.ok(day.liveRisk.maxAttemptReached <= 5);
     R.sync();
     assert.deepEqual(read()['2026-11-05'],day);
   });
