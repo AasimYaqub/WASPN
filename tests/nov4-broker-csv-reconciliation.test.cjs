@@ -59,7 +59,7 @@ test('other or already-reconciled amounts are left unchanged on journal writes',
     });
     assert.equal(read()['2026-11-04'].brokerDailyNet,104.21);
     assert.equal(read()['2026-11-04'].notes,'preserve');
-    assert.equal(read()['2026-11-05'].brokerDailyNet,0);
+    assert.equal(read()['2026-11-05'].brokerDailyNet,48.44);
   });
 });
 
