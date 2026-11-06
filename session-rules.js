@@ -44,6 +44,21 @@
     return true;
   }
 
+  // November 5: TradeZero confirms 3 completed cycles, gross +55.00,
+  // fees 6.56, net +48.44. Correct only the known gross-as-net value.
+  function reconcileNov5BrokerCsv(journal){
+    const day = journal && journal["2026-11-05"];
+    if(!day || typeof day !== "object" || Array.isArray(day)) return false;
+    if(day.brokerDailyNet !== 55) return false;
+
+    day.brokerDailyNet = 48.44;
+    day.brokerDailyGross = 55;
+    day.brokerDailyFees = 6.56;
+    day.brokerDailyNetSource = "TRADEZERO_EXECUTION_REPORT_2026-11-06";
+    // Preserve all trades, local estimates, annotations, process and risk status.
+    return true;
+  }
+
   let rememberedDate = null;
   let rememberedRisk = {};
   let backend = null;
@@ -381,7 +396,8 @@
 
     const nov3Corrected = reconcileNov3BrokerCsv(journal);
     const nov4Corrected = reconcileNov4BrokerCsv(journal);
-    if(nov3Corrected || nov4Corrected){
+    const nov5Corrected = reconcileNov5BrokerCsv(journal);
+    if(nov3Corrected || nov4Corrected || nov5Corrected){
       root.localStorage.setItem(STORAGE_KEY, JSON.stringify(journal));
     }
 
@@ -436,6 +452,7 @@
   function writeJournal(journal){
     reconcileNov3BrokerCsv(journal);
     reconcileNov4BrokerCsv(journal);
+    reconcileNov5BrokerCsv(journal);
     const date = resetDay();
 
     let previous;
