@@ -8,7 +8,7 @@
   const HARD_STOP = -100;
   const OBJECTIVE = 50;
   const MAX_ATTEMPTS = 5;
-  const APP_VERSION = "14";
+  const APP_VERSION = "15";
   const COOLDOWN_MS = 5 * 60 * 1000;
   const STORAGE_KEY = "waspnJournalV2";
   const BACKEND_MAX_AGE_MS = 15000;
@@ -49,7 +49,10 @@
   function reconcileNov5BrokerCsv(journal){
     const day = journal && journal["2026-11-05"];
     if(!day || typeof day !== "object" || Array.isArray(day)) return false;
-    if(day.brokerDailyNet !== 55) return false;
+    // The full broker export for this closed date is authoritative even if
+    // device storage holds a rounded, estimated, or differently typed total.
+    if(day.brokerDailyNet === 48.44 &&
+       day.brokerDailyNetSource === "TRADEZERO_EXECUTION_REPORT_2026-11-06") return false;
 
     day.brokerDailyNet = 48.44;
     day.brokerDailyGross = 55;
