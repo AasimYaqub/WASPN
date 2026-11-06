@@ -124,7 +124,7 @@ test('Backup hardening is installed through session-rules, which Data Backup act
 
 test('hardening release bumps PWA cache', () => {
   const source = read('service-worker.js');
-  assert.match(source,/waspn-pwa-v15/);
+  assert.match(source,/waspn-pwa-v16/);
 });
 
 
@@ -159,7 +159,7 @@ test('policy display labels are shared and hydrated centrally', () => {
 test('PWA exposes build version and explicit update prompt', () => {
   const nav=read('workflow-nav.js'), sw=read('service-worker.js');
   assert.match(nav,/waspnBuildVersion/); assert.match(nav,/WASPN update ready • Refresh/);
-  assert.match(sw,/WASPN_ACTIVATE_UPDATE/); assert.match(sw,/waspn-pwa-v15/);
+  assert.match(sw,/WASPN_ACTIVATE_UPDATE/); assert.match(sw,/waspn-pwa-v16/);
 });
 
 test('broker authority state is visually explicit', () => {
@@ -185,7 +185,7 @@ test('policy display labels are shared and hydrated centrally', () => {
 test('PWA exposes build version and explicit update prompt', () => {
   const nav=read('workflow-nav.js'), sw=read('service-worker.js');
   assert.match(nav,/waspnBuildVersion/); assert.match(nav,/WASPN update ready • Refresh/);
-  assert.match(sw,/WASPN_ACTIVATE_UPDATE/); assert.match(sw,/waspn-pwa-v15/);
+  assert.match(sw,/WASPN_ACTIVATE_UPDATE/); assert.match(sw,/waspn-pwa-v16/);
 });
 
 test('broker authority state is visually explicit', () => {
