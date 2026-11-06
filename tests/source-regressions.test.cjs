@@ -113,7 +113,7 @@ test('Review actively syncs broker journal timing and refreshes the open day', (
 test('Backup hardening is installed through session-rules, which Data Backup actually loads', () => {
   const rules = read('session-rules.js');
   const backup = read('data-backup.html');
-  assert.match(backup,/session-rules\.js\?v=4/);
+  assert.match(backup,/session-rules\.js\?v=5/);
   assert.match(rules,/function validateBackupJournal/);
   assert.match(rules,/function isRealDateKey/);
   assert.match(rules,/Date\.UTC/);
