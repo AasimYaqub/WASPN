@@ -82,9 +82,24 @@ test('reconciliation survives journal save, does not change unrelated or valid b
   });
 });
 
-test('Review falls back to validated Nov 5 net, and saved broker result wins',()=>{
+test('Review always selects finalized Nov 5 CSV net over stale saved live gross',()=>{
   const src=fs.readFileSync(path.join(__dirname,'..','calendar-2026.html'),'utf8');
   assert.match(src,/"2026-11-05":48\.44/);
   const fn=src.match(/function getDailyResult\([\s\S]*?\n\}/)?.[0]||'';
+  assert.ok(fn.includes('if(date === "2026-11-05")'));
+  assert.ok(fn.indexOf('if(date === "2026-11-05")') < fn.indexOf('record.brokerDailyNet'));
   assert.ok(fn.indexOf('record.brokerDailyNet') < fn.indexOf('tradingData[date]'));
+});
+
+test('Nov 5 repair fixes rounded, typed and alternate stored broker results',()=>{
+  for(const stale of [55.0000000001,"55",50.5,48.44]){
+    withStorage({'2026-11-05':{brokerDailyNet:stale,notes:'untouched',trades:[{symbol:'OMH'}]}},read=>{
+      R.sync();
+      const day=read()['2026-11-05'];
+      assert.equal(day.brokerDailyNet,48.44);
+      assert.equal(day.notes,'untouched');
+      assert.deepEqual(day.trades,[{symbol:'OMH'}]);
+      assert.equal(day.brokerDailyNetSource,'TRADEZERO_EXECUTION_REPORT_2026-11-06');
+    });
+  }
 });
