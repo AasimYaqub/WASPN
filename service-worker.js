@@ -2,12 +2,12 @@ const CACHE_PREFIX =
   "waspn-pwa-";
 
 const CACHE_NAME =
-  "waspn-pwa-v15";
+  "waspn-pwa-v16";
 
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./session-rules.js?v=4",
+  "./session-rules.js?v=5",
   "./live-risk.html",
   "./journal.html",
   "./compliance.html",
