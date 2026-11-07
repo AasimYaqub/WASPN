@@ -27,7 +27,9 @@ test('Friday Nov 6 stale live gross is replaced by broker execution net, preserv
   assert.equal(day.brokerDailyNet,94.01);
   assert.equal(day.brokerDailyGross,110.10);
   assert.equal(day.brokerDailyDeductions,16.09);
-  assert.equal(day.brokerReportedFees,16.09);\n  assert.equal(day.brokerDailyFees,16.09);\n  assert.equal(day.brokerDailyCsvExecutions,4);
+  assert.equal(day.brokerReportedFees,16.09);
+  assert.equal(day.brokerDailyFees,16.09);
+  assert.equal(day.brokerDailyCsvExecutions,4);
   assert.equal(day.brokerUnitemizedDeductions,0);
   assert.equal(day.brokerDailySettlementDate,'2026-11-09');
   assert.equal(day.brokerDailySettlementConfirmed,false);
