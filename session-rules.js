@@ -8,7 +8,7 @@
   const HARD_STOP = -100;
   const OBJECTIVE = 50;
   const MAX_ATTEMPTS = 5;
-  const APP_VERSION = "16";
+  const APP_VERSION = "17";
   const COOLDOWN_MS = 5 * 60 * 1000;
   const STORAGE_KEY = "waspnJournalV2";
   const BACKEND_MAX_AGE_MS = 15000;
@@ -62,12 +62,11 @@
     return true;
   }
 
-  // Trade date 2026-11-06: read-only broker historical executions returned
-  // gross +110.10 and aggregate net proceeds +94.01 (4 fills, two flat pairs).
-  // Settlement date 2026-11-09: do NOT claim these proceeds are settled.
-  // Reported fee fields total 15.07; gross-to-net deductions are 16.09;
-  // the additional 1.02 is not itemized by the broker.
-  const NOV6_PENDING_SOURCE = "TRADEZERO_HISTORICAL_NET_PROCEEDS_PENDING_SETTLEMENT_2026-11-09";
+  // User-provided TradeZero TradeHistory20261107053201.csv: 2026-11-06
+  // DBGI 2000 shares net +34.15; RAYA 500 shares net +59.86.
+  // Gross +110.10, itemized charges 16.09, net +94.01, four fills.
+  // Settlement date is 2026-11-09; not yet certified settled.
+  const NOV6_PENDING_SOURCE = "TRADEZERO_USER_EXECUTION_CSV_2026-11-07_PENDING_SETTLEMENT_2026-11-09";
   function reconcileNov6PendingNet(journal){
     const day = journal && journal["2026-11-06"];
     if(!day || typeof day !== "object" || Array.isArray(day)) return false;
