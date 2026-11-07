@@ -801,7 +801,7 @@ const tradingData = {
   "2026-11-04":104.21,
   // TradeZero execution report reconciled 2026-11-06 (gross +55.00, fees 6.56).
   "2026-11-05":48.44,
-  // Broker historical execution net proceeds, NOT settled (settlement 2026-11-09).
+  // User-supplied TradeZero execution CSV verified: NET +94.01, not settled (S/D 2026-11-09).
   // Four fills, +110.10 gross, −16.09 proceeds deductions = +94.01 provisional net.
   "2026-11-06":94.01
 };
@@ -972,7 +972,7 @@ function getDailyResult(
     }
     return {
       value:tradingData["2026-11-06"],
-      source:"TradeZero execution net · settlement pending 9 Nov",
+      source:"TradeZero CSV net · settlement pending 9 Nov",
       live:false
     };
   }
