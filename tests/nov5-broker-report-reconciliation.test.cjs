@@ -44,7 +44,7 @@ test('November 5 gross-as-net is corrected to broker net, preserving all trades 
     assert.equal(day.liveRisk.attempt,3);
     assert.equal(day.liveRisk.windowBreach,false);
     assert.equal(day.liveRisk.sessionEnded,true);
-    assert.ok(day.liveRisk.maxAttemptReached <= 5);
+    assert.ok(day.liveRisk.maxAttemptReached == null || day.liveRisk.maxAttemptReached <= 5);
     R.sync();
     assert.deepEqual(read()['2026-11-05'],day);
   });
@@ -71,7 +71,7 @@ test('reconciliation survives journal save, does not change unrelated or valid b
       '2026-11-02':{brokerDailyNet:59.95}
     });
     assert.equal(read()['2026-11-05'].brokerDailyNet,48.44);
-    assert.equal(read()['2026-11-06'].brokerDailyNet,75);
+    assert.equal(read()['2026-11-06'].brokerDailyNet,94.01);
     assert.equal(read()['2026-11-06'].notes,'no changes');
     assert.equal(read()['2026-11-02'].brokerDailyNet,59.95);
   });

@@ -8,7 +8,7 @@
   const HARD_STOP = -100;
   const OBJECTIVE = 50;
   const MAX_ATTEMPTS = 5;
-  const APP_VERSION = "15";
+  const APP_VERSION = "16";
   const COOLDOWN_MS = 5 * 60 * 1000;
   const STORAGE_KEY = "waspnJournalV2";
   const BACKEND_MAX_AGE_MS = 15000;
@@ -59,6 +59,31 @@
     day.brokerDailyFees = 6.56;
     day.brokerDailyNetSource = "TRADEZERO_EXECUTION_REPORT_2026-11-06";
     // Preserve all trades, local estimates, annotations, process and risk status.
+    return true;
+  }
+
+  // Trade date 2026-11-06: read-only broker historical executions returned
+  // gross +110.10 and aggregate net proceeds +94.01 (4 fills, two flat pairs).
+  // Settlement date 2026-11-09: do NOT claim these proceeds are settled.
+  // Reported fee fields total 15.07; gross-to-net deductions are 16.09;
+  // the additional 1.02 is not itemized by the broker.
+  const NOV6_PENDING_SOURCE = "TRADEZERO_HISTORICAL_NET_PROCEEDS_PENDING_SETTLEMENT_2026-11-09";
+  function reconcileNov6PendingNet(journal){
+    const day = journal && journal["2026-11-06"];
+    if(!day || typeof day !== "object" || Array.isArray(day)) return false;
+    // Future verified settled or manually confirmed accounting must take priority.
+    if(typeof day.brokerDailyNetSource === "string" &&
+       /SETTLED_CONFIRMED|FINAL_SETTLED/.test(day.brokerDailyNetSource)) return false;
+    if(day.brokerDailyNet === 94.01 && day.brokerDailyNetSource === NOV6_PENDING_SOURCE) return false;
+    day.brokerDailyNet = 94.01;
+    day.brokerDailyGross = 110.10;
+    day.brokerDailyDeductions = 16.09;
+    day.brokerReportedFees = 15.07;
+    day.brokerUnitemizedDeductions = 1.02;
+    day.brokerDailyNetSource = NOV6_PENDING_SOURCE;
+    day.brokerDailySettlementDate = "2026-11-09";
+    day.brokerDailySettlementConfirmed = false;
+    // Do not touch attempts, out-of-window breach, trades, scores or notes.
     return true;
   }
 
@@ -400,7 +425,8 @@
     const nov3Corrected = reconcileNov3BrokerCsv(journal);
     const nov4Corrected = reconcileNov4BrokerCsv(journal);
     const nov5Corrected = reconcileNov5BrokerCsv(journal);
-    if(nov3Corrected || nov4Corrected || nov5Corrected){
+    const nov6Corrected = reconcileNov6PendingNet(journal);
+    if(nov3Corrected || nov4Corrected || nov5Corrected || nov6Corrected){
       root.localStorage.setItem(STORAGE_KEY, JSON.stringify(journal));
     }
 
@@ -456,6 +482,7 @@
     reconcileNov3BrokerCsv(journal);
     reconcileNov4BrokerCsv(journal);
     reconcileNov5BrokerCsv(journal);
+    reconcileNov6PendingNet(journal);
     const date = resetDay();
 
     let previous;

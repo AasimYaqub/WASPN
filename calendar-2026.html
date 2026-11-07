@@ -697,7 +697,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 
 </div>
 
-<script src="session-rules.js?v=5"></script>
+<script src="session-rules.js?v=6"></script>
 <script src="tradezero-live.js?v=4"></script>
 
 <script>
@@ -800,7 +800,10 @@ const tradingData = {
   // TradeZero execution report reconciled 2026-11-05 (gross +109.00, fees 4.79).
   "2026-11-04":104.21,
   // TradeZero execution report reconciled 2026-11-06 (gross +55.00, fees 6.56).
-  "2026-11-05":48.44
+  "2026-11-05":48.44,
+  // Broker historical execution net proceeds, NOT settled (settlement 2026-11-09).
+  // Four fills, +110.10 gross, −16.09 proceeds deductions = +94.01 provisional net.
+  "2026-11-06":94.01
 };
 
 const months = [
@@ -949,6 +952,27 @@ function getDailyResult(
     return {
       value:tradingData["2026-11-05"],
       source:"TradeZero execution report · net after fees",
+      live:false
+    };
+  }
+
+  // Read-only TradeZero execution net for Friday; historical broker record
+  // was retrieved but has no settlement-complete indicator (T+1 Monday).
+  // Override stale +110.10 gross on this closed date, except if a future
+  // explicitly confirmed settled journal value has superseded the snapshot.
+  if(date === "2026-11-06"){
+    if(typeof record.brokerDailyNetSource === "string" &&
+       /SETTLED_CONFIRMED|FINAL_SETTLED/.test(record.brokerDailyNetSource) &&
+       Number.isFinite(record.brokerDailyNet)){
+      return {
+        value:record.brokerDailyNet,
+        source:"Broker settlement confirmed",
+        live:false
+      };
+    }
+    return {
+      value:tradingData["2026-11-06"],
+      source:"TradeZero execution net · settlement pending 9 Nov",
       live:false
     };
   }
