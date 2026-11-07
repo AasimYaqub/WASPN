@@ -77,8 +77,10 @@
     day.brokerDailyNet = 94.01;
     day.brokerDailyGross = 110.10;
     day.brokerDailyDeductions = 16.09;
-    day.brokerReportedFees = 15.07;
-    day.brokerUnitemizedDeductions = 1.02;
+    day.brokerReportedFees = 16.09;
+    day.brokerDailyFees = 16.09;
+    day.brokerUnitemizedDeductions = 0;
+    day.brokerDailyCsvExecutions = 4;
     day.brokerDailyNetSource = NOV6_PENDING_SOURCE;
     day.brokerDailySettlementDate = "2026-11-09";
     day.brokerDailySettlementConfirmed = false;
